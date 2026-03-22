@@ -776,6 +776,193 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
 @media print { .header, .tabs { position: static; } }
+
+/* Examenes Probables */
+.exam-card {
+  background: var(--card);
+  border-radius: 16px;
+  border-left: 5px solid;
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06);
+  border-color: var(--accent);
+  transition: box-shadow 0.3s, transform 0.2s;
+}
+.exam-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.1); transform: translateY(-1px); }
+.exam-card:nth-child(2) { border-color: #e94560; }
+.exam-card:nth-child(3) { border-color: #e67e22; }
+.exam-card:nth-child(4) { border-color: #3498db; }
+.exam-card:nth-child(5) { border-color: #9b59b6; }
+.exam-header {
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.exam-header h3 {
+  font-size: 1.05rem;
+  color: var(--text);
+  margin: 0;
+}
+.exam-header h3 .exam-num {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
+  opacity: 0.6;
+}
+.exam-prob-badge {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.exam-prob-alta { background: #e8f5e9; color: #2e7d32; }
+.exam-prob-media { background: #fff3e0; color: #e65100; }
+.exam-body {
+  padding: 0 24px 20px;
+}
+.exam-body .exam-section {
+  margin-bottom: 16px;
+}
+.exam-body .exam-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-light);
+  margin-bottom: 6px;
+}
+.exam-body .exam-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+.exam-body details {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.exam-body details summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(15,52,96,0.03);
+  transition: background 0.2s;
+  list-style: none;
+}
+.exam-body details summary::-webkit-details-marker { display: none; }
+.exam-body details summary::before {
+  content: '+ ';
+  font-weight: 700;
+  margin-right: 4px;
+}
+.exam-body details[open] summary::before {
+  content: '- ';
+}
+.exam-body details summary:hover {
+  background: rgba(15,52,96,0.07);
+}
+.exam-body details .solution-content {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.exam-body details pre {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  padding: 16px 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+  margin: 8px 0;
+}
+.exam-body details pre b {
+  color: #82b1ff;
+}
+.exam-body details pre .comment {
+  color: #7f8c8d;
+}
+.exam-oral-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+.exam-oral-box {
+  background: rgba(15,52,96,0.03);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.exam-oral-box h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.exam-oral-box ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+.exam-intro-card {
+  background: linear-gradient(135deg, rgba(15,52,96,0.04), rgba(233,69,96,0.04));
+  border: 1px solid rgba(15,52,96,0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.exam-intro-card h2 {
+  font-size: 1.15rem;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.exam-intro-card p {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.exam-intro-card .exam-format {
+  background: white;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 12px;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+.exam-intro-card .exam-format strong {
+  color: var(--accent);
+}
+.exam-tip {
+  background: linear-gradient(135deg, rgba(39,174,96,0.06), rgba(39,174,96,0.02));
+  border: 1px solid rgba(39,174,96,0.15);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #2c3e50;
+}
+.exam-tip strong { color: var(--success); }
+@media (max-width: 768px) {
+  .exam-oral-grid { grid-template-columns: 1fr; }
+  .exam-header { flex-direction: column; align-items: flex-start; }
+}
 </style>
 </head>
 <body>
@@ -802,6 +989,7 @@ body {
     <button class="tab-btn" data-tab="pomodoro">Pomodoro</button>
     <button class="tab-btn" data-tab="plan">Plan Semanal</button>
     <button class="tab-btn" data-tab="tp">Practica TP</button>
+    <button class="tab-btn" data-tab="examenes">Examenes Probables</button>
   </div>
 </div>
 
@@ -4013,6 +4201,612 @@ init();
       <div id="tpContainer"></div>
     </div>
   </div>
+</div>
+<div class="tab-content" id="tab-examenes">
+
+<!-- Intro -->
+<div class="exam-intro-card">
+  <h2>Los 5 Examenes Mas Probables</h2>
+  <p>Analisis basado en la distribucion de los 89 ejercicios publicados por la catedra, la importancia relativa de cada unidad y los patrones tipicos de examenes UTN. Cada escenario incluye el ejercicio de admision con su solucion completa y la guia oral para ambas bolillas.</p>
+  <div class="exam-format">
+    <strong>Formato del examen final:</strong><br>
+    1. <strong>Ejercicio de admision:</strong> El profesor elige al azar 1 ejercicio de los 89 publicados. El alumno lo resuelve en el momento.<br>
+    2. <strong>Oral:</strong> El alumno saca 2 bolillas al azar (unidades numeradas), elige 1 y expone los temas oralmente. Puede incluir 2-3 exposiciones + preguntas breves de otras unidades.<br>
+    <span style="color:var(--text-light);font-size:0.8rem;">Recordar: llevar carpeta de TPs y monografia.</span>
+  </div>
+</div>
+
+<!-- ==================== EXAMEN 1 ==================== -->
+<div class="exam-card">
+  <div class="exam-header">
+    <h3><span class="exam-num">Examen Probable 1</span>El Clasico de Numeracion + Arquitectura</h3>
+    <span class="exam-prob-badge exam-prob-alta">Probabilidad ALTA</span>
+  </div>
+  <div class="exam-body">
+
+    <div class="exam-section">
+      <div class="exam-section-title">Ejercicio de Admision</div>
+      <div class="exam-desc">
+        <strong>Ejercicio 4</strong> — Operaciones en Complemento a 2 y Complemento a 1 con 8 bits:<br>
+        a) -35 - (-28) &nbsp;&nbsp; b) -56 - 15
+      </div>
+    </div>
+
+    <details>
+      <summary>Ver solucion completa del ejercicio de admision</summary>
+      <div class="solution-content">
+<pre>
+<b>a) -35 - (-28) = -35 + 28 = -7</b>
+
+<b>EN COMPLEMENTO A 2 (8 bits):</b>
++35 = 00100011
+-35 en C2: invertir -> 11011100, sumar 1 -> 11011101
++28 = 00011100
+-(-28) = +28 = 00011100
+
+Operacion: -35 + 28
+  11011101  (-35 en C2)
++ 00011100  (+28)
+-----------
+  11111001
+
+Verificar: 11111001 en C2 -> invertir: 00000110, +1: 00000111 = 7 -> es -7  CORRECTO
+
+<b>b) -56 - 15 = -71</b>
+
++56 = 00111000
+-56 en C2: invertir -> 11000111, sumar 1 -> 11001000
++15 = 00001111
+-15 en C2: invertir -> 11110000, sumar 1 -> 11110001
+
+Operacion: -56 + (-15) = -56 - 15
+  11001000  (-56 en C2)
++ 11110001  (-15 en C2)
+-----------
+ 1 10111001  (descarto carry)
+
+Verificar: 10111001 -> invertir: 01000110, +1: 01000111 = 71 -> es -71  CORRECTO
+No hay overflow porque ambos operandos son negativos y el resultado es negativo.
+
+<b>EN COMPLEMENTO A 1 (8 bits):</b>
+
+<b>a) -35 + 28</b>
+-35 en C1: invertir bits de 00100011 -> 11011100
++28 = 00011100
+
+  11011100
++ 00011100
+-----------
+  11111000  -> carry final = 0, no se suma
+
+Verificar C1: 11111000 -> invertir: 00000111 = 7 -> es -7  CORRECTO
+(En C1, si hay carry final se suma al resultado - "end-around carry")
+
+<b>b) -56 - 15</b>
+-56 en C1: 11000111, -15 en C1: 11110000
+  11000111
++ 11110000
+-----------
+ 1 10110111  -> carry final = 1, sumar 1 al resultado
+  10110111 + 1 = 10111000
+
+Verificar: 10111000 -> invertir: 01000111 = 71 -> es -71  CORRECTO
+</pre>
+      </div>
+    </details>
+
+    <div class="exam-section" style="margin-top:16px;">
+      <div class="exam-section-title">Bolillas Orales</div>
+      <div class="exam-oral-grid">
+        <div class="exam-oral-box">
+          <h4>Bolilla 1 — Unidad 1: Representacion de Datos</h4>
+          <ul>
+            <li>Sistemas de numeracion: definicion, conversion entre bases (2, 8, 10, 16)</li>
+            <li>Complemento a 1 y a 2: definiciones, rangos, ventajas de C2 sobre C1</li>
+            <li>Punto flotante IEEE 754: formato (signo, exponente, mantisa), normalizacion, casos especiales (NaN, infinito, denormalizados)</li>
+            <li>Codigos: BCD (natural y exceso 3), Hamming (deteccion y correccion de errores), Gray (propiedad de adyacencia)</li>
+          </ul>
+        </div>
+        <div class="exam-oral-box">
+          <h4>Bolilla 2 — Unidad 4: Maquina Elemental</h4>
+          <ul>
+            <li>Modelo Von Neumann: 5 componentes (UC, ALU, memoria, E/S, bus), concepto de programa almacenado</li>
+            <li>Maquina Elemental (Blue): registros (ACC, PC, IR, MAR, MBR), formato instruccion/dato</li>
+            <li>Ciclo de maquina: fetch-decode-execute, pulsos de reloj CP</li>
+            <li>Unidad de control: cableada vs microprogramada, ventajas y desventajas</li>
+            <li>Bus: tipos (datos, direcciones, control), tercer estado (tri-state)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-tip">
+      <strong>Tip:</strong> C2 es el ejercicio mas clasico de la materia. Practicar hasta poder resolver operaciones en C1 y C2 de memoria. U1+U4 son el corazon conceptual de Arquitectura: si dominas ambas, transmitis solidez al tribunal.
+    </div>
+  </div>
+</div>
+
+<!-- ==================== EXAMEN 2 ==================== -->
+<div class="exam-card">
+  <div class="exam-header">
+    <h3><span class="exam-num">Examen Probable 2</span>Punto Flotante + Boole</h3>
+    <span class="exam-prob-badge exam-prob-alta">Probabilidad ALTA</span>
+  </div>
+  <div class="exam-body">
+
+    <div class="exam-section">
+      <div class="exam-section-title">Ejercicio de Admision</div>
+      <div class="exam-desc">
+        <strong>Ejercicio 6</strong> — Representar en punto flotante (32 bits: 1 signo + 8 exponente + 23 mantisa) en base 2, 8 y 16:<br>
+        a) 52.73 &nbsp;&nbsp; b) 0.125 &nbsp;&nbsp; c) 0.011
+      </div>
+    </div>
+
+    <details>
+      <summary>Ver solucion completa del ejercicio de admision</summary>
+      <div class="solution-content">
+<pre>
+<b>a) 52.73 en punto flotante base 2 (IEEE 754 - 32 bits)</b>
+
+Paso 1: Convertir 52 a binario
+52/2=26 r0, 26/2=13 r0, 13/2=6 r1, 6/2=3 r0, 3/2=1 r1, 1/2=0 r1
+52 = 110100 en binario
+
+Paso 2: Convertir 0.73 a binario
+0.73 x 2 = 1.46 -> 1
+0.46 x 2 = 0.92 -> 0
+0.92 x 2 = 1.84 -> 1
+0.84 x 2 = 1.68 -> 1
+0.68 x 2 = 1.36 -> 1
+0.36 x 2 = 0.72 -> 0
+0.72 x 2 = 1.44 -> 1
+(continua periodicamente...)
+0.73 ≈ 0.1011101... en binario
+
+Paso 3: Numero completo
+52.73 = 110100.1011101... en binario
+
+Paso 4: Normalizar
+= 1.101001011101... x 2^5
+
+Paso 5: Formato 32 bits
+Signo: 0 (positivo)
+Exponente: 5 + 127 (bias) = 132 = 10000100 en binario
+Mantisa: 10100101110100101110000 (23 bits, sin el 1 implicito)
+
+Resultado: 0 | 10000100 | 10100101110100101110000
+
+En base 8: agrupar bits de a 3 desde el punto decimal
+En base 16: agrupar bits de a 4 desde el punto decimal
+
+---------------------------------------------------------------
+
+<b>b) 0.125 en punto flotante</b>
+
+0.125 = 1/8 = 0.001 en binario = 1.0 x 2^(-3)
+
+Signo: 0
+Exponente: -3 + 127 = 124 = 01111100 en binario
+Mantisa: 00000000000000000000000 (todo ceros, el 1 es implicito)
+
+Resultado: 0 | 01111100 | 00000000000000000000000
+
+---------------------------------------------------------------
+
+<b>c) 0.011 en punto flotante</b>
+
+Paso 1: Convertir 0.011 (decimal) a binario
+0.011 x 2 = 0.022 -> 0
+0.022 x 2 = 0.044 -> 0
+0.044 x 2 = 0.088 -> 0
+0.088 x 2 = 0.176 -> 0
+0.176 x 2 = 0.352 -> 0
+0.352 x 2 = 0.704 -> 0
+0.704 x 2 = 1.408 -> 1
+0.408 x 2 = 0.816 -> 0
+0.816 x 2 = 1.632 -> 1
+(continua...)
+0.011 ≈ 0.00000010110100... en binario
+
+Paso 2: Normalizar
+= 1.0110100... x 2^(-7)
+
+Paso 3: Formato 32 bits
+Signo: 0
+Exponente: -7 + 127 = 120 = 01111000 en binario
+Mantisa: 01101000... (completar a 23 bits)
+
+Resultado: 0 | 01111000 | 01101000000000000000000
+</pre>
+      </div>
+    </details>
+
+    <div class="exam-section" style="margin-top:16px;">
+      <div class="exam-section-title">Bolillas Orales</div>
+      <div class="exam-oral-grid">
+        <div class="exam-oral-box">
+          <h4>Bolilla 1 — Unidad 1: Representacion de Datos</h4>
+          <ul>
+            <li>Sistemas de numeracion y conversiones entre bases</li>
+            <li>Complemento a 1 y a 2: rangos y operaciones</li>
+            <li>Punto flotante IEEE 754: formato, normalizacion, bias, casos especiales</li>
+            <li>Codigos: BCD, Hamming, Gray</li>
+          </ul>
+        </div>
+        <div class="exam-oral-box">
+          <h4>Bolilla 2 — Unidad 2: Algebra de Boole y Circuitos</h4>
+          <ul>
+            <li>Postulados y teoremas de Boole (De Morgan, absorcion, consenso)</li>
+            <li>Formas canonicas: Suma de Productos (SdP) y Producto de Sumas (PdS)</li>
+            <li>Karnaugh: metodo de minimizacion, agrupamiento, condiciones "don't care"</li>
+            <li>Compuertas logicas: AND, OR, NOT, NAND, NOR, XOR — universalidad de NAND</li>
+            <li>Circuitos combinacionales: MUX, DEC, codificadores, sumadores</li>
+            <li>Circuitos secuenciales: biestables (SR, JK, D, T), contadores, registros de desplazamiento</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-tip">
+      <strong>Tip:</strong> Punto flotante es el ejercicio "estrella" — requiere metodologia paso a paso sin saltear. U2 es la unidad mas extensa: asegurate de poder explicar desde los postulados de Boole hasta los contadores, con ejemplos de cada circuito.
+    </div>
+  </div>
+</div>
+
+<!-- ==================== EXAMEN 3 ==================== -->
+<div class="exam-card">
+  <div class="exam-header">
+    <h3><span class="exam-num">Examen Probable 3</span>Karnaugh + Memorias</h3>
+    <span class="exam-prob-badge exam-prob-alta">Probabilidad ALTA</span>
+  </div>
+  <div class="exam-body">
+
+    <div class="exam-section">
+      <div class="exam-section-title">Ejercicio de Admision</div>
+      <div class="exam-desc">
+        <strong>Ejercicio 34</strong> — Minimizar funciones por Karnaugh y comparar Suma de Productos vs Producto de Sumas (4 funciones de 4 variables).
+      </div>
+    </div>
+
+    <details>
+      <summary>Ver solucion completa del ejercicio de admision</summary>
+      <div class="solution-content">
+<pre>
+<b>a) f(a,b,c,d) = Sigma(2,3,4,7,9,10,11,13,14,15)</b>
+
+<b>Paso 1: Armar el mapa de Karnaugh de 4 variables</b>
+
+Minterms presentes: 2,3,4,7,9,10,11,13,14,15
+
+            cd
+  ab     00   01   11   10
+  00  |  0  |  0  |  1  |  1  |   (posiciones: 0, 1, 3, 2)
+  01  |  1  |  0  |  1  |  0  |   (posiciones: 4, 5, 7, 6)
+  11  |  0  |  1  |  1  |  1  |   (posiciones: 12, 13, 15, 14)
+  10  |  0  |  1  |  1  |  1  |   (posiciones: 8, 9, 11, 10)
+
+<b>Paso 2: Identificar grupos de 1s (SdP)</b>
+
+Grupo 1: {2, 3, 10, 11} -> posiciones donde b=0, c=1
+  Simplifica a: b'c
+
+Grupo 2: {3, 7, 11, 15} -> posiciones donde cd=11
+  Simplifica a: cd
+
+Grupo 3: {9, 11, 13, 15} -> posiciones donde a=1, d=1
+  Simplifica a: ad
+
+Grupo 4: {4} -> queda suelto: a'bc'd'
+  (No se puede agrupar mas)
+
+<b>SdP minimizada: f = b'c + cd + ad + a'bc'd'</b>
+
+<b>Paso 3: Para PdS, agrupar los 0s</b>
+
+Posiciones con 0: {0, 1, 5, 6, 8, 12}
+
+            cd
+  ab     00   01   11   10
+  00  |  1  |  1  |  0  |  0  |
+  01  |  0  |  1  |  0  |  1  |
+  11  |  1  |  0  |  0  |  0  |
+  10  |  1  |  0  |  0  |  0  |
+  (mapa de los 0s)
+
+Agrupar los 0s:
+Grupo A: {0, 1} -> a=0, b=0, c=0 -> a'b'c' ... no.
+  {0,1} = ab=00, d variable, c=0 -> a'b'c'
+  Mas grande: {0, 1, 8, 12}? -> 0(0000),1(0001),8(1000),12(1100)
+  Patron: c=0, d=0 solo 0 y 8... probemos otros grupos.
+
+Grupo A: {0, 8} -> c=0, d=0, b=0 -> b'c'd'
+Grupo B: {0, 1} -> a=0, b=0, c=0 -> a'b'c'
+Grupo C: {5, 1} -> a=0, c=0, d=1 -> a'c'd
+Grupo D: {12, 8} -> b=0, c=0, a variable -> no, 12=1100, 8=1000: b'c'd'... ya cubierto
+Grupo E: {6} -> a'bcd' (suelto) o {6,4}? 4 no esta en 0s -> suelto
+Grupo F: {5} -> a'bc'd
+
+Complemento: f' = b'c'd' + a'c'd + a'bcd' + ...
+PdS: f = (b+c+d)(a+c+d')(a+b'+c+d)...
+
+<b>Comparacion: en este caso SdP tiene menor costo (4 terminos)
+que PdS, por lo que SdP es la forma preferida.</b>
+
+<b>NOTA: Para las funciones b), c), d) del ejercicio, aplicar
+el mismo metodo:</b>
+1. Ubicar minterms en mapa K de 4 variables
+2. Agrupar 1s (potencias de 2: pares, cuartetos, octetos)
+3. Escribir SdP minimizada
+4. Agrupar 0s para obtener PdS
+5. Comparar cantidad de literales/terminos
+</pre>
+      </div>
+    </details>
+
+    <div class="exam-section" style="margin-top:16px;">
+      <div class="exam-section-title">Bolillas Orales</div>
+      <div class="exam-oral-grid">
+        <div class="exam-oral-box">
+          <h4>Bolilla 1 — Unidad 2: Boole / Digital</h4>
+          <ul>
+            <li>Algebra de Boole: postulados, teoremas, dualidad</li>
+            <li>Formas canonicas SdP y PdS, minterms y maxterms</li>
+            <li>Mapas de Karnaugh: minimizacion, "don't care", implicantes primos</li>
+            <li>Compuertas: universalidad NAND/NOR</li>
+            <li>Combinacionales: MUX, DEC, sumadores</li>
+            <li>Secuenciales: biestables SR, JK, D, T; contadores sincronicos y asincronicos</li>
+          </ul>
+        </div>
+        <div class="exam-oral-box">
+          <h4>Bolilla 2 — Unidad 3: Memorias</h4>
+          <ul>
+            <li>Clasificacion de memorias: volatil/no volatil, lectura/escritura, acceso</li>
+            <li>SRAM vs DRAM: estructura interna, velocidad, costo, refresh en DRAM</li>
+            <li>ROM, PROM, EPROM, EEPROM, Flash: tecnologia y aplicaciones</li>
+            <li>Extension de palabra y extension de capacidad (direcciones)</li>
+            <li>Memorias especiales: FIFO, LIFO (stack), memorias asociativas (CAM)</li>
+            <li>Jerarquia de memoria: registros, cache, RAM, disco</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-tip">
+      <strong>Tip:</strong> Karnaugh es el ejercicio mas frecuente de U2. La clave es no saltear pasos: armar el mapa completo, identificar TODOS los grupos posibles, verificar cobertura. En el oral de memorias, saber dibujar la celda SRAM (6 transistores) y la celda DRAM (1 transistor + capacitor) marca diferencia.
+    </div>
+  </div>
+</div>
+
+<!-- ==================== EXAMEN 4 ==================== -->
+<div class="exam-card">
+  <div class="exam-header">
+    <h3><span class="exam-num">Examen Probable 4</span>Assembler 8088</h3>
+    <span class="exam-prob-badge exam-prob-alta">Probabilidad ALTA</span>
+  </div>
+  <div class="exam-body">
+
+    <div class="exam-section">
+      <div class="exam-section-title">Ejercicio de Admision</div>
+      <div class="exam-desc">
+        <strong>Ejercicio 66</strong> — Instruccion ADD con distintos modos de direccionamiento (5 instrucciones con datos dados).<br>
+        Datos: AX=1F1C, BX=168A, SI=2682, AL=4C<br>
+        DS:147A=AB, DS:168A=DC, DS:1A1B=12, DS:269C=21, DS:269D=A2
+      </div>
+    </div>
+
+    <details>
+      <summary>Ver solucion completa del ejercicio de admision</summary>
+      <div class="solution-content">
+<pre>
+<b>Datos iniciales:</b>
+AX = 1F1C    BX = 168A    SI = 2682    AL = 4C (parte baja de AX)
+DS:147A = AB    DS:168A = DC    DS:1A1B = 12
+DS:269C = 21    DS:269D = A2
+
+<b>a) ADD AX, BX</b>   ->  Modo: Registro + Registro
+   AX = AX + BX = 1F1C + 168A = 35A6
+   <b>AX = 35A6</b>
+
+<b>b) ADD AX, [BX]</b>  ->  Modo: Registro + Memoria (indirecto por registro)
+   Direccion efectiva = DS:BX = DS:168A
+   Como AX es 16 bits, se leen 2 bytes:
+   Byte bajo:  DS:168A = DC
+   Byte alto:  DS:168B = ?? (no dado, asumir 00)
+   [BX] = 00DC
+   AX = 1F1C + 00DC = 1FF8
+   <b>AX = 1FF8</b>
+
+<b>c) ADD BX, 0124</b>  ->  Modo: Registro + Inmediato
+   BX = BX + 0124 = 168A + 0124 = 17AE
+   <b>BX = 17AE</b>
+
+<b>d) ADD AL, [1A1B]</b>  ->  Modo: Registro 8bit + Memoria (directo)
+   Direccion efectiva = DS:1A1B
+   Contenido de DS:1A1B = 12 (1 byte, porque AL es 8 bits)
+   AL = AL + 12 = 4C + 12 = 5E
+   <b>AL = 5E</b>
+   (AX queda con AH sin cambio y AL = 5E)
+
+<b>e) ADD BX, [SI+1A]</b>  ->  Modo: Registro + Memoria (indexado con desplaz.)
+   Direccion efectiva = DS:(SI + 1A) = DS:(2682 + 001A) = DS:269C
+   Como BX es 16 bits, se leen 2 bytes (little-endian):
+   Byte bajo:  DS:269C = 21
+   Byte alto:  DS:269D = A2
+   [SI+1A] = A221   (little-endian: byte alto | byte bajo)
+   BX = 168A + A221 = B8AB
+   <b>BX = B8AB</b>
+
+<b>Resumen de modos de direccionamiento usados:</b>
+a) Registro a registro
+b) Indirecto por registro
+c) Inmediato
+d) Directo (direccion absoluta)
+e) Indexado con desplazamiento (base + offset)
+</pre>
+      </div>
+    </details>
+
+    <div class="exam-section" style="margin-top:16px;">
+      <div class="exam-section-title">Bolillas Orales</div>
+      <div class="exam-oral-grid">
+        <div class="exam-oral-box">
+          <h4>Bolilla 1 — Unidad 5: Microprocesador 8088</h4>
+          <ul>
+            <li>Arquitectura interna: BIU y EU, cola de instrucciones (prefetch)</li>
+            <li>Registros: generales (AX, BX, CX, DX), segmento (CS, DS, SS, ES), punteros e indices (SP, BP, SI, DI), IP, flags</li>
+            <li>Modos de direccionamiento: inmediato, directo, indirecto, indexado, basado, basado-indexado</li>
+            <li>Segmentacion: direccion fisica = segmento x 16 + offset</li>
+            <li>Interrupciones: hardware (INTR, NMI) y software (INT n), tabla de vectores</li>
+            <li>Ciclo de bus: T1-T4, wait states</li>
+          </ul>
+        </div>
+        <div class="exam-oral-box">
+          <h4>Bolilla 2 — Unidad 6: Arquitectura Avanzada</h4>
+          <ul>
+            <li>CISC vs RISC: filosofias, ejemplos, ventajas y desventajas</li>
+            <li>Pipeline (segmentacion de cauce): etapas, hazards (datos, control, estructural)</li>
+            <li>Memoria cache: principio de localidad, mapeo directo/asociativo/conjunto-asociativo</li>
+            <li>DMA (acceso directo a memoria): funcionamiento, burst vs ciclo robado</li>
+            <li>Coprocesador, buses de expansion (ISA, PCI)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-tip">
+      <strong>Tip:</strong> La U5 tiene 18 ejercicios (la mayor cantidad de toda la materia). Dominar los modos de direccionamiento es clave: practicar calculando direcciones efectivas con diferentes modos. En el oral, saber explicar la segmentacion del 8088 y por que se usa (bus de 20 bits con registros de 16 bits).
+    </div>
+  </div>
+</div>
+
+<!-- ==================== EXAMEN 5 ==================== -->
+<div class="exam-card">
+  <div class="exam-header">
+    <h3><span class="exam-num">Examen Probable 5</span>Maquina Elemental + Diseno Combinacional</h3>
+    <span class="exam-prob-badge exam-prob-media">Probabilidad MEDIA-ALTA</span>
+  </div>
+  <div class="exam-body">
+
+    <div class="exam-section">
+      <div class="exam-section-title">Ejercicio de Admision</div>
+      <div class="exam-desc">
+        <strong>Ejercicio 88</strong> — Representacion octal de un programa en Maquina Elemental (Blue) + traza de ejecucion completa.
+      </div>
+    </div>
+
+    <details>
+      <summary>Ver solucion completa del ejercicio de admision</summary>
+      <div class="solution-content">
+<pre>
+<b>Programa en Maquina Elemental (Blue):</b>
+
+3001  LDA 3007    -> Cargar ACC con contenido de direccion 3007
+3002  IOR 3010    -> OR logico: ACC = ACC OR M[3010]
+3003  AND 3011    -> AND logico: ACC = ACC AND M[3011]
+3004  STA 3012    -> Almacenar ACC en direccion 3012
+3005  OUT 01      -> Sacar ACC por puerto 01
+3006  HLT         -> Detener maquina
+
+<b>Datos iniciales (en octal):</b>
+M[3007] = 110771
+M[3010] = 145735
+M[3011] = 074000
+M[3012] = 077177  (sera sobreescrito)
+
+<b>Representacion octal del programa:</b>
+(Formato: opcode + direccion)
+
+3001: LDA = opcode 01 -> 01 3007 -> 013007
+3002: IOR = opcode 05 -> 05 3010 -> 053010
+3003: AND = opcode 04 -> 04 3011 -> 043011
+3004: STA = opcode 02 -> 02 3012 -> 023012
+3005: OUT = opcode 14 -> 14 0001 -> 140001
+3006: HLT = opcode 15 -> 15 0000 -> 150000
+
+<b>TRAZA DE EJECUCION PASO A PASO:</b>
+
+<b>Paso 1: LDA 3007</b>
+  ACC <- M[3007] = 110771 (octal)
+  ACC = 110771
+
+<b>Paso 2: IOR 3010</b>
+  ACC <- ACC OR M[3010]
+  ACC = 110771 OR 145735
+
+  Convertir a binario para hacer OR bit a bit:
+  110771 = 001 001 000 111 111 001
+  145735 = 001 100 101 111 011 101
+  OR:      001 101 101 111 111 101
+
+  Resultado en octal: 155775
+  ACC = 155775
+
+<b>Paso 3: AND 3011</b>
+  ACC <- ACC AND M[3011]
+  ACC = 155775 AND 074000
+
+  155775 = 001 101 101 111 111 101
+  074000 = 000 111 100 000 000 000
+  AND:     000 101 100 000 000 000
+
+  Resultado en octal: 054000
+  ACC = 054000
+
+<b>Paso 4: STA 3012</b>
+  M[3012] <- ACC = 054000
+  La direccion 3012 ahora contiene 054000 (antes era 077177)
+
+<b>Paso 5: OUT 01</b>
+  Salida por puerto 01: valor 054000 (octal)
+
+<b>Paso 6: HLT</b>
+  Maquina detenida.
+
+<b>ESTADO FINAL:</b>
+ACC    = 054000
+M[3007] = 110771  (sin cambio)
+M[3010] = 145735  (sin cambio)
+M[3011] = 074000  (sin cambio)
+M[3012] = 054000  (MODIFICADO - antes era 077177)
+Puerto 01 = 054000
+</pre>
+      </div>
+    </details>
+
+    <div class="exam-section" style="margin-top:16px;">
+      <div class="exam-section-title">Bolillas Orales</div>
+      <div class="exam-oral-grid">
+        <div class="exam-oral-box">
+          <h4>Bolilla 1 — Unidad 4: Maquina Elemental / UC</h4>
+          <ul>
+            <li>Modelo Von Neumann: componentes y principio de programa almacenado</li>
+            <li>Maquina Blue: registros, formato de instruccion y dato, set de instrucciones</li>
+            <li>Ciclo de maquina: fetch (busqueda), decode (decodificacion), execute (ejecucion)</li>
+            <li>Microprogramacion: micro-ordenes, micro-instrucciones, firmware</li>
+            <li>UC cableada vs microprogramada: comparacion, trade-offs</li>
+            <li>Sistema de buses: datos, direcciones, control; protocolo de comunicacion</li>
+          </ul>
+        </div>
+        <div class="exam-oral-box">
+          <h4>Bolilla 2 — Unidad 2: Combinacionales / Secuenciales</h4>
+          <ul>
+            <li>Algebra de Boole: axiomas, teoremas fundamentales</li>
+            <li>Mapas de Karnaugh: minimizacion de funciones logicas</li>
+            <li>Circuitos combinacionales: MUX, DEMUX, decodificadores, sumadores, comparadores</li>
+            <li>Circuitos secuenciales: biestables (SR, JK, D, T), tablas de excitacion</li>
+            <li>Contadores: sincronicos y asincronicos, modulo N</li>
+            <li>Registros de desplazamiento: SISO, SIPO, PISO, PIPO</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-tip">
+      <strong>Tip:</strong> La traza de programa Blue es un clasico de final. La clave esta en no confundir operaciones logicas con aritmeticas (IOR y AND son bit a bit, no sumas). Para el oral de U4, poder explicar el ciclo de maquina dibujando el camino de datos es lo que mas impresiona al profesor.
+    </div>
+  </div>
+</div>
+
 </div>
 <footer style="text-align:center;padding:20px;background:#1a1a2e;color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:20px;">
   Arquitectura de Computadoras — Dashboard de Estudio<br>
