@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arquitectura de Computadoras v2 — Dashboard de Estudio</title>
+<title>Arquitectura de Computadoras — Dashboard de Estudio</title>
 <style>
 :root {
   --bg: #f0f2f5;
@@ -538,8 +538,6 @@ body {
 .quiz-option.selected { background: #eaf0f9; border-color: var(--accent); font-weight: 600; }
 .quiz-option.correct { background: #d5f5e3; border-color: var(--success); }
 .quiz-option.incorrect { background: #fadbd8; border-color: var(--danger); }
-/* SOS ANXIETY BUTTON */
-.sos-btn {
   position: fixed;
   bottom: 24px;
   right: 24px;
@@ -556,7 +554,6 @@ body {
   transition: var(--transition);
   font-family: inherit;
 }
-.sos-btn:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(233,69,96,0.5); }
 .modal-overlay {
   display: none;
   position: fixed;
@@ -653,7 +650,7 @@ body {
 ::-webkit-scrollbar-track { background: #f0f0f0; }
 ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #aaa; }
-@media print { .header, .tabs { position: static; } .sos-btn { display: none; } }
+@media print { .header, .tabs { position: static; } }
 </style>
 </head>
 <body>
@@ -662,7 +659,6 @@ body {
   <div class="header-top">
     <div>
       <h1>Arquitectura de Computadoras</h1>
-      <div class="motto">"No estudies solamente -- DEMOSTRA que sabes."</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
       <span class="streak-badge" id="streakBadge">0 dias</span>
@@ -933,34 +929,7 @@ body {
 
 </div><!-- /main -->
 
-<!-- SOS ANXIETY BUTTON -->
-<button class="sos-btn" onclick="openSOS()">SOS Ansiedad</button>
 
-<!-- SOS MODAL -->
-<div class="modal-overlay" id="sosModal">
-  <div class="modal">
-    <button class="close-modal" onclick="closeSOS()">&times;</button>
-    <h2>Respiracion 4-7-8</h2>
-    <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:12px;">Inspira 4s, mantene 7s, exhala 8s. Repeti 3 veces.</p>
-    <div class="breathing-circle" id="breathCircle">
-      <span id="breathText">Inspira</span>
-    </div>
-    <div class="breathing-label" id="breathLabel">Segui el circulo</div>
-    <button class="btn btn-sm btn-primary" style="display:block;margin:12px auto;" onclick="startBreathing()">Iniciar respiracion</button>
-    <div class="sos-tip" style="background:#e8f8f5;border-left:4px solid #1abc9c;">
-      Tenes <strong>4 chances</strong>. No pasa nada si no es hoy. Si no sale el 15 de mayo, hay mesa en julio.
-    </div>
-    <div class="sos-tip" style="background:#fdf2e9;border-left:4px solid #f39c12;">
-      Cerra los ojos 30 segundos. Respira. <strong>El conocimiento esta ahi</strong> -- solo necesitas dejar que el cuerpo se calme para accederlo.
-    </div>
-    <div class="sos-tip" style="background:#eaf2f8;border-left:4px solid #3498db;">
-      <strong>Si te bloqueas:</strong> salta al siguiente tema. Volve despues. Los primeros minutos resolviendo algo facil bajan el cortisol.
-    </div>
-    <div class="sos-tip" style="background:#f5eef8;border-left:4px solid #9b59b6;">
-      Reencuadra: "estoy nervioso" se convierte en <strong>"estoy activado, mi cuerpo se esta preparando"</strong>.
-    </div>
-  </div>
-</div>
 
 <script>
 // ============================================================
@@ -1011,95 +980,1169 @@ if (!data.admissionHistory) data.admissionHistory = [];
 // EXERCISES DATA
 // ============================================================
 const EXERCISES = [
-  { id:1, unit:1, desc:"Convertir a decimal (binario, hex, octal)" },
-  { id:2, unit:1, desc:"Mayor numero decimal con 4 y 7 digitos hex" },
-  { id:3, unit:1, desc:"Ordenar numeros de mayor a menor en diferentes bases" },
-  { id:4, unit:1, desc:"Operaciones en complemento a 2 y complemento a 1 (8 bits)" },
-  { id:5, unit:1, desc:"Maximo numero positivo/negativo en C2, 16 y 32 bits" },
-  { id:6, unit:1, desc:"Representar en punto flotante (32 bits: 1+8+23) en base 2, 8, 16" },
-  { id:7, unit:1, desc:"Operaciones en punto flotante base 2" },
-  { id:8, unit:1, desc:"Obtener decimales desde punto flotante IEEE" },
-  { id:9, unit:1, desc:"Representar en punto flotante (igual que 6, mas numeros)" },
-  { id:10, unit:1, desc:"Obtener decimales desde punto flotante (variante)" },
-  { id:11, unit:1, desc:"Tabla de codigo Gray de 6 bits" },
-  { id:12, unit:1, desc:"Tabla de codigo Johnson de 6 bits + caracteristicas" },
-  { id:13, unit:1, desc:"Completar tabla BCD 2421, EXC3, 3421, 5421 + autocomplementarios" },
-  { id:14, unit:1, desc:"Distancia minima BCD Aiken + codigo paridad impar" },
-  { id:15, unit:1, desc:"Tabla codigos 2-entre-5 y biquinario + distancia minima" },
-  { id:16, unit:1, desc:"Tabla codigo Hamming sobre base BCD 3421" },
-  { id:17, unit:1, desc:"Bits necesarios codigo Gray para 360 grados" },
-  { id:18, unit:1, desc:"Determinar si codigos son ponderados y sus pesos" },
-  { id:19, unit:1, desc:"Representar 847 en binario natural vs BCD EXC3, comparar" },
-  { id:20, unit:1, desc:"Bits del codigo Hamming para 5, 8 y 12 bits de datos" },
-  { id:21, unit:2, desc:"Hallar expresiones canonicas + tabla de verdad" },
-  { id:22, unit:2, desc:"Simplificar expresiones con teoremas de Boole" },
-  { id:23, unit:2, desc:"Convertir entre suma de productos y producto de sumas" },
-  { id:24, unit:2, desc:"Tabla de verdad funcion 4 variables (1 cuando 3+ son 1)" },
-  { id:25, unit:2, desc:"Tabla de verdad funcion 4 variables (menor peso=0, mayor=1)" },
-  { id:26, unit:2, desc:"Demostrar igualdades booleanas" },
-  { id:27, unit:2, desc:"Verificar igualdades con De Morgan" },
-  { id:28, unit:2, desc:"Convertir entre SdP y PdS (variante)" },
-  { id:29, unit:2, desc:"Tabla de verdad funcion 4 vars (1 cuando 2 vars son 0)" },
-  { id:30, unit:2, desc:"Minimizar por Karnaugh (3 y 4 variables)" },
-  { id:31, unit:2, desc:"De SdP minimizada obtener PdS minimizada" },
-  { id:32, unit:2, desc:"Generador paridad impar para BCD Aiken" },
-  { id:33, unit:2, desc:"Minimizar por Karnaugh (variantes)" },
-  { id:34, unit:2, desc:"Minimizar y comparar SdP vs PdS" },
-  { id:35, unit:2, desc:"Minimizar por Karnaugh, resultado en PdS" },
-  { id:36, unit:2, desc:"Detectar numero >6 o <3 en BCD Exceso 3" },
-  { id:37, unit:2, desc:"Diseno limpiaparabrisas (sistema combinacional)" },
-  { id:38, unit:2, desc:"Diseno llaves de escalera" },
-  { id:39, unit:2, desc:"Implementar funciones con decodificadores" },
-  { id:40, unit:2, desc:"Diseno comparador 2 bits con NAND" },
-  { id:41, unit:2, desc:"Generador paridad BCD 8421 con decodificadores/MUX" },
-  { id:42, unit:2, desc:"Sistema arranque motor con paridad impar" },
-  { id:43, unit:2, desc:"MUX 8 canales a partir de MUX 2 canales" },
-  { id:44, unit:2, desc:"Tabla de verdad de biestable" },
-  { id:45, unit:2, desc:"Determinar codigo de contaje en registro desplazamiento JK" },
-  { id:46, unit:2, desc:"Contador binario ascendente asincrono: secuencia + diagrama tiempos" },
-  { id:47, unit:2, desc:"Contador binario descendente asincrono: secuencia + diagrama tiempos" },
-  { id:48, unit:2, desc:"Convertir biestables: SR->JK, JK->T, SR->D" },
-  { id:49, unit:2, desc:"Sistema combinacional para detectar valor 72 y reiniciar contador" },
-  { id:50, unit:3, desc:"Determinar n1 y n2 para memorias de distintos tamanos" },
-  { id:51, unit:3, desc:"Bits de direccionamiento para 512 y 2048 posiciones" },
-  { id:52, unit:3, desc:"Bits totales de memoria 64Kx8 + bits de direccionamiento" },
-  { id:53, unit:3, desc:"Combinar 2 RAMs de 512 para 1024 posiciones" },
-  { id:54, unit:3, desc:"Construir memoria 4Kx8 desde pastillas 2Kx4" },
-  { id:55, unit:3, desc:"Banco de memoria 4Kx16 desde RAMs de 2KByte" },
-  { id:56, unit:4, desc:"Decodificar instrucciones en octal -> mnemonico" },
-  { id:57, unit:4, desc:"Programa intercambio de contenidos (ubicacion 400)" },
-  { id:58, unit:4, desc:"Programa operacion IOR entre ubicaciones" },
-  { id:59, unit:4, desc:"Secuencia salto condicional (si cero->311, si no->444)" },
-  { id:60, unit:4, desc:"Programa cuadrado por sumas sucesivas de impares" },
-  { id:61, unit:4, desc:"Programa raiz cuadrada por restas sucesivas de impares" },
-  { id:62, unit:5, desc:"Duplicar instrucciones manteniendo longitud de palabra" },
-  { id:63, unit:5, desc:"Agregar direccionamiento directo e indirecto" },
-  { id:64, unit:5, desc:"Calcular posicion de memoria con IP y CS" },
-  { id:65, unit:5, desc:"Inicio y fin de segmentos datos/codigo desde DS y CS" },
-  { id:66, unit:5, desc:"ADD con distintos modos de direccionamiento" },
-  { id:67, unit:5, desc:"Cargar AX=3333, BX=CCBB, sumar, anotar registros" },
-  { id:68, unit:5, desc:"Suma AL=F6 + BL=8A, verificar acarreo" },
-  { id:69, unit:5, desc:"Producto logico entre partes de AX" },
-  { id:70, unit:5, desc:"Complemento a dos de 82 en AX" },
-  { id:71, unit:5, desc:"XOR y OR entre AX=6375 y BX=4F4A" },
-  { id:72, unit:5, desc:"Suma 32 bits (AX+BX, CX+DX) con comparacion" },
-  { id:73, unit:5, desc:"Suma de dos numeros de 5 bytes" },
-  { id:74, unit:5, desc:"Detectar paridad impar y copiar a otro bloque" },
-  { id:75, unit:5, desc:"Traducir FOR de alto nivel a 8088" },
-  { id:76, unit:5, desc:"Corrimiento 4 bits a derecha de BX=0FF0" },
-  { id:77, unit:5, desc:"Valor absoluto usando rotaciones y control" },
-  { id:78, unit:5, desc:"Contar bits en 1 con contadores y control" },
-  { id:79, unit:5, desc:"Trasladar tabla de bytes con indexacion" },
-  { id:80, unit:5, desc:"Filtrar numeros pares de un bloque" },
-  { id:81, unit:5, desc:"Multiplicacion por sumas sucesivas" },
-  { id:82, unit:4, desc:"BUS comun sin tercer estado (MBR y ACC)" },
-  { id:83, unit:4, desc:"BUS comun con tercer estado (MBR y ACC)" },
-  { id:84, unit:4, desc:"Cambiar XOR por SUB: ciclos de ejecucion" },
-  { id:85, unit:4, desc:"Circuito UC cableada con contador y decodificador" },
-  { id:86, unit:4, desc:"Cambiar XOR por DEC: ciclos de ejecucion" },
-  { id:87, unit:4, desc:"Agregar instruccion RET + modificar JSR" },
-  { id:88, unit:4, desc:"Representacion octal de programa + contenido post-ejecucion" },
-  { id:89, unit:4, desc:"Subrutina OR de 2 datos con paso y retorno" },
+  { id:1, unit:1, desc:"Convertir a decimal (binario, hex, octal)", fullDesc:`Convertir a decimal los siguientes números.<br>a) 11110000112<br>b)  1AC16<br><br>c) 100101,100112<br><br>d) 5368                                    e) 426,618                f) A2C,416`, why:`Conversion entre bases es la base de todo. Aparece en TODOS los examenes.`, solution:`<b>Conversion a decimal:</b><br><br>
+<b>a) 1111000011<sub>2</sub></b><br>
+Expansion polinomial: 1&times;2<sup>9</sup> + 1&times;2<sup>8</sup> + 1&times;2<sup>7</sup> + 1&times;2<sup>6</sup> + 0&times;2<sup>5</sup> + 0&times;2<sup>4</sup> + 0&times;2<sup>3</sup> + 0&times;2<sup>2</sup> + 1&times;2<sup>1</sup> + 1&times;2<sup>0</sup><br>
+= 512 + 256 + 128 + 64 + 2 + 1 = <b>963<sub>10</sub></b><br><br>
+<b>b) 1AC<sub>16</sub></b><br>
+1&times;16<sup>2</sup> + A&times;16<sup>1</sup> + C&times;16<sup>0</sup> = 256 + 160 + 12 = <b>428<sub>10</sub></b><br><br>
+<b>c) 100101,10011<sub>2</sub></b><br>
+Parte entera: 1&times;2<sup>5</sup> + 0 + 0 + 1&times;2<sup>2</sup> + 0 + 1&times;2<sup>0</sup> = 32 + 4 + 1 = 37<br>
+Parte decimal: 1&times;2<sup>-1</sup> + 0 + 0 + 1&times;2<sup>-4</sup> + 1&times;2<sup>-5</sup> = 0.5 + 0.0625 + 0.03125 = 0.59375<br>
+= <b>37.59375<sub>10</sub></b><br><br>
+<b>d) 536<sub>8</sub></b><br>
+5&times;8<sup>2</sup> + 3&times;8<sup>1</sup> + 6&times;8<sup>0</sup> = 320 + 24 + 6 = <b>350<sub>10</sub></b><br><br>
+<b>e) 426,61<sub>8</sub></b><br>
+4&times;64 + 2&times;8 + 6 + 6&times;8<sup>-1</sup> + 1&times;8<sup>-2</sup> = 256 + 16 + 6 + 0.75 + 0.015625 = <b>278.765625<sub>10</sub></b><br><br>
+<b>f) A2C,4<sub>16</sub></b><br>
+10&times;256 + 2&times;16 + 12 + 4&times;16<sup>-1</sup> = 2560 + 32 + 12 + 0.25 = <b>2604.25<sub>10</sub></b>` },
+  { id:2, unit:1, desc:"Mayor numero decimal con 4 y 7 digitos hex", fullDesc:`¿Cuál es el mayor número decimal que puede ser representado por 4 y 7<br>dígitos hexadecimales?`, why:`Conversion entre bases es la base de todo. Aparece en TODOS los examenes.`, solution:`<b>Mayor numero con N digitos hex:</b><br><br>
+Con <b>4 digitos hex</b>: FFFF<sub>16</sub> = 16<sup>4</sup> - 1 = <b>65535</b><br><br>
+Con <b>7 digitos hex</b>: FFFFFFF<sub>16</sub> = 16<sup>7</sup> - 1 = <b>268435455</b><br><br>
+<b>Regla general:</b> Con N digitos en base b, el maximo es b<sup>N</sup> - 1` },
+  { id:3, unit:1, desc:"Ordenar numeros de mayor a menor en diferentes bases", fullDesc:`Ordenar, para los siguientes casos, los números de mayor a menor.<br>(AB3)16<br>(1011101001)2<br>(9652)10<br>(AA1E)16<br><br>(12734)8<br>(1001100011)2`, why:`Conversion entre bases es la base de todo. Aparece en TODOS los examenes.`, solution:`<b>Convertir todos a decimal para comparar:</b><br><br>
+<code>(AB3)<sub>16</sub></code> = 10&times;256 + 11&times;16 + 3 = <b>2739</b><br>
+<code>(1011101001)<sub>2</sub></code> = 512+128+64+32+8+1 = <b>745</b><br>
+<code>(9652)<sub>10</sub></code> = <b>9652</b><br>
+<code>(AA1E)<sub>16</sub></code> = 10&times;4096+10&times;256+1&times;16+14 = <b>43550</b><br>
+<code>(12734)<sub>8</sub></code> = 1&times;4096+2&times;512+7&times;64+3&times;8+4 = <b>5596</b><br>
+<code>(1001100011)<sub>2</sub></code> = 512+64+32+2+1 = <b>611</b><br><br>
+<b>Orden de mayor a menor:</b><br>
+(AA1E)<sub>16</sub> &gt; (9652)<sub>10</sub> &gt; (12734)<sub>8</sub> &gt; (AB3)<sub>16</sub> &gt; (1011101001)<sub>2</sub> &gt; (1001100011)<sub>2</sub><br>
+43550 &gt; 9652 &gt; 5596 &gt; 2739 &gt; 745 &gt; 611` },
+  { id:4, unit:1, desc:"Operaciones en complemento a 2 y complemento a 1 (8 bits)", fullDesc:`Efectúe las siguientes operaciones utilizando palabras de 8 bits,<br>1) Representando<br>los<br>números<br>negativos<br>mediante<br>el<br>convenio<br>de<br>complemento a dos,<br>2) Representando<br>los<br>números<br>negativos<br>mediante<br>el<br>convenio<br>de<br>complemento a uno.<br><br>a)<br>-35 -   (-28)<br>b)<br>-56 – 15`, why:`Operaciones en C2 son como la CPU hace restas internamente. Siempre cae en admision.`, solution:`<b>Operaciones en C2 y C1 con 8 bits:</b><br><br>
+<b>a) -35 - (-28) = -35 + 28 = -7</b><br><br>
+<b>En C2:</b><br>
+-35 en C2: +35 = <code>00100011</code> &rarr; invertir: <code>11011100</code> + 1 = <code>11011101</code><br>
++28 en C2: <code>00011100</code><br>
+Suma: <code>11011101</code> + <code>00011100</code> = <code>11111001</code><br>
+Verificacion: C2 de 11111001 &rarr; 00000111 = 7, con signo negativo = <b>-7</b> &#10004;<br><br>
+<b>En C1:</b><br>
+-35 en C1: invertir 00100011 = <code>11011100</code><br>
++28 en C1: <code>00011100</code><br>
+Suma: <code>11011100</code> + <code>00011100</code> = <code>11111000</code><br>
+C1 de 11111000 = 00000111 = 7, con signo = <b>-7</b> &#10004;<br><br>
+<b>b) -56 - 15 = -71</b><br><br>
+<b>En C2:</b><br>
+-56 en C2: 56 = <code>00111000</code> &rarr; C2 = <code>11001000</code><br>
+-15 en C2: 15 = <code>00001111</code> &rarr; C2 = <code>11110001</code><br>
+Suma: <code>11001000</code> + <code>11110001</code> = <code>1,10111001</code> (carry se descarta)<br>
+Resultado: <code>10111001</code> &rarr; C2 = 01000111 = 71, con signo = <b>-71</b> &#10004;` },
+  { id:5, unit:1, desc:"Maximo numero positivo/negativo en C2, 16 y 32 bits", fullDesc:`Indique cuál es el máximo número decimal positivo y negativo representado en<br>el convenio de complemento a dos, si se utilizan palabras de 16 bits y 32 bits.`, why:`Operaciones en C2 son como la CPU hace restas internamente. Siempre cae en admision.`, solution:`<b>Rango en complemento a 2:</b><br><br>
+<b>Formula:</b> Con n bits, rango = [-2<sup>n-1</sup>, +2<sup>n-1</sup> - 1]<br><br>
+<b>16 bits:</b><br>
+Maximo positivo: 2<sup>15</sup> - 1 = <b>+32767</b> (<code>0111 1111 1111 1111</code>)<br>
+Maximo negativo: -2<sup>15</sup> = <b>-32768</b> (<code>1000 0000 0000 0000</code>)<br><br>
+<b>32 bits:</b><br>
+Maximo positivo: 2<sup>31</sup> - 1 = <b>+2,147,483,647</b><br>
+Maximo negativo: -2<sup>31</sup> = <b>-2,147,483,648</b>` },
+  { id:6, unit:1, desc:"Representar en punto flotante (32 bits: 1+8+23) en base 2, 8, 16", fullDesc:`Disponiendo de una palabra de 32 bits, de los cuáles 1 es destinado para el bit<br>de signo del número, 8 para el exponente y 23 para la mantisa, represente en<br>punto flotante y en base 2,  8  y  16   los siguientes números decimales.<br>a)   52,73<br>b)   0,125                    c)   0,011`, why:`IEEE 754 es como se representan los float/double en todos los lenguajes. Ejercicio clasico de examen.`, solution:`<b>Representacion en punto flotante (1+8+23 bits):</b><br><br>
+<b>a) 52.73<sub>10</sub> en base 2:</b><br>
+52 en binario: <code>110100</code><br>
+0.73 en binario: 0.73&times;2=1.46, 0.46&times;2=0.92, 0.92&times;2=1.84, 0.84&times;2=1.68... &rarr; <code>0.1011...</code><br>
+52.73 = <code>110100.1011...</code><sub>2</sub><br>
+Normalizar: <code>1.101001011... &times; 2<sup>5</sup></code><br>
+Signo: 0, Exponente: 5 + 127 = 132 = <code>10000100</code>, Mantisa: <code>10100101110...</code><br><br>
+<b>b) 0.125<sub>10</sub>:</b><br>
+0.125 = <code>0.001</code><sub>2</sub> = <code>1.0 &times; 2<sup>-3</sup></code><br>
+Signo: 0, Exp: -3+127=124=<code>01111100</code>, Mantisa: <code>000...0</code><br><br>
+<b>c) 0.011<sub>10</sub>:</b><br>
+Convertir a binario y normalizar de forma similar.` },
+  { id:7, unit:1, desc:"Operaciones en punto flotante base 2", fullDesc:`Efectúe las siguientes operaciones de acuerdo a la representación en punto<br>flotante indicada en el ejercicio anterior, y en base 2.<br><br>a)<br>111001 + 10100,1011110 + 111,0011`, why:`IEEE 754 es como se representan los float/double en todos los lenguajes. Ejercicio clasico de examen.`, solution:`<b>Suma en punto flotante base 2:</b><br><br>
+<b>a) 111001 + 10100,1011110 + 111,0011</b><br><br>
+<b>Paso 1:</b> Alinear exponentes (normalizar todos al mismo exponente)<br>
+111001 = <code>1.11001 &times; 2<sup>5</sup></code><br>
+10100.1011110 = <code>1.01001011110 &times; 2<sup>4</sup></code> = <code>0.101001011110 &times; 2<sup>5</sup></code><br>
+111.0011 = <code>1.110011 &times; 2<sup>2</sup></code> = <code>0.001110011 &times; 2<sup>5</sup></code><br><br>
+<b>Paso 2:</b> Sumar mantisas con exponente 2<sup>5</sup>:<br>
+<code>1.110010000</code> + <code>0.101001011110</code> + <code>0.001110011</code><br>
+= <code>10.100111100110</code> &times; 2<sup>5</sup><br><br>
+<b>Paso 3:</b> Re-normalizar: <code>1.0100111100110 &times; 2<sup>6</sup></code>` },
+  { id:8, unit:1, desc:"Obtener decimales desde punto flotante IEEE", fullDesc:`Obtenga los números decimales de la siguiente representación en punto<br>flotante de base 2.<br>a) 0  10010101  111111110100001...<br><br>b) 1  01010111  1100010111100001...`, why:`IEEE 754 es como se representan los float/double en todos los lenguajes. Ejercicio clasico de examen.`, solution:`<b>Decodificar punto flotante IEEE a decimal:</b><br><br>
+<b>a) 0 10010101 111111110100001...</b><br>
+Signo: 0 (positivo)<br>
+Exponente: <code>10010101</code> = 149, Exp real = 149 - 127 = 22<br>
+Mantisa: 1.111111110100001...<br>
+Valor = +1.111111110100001 &times; 2<sup>22</sup><br>
+&asymp; <b>+8,380,416</b> (valor aproximado)<br><br>
+<b>b) 1 01010111 1100010111100001...</b><br>
+Signo: 1 (negativo)<br>
+Exponente: <code>01010111</code> = 87, Exp real = 87 - 127 = -40<br>
+Mantisa: 1.1100010111100001...<br>
+Valor = -1.1100010111100001 &times; 2<sup>-40</sup><br>
+&asymp; <b>-1.61 &times; 10<sup>-12</sup></b> (valor muy pequeno)` },
+  { id:9, unit:1, desc:"Representar en punto flotante (igual que 6, mas numeros)", fullDesc:`Disponiendo de una palabra de 32 bits, de los cuáles 1 se destina para el bit de<br>signo del número,  8 para el exponente  y  23 para la mantisa,  representar en<br>punto flotante y en base 2, 8 y 16 los siguientes números decimales.<br>a) 14,63              b) 0,35                  c) 0,000052                         d) 105,5787`, why:`IEEE 754 es como se representan los float/double en todos los lenguajes. Ejercicio clasico de examen.`, solution:`<b>Representacion en punto flotante (1+8+23):</b><br><br>
+<b>a) 14.63:</b><br>
+14 = <code>1110</code><sub>2</sub><br>
+0.63: 0.63&times;2=1.26, 0.26&times;2=0.52, 0.52&times;2=1.04, 0.04&times;2=0.08... &rarr; <code>0.1010...</code><br>
+14.63 = <code>1110.1010...</code> = <code>1.1101010... &times; 2<sup>3</sup></code><br>
+S=0, Exp=3+127=130=<code>10000010</code>, M=<code>11010100001...</code><br><br>
+<b>b) 0.35:</b> <code>0.01011...</code> = <code>1.0110... &times; 2<sup>-2</sup></code><br>
+S=0, Exp=125=<code>01111101</code><br><br>
+<b>c) 0.000052:</b> Numero muy chico, exponente negativo grande<br>
+<code>1.101... &times; 2<sup>-15</sup></code>, Exp=-15+127=112=<code>01110000</code><br><br>
+<b>d) 105.5787:</b> <code>1101001.1001...</code> = <code>1.101001... &times; 2<sup>6</sup></code><br>
+S=0, Exp=6+127=133=<code>10000101</code>` },
+  { id:10, unit:1, desc:"Obtener decimales desde punto flotante (variante)", fullDesc:`Obtenga los números decimales de la siguiente representación en punto<br>flotante de base 2.<br><br>a) 0  00101010  100010100101...            b) 0  10100100  100010011001...`, why:`IEEE 754 es como se representan los float/double en todos los lenguajes. Ejercicio clasico de examen.`, solution:`<b>Decodificar punto flotante a decimal:</b><br><br>
+<b>a) 0 00101010 100010100101...</b><br>
+Signo: 0 (positivo)<br>
+Exponente: <code>00101010</code> = 42, Exp real = 42 - 127 = -85<br>
+Mantisa: 1.100010100101...<br>
+Valor = +1.100010100101 &times; 2<sup>-85</sup><br>
+&asymp; <b>+4.93 &times; 10<sup>-26</sup></b> (numero extremadamente pequeno)<br><br>
+<b>b) 0 10100100 100010011001...</b><br>
+Signo: 0 (positivo)<br>
+Exponente: <code>10100100</code> = 164, Exp real = 164 - 127 = 37<br>
+Mantisa: 1.100010011001...<br>
+Valor = +1.100010011001 &times; 2<sup>37</sup><br>
+&asymp; <b>+2.12 &times; 10<sup>11</sup></b>` },
+  { id:11, unit:1, desc:"Tabla de codigo Gray de 6 bits", fullDesc:`Realizar la tabla de un código Gray de 6bits.`, why:`Gray se usa en encoders y Karnaugh. Johnson en contadores. Pregunta frecuente en oral.`, solution:`<b>Codigo Gray de 6 bits:</b><br><br>
+El codigo Gray se construye reflejando el codigo anterior y agregando 0s arriba y 1s abajo:<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dec | Gray 6 bits
+ 0  | 000000
+ 1  | 000001
+ 2  | 000011
+ 3  | 000010
+ 4  | 000110
+ 5  | 000111
+ 6  | 000101
+ 7  | 000100
+ 8  | 001100
+ 9  | 001101
+10  | 001111
+11  | 001110
+12  | 001010
+13  | 001011
+14  | 001001
+15  | 001000
+...continua hasta 63 (111111 Gray)
+</pre>
+<b>Metodo:</b> Para convertir binario a Gray:<br>
+- El MSB es igual<br>
+- Cada bit siguiente = XOR del bit actual con el anterior del binario<br>
+<b>Formula:</b> G<sub>i</sub> = B<sub>i</sub> &oplus; B<sub>i+1</sub>` },
+  { id:12, unit:1, desc:"Tabla de codigo Johnson de 6 bits + caracteristicas", fullDesc:`Realizar la tabla de un código Jhonson de 6 bits.  Indique que características<br>presenta  este código.`, why:`Gray se usa en encoders y Karnaugh. Johnson en contadores. Pregunta frecuente en oral.`, solution:`<b>Codigo Johnson de 6 bits:</b><br><br>
+El codigo Johnson es un contador de anillo con retroalimentacion invertida:<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Paso | Q5 Q4 Q3 Q2 Q1 Q0
+  0  |  0  0  0  0  0  0
+  1  |  1  0  0  0  0  0
+  2  |  1  1  0  0  0  0
+  3  |  1  1  1  0  0  0
+  4  |  1  1  1  1  0  0
+  5  |  1  1  1  1  1  0
+  6  |  1  1  1  1  1  1
+  7  |  0  1  1  1  1  1
+  8  |  0  0  1  1  1  1
+  9  |  0  0  0  1  1  1
+ 10  |  0  0  0  0  1  1
+ 11  |  0  0  0  0  0  1
+</pre>
+<b>Caracteristicas:</b><br>
+- Con N bits genera <b>2N estados</b> (12 estados con 6 bits)<br>
+- <b>Distancia 1</b> entre estados consecutivos (solo cambia 1 bit)<br>
+- Es un codigo <b>ciclico</b> (el ultimo vuelve al primero)<br>
+- Se usa en <b>contadores</b> de anillo` },
+  { id:13, unit:1, desc:"Completar tabla BCD 2421, EXC3, 3421, 5421 + autocomplementarios", fullDesc:`Completar el cuadro,  según los códigos indicados para la codificación de los<br>números decimales enunciados. ¿Cuáles de los códigos son auto<br>complementarios?.<br>----------------------------------------------------------------------------------------------------------<br><br>Decimal<br>BCD 2421         BCD EXC3          BCD 3421          BCD 5421<br>----------------------------------------------------------------------------------------------------------<br>72,5<br>91,2<br>245<br>1023,12<br>----------------------------------------------------------------------------------------------------------`, why:`Los codigos BCD son base para entender displays y aritmetica decimal en hardware.`, solution:`<b>Tabla de codigos BCD:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dig | BCD 2421 | BCD EXC3 | BCD 3421 | BCD 5421
+ 0  |  0000    |  0011    |  0000    |  0000
+ 1  |  0001    |  0100    |  0001    |  0001
+ 2  |  0010    |  0101    |  0010    |  0010
+ 3  |  0011    |  0110    |  0011    |  0011
+ 4  |  0100    |  0111    |  0100    |  0100
+ 5  |  1011    |  1000    |  1000    |  1000
+ 6  |  1100    |  1001    |  1001    |  1001
+ 7  |  1101    |  1010    |  1010    |  1010
+ 8  |  1110    |  1011    |  1011    |  1011
+ 9  |  1111    |  1100    |  1100    |  1100
+</pre>
+<b>Autocomplementarios:</b> BCD 2421 y BCD EXC3<br>
+(El complemento a 9 se obtiene invirtiendo los bits)<br><br>
+Para codificar 72.5: se codifica digito a digito:<br>
+72.5 en BCD 2421: 1101 0010 . 1011<br>
+72.5 en BCD EXC3: 1010 0101 . 1000` },
+  { id:14, unit:1, desc:"Distancia minima BCD Aiken + codigo paridad impar", fullDesc:`Indicar cuál es la distancia mínima del código BCD Aiken.  Obtener a partir de<br>él un código de paridad impar con la incorporación de un bit de paridad.  ¿Cuál<br>es la distancia mínima del código resultante?`, why:`Los codigos BCD son base para entender displays y aritmetica decimal en hardware.`, solution:`<b>Distancia minima BCD Aiken:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">BCD Aiken (2421):
+0: 0000    5: 1011
+1: 0001    6: 1100
+2: 0010    7: 1101
+3: 0011    8: 1110
+4: 0100    9: 1111
+</pre>
+Distancia minima: <b>d<sub>min</sub> = 1</b> (ej: entre 0000 y 0001 hay 1 bit de diferencia)<br><br>
+<b>Codigo con paridad impar:</b> Se agrega 1 bit tal que la cantidad total de 1s sea impar:<br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dig | Aiken | P | Con paridad
+ 0  | 0000  | 1 | 10000
+ 1  | 0001  | 0 | 00001
+ 2  | 0010  | 0 | 00010
+ 3  | 0011  | 1 | 10011
+ 4  | 0100  | 0 | 00100
+ 5  | 1011  | 0 | 01011
+ 6  | 1100  | 0 | 01100
+ 7  | 1101  | 1 | 11101
+ 8  | 1110  | 1 | 11110
+ 9  | 1111  | 0 | 01111
+</pre>
+Distancia minima del codigo con paridad: <b>d<sub>min</sub> = 2</b><br>
+(Permite <b>detectar</b> errores de 1 bit, pero no corregirlos)` },
+  { id:15, unit:1, desc:"Tabla codigos 2-entre-5 y biquinario + distancia minima", fullDesc:`Realizar la tabla de los códigos  2 entre 5,  y  biquinario.  Indicar la distancia<br>mínima de ellos,  y la denominación que reciben estos tipos de códigos.`, why:`Los codigos BCD son base para entender displays y aritmetica decimal en hardware.`, solution:`<b>Codigos 2-entre-5 y biquinario:</b><br><br>
+<b>Codigo 2-entre-5:</b> Cada digito tiene exactamente 2 bits en 1 de 5:<br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dig | 2-entre-5
+ 0  | 00011
+ 1  | 00101
+ 2  | 00110
+ 3  | 01001
+ 4  | 01010
+ 5  | 01100
+ 6  | 10001
+ 7  | 10010
+ 8  | 10100
+ 9  | 11000
+</pre>
+d<sub>min</sub> = 2. Es un codigo <b>detector de errores</b>.<br><br>
+<b>Codigo biquinario (7 bits = 2+5):</b><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dig | Bi+Qui
+ 0  | 01 00001
+ 1  | 01 00010
+ 2  | 01 00100
+ 3  | 01 01000
+ 4  | 01 10000
+ 5  | 10 00001
+ 6  | 10 00010
+ 7  | 10 00100
+ 8  | 10 01000
+ 9  | 10 10000
+</pre>
+d<sub>min</sub> = 2. Ambos son codigos <b>detectores de error por peso constante</b>.` },
+  { id:16, unit:1, desc:"Tabla codigo Hamming sobre base BCD 3421", fullDesc:`Realice la tabla del código Hamming para la detección y corrección de un bit,<br>tomando como código base de información el BCD 3421.`, why:`Hamming se usa en memoria ECC. Ejercicio muy probable en admision. Saber construir la tabla.`, solution:`<b>Codigo Hamming sobre BCD 3421:</b><br><br>
+<b>Paso 1:</b> Determinar bits de paridad necesarios.<br>
+Con 4 bits de datos, se necesitan 3 bits de paridad (2<sup>3</sup> &ge; 4+3+1).<br>
+Total: 7 bits. Posiciones de paridad: 1, 2, 4.<br><br>
+<b>Paso 2:</b> Ubicar datos en posiciones 3, 5, 6, 7:<br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Pos:  7  6  5  4  3  2  1
+      D4 D3 D2 P3 D1 P2 P1
+
+P1 cubre pos 1,3,5,7 (bit menos significativo del indice = 1)
+P2 cubre pos 2,3,6,7 (segundo bit del indice = 1)
+P4 cubre pos 4,5,6,7 (tercer bit del indice = 1)
+</pre>
+Para cada digito BCD 3421 (0-9), se calculan P1, P2, P4 para paridad par.<br>
+La tabla completa tiene 10 filas &times; 7 columnas con los valores Hamming.` },
+  { id:17, unit:1, desc:"Bits necesarios codigo Gray para 360 grados", fullDesc:`Que cantidad de bits necesitaría en un código Gray; para codificar ángulos de 1<br>en 1 grados hasta 360 grados.`, why:`Hamming se usa en memoria ECC. Ejercicio muy probable en admision. Saber construir la tabla.`, solution:`<b>Bits para codigo Gray de 360 grados:</b><br><br>
+Se necesitan codificar <b>360 posiciones</b> (0&deg; a 359&deg;).<br><br>
+Con n bits se representan 2<sup>n</sup> combinaciones:<br>
+- 8 bits: 2<sup>8</sup> = 256 &lt; 360 (no alcanza)<br>
+- 9 bits: 2<sup>9</sup> = 512 &ge; 360 &#10004;<br><br>
+<b>Respuesta: Se necesitan 9 bits.</b><br><br>
+Nota: Sobrarian 512 - 360 = 152 combinaciones sin usar.` },
+  { id:18, unit:1, desc:"Determinar si codigos son ponderados y sus pesos", fullDesc:`Los códigos ponderados BCD son aquellos en los que a cada posición de un<br>dígito binario se le asigna un peso, de forma tal que el número decimal<br>equivalente se presenta como:  N =  Pi x Xi,  - dónde Pi  es el peso de la<br>posición i,  y  Xi  toma el  valor 0 ó  1 según la combinación, y  N varía entre 0 y<br>9. Teniendo en cuenta lo indicado,<br>¿ Cuáles de los siguientes códigos son ponderados, y en caso de ser así,<br>cuáles son los pesos correspondientes?. Para efectuar el análisis complete con<br>las combinaciones faltantes cada uno de los códigos.<br><br>a)<br>decimal<br>P3 P2 Pl PO<br>b)<br>decimal      P3 P2 Pl PO<br><br>1<br>0 0 0 1<br><br>3<br>0 0 1 1<br><br>3<br>0 0 1 1<br><br>5<br>0 1 0 1<br><br>4<br>0 1 0 0<br><br>7<br>1 1 0 1<br><br>7<br>1 1 0 0<br><br>9<br>1 1 1 1<br><br>c)        decimal         P3 P2 Pl PO                 d)          decimal     P3 P2 Pl PO<br><br>1<br>0 0 0 1<br><br>0<br>0 0 0 0<br><br>3<br>0 0 1 1<br><br>1<br>0 0 0 1<br><br>5<br>0 1 0 0<br><br>2<br>0 0 1 1<br><br>7<br>1 1 0 0<br><br>3<br>0 0 1 0`, why:`Hamming se usa en memoria ECC. Ejercicio muy probable en admision. Saber construir la tabla.`, solution:`<b>Analisis de codigos ponderados:</b><br><br>
+Un codigo es ponderado si N = &sum;(P<sub>i</sub> &times; X<sub>i</sub>) para todos los digitos 0-9.<br><br>
+<b>a)</b> Con los datos 1&rarr;0001, 3&rarr;0011, 4&rarr;0100, 7&rarr;1100:<br>
+P0=1, P1=2 (de 3=0011: P1+P0=3), P2=4 (de 4=0100), P3=8 (de 7: necesitamos P3+P2=7? No cuadra con 1100&rarr;P3+P2).<br>
+Hay que verificar la consistencia para todos los valores.<br><br>
+<b>Metodo:</b> Plantear sistema de ecuaciones con los valores conocidos y verificar si existe solucion unica con pesos enteros que funcione para los 10 digitos.<br><br>
+Algunos codigos conocidos: 8421, 2421, 5421, 3421 son ponderados. Se verifica que los pesos asignados cumplan la propiedad para todos los digitos.` },
+  { id:19, unit:1, desc:"Representar 847 en binario natural vs BCD EXC3, comparar", fullDesc:`Representar el número 847 en binario natural y en BCD EXC 3. Comentar el<br>resultado luego de efectuar un análisis comparativo sobre la facilidad para<br>obtener las representaciones y la longitud de bits necesarios para cada caso.`, why:`Hamming se usa en memoria ECC. Ejercicio muy probable en admision. Saber construir la tabla.`, solution:`<b>847 en binario natural vs BCD EXC3:</b><br><br>
+<b>Binario natural:</b><br>
+847 &divide; 2 sucesivamente: 847 = <code>1101001111</code><sub>2</sub> (10 bits)<br><br>
+<b>BCD Exceso 3:</b><br>
+Se codifica digito a digito, sumando 3 a cada uno:<br>
+8 &rarr; 8+3=11 &rarr; <code>1011</code><br>
+4 &rarr; 4+3=7 &rarr; <code>0111</code><br>
+7 &rarr; 7+3=10 &rarr; <code>1010</code><br>
+847 en BCD EXC3 = <code>1011 0111 1010</code> (12 bits)<br><br>
+<b>Comparacion:</b><br>
+- Binario natural: 10 bits (mas eficiente en espacio)<br>
+- BCD EXC3: 12 bits (menos eficiente, pero mas facil de obtener: solo sumar 3 a cada digito decimal)<br>
+- BCD es mas facil de convertir desde/hacia decimal, pero usa mas bits.` },
+  { id:20, unit:1, desc:"Bits del codigo Hamming para 5, 8 y 12 bits de datos", fullDesc:`¿Cuántos bits tendrá el código Hamming para poder detectar y corregir un error<br>si los datos originalmente se codifican con combinaciones de:<br><br>a) 5 bits<br><br>b) 8 bits<br><br>c) 12 bits?`, why:`Hamming se usa en memoria ECC. Ejercicio muy probable en admision. Saber construir la tabla.`, solution:`<b>Bits del codigo Hamming:</b><br><br>
+<b>Condicion:</b> 2<sup>p</sup> &ge; m + p + 1 (m = bits de datos, p = bits de paridad)<br><br>
+<b>a) m = 5 bits:</b><br>
+p=3: 2<sup>3</sup>=8 &ge; 5+3+1=9? No<br>
+p=4: 2<sup>4</sup>=16 &ge; 5+4+1=10? Si &#10004;<br>
+Total: <b>5 + 4 = 9 bits</b><br><br>
+<b>b) m = 8 bits:</b><br>
+p=3: 8 &ge; 12? No<br>
+p=4: 16 &ge; 13? Si &#10004;<br>
+Total: <b>8 + 4 = 12 bits</b><br><br>
+<b>c) m = 12 bits:</b><br>
+p=4: 16 &ge; 17? No<br>
+p=5: 32 &ge; 18? Si &#10004;<br>
+Total: <b>12 + 5 = 17 bits</b>` },
+  { id:21, unit:2, desc:"Hallar expresiones canonicas + tabla de verdad", fullDesc:`Hallar las expresiones canónicas de las siguientes funciones.<br>Representar la tabla de verdad correspondiente a cada una de ellas.`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Expresiones canonicas y tabla de verdad:</b><br><br>
+Para hallar la forma canonica de una funcion:<br>
+1. Armar la <b>tabla de verdad</b> con todas las combinaciones<br>
+2. <b>Suma de productos (minterms):</b> Para cada fila donde f=1, escribir el mintermino<br>
+3. <b>Producto de sumas (maxterms):</b> Para cada fila donde f=0, escribir el maxtermino<br><br>
+<b>Ejemplo con f(A,B) = A+B:</b><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">A B | f
+0 0 | 0  &rarr; maxterm: (A+B)
+0 1 | 1  &rarr; minterm: A'.B
+1 0 | 1  &rarr; minterm: A.B'
+1 1 | 1  &rarr; minterm: A.B
+</pre>
+SdP: f = A'B + AB' + AB = &sum;m(1,2,3)<br>
+PdS: f = (A+B) = &prod;M(0)` },
+  { id:22, unit:2, desc:"Simplificar expresiones con teoremas de Boole", fullDesc:`Simplificar las siguientes expresiones aplicando los teoremas del álgebra de<br>Boole.<br><br><br><br>r<br>pq<br>pqr<br>r<br>q<br>p<br>q<br>p<br>pqr<br>r<br>q<br>p<br>f<br><br><br><br><br><br>,<br>,<br><br><br><br>d<br>b<br>c<br>d<br>b<br>a<br>d<br>cb<br>c<br>b<br>a<br>bd<br>a<br>c<br>ab<br>d<br>c<br>b<br>d<br>c<br>b<br>a<br>f<br><br><br><br><br><br><br><br>,<br>,<br>,`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Simplificacion con teoremas de Boole:</b><br><br>
+<b>Teoremas utiles:</b><br>
+- A + A'B = A + B (absorcion)<br>
+- A(A+B) = A (absorcion)<br>
+- A + AB = A (absorcion)<br>
+- AB + AB' = A (combinacion)<br>
+- (A+B)(A+B') = A (combinacion)<br>
+- De Morgan: (AB)' = A'+B' y (A+B)' = A'B'<br><br>
+Se aplican estos teoremas iterativamente hasta no poder simplificar mas. El proceso requiere practica para identificar que teorema aplicar en cada paso.` },
+  { id:23, unit:2, desc:"Convertir entre suma de productos y producto de sumas", fullDesc:`Dadas las siguientes funciones, representadas mediante la expresión canónica<br>por comprensión de suma de productos y producto de sumas, obtener las<br>representaciones de las mismas en la forma de producto de sumas y suma de<br>productos respectivamente.<br><br>a)<br><br><br><br><br>7,5,2,1,0<br>,<br>,<br>3<br><br>c<br>b<br>a<br>f<br><br>b)<br><br><br><br><br><br><br>4<br>14<br>,<br>12<br>,<br>10<br>,8,6,4,2,1<br>,<br>,<br>,<br>d<br>c<br>b<br>a<br>f`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Conversion entre SdP y PdS:</b><br><br>
+<b>a) f(a,b,c) = &sum;m(0,1,2,5,7):</b><br>
+Los minterms donde f=1 son: 0,1,2,5,7<br>
+Los minterms donde f=0 son: 3,4,6<br>
+&rarr; PdS: f = &prod;M(3,4,6) = (a+b'+c')(a'+b+c)(a'+b'+c)<br><br>
+<b>b) f(a,b,c,d) = &prod;M(1,2,4,6,8,10,12,14):</b><br>
+Los maxterms donde f=0 son: 1,2,4,6,8,10,12,14<br>
+Los minterms donde f=1 son: 0,3,5,7,9,11,13,15<br>
+&rarr; SdP: f = &sum;m(0,3,5,7,9,11,13,15)<br><br>
+<b>Regla:</b> Los numeros que no estan en una forma son los de la otra.` },
+  { id:24, unit:2, desc:"Tabla de verdad funcion 4 variables (1 cuando 3+ son 1)", fullDesc:`Obtener la tabla de verdad y la función canónica por comprensión en la forma<br>de producto de sumas de una función de 4 variables que toma el valor 1<br>cuando 3 o más variables toman el valor  1.`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Funcion de 4 variables que vale 1 cuando 3 o mas variables son 1:</b><br><br>
+Combinaciones con 3 o mas unos:<br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">ABCD | f
+0111 | 1  (7)
+1011 | 1  (11)
+1101 | 1  (13)
+1110 | 1  (14)
+1111 | 1  (15)
+</pre>
+f = &sum;m(7, 11, 13, 14, 15)<br><br>
+<b>PdS:</b> f = &prod;M(0,1,2,3,4,5,6,8,9,10,12)<br><br>
+Minimizada por Karnaugh: f = BCD + ACD + ABD + ABC` },
+  { id:25, unit:2, desc:"Tabla de verdad funcion 4 variables (menor peso=0, mayor=1)", fullDesc:`Obtener la tabla de verdad y la función canónica por comprensión y extensión<br>en la forma de suma de productos y producto de sumas de una función de 4<br>variables que toma el valor 1 cuando la variable de menor peso vale 0,  y la de<br>mayor peso vale 1.`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Funcion: f=1 cuando D(menor peso)=0 y A(mayor peso)=1:</b><br><br>
+Variables: A(MSB), B, C, D(LSB)<br>
+Condicion: A=1 y D=0<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">ABCD | f
+0000 | 0
+0001 | 0
+0010 | 0
+...
+1000 | 1  (8)
+1010 | 1  (10)
+1100 | 1  (12)
+1110 | 1  (14)
+</pre>
+f = &sum;m(8, 10, 12, 14) = A &middot; D'<br>
+PdS: f = &prod;M(0,1,2,3,4,5,6,7,9,11,13,15)<br><br>
+<b>Resultado minimizado:</b> f = A &middot; D' (muy simple: solo 2 variables)` },
+  { id:26, unit:2, desc:"Demostrar igualdades booleanas", fullDesc:`Demostrar las siguientes igualdades.<br><br><br><br>c<br>e<br>d<br>a<br>p<br>c<br>e<br>d<br>a<br>p<br><br><br><br><br><br>b<br>a<br>b<br>a<br><br><br><br><br><br><br>ac<br>ab<br>c<br>a<br>a<br><br><br>`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Demostraciones de igualdades booleanas:</b><br><br>
+Se usan los teoremas del algebra de Boole. Para demostrar A=B se puede:<br>
+1. Simplificar ambos lados hasta llegar a la misma expresion<br>
+2. Expandir a forma canonica y comparar<br>
+3. Usar tabla de verdad<br><br>
+<b>Teoremas clave:</b><br>
+- De Morgan: (A+B)' = A'B' y (AB)' = A'+B'<br>
+- Absorcion: A+AB = A<br>
+- Consenso: AB+A'C+BC = AB+A'C<br>
+- Idempotencia: A+A = A, A&middot;A = A` },
+  { id:27, unit:2, desc:"Verificar igualdades con De Morgan", fullDesc:`Indicar cual de las siguientes igualdades es correcta, haciendo uso de las leyes<br>de  De Morgan.<br><br><br><br><br><br>b<br>c<br>c<br>a<br>b<br>a<br>b<br>c<br>c<br>a<br>ab<br><br><br><br><br><br><br><br><br><br><br><br><br><br>bc<br>c<br>b<br>a<br>d<br>c<br>b<br>a<br>f<br>d<br>b<br>a<br>cd<br>b<br>a<br>e<br>d<br>c<br>b<br>a<br>f<br>c<br>b<br>a<br>bc<br>c<br>a<br>c<br>b<br>a<br>f<br><br><br><br><br><br><br><br><br>,<br>,<br>,<br>,<br>,<br>,<br>,<br>,<br>,<br><br><br><br><br><br><br><br>b<br>a<br>abc<br>c<br>b<br>a<br>ab<br>c<br>b<br>a<br>c<br>b<br>a<br><br><br><br><br><br><br><br>`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Verificacion con De Morgan:</b><br><br>
+<b>Leyes de De Morgan:</b><br>
+- (A &middot; B)' = A' + B'<br>
+- (A + B)' = A' &middot; B'<br><br>
+Se aplican sistematicamente a cada lado de las igualdades:<br>
+1. Complementar la expresion completa<br>
+2. Cambiar AND por OR y viceversa<br>
+3. Complementar cada variable<br><br>
+Luego se comparan ambos lados. Si coinciden, la igualdad es correcta.` },
+  { id:28, unit:2, desc:"Convertir entre SdP y PdS (variante)", fullDesc:`Dadas las siguientes funciones, representadas mediante la expresión canónica<br>por comprensión de suma de productos y producto de sumas, obtener las<br>representaciones de las mismas en la forma de producto de sumas y suma de<br>productos respectivamente.<br><br><br><br><br><br><br><br>4<br>15<br>,<br>14<br>,<br>11<br>,9,7,6,4<br>,<br>,<br>,<br>d<br>c<br>b<br>a<br>f<br><br><br><br><br><br>6,3,2,0<br>,<br>,<br>3<br><br>c<br>b<br>a<br>f`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Conversion SdP &#8596; PdS (variante):</b><br><br>
+<b>a) f(a,b,c,d) = &sum;m(4,6,7,9,11,14,15):</b><br>
+Minterms f=1: {4,6,7,9,11,14,15}<br>
+Minterms f=0: {0,1,2,3,5,8,10,12,13}<br>
+PdS: f = &prod;M(0,1,2,3,5,8,10,12,13)<br><br>
+<b>b) f(a,b,c) = &prod;M(0,2,3,6):</b><br>
+Maxterms f=0: {0,2,3,6}<br>
+Minterms f=1: {1,4,5,7}<br>
+SdP: f = &sum;m(1,4,5,7)` },
+  { id:29, unit:2, desc:"Tabla de verdad funcion 4 vars (1 cuando 2 vars son 0)", fullDesc:`Obtener la tabla de verdad y la función canónica por extensión en la forma de<br>suma de productos de una función de  4  variables que toma el valor   1<br>cuando  2  variables toman el valor 0.`, why:`Simplificacion booleana es la base del diseno digital. Siempre cae teoria o practica.`, solution:`<b>Funcion de 4 vars que vale 1 cuando exactamente 2 variables son 0:</b><br><br>
+Es decir, exactamente 2 variables en 1 y 2 en 0. Combinaciones:<br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">ABCD  Dec  Unos
+0011   3    2  &#10004;
+0101   5    2  &#10004;
+0110   6    2  &#10004;
+1001   9    2  &#10004;
+1010  10    2  &#10004;
+1100  12    2  &#10004;
+</pre>
+f = &sum;m(3, 5, 6, 9, 10, 12)<br><br>
+<b>Minimizada:</b> f = A'B'CD + A'BC'D + A'BCD' + AB'C'D + AB'CD' + ABCD'<br>
+(No simplifica mucho por Karnaugh - los minterms estan dispersos)` },
+  { id:30, unit:2, desc:"Minimizar por Karnaugh (3 y 4 variables)", fullDesc:`Minimizar por el método de Karnaugh las siguientes funciones expresadas en<br>la forma canónica por comprensión.<br><br>a)<br><br><br><br><br>7,5,,2,0<br>,<br>,<br>3<br><br>c<br>b<br>a<br>f<br><br>b)<br><br><br><br><br>15<br>,<br>14<br>,<br>11<br>,<br>10<br>,8,7,5,4,1<br>,<br>,<br>,<br>4<br><br>d<br>c<br>b<br>a<br>f`, why:`Karnaugh es EL metodo de minimizacion. Cae en casi todas las mesas.`, solution:`<b>Minimizacion por Karnaugh:</b><br><br>
+<b>a) f(a,b,c) = &sum;m(0,2,3,5,7):</b><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">    BA
+C   00  01  11  10
+0 |  1 |  0 |  0 |  1 |
+1 |  0 |  1 |  1 |  1 |
+</pre>
+Grupos: {0,2}=B'C', {2,3}=A'B (o), {5,7}=AC, {3,7}=BC<br>
+<b>f = B'C' + BC + AC = C'B' + C(A+B)</b><br><br>
+<b>b) f(a,b,c,d) = &sum;m(1,4,5,7,8,10,11,14,15):</b><br>
+Se arma mapa 4&times;4, se agrupan en potencias de 2.<br>
+<b>f = A'BD + AC'D' + ACD + A'B'D</b> (resultado depende de agrupamientos)` },
+  { id:31, unit:2, desc:"De SdP minimizada obtener PdS minimizada", fullDesc:`Las  siguientes  expresiones  corresponden  a  funciones minimizadas<br>expresadas en la forma de suma de productos. Obtener las funciones<br>minimizadas expresadas en la forma de producto de sumas correspondientes.<br><br><br><br>bd<br>a<br>d<br>c<br>a<br>d<br>c<br>b<br>abd<br>d<br>c<br>b<br>a<br>f<br><br><br><br><br>,<br>,<br>,<br><br><br><br>bcd<br>bd<br>c<br>b<br>a<br>d<br>c<br>b<br>a<br>f<br><br><br><br>,<br>,<br>,<br><br><br><br>c<br>b<br>bcd<br>b<br>a<br>d<br>c<br>b<br>a<br>f<br><br><br><br>,<br>,<br>,`, why:`Karnaugh es EL metodo de minimizacion. Cae en casi todas las mesas.`, solution:`<b>De SdP minimizada a PdS minimizada:</b><br><br>
+<b>Metodo:</b><br>
+1. Armar el mapa de Karnaugh con la funcion dada<br>
+2. Agrupar los <b>ceros</b> en lugar de los unos<br>
+3. Escribir los maxterms correspondientes (variables complementadas)<br><br>
+Cada grupo de ceros genera un factor (suma) en el PdS.<br>
+Donde hay un 1 en el grupo, la variable va negada; donde hay 0, va directa.<br><br>
+<b>Tip:</b> Tambien se puede obtener la PdS complementando la SdP de f' y aplicando De Morgan.` },
+  { id:32, unit:2, desc:"Generador paridad impar para BCD Aiken", fullDesc:`En un sistema digital que opera con el  código  BCD Aiken  se  desea<br>implementar un generador de paridad impar.  Indicar la función más simple, ya<br>sea en la forma de producto de sumas o suma de productos que satisface el<br>requisito.`, why:`Karnaugh es EL metodo de minimizacion. Cae en casi todas las mesas.`, solution:`<b>Generador de paridad impar para BCD Aiken:</b><br><br>
+<b>BCD Aiken (2421):</b> usa combinaciones 0000-0100 y 1011-1111<br>
+Las combinaciones 0101-1010 son <b>dont care</b>.<br><br>
+P (paridad impar) = 1 cuando hay cantidad par de 1s en los 4 bits.<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dec|ABCD|#1s|P
+ 0 |0000| 0 |1
+ 1 |0001| 1 |0
+ 2 |0010| 1 |0
+ 3 |0011| 2 |1
+ 4 |0100| 1 |0
+ 5 |1011| 3 |0
+ 6 |1100| 2 |1
+ 7 |1101| 3 |0
+ 8 |1110| 3 |0
+ 9 |1111| 4 |1
+</pre>
+Con los dont-cares en el mapa de Karnaugh se obtiene la funcion mas simple.` },
+  { id:33, unit:2, desc:"Minimizar por Karnaugh (variantes)", fullDesc:`Minimizar por el método de Karnaugh las siguientes funciones expresadas en<br>la forma canónica por comprensión.<br><br>a)<br><br><br><br><br><br><br>4<br>15<br>,<br>13<br>,<br>11<br>,8,7,5,4,1,0<br>,<br>,<br>,<br>d<br>c<br>b<br>a<br>f<br><br>b)<br><br><br><br><br>15<br>,<br>14<br>,<br>12<br>,<br>10<br>,9,7,5,3,2,0<br>,<br>,<br>,<br>4<br><br>d<br>c<br>b<br>a<br>f`, why:`Karnaugh es EL metodo de minimizacion. Cae en casi todas las mesas.`, solution:`<b>Minimizar por Karnaugh (variantes):</b><br><br>
+<b>a) f(a,b,c,d) = &sum;m(0,1,4,5,7,8,11,13,15):</b><br>
+Armar mapa 4x4 y agrupar:<br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">      CD
+AB   00  01  11  10
+00 |  1 |  1 |  0 |  0 |
+01 |  1 |  1 |  1 |  0 |
+11 |  0 |  1 |  1 |  0 |
+10 |  1 |  0 |  1 |  0 |
+</pre>
+Agrupamientos posibles: {0,1,4,5}=A'D', {5,7,13,15}=BD, {11,15}=ACD, etc.<br>
+<b>f = A'D' + BD + ACD' (o equivalente)</b><br><br>
+<b>b) f(a,b,c,d) = &sum;m(0,2,3,5,7,9,10,12,14,15):</b><br>
+Mismo procedimiento, buscar grupos maximos.` },
+  { id:34, unit:2, desc:"Minimizar y comparar SdP vs PdS", fullDesc:`Minimizar las siguientes funciones y determinar si son más simples sus<br>expresiones de producto de sumas o suma de productos.<br><br>a)<br><br><br><br><br>15<br>,<br>14<br>,<br>13<br>,<br>11<br>,<br>10<br>,9,7,4,3,2<br>,<br>,<br>,<br>4<br><br>d<br>c<br>b<br>a<br>f<br><br>b)<br><br><br><br><br>15<br>,<br>14<br>,<br>11<br>,9,8,7,6,5,3,0<br>,<br>,<br>,<br>4<br><br>d<br>c<br>b<br>a<br>f<br><br>c)<br><br><br><br><br>12<br>,9,8,3,2,1<br>,<br>,<br>,<br>4<br><br>d<br>c<br>b<br>a<br>f<br><br>d)<br><br><br><br><br>12<br>,<br>10<br>,9,8,6,5,2,1,0<br>,<br>,<br>,<br>4<br><br>d<br>c<br>b<br>a<br>f`, why:`Karnaugh es EL metodo de minimizacion. Cae en casi todas las mesas.`, solution:`<b>Comparar SdP vs PdS minimizada:</b><br><br>
+<b>Metodo:</b> Para cada funcion, minimizar por Karnaugh tanto agrupando 1s (SdP) como 0s (PdS), y comparar la cantidad de terminos y literales.<br><br>
+La forma mas simple es la que tiene:<br>
+1. Menos terminos<br>
+2. Menos literales totales<br><br>
+A veces la SdP es mas simple, a veces la PdS. Depende de la distribucion de 1s y 0s en el mapa.` },
+  { id:35, unit:2, desc:"Minimizar por Karnaugh, resultado en PdS", fullDesc:`Minimizar por Karnaugh las siguientes funciones y dar el resultado en la forma<br>de producto de sumas.<br><br><br><br><br><br>cd<br>ab<br>bc<br>a<br>d<br>c<br>b<br>a<br>f<br><br><br><br><br>,<br>,<br>,<br><br><br><br><br><br><br><br><br>d<br>c<br>a<br>bd<br>ac<br>ab<br>bc<br>a<br>d<br>c<br>b<br>a<br>f<br><br><br><br><br><br>,<br>,<br>,`, why:`Karnaugh es EL metodo de minimizacion. Cae en casi todas las mesas.`, solution:`<b>Minimizar por Karnaugh, resultado en PdS:</b><br><br>
+<b>Metodo para obtener PdS directamente del mapa:</b><br>
+1. Agrupar los <b>ceros</b> del mapa<br>
+2. Para cada grupo, escribir la suma (maxterm):<br>
+   - Si la variable vale 1 en el grupo &rarr; va <b>negada</b><br>
+   - Si la variable vale 0 en el grupo &rarr; va <b>directa</b><br>
+3. Multiplicar todos los factores<br><br>
+<b>Alternativa:</b> Obtener SdP de f', aplicar De Morgan para obtener PdS de f.` },
+  { id:36, unit:2, desc:"Detectar numero >6 o <3 en BCD Exceso 3", fullDesc:`En un registro de 4 bits, cuyas salidas están disponibles al exterior, se<br>almacena información numérica decimal en el código BCD Exceso 3.  Se desea<br>implementar un sistema digital que detecte cuando el número contenido en el<br>registro es superior a 6 e inferior a 3. Indicar la función más simple, ya sea en<br>la forma de producto de sumas ó suma de productos que satisface el requisito.`, why:`Karnaugh es EL metodo de minimizacion. Cae en casi todas las mesas.`, solution:`<b>Detectar numero > 6 o < 3 en BCD Exceso 3:</b><br><br>
+En BCD EXC3, el rango valido es 0011 (0) a 1100 (9).<br>
+Numeros > 6: 7(1010), 8(1011), 9(1100)<br>
+Numeros < 3: 0(0011), 1(0100), 2(0101)<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dec|ABCD(EXC3)|f
+ 0 | 0011     | 1
+ 1 | 0100     | 1
+ 2 | 0101     | 1
+ 3 | 0110     | 0
+ 4 | 0111     | 0
+ 5 | 1000     | 0
+ 6 | 1001     | 0
+ 7 | 1010     | 1
+ 8 | 1011     | 1
+ 9 | 1100     | 1
+</pre>
+Combinaciones 0000,0001,0010,1101,1110,1111 son <b>dont care</b>.<br>
+Minimizar por Karnaugh con dont cares para obtener la expresion mas simple.` },
+  { id:37, unit:2, desc:"Diseno limpiaparabrisas (sistema combinacional)", fullDesc:`Diseñe un sistema combinacional que accione el motor de un limpiaparabrisas<br>sabiendo que éste funciona cuando la llave general del auto está en contacto, y<br>además, se activa el control del limpiaparabrisas, pero si desactiva este último,<br>el motor sigue funcionando hasta que las escobillas lleguen al costado<br>izquierdo.<br>Obtener la solución más simple, e implementarla con las compuertas<br>correspondientes.`, why:`Diseno de circuitos reales. Demuestra que podes aplicar la teoria.`, solution:`<b>Diseno sistema limpiaparabrisas:</b><br><br>
+<b>Variables:</b><br>
+- L: Llave general (contacto) <br>
+- C: Control del limpiaparabrisas<br>
+- E: Sensor escobillas en posicion izquierda<br>
+- M: Motor (salida)<br><br>
+<b>Condiciones:</b><br>
+- M=1 cuando L=1 AND C=1<br>
+- Si C pasa a 0, M sigue en 1 hasta E=1 (escobillas en posicion)<br><br>
+<b>Funcion:</b> M = L &middot; (C + M &middot; E')<br>
+(Es un circuito con <b>realimentacion</b> - memoria implicita)<br><br>
+Se implementa con compuertas AND y OR, con la salida M realimentada a la entrada.` },
+  { id:38, unit:2, desc:"Diseno llaves de escalera", fullDesc:`Realizar el diseño e implementación de dos llaves de luz colocadas al pie y<br>cima de una escalera; de tal manera que pueda prender la luz de la llave de<br>abajo y apagarla con la llave de arriba y viceversa.`, why:`Diseno de circuitos reales. Demuestra que podes aplicar la teoria.`, solution:`<b>Llaves de escalera (conmutador):</b><br><br>
+<b>Variables:</b> A (llave abajo), B (llave arriba)<br>
+<b>Salida:</b> L (luz)<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">A B | L
+0 0 | 0
+0 1 | 1
+1 0 | 1
+1 1 | 0
+</pre>
+<b>L = A &oplus; B = A'B + AB'</b> (XOR)<br><br>
+Se implementa con una compuerta <b>XOR</b>, o equivalentemente:<br>
+L = (A+B) &middot; (A'+B') = (A+B) &middot; (AB)'<br><br>
+Este es el circuito clasico de <b>llave combinada</b> o conmutador de tres vias.` },
+  { id:39, unit:2, desc:"Implementar funciones con decodificadores", fullDesc:`Utilizar decodificadores para implementar las siguientes funciones:<br><br>1.<br><br><br><br><br>10<br>,8,7,1,0<br>,<br>,<br>,<br>4<br><br>d<br>c<br>b<br>a<br>f<br><br>2.<br><br><br><br><br>12<br>,8,,5,3,2,1<br>,<br>,<br>,<br>4<br><br>d<br>c<br>b<br>a<br>f`, why:`Diseno de circuitos reales. Demuestra que podes aplicar la teoria.`, solution:`<b>Implementar funciones con decodificadores:</b><br><br>
+Un decodificador de n entradas tiene 2<sup>n</sup> salidas, cada una correspondiente a un mintermino.<br><br>
+<b>1) f(a,b,c,d) = &sum;m(0,1,7,8,10):</b><br>
+Usar decodificador 4:16. Conectar las salidas 0,1,7,8,10 a una compuerta OR.<br>
+f = m0 + m1 + m7 + m8 + m10<br><br>
+<b>2) f(a,b,c,d) = &sum;m(1,2,3,5,8,12):</b><br>
+Conectar salidas 1,2,3,5,8,12 del decodificador 4:16 a OR.<br>
+f = m1 + m2 + m3 + m5 + m8 + m12<br><br>
+<b>Ventaja:</b> Cualquier funcion se implementa sin minimizar, solo conectando los minterms.` },
+  { id:40, unit:2, desc:"Diseno comparador 2 bits con NAND", fullDesc:`Realizar el diseño de un comparador de dos números de dos bits c/u. Este<br>sistema tiene que tener 3 salidas la de mayor, menor e igual. Realizar el diseño<br>con compuertas Nand.`, why:`Diseno de circuitos reales. Demuestra que podes aplicar la teoria.`, solution:`<b>Comparador de 2 numeros de 2 bits con NAND:</b><br><br>
+<b>Entradas:</b> A = A1A0, B = B1B0<br>
+<b>Salidas:</b> M (A>B), I (A=B), m (A&lt;B)<br><br>
+<b>Tabla de verdad</b> (16 combinaciones) y luego minimizar por Karnaugh.<br><br>
+<b>I (igualdad):</b> I = (A1&oplus;B1)' &middot; (A0&oplus;B0)' = XNOR de cada par<br>
+<b>M (mayor):</b> M = A1&middot;B1' + (A1&oplus;B1)'&middot;A0&middot;B0'<br>
+<b>m (menor):</b> m = A1'&middot;B1 + (A1&oplus;B1)'&middot;A0'&middot;B0<br><br>
+Para implementar con NAND: convertir cada expresion a forma NAND-NAND usando doble complemento.` },
+  { id:41, unit:2, desc:"Generador paridad BCD 8421 con decodificadores/MUX", fullDesc:`Un registro de salida en paralelo A0 a A3 contiene un carácter codificado en<br>BCD 8421. Realizar un generador de paridad para agregar el correspondiente<br>bit Ap que permita elegir paridad par o impar, con una llave selectora. Utilizar<br>decodificadores y multiplexores`, why:`Diseno de circuitos reales. Demuestra que podes aplicar la teoria.`, solution:`<b>Generador de paridad con decodificador y MUX:</b><br><br>
+<b>Entradas:</b> A0-A3 (BCD 8421), Selector par/impar (S)<br>
+<b>Salida:</b> Ap (bit de paridad)<br><br>
+<b>Metodo:</b><br>
+1. Decodificador 4:16 para A0-A3<br>
+2. Para paridad par: Ap=1 cuando cantidad de 1s es impar<br>
+3. Para paridad impar: Ap=1 cuando cantidad de 1s es par<br>
+4. MUX selecciona entre ambas opciones segun S<br><br>
+Conectar salidas del decodificador correspondientes a combinaciones con cantidad impar de 1s a una entrada del MUX, y las de cantidad par a la otra.` },
+  { id:42, unit:2, desc:"Sistema arranque motor con paridad impar", fullDesc:`El diagrama de la figura indica el sistema de arranque de un motor eléctrico.<br>Existen cuatro variables binarias de control las cuales permitirán el arranque<br>del motor sólo cuando existe paridad impar entre ellas. Hay dos casos<br>especiales, llamados de emergencia que permitirán arranque, y ocurren cuando<br>todas las variables están en uno ó cero simultáneamente.<br>Realizar con compuertas.<br><br>Ejercicio Nº 43:<br>Construir un multiplexor de 8 canales a partir de multiplexores de 2 canales.<br><br>La solución es conectarlos en cascada:<br>Siasdfgfstem<br>Sistema<br>de<br>AaArranquefd<br>Sistemadfffsd<br>sdvcsdffsdfsdf<br>zxvcfdsfsdfsdf<br>Sistrema<br>Arranquede<br>arranqueSis<br>Motor<br>V<br>V2<br>V3<br>V4<br>V1`, why:`Diseno de circuitos reales. Demuestra que podes aplicar la teoria.`, solution:`<b>Sistema arranque motor con paridad impar + emergencia:</b><br><br>
+<b>Variables:</b> V1, V2, V3, V4<br>
+<b>Salida:</b> Motor = 1 cuando paridad impar O emergencia<br><br>
+<b>Paridad impar:</b> cantidad impar de 1s entre V1-V4<br>
+<b>Emergencia:</b> todas en 0 (0000) o todas en 1 (1111)<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">f = &sum;m(0, 1,2,4,7,8,11,13,14, 15)
+</pre>
+f = paridad_impar(V1,V2,V3,V4) + V1V2V3V4 + V1'V2'V3'V4'<br>
+Minimizar por Karnaugh e implementar con compuertas.` },
+  { id:43, unit:2, desc:"MUX 8 canales a partir de MUX 2 canales", fullDesc:``, why:`Biestables y contadores son la base de registros y memorias. Fundamental para U3-U4.`, solution:`<b>MUX 8 canales con MUX de 2 canales:</b><br><br>
+Se necesitan <b>7 MUX de 2 canales</b> conectados en cascada (arbol):<br><br>
+<b>Nivel 1 (4 MUX):</b> Seleccionan entre pares de canales con S0<br>
+- MUX1: canales 0,1 (S0 selecciona)<br>
+- MUX2: canales 2,3<br>
+- MUX3: canales 4,5<br>
+- MUX4: canales 6,7<br><br>
+<b>Nivel 2 (2 MUX):</b> Seleccionan entre salidas del nivel 1 con S1<br>
+- MUX5: salidas de MUX1, MUX2<br>
+- MUX6: salidas de MUX3, MUX4<br><br>
+<b>Nivel 3 (1 MUX):</b> Selecciona entre nivel 2 con S2<br>
+- MUX7: salidas de MUX5, MUX6 &rarr; Salida final<br><br>
+<b>Lineas de seleccion:</b> S2(MSB), S1, S0(LSB)` },
+  { id:44, unit:2, desc:"Tabla de verdad de biestable", fullDesc:`Realizar la tabla de verdad de este biestable`, why:`Biestables y contadores son la base de registros y memorias. Fundamental para U3-U4.`, solution:`<b>Tabla de verdad de biestable:</b><br><br>
+<b>Biestable SR (Set-Reset):</b>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">S  R | Q(t+1) | Descripcion
+0  0 |  Q(t)  | Mantiene estado
+0  1 |   0    | Reset
+1  0 |   1    | Set
+1  1 | Indet. | No permitido
+</pre>
+<b>Biestable JK:</b>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">J  K | Q(t+1) | Descripcion
+0  0 |  Q(t)  | Mantiene
+0  1 |   0    | Reset
+1  0 |   1    | Set
+1  1 |  Q'(t) | Conmuta (toggle)
+</pre>
+El JK resuelve el problema del estado prohibido del SR.` },
+  { id:45, unit:2, desc:"Determinar codigo de contaje en registro desplazamiento JK", fullDesc:`Determinar en que código se lleva el contaje en el siguiente registro de<br>desplazamiento realizado con biestables J-K. Suponer que inicialmente<br><br>QO=Ql=Q2=Q3=0.`, why:`Biestables y contadores son la base de registros y memorias. Fundamental para U3-U4.`, solution:`<b>Codigo de contaje en registro de desplazamiento JK:</b><br><br>
+Con Q0=Q1=Q2=Q3=0 como estado inicial, se analiza ciclo a ciclo:<br><br>
+Las entradas J y K de cada biestable dependen de la retroalimentacion del circuito.<br>
+Se sigue la secuencia de estados evaluando las entradas J,K en cada pulso de reloj.<br><br>
+El registro de desplazamiento con retroalimentacion genera un patron especifico.<br>
+Si la retroalimentacion es Q3' a J0 y Q3 a K0, genera un <b>contador Johnson</b>.<br>
+Si hay XOR en la retroalimentacion, genera un <b>LFSR</b> (secuencia pseudo-aleatoria).<br><br>
+Se debe analizar el circuito especifico dado para determinar la secuencia.` },
+  { id:46, unit:2, desc:"Contador binario ascendente asincrono: secuencia + diagrama tiempos", fullDesc:`1. Contador binario ascendente.<br>La figura  presenta un contador binario de cuatro bits conectado para que<br>funcione de modo asíncrono (la entrada de reloj sólo está conectada al primer<br>flip-flop). El segundo flipflop se dispara mediante la señal Q0 (salida del primer<br>flip-flop), el tercer flip-flop mediante la señal Q1 (salida del anterior) y así<br>sucesivamente. Cada flip-flop cambia durante el flanco descendente de la señal<br>que se aplica a su entrada de reloj.<br>R<br>S<br>Q<br>Q<br>J         Q0<br>T<br>K        Q0<br>J         Q1<br>T<br>K        Q1<br>J         Q2<br>T<br>K        Q2<br>J         Q3<br>T<br>K        Q3<br>IMPULSOS<br><br>El contador de cuatro bits dispone de dieciséis estados diferentes (24 =16).Hay<br>que tener en cuenta que Q0 representa el bit menos significativo (LSB) y Q3 el<br>bit más significativo (MSB).<br><br>Realizar la secuencia de estados del contador en una tabla, para Q3, Q2, Q1 y<br>Q0 y el diagrama de tiempos del contador.`, why:`Biestables y contadores son la base de registros y memorias. Fundamental para U3-U4.`, solution:`<b>Contador binario ascendente asincrono de 4 bits:</b><br><br>
+Cada flip-flop JK con J=K=1 (modo toggle). Se dispara en flanco descendente.<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Pulso | Q3 Q2 Q1 Q0 | Dec
+  0   |  0  0  0  0 |  0
+  1   |  0  0  0  1 |  1
+  2   |  0  0  1  0 |  2
+  3   |  0  0  1  1 |  3
+  4   |  0  1  0  0 |  4
+  5   |  0  1  0  1 |  5
+  6   |  0  1  1  0 |  6
+  7   |  0  1  1  1 |  7
+  8   |  1  0  0  0 |  8
+  9   |  1  0  0  1 |  9
+ 10   |  1  0  1  0 | 10
+ 11   |  1  0  1  1 | 11
+ 12   |  1  1  0  0 | 12
+ 13   |  1  1  0  1 | 13
+ 14   |  1  1  1  0 | 14
+ 15   |  1  1  1  1 | 15
+</pre>
+Despues del pulso 16 vuelve a 0000 (cuenta modulo 16).<br>
+Q0 cambia cada pulso, Q1 cada 2, Q2 cada 4, Q3 cada 8.` },
+  { id:47, unit:2, desc:"Contador binario descendente asincrono: secuencia + diagrama tiempos", fullDesc:`En la figura  se observa un contador asíncrono binario descendente de cuatro<br>bits. El circuito es similar al anterior, con la excepción de que las entradas de<br>cada flip-flop se conectan a la salida complementaria del flip-flop anterior. Cada<br>flip-flop bascula al recibir un flanco descendente en su señal de reloj, que en<br>este caso se produce cuando la salida anterior cambia de ‘0’ a ‘1’, o lo que es<br>lo mismo la salida complementaria cambia de ‘1’ a ‘0’.<br><br>Realizar la secuencia de estados del contador en una tabla, para Q3, Q2, Q1 y<br>Q0 y el respectivo diagrama de tiempos.`, why:`Biestables y contadores son la base de registros y memorias. Fundamental para U3-U4.`, solution:`<b>Contador binario descendente asincrono de 4 bits:</b><br><br>
+Similar al ascendente pero usando salidas Q' para disparar el siguiente FF.<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Pulso | Q3 Q2 Q1 Q0 | Dec
+  0   |  0  0  0  0 |  0
+  1   |  1  1  1  1 | 15
+  2   |  1  1  1  0 | 14
+  3   |  1  1  0  1 | 13
+  4   |  1  1  0  0 | 12
+  5   |  1  0  1  1 | 11
+  6   |  1  0  1  0 | 10
+  7   |  1  0  0  1 |  9
+  8   |  1  0  0  0 |  8
+  9   |  0  1  1  1 |  7
+ 10   |  0  1  1  0 |  6
+ 11   |  0  1  0  1 |  5
+ 12   |  0  1  0  0 |  4
+ 13   |  0  0  1  1 |  3
+ 14   |  0  0  1  0 |  2
+ 15   |  0  0  0  1 |  1
+</pre>
+Cuenta hacia abajo: 0, 15, 14, 13, ..., 1, 0, 15, ...` },
+  { id:48, unit:2, desc:"Convertir biestables: SR->JK, JK->T, SR->D", fullDesc:`a) A partir de un biestable SR, obtener un JK.<br>b) A partir de un biestable JK, obtener un biestable T.<br>c) A partir de un biestable SR, obtener un biestable D.`, why:`Biestables y contadores son la base de registros y memorias. Fundamental para U3-U4.`, solution:`<b>Conversiones entre biestables:</b><br><br>
+<b>a) SR &rarr; JK:</b><br>
+J=S, K=R cuando no hay estado prohibido.<br>
+Para resolver J=K=1 (toggle): S = J&middot;Q', R = K&middot;Q<br>
+Asi cuando J=K=1: S=Q', R=Q &rarr; conmuta &#10004;<br><br>
+<b>b) JK &rarr; T:</b><br>
+El biestable T conmuta cuando T=1 y mantiene cuando T=0.<br>
+Solucion: <b>J = T, K = T</b><br>
+Cuando T=1: J=K=1 &rarr; conmuta &#10004;<br>
+Cuando T=0: J=K=0 &rarr; mantiene &#10004;<br><br>
+<b>c) SR &rarr; D:</b><br>
+El biestable D almacena la entrada: Q(t+1)=D<br>
+Solucion: <b>S = D, R = D'</b><br>
+Cuando D=1: S=1,R=0 &rarr; Q=1 &#10004;<br>
+Cuando D=0: S=0,R=1 &rarr; Q=0 &#10004;` },
+  { id:49, unit:2, desc:"Sistema combinacional para detectar valor 72 y reiniciar contador", fullDesc:`Determinar el Sistema combinacional necesario para indicar que los contadores<br>binarios han alcanzado el valor equivalente decimal 72, e inicie el conteo<br>nuevamente desde 0.<br>Contador<br>Binario Natural<br>Sistema<br>Combinacional<br>Contador<br>Binario Natural<br>Impulsos`, why:`Biestables y contadores son la base de registros y memorias. Fundamental para U3-U4.`, solution:`<b>Detectar valor 72 y reiniciar contador:</b><br><br>
+72<sub>10</sub> = <code>1001000</code><sub>2</sub> (7 bits, necesitamos contador de al menos 7 bits)<br><br>
+<b>Sistema combinacional:</b><br>
+Detectar Q6=1, Q5=0, Q4=0, Q3=1, Q2=0, Q1=0, Q0=0<br><br>
+f = Q6 &middot; Q5' &middot; Q4' &middot; Q3 &middot; Q2' &middot; Q1' &middot; Q0'<br><br>
+<b>Implementacion:</b><br>
+Una compuerta AND de 7 entradas (con inversores en Q5,Q4,Q2,Q1,Q0).<br>
+La salida se conecta al RESET de todos los flip-flops del contador.<br><br>
+Cuando el contador llega a 72, la AND da 1, forzando reset a 0.<br>
+Esto genera un <b>contador modulo 72</b> (cuenta de 0 a 71 y reinicia).` },
+  { id:50, unit:3, desc:"Determinar n1 y n2 para memorias de distintos tamanos", fullDesc:`Determinar cuál es el valor de n1 y n2, si la memoria es de: 8Kbytes,<br>32Kbytes, 2 Mbytes,  2018 palabras de 16 bits, 65536 palabras de 32 bits o<br>524288 palabras de 32 bits.`, why:`Calculo de direccionamiento y extension de memoria. Ejercicio clasico que siempre aparece.`, solution:`<b>Determinar n1 (direcciones) y n2 (datos):</b><br><br>
+n1 = bits del bus de direcciones, n2 = bits del bus de datos.<br>
+Posiciones = 2<sup>n1</sup>, Tamano palabra = n2 bits.<br><br>
+<b>8 KBytes:</b> 8K = 8192 = 2<sup>13</sup> posiciones de 8 bits &rarr; n1=13, n2=8<br>
+<b>32 KBytes:</b> 32K = 2<sup>15</sup> posiciones de 8 bits &rarr; n1=15, n2=8<br>
+<b>2 MBytes:</b> 2M = 2<sup>21</sup> posiciones de 8 bits &rarr; n1=21, n2=8<br>
+<b>2048 pal &times; 16 bits:</b> 2048 = 2<sup>11</sup> &rarr; n1=11, n2=16<br>
+<b>65536 pal &times; 32 bits:</b> 65536 = 2<sup>16</sup> &rarr; n1=16, n2=32<br>
+<b>524288 pal &times; 32 bits:</b> 524288 = 2<sup>19</sup> &rarr; n1=19, n2=32` },
+  { id:51, unit:3, desc:"Bits de direccionamiento para 512 y 2048 posiciones", fullDesc:`¿Cuantos bits de direccionamiento son necesarios para la localización de una<br>palabra en una memoria de 512 posiciones?;¿y de una de 2048?.`, why:`Calculo de direccionamiento y extension de memoria. Ejercicio clasico que siempre aparece.`, solution:`<b>Bits de direccionamiento:</b><br><br>
+<b>512 posiciones:</b> 512 = 2<sup>9</sup> &rarr; <b>9 bits</b> de direccionamiento<br><br>
+<b>2048 posiciones:</b> 2048 = 2<sup>11</sup> &rarr; <b>11 bits</b> de direccionamiento<br><br>
+<b>Formula general:</b> n = log<sub>2</sub>(posiciones) = ceil(log<sub>2</sub>(N))` },
+  { id:52, unit:3, desc:"Bits totales de memoria 64Kx8 + bits de direccionamiento", fullDesc:`¿Cuantos bits posee una memoria de 64Kx8, siendo 64K la cantidad de<br>posiciones a direccionar y 8 la cantidad de bits de cada posición o palabra?<br>¿Cuantos bits de direccionamiento son necesarios?`, why:`Calculo de direccionamiento y extension de memoria. Ejercicio clasico que siempre aparece.`, solution:`<b>Memoria 64K &times; 8:</b><br><br>
+<b>Bits totales:</b> 64K &times; 8 = 65536 &times; 8 = <b>524,288 bits</b> = <b>64 KBytes</b><br><br>
+<b>Bits de direccionamiento:</b> 64K = 2<sup>16</sup> &rarr; <b>16 bits</b> de direccion<br><br>
+El bus de direcciones tiene 16 lineas (A0-A15).<br>
+El bus de datos tiene 8 lineas (D0-D7).` },
+  { id:53, unit:3, desc:"Combinar 2 RAMs de 512 para 1024 posiciones", fullDesc:`Se tienen dos memorias RAM de 512 posiciones cada una. ¿Cuantos bits se<br>necesitarán para direccionar a ambas de manera de obtener una memoria de<br>1024 posiciones? Realizar una posible conexión.`, why:`Calculo de direccionamiento y extension de memoria. Ejercicio clasico que siempre aparece.`, solution:`<b>Combinar 2 RAMs de 512 posiciones:</b><br><br>
+<b>Cada RAM:</b> 512 = 2<sup>9</sup> posiciones &rarr; 9 bits de direccion (A0-A8)<br>
+<b>Memoria combinada:</b> 1024 = 2<sup>10</sup> posiciones &rarr; <b>10 bits</b> de direccion<br><br>
+<b>Conexion:</b><br>
+- A0-A8: se conectan en paralelo a ambas RAMs<br>
+- A9: se usa como <b>chip select</b><br>
+  - A9=0 &rarr; selecciona RAM 1 (direcciones 0-511)<br>
+  - A9=1 &rarr; selecciona RAM 2 (direcciones 512-1023)<br>
+- Bus de datos: compartido<br><br>
+Se necesita un inversor para que CS de una RAM sea A9 y de la otra A9'.` },
+  { id:54, unit:3, desc:"Construir memoria 4Kx8 desde pastillas 2Kx4", fullDesc:`Realizar una memoria de 4K X 8, partiendo de pastillas de 2K X 4.`, why:`Calculo de direccionamiento y extension de memoria. Ejercicio clasico que siempre aparece.`, solution:`<b>Memoria 4K &times; 8 desde pastillas 2K &times; 4:</b><br><br>
+<b>Necesidad:</b> 4K posiciones &times; 8 bits<br>
+<b>Disponible:</b> pastillas de 2K posiciones &times; 4 bits<br><br>
+<b>Extension de palabra (4&rarr;8 bits):</b> 2 pastillas en paralelo, misma direccion, cada una aporta 4 bits.<br>
+<b>Extension de posiciones (2K&rarr;4K):</b> 2 bancos, seleccionados con A11.<br><br>
+<b>Total: 4 pastillas</b> (2 filas &times; 2 columnas)<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">A0-A10 &rarr; a las 4 pastillas (direccionamiento interno)
+A11 &rarr; chip select (0: banco bajo, 1: banco alto)
+D0-D3 &rarr; pastillas de la columna 1
+D4-D7 &rarr; pastillas de la columna 2</pre>` },
+  { id:55, unit:3, desc:"Banco de memoria 4Kx16 desde RAMs de 2KByte", fullDesc:`Disponemos de memorias RAM de 2KByte y queremos realizar un banco de<br>memoria de 4Kx16. Realizar la posible conexión y determinar cuántos bytes<br>tiene el bus de direcciones, datos y control.`, why:`Calculo de direccionamiento y extension de memoria. Ejercicio clasico que siempre aparece.`, solution:`<b>Banco de memoria 4K &times; 16 desde RAMs de 2KByte:</b><br><br>
+<b>RAM disponible:</b> 2KByte = 2K &times; 8 (2048 posiciones de 8 bits)<br>
+<b>Objetivo:</b> 4K &times; 16 (4096 posiciones de 16 bits)<br><br>
+<b>Extension de palabra (8&rarr;16):</b> 2 RAMs en paralelo por banco<br>
+<b>Extension de posiciones (2K&rarr;4K):</b> 2 bancos<br>
+<b>Total: 4 RAMs</b><br><br>
+<b>Bus de direcciones:</b> 12 bits (A0-A11, ya que 4K=2<sup>12</sup>)<br>
+<b>Bus de datos:</b> 16 bits (D0-D15)<br>
+<b>Bus de control:</b> R/W, CS, y lineas de seleccion de banco<br><br>
+A0-A10 van a todas las RAMs. A11 selecciona banco alto/bajo.` },
+  { id:56, unit:4, desc:"Decodificar instrucciones en octal -> mnemonico", fullDesc:`¿Cuál es el efecto de las siguientes instrucciones en octal?. Indique el<br>mnemónico correspondiente.<br><br>177333<br><br>136601<br><br>110377<br><br>013152<br><br>042322<br><br>125033<br><br>075303<br><br>106210<br><br>063501<br><br>151212<br>Memoria de Acceso<br>Aleatorio<br>[RAM]<br>Bus de<br>Direcciones<br>Bus de Datos<br>n2<br>n1`, why:`Programacion de la Blue. Es el nucleo de la materia y la base para entender CPUs reales.`, solution:`<b>Decodificacion de instrucciones de la Blue:</b><br><br>
+La Maquina Elemental (Blue) usa palabras de 18 bits: 3 bits opcode + 15 bits direccion.<br>
+En octal: 6 digitos (2 para opcode + 4 para direccion).<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Opcode | Mnemonico | Accion
+  00   |   HLT     | Detener
+  01   |   STA     | ACC &rarr; Mem[dir]
+  02   |   LDA     | Mem[dir] &rarr; ACC
+  03   |   AND     | ACC AND Mem[dir] &rarr; ACC
+  04   |   IOR     | ACC OR Mem[dir] &rarr; ACC
+  05   |   XOR     | ACC XOR Mem[dir] &rarr; ACC
+  06   |   JMP     | Salto incondicional
+  07   |   JPZ     | Salto si ACC &ge; 0
+  10   |   JSR     | Salto a subrutina
+  11   |   OUT     | Salida
+  13   |   IN      | Entrada
+</pre>
+Para cada instruccion dada, separar los 2 digitos altos (opcode) de los 4 bajos (direccion) y buscar en la tabla.` },
+  { id:57, unit:4, desc:"Programa intercambio de contenidos (ubicacion 400)", fullDesc:`Escriba un programa comenzando en la ubicación 400 que intercambie los<br>contenidos de las ubicaciones 550 y 551. Expresarlo en representación octal y<br>mnemónica.`, why:`Programacion de la Blue. Es el nucleo de la materia y la base para entender CPUs reales.`, solution:`<b>Programa intercambio contenidos (Blue):</b><br><br>
+Intercambiar contenidos de ubicaciones 550 y 551 usando ACC como temporal:<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dir  | Octal  | Mnemonico    | Accion
+0400 | 020550 | LDA 0550     | ACC &larr; (550)
+0401 | 010551 | STA 0551_tmp | ACC &rarr; temporal (usar 552)
+  -- | (Necesitamos un temporal) --
+</pre>
+<b>Programa correcto:</b>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">0400: LDA 0550    | ACC &larr; contenido de 550
+0401: STA 0552    | Guardar en temporal (552)
+0402: LDA 0551    | ACC &larr; contenido de 551
+0403: STA 0550    | Guardar en 550
+0404: LDA 0552    | ACC &larr; temporal
+0405: STA 0551    | Guardar en 551
+0406: HLT         | Fin
+</pre>` },
+  { id:58, unit:4, desc:"Programa operacion IOR entre ubicaciones", fullDesc:`Escriba un programa que comience en la ubicación 760 que efectúe la<br>operación lógica IOR entre el contenido de la ubicación 650 y 653. Depositar el<br>resultado en 650 e indicar el valor resultante en octal a partir de los siguientes<br>datos en decimal:`, why:`Programacion de la Blue. Es el nucleo de la materia y la base para entender CPUs reales.`, solution:`<b>Programa IOR entre ubicaciones (Blue):</b><br><br>
+Operacion: (650) IOR (653) &rarr; resultado en 650<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dir  | Mnemonico    | Accion
+0760 | LDA 0650     | ACC &larr; contenido de 650
+0761 | IOR 0653     | ACC &larr; ACC OR (653)
+0762 | STA 0650     | Resultado &rarr; 650
+0763 | HLT          | Fin
+</pre>
+<b>En octal:</b>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">0760: 020650
+0761: 040653
+0762: 010650
+0763: 000000
+</pre>` },
+  { id:59, unit:4, desc:"Secuencia salto condicional (si cero->311, si no->444)", fullDesc:`Proyecte una secuencia de instrucciones que efectúe un salto a la ubicación<br>311 si el contenido de la dirección 200 es cero, y a la ubicación 444 si el<br>contenido es distinto de cero.`, why:`Programacion de la Blue. Es el nucleo de la materia y la base para entender CPUs reales.`, solution:`<b>Salto condicional en la Blue:</b><br><br>
+Si (200)=0 saltar a 311, si (200)&ne;0 saltar a 444.<br><br>
+<b>Idea:</b> Usar LDA para cargar el contenido y JPZ para testear.<br>
+JPZ salta si ACC &ge; 0 (no exactamente si es cero).<br>
+Para detectar cero, podemos usar XOR o complementar.<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dir  | Mnemonico    | Accion
+XXX  | LDA 0200     | ACC &larr; (200)
+XXX  | JPZ label    | Si ACC=0, salta (necesitamos verificar)
+XXX  | JMP 0444     | Si no es cero, ir a 444
+label| JMP 0311     | Si es cero, ir a 311
+</pre>
+Nota: La implementacion exacta depende de si la Blue tiene instruccion de salto por cero o solo por signo.` },
+  { id:60, unit:4, desc:"Programa cuadrado por sumas sucesivas de impares", fullDesc:`Escriba un programa que efectúe el cuadrado de un número por sumas<br>sucesivas de valores impares. Suponga que dicho número puede ser positivo o<br>negativo.`, why:`Programacion de la Blue. Es el nucleo de la materia y la base para entender CPUs reales.`, solution:`<b>Cuadrado por sumas sucesivas de impares (Blue):</b><br><br>
+<b>Propiedad:</b> N<sup>2</sup> = 1 + 3 + 5 + ... + (2N-1) = &sum; primeros N impares<br><br>
+<b>Algoritmo:</b><br>
+1. Si N&lt;0, hacer N = |N| (el cuadrado es siempre positivo)<br>
+2. Resultado = 0, Impar = 1, Contador = N<br>
+3. Resultado = Resultado + Impar<br>
+4. Impar = Impar + 2<br>
+5. Contador = Contador - 1<br>
+6. Si Contador &ne; 0, volver a 3<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">; Pseudocodigo Blue
+LDA N        ; Cargar numero
+JPZ FIN      ; Si es 0, resultado=0
+; (verificar signo y hacer abs)
+; Loop: sumar impares sucesivos
+; Almacenar resultado
+HLT</pre>` },
+  { id:61, unit:4, desc:"Programa raiz cuadrada por restas sucesivas de impares", fullDesc:`Escriba un programa que efectúa la raíz cuadrada de un número por restas<br>sucesivas de valores impares. Suponga que dicho número es siempre positivo.`, why:`Programacion de la Blue. Es el nucleo de la materia y la base para entender CPUs reales.`, solution:`<b>Raiz cuadrada por restas sucesivas de impares (Blue):</b><br><br>
+<b>Propiedad:</b> Si N = 1+3+5+...+(2k-1), entonces &radic;N = k<br><br>
+<b>Algoritmo:</b><br>
+1. Resultado = 0, Impar = 1, Resto = N<br>
+2. Resto = Resto - Impar<br>
+3. Si Resto &lt; 0, terminar (Resultado es la raiz entera)<br>
+4. Resultado = Resultado + 1<br>
+5. Impar = Impar + 2<br>
+6. Volver a 2<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Ejemplo: sqrt(25)
+25 - 1 = 24 (R=1)
+24 - 3 = 21 (R=2)
+21 - 5 = 16 (R=3)
+16 - 7 = 9  (R=4)
+ 9 - 9 = 0  (R=5) &rarr; sqrt(25) = 5</pre>` },
+  { id:62, unit:5, desc:"Duplicar instrucciones manteniendo longitud de palabra", fullDesc:`Suponga que la Blue debe ser dotada del doble de instrucciones. ¿Cómo<br>modificaría la estructura de la palabra, manteniendo su longitud con dicho<br>objeto? ¿Cuántas palabras pueden direccionarse directamente según su<br>propuesta?.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Duplicar instrucciones manteniendo longitud de palabra:</b><br><br>
+La Blue tiene 18 bits: 3 bits opcode (8 instrucciones) + 15 bits direccion (32K).<br><br>
+Para <b>duplicar instrucciones</b> (16 instrucciones), necesitamos 4 bits de opcode.<br>
+Si mantenemos 18 bits: 4 bits opcode + 14 bits direccion.<br><br>
+<b>Consecuencia:</b><br>
+- Opcode: 4 bits &rarr; 2<sup>4</sup> = <b>16 instrucciones</b> &#10004;<br>
+- Direccion: 14 bits &rarr; 2<sup>14</sup> = <b>16K palabras</b> direccionables directamente<br>
+- Se pierde la mitad del espacio de direccionamiento (de 32K a 16K)<br><br>
+<b>Alternativa:</b> Usar instrucciones de longitud variable o paginas de memoria.` },
+  { id:63, unit:5, desc:"Agregar direccionamiento directo e indirecto", fullDesc:`Suponga que la Blue debe ser dotada de direccionamiento directo e indirecto,<br>usando las mismas instrucciones de referencia a memoria. ¿Cómo modificaría<br>la estructura de la palabra, manteniendo su longitud con dicho objeto?<br>¿Cuántas palabras pueden direccionarse directamente e indirectamente según<br>su propuesta?`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Direccionamiento directo e indirecto:</b><br><br>
+Se agrega 1 bit de modo (I): I=0 directo, I=1 indirecto.<br><br>
+<b>Nueva estructura (18 bits):</b> 3 bits opcode + 1 bit I + 14 bits direccion<br><br>
+<b>Directo (I=0):</b> Operando en Mem[direccion] &rarr; 2<sup>14</sup> = <b>16K posiciones</b><br>
+<b>Indirecto (I=1):</b> Mem[direccion] contiene la direccion real del operando &rarr; 2<sup>15</sup> = <b>32K posiciones</b> (la palabra apuntada usa 15 bits completos)<br><br>
+El direccionamiento indirecto permite acceder a toda la memoria a costa de un acceso extra a memoria.` },
+  { id:64, unit:5, desc:"Calcular posicion de memoria con IP y CS", fullDesc:`Indique la posición de memoria a la que se accederá para leer una instrucción,<br>si los contenidos de los registros IP y CS son 1F3C y FF22, respectivamente.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Direccion fisica con IP y CS (8088):</b><br><br>
+<b>Formula:</b> Direccion fisica = CS &times; 16 + IP = CS &times; 10h + IP<br><br>
+<b>Datos:</b> IP = 1F3C, CS = FF22<br><br>
+<b>Calculo:</b><br>
+CS &times; 10h = FF22 &times; 10h = FF220<br>
+FF220 + 1F3C = <b>1011 5C</b><sub>16</sub><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">  FF220
++ 01F3C
+-------
+ 1011 5C  (20 bits de direccion fisica)</pre>
+La instruccion se leera de la direccion <b>1011 5C</b>h.` },
+  { id:65, unit:5, desc:"Inicio y fin de segmentos datos/codigo desde DS y CS", fullDesc:`Suponiendo que los contenidos de los registros DS (Segmento de Datos) y CS<br>(Segmento de Código) son C200 y BB2C, respectivamente, indicar la posición<br>física de inicio y final de los segmentos de datos y de código. ¿Observa algún<br>problema?.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Segmentos de datos y codigo (8088):</b><br><br>
+<b>DS = C200h, CS = BB2Ch</b><br><br>
+<b>Segmento de datos:</b><br>
+Inicio: DS &times; 10h = C2000h<br>
+Fin: C2000h + FFFFh = D1FFFh<br><br>
+<b>Segmento de codigo:</b><br>
+Inicio: CS &times; 10h = BB2C0h<br>
+Fin: BB2C0h + FFFFh = CB2BFh<br><br>
+<b>Problema:</b> Los segmentos se <b>solapan</b>.<br>
+Rango datos: C2000-D1FFF<br>
+Rango codigo: BB2C0-CB2BF<br>
+Solapamiento: C2000-CB2BF<br><br>
+Esto puede causar que datos y codigo se pisen mutuamente (comportamiento no deseado).` },
+  { id:66, unit:5, desc:"ADD con distintos modos de direccionamiento", fullDesc:`Indicar el valor que queda almacenado en el operando destino después de<br>ejecutar cada una de las siguientes instrucciones.<br><br>a)<br>ADD AX,BX<br>b)<br>ADD AX, [BX]<br>c)<br>ADD BX,0124<br>d)<br>ADD AL, [1A1B]<br>e)<br>ADD BX, [SI+1A]<br><br>Datos:<br>AX=1F1C<br><br>BX=168A<br><br>SI=2682<br><br>AL=4C<br><br>DS:147A=AB<br><br>DS:168A=DC<br><br>DS:1A1B=12<br><br>DS:269C=21<br><br>DS:269D=A2`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>ADD con distintos modos de direccionamiento:</b><br><br>
+Datos: AX=1F1C, BX=168A, SI=2682, AL=4C, DS:147A=AB, DS:168A=DC, DS:1A1B=12, DS:269C=21, DS:269D=A2<br><br>
+<b>a) ADD AX,BX</b> (registro-registro)<br>
+AX = AX + BX = 1F1C + 168A = <b>35A6</b><br><br>
+<b>b) ADD AX,[BX]</b> (registro-indirecto)<br>
+[BX] = [168A] = DC (byte). Con 16 bits: DS:168A contiene DCh en byte bajo.<br>
+AX = 1F1C + 00DC = <b>1FF8</b><br><br>
+<b>c) ADD BX,0124h</b> (registro-inmediato)<br>
+BX = 168A + 0124 = <b>17AE</b><br><br>
+<b>d) ADD AL,[1A1Bh]</b><br>
+AL = 4C + 12 = <b>5E</b><br><br>
+<b>e) ADD BX,[SI+1Ah]</b><br>
+Dir = SI + 1A = 2682 + 1A = 269C. [269C]= 21, [269D]=A2 &rarr; word = A221<br>
+BX = 168A + A221 = <b>B8AB</b>` },
+  { id:67, unit:5, desc:"Cargar AX=3333, BX=CCBB, sumar, anotar registros", fullDesc:`Cargar AX con el valor hexadecimal 3333 y BX con le número CCBB, efectuar<br>su suma dejando el resultado en AX y anotar el estado de los distintos<br>registros.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Suma AX=3333h + BX=CCBBh:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV AX, 3333h    ; AX = 3333
+MOV BX, 0CCBBh   ; BX = CCBB
+ADD AX, BX       ; AX = AX + BX
+</pre>
+<b>Calculo:</b> 3333 + CCBB = <b>FFEEh</b><br><br>
+<b>Flags:</b><br>
+- CF = 0 (no hay carry del bit 15)<br>
+- ZF = 0 (resultado no es cero)<br>
+- SF = 1 (bit 15 = 1, resultado negativo en C2)<br>
+- OF = 0 (positivo + negativo, nunca overflow)<br>
+- AX = FFEEh, BX = CCBBh sin cambios` },
+  { id:68, unit:5, desc:"Suma AL=F6 + BL=8A, verificar acarreo", fullDesc:`Colocar el número hexadecimal F6 en AL; luego el valor 8A en BL y realizar su<br>suma, dejando el resultado en AX. Verificar el acarreo.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Suma AL=F6h + BL=8Ah:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV AL, 0F6h     ; AL = F6
+MOV BL, 8Ah      ; BL = 8A
+ADD AL, BL       ; AL = AL + BL
+</pre>
+<b>Calculo:</b> F6 + 8A = <b>180h</b><br>
+AL = 80h (solo los 8 bits bajos)<br><br>
+<b>Flags:</b><br>
+- <b>CF = 1</b> (hay carry del bit 7, confirmando acarreo)<br>
+- SF = 1 (bit 7 del resultado = 1)<br>
+- OF = 1 (dos negativos dan positivo aparente - overflow en signados)<br>
+- ZF = 0<br><br>
+AX = xx80h (AH no cambia, AL = 80h)` },
+  { id:69, unit:5, desc:"Producto logico entre partes de AX", fullDesc:`Colocar el número AC en los bits menos significativos de AX; al número F3 en<br>los bits más significativos de AX y realizar el producto lógico entre ambos.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Producto logico AND entre partes de AX:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV AL, 0ACh     ; AL = AC (parte baja)
+MOV AH, 0F3h     ; AH = F3 (parte alta)
+AND AL, AH       ; AL = AL AND AH
+</pre>
+<b>Calculo:</b><br>
+<code>AC = 1010 1100</code><br>
+<code>F3 = 1111 0011</code><br>
+<code>AND= 1010 0000</code> = <b>A0h</b><br><br>
+AL = A0h. Flags: SF=1, ZF=0, CF=0, OF=0` },
+  { id:70, unit:5, desc:"Complemento a dos de 82 en AX", fullDesc:`Colocar 82 en AX y obtener el complemento a dos.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Complemento a dos de 82h:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV AX, 0082h    ; AX = 0082
+NEG AX           ; AX = complemento a 2 de AX
+</pre>
+<b>Calculo:</b><br>
+0082h = <code>0000 0000 1000 0010</code><br>
+C1: <code>1111 1111 0111 1101</code><br>
+C2: <code>1111 1111 0111 1110</code> = <b>FF7Eh</b><br><br>
+AX = FF7Eh<br>
+Verificacion: 0082 + FF7E = 10000h (mod 2<sup>16</sup> = 0) &#10004;<br>
+En decimal: 130 &rarr; -130 en C2 &#10004;` },
+  { id:71, unit:5, desc:"XOR y OR entre AX=6375 y BX=4F4A", fullDesc:`Colocar 6375 en AX; 4F4A en BX. Obtener la or exclusiva entre ambos,<br>dejando el resultado en AX. Luego obtener la suma lógica entre AX y BX`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>XOR y OR entre AX y BX:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV AX, 6375h
+MOV BX, 4F4Ah
+XOR AX, BX       ; AX = AX XOR BX
+OR  AX, BX       ; AX = AX OR BX
+</pre>
+<b>XOR:</b><br>
+<code>6375 = 0110 0011 0111 0101</code><br>
+<code>4F4A = 0100 1111 0100 1010</code><br>
+<code>XOR  = 0010 1100 0011 1111</code> = <b>2C3Fh</b><br>
+AX = 2C3Fh<br><br>
+<b>OR (AX=2C3F, BX=4F4A):</b><br>
+<code>2C3F = 0010 1100 0011 1111</code><br>
+<code>4F4A = 0100 1111 0100 1010</code><br>
+<code>OR   = 0110 1111 0111 1111</code> = <b>6F7Fh</b><br>
+AX = 6F7Fh` },
+  { id:72, unit:5, desc:"Suma 32 bits (AX+BX, CX+DX) con comparacion", fullDesc:`Confeccionar un programa que sume dos números de 32 bits, contenido en los<br>registros AX y BX el primero y en CX y DX el segundo. Los 16 bits de menos<br>peso de los números se encuentran en los registros AX y CX respectivamente y<br>el resultado de su suma quedará en AX. Los 16 bits de más peso se<br>encuentran en los registros BX y DX, quedando el resultado de su suma en BX.<br>Si el resultado de la suma es mayor que 3532, se cargará el valor 0F en la<br><br>dirección de memoria 2000 y.en el registro BP. En caso contrario se cargará el<br>valor cero.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Suma 32 bits con comparacion:</b><br><br>
+Primer numero: BX:AX, Segundo: DX:CX. Resultado en BX:AX.<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">ADD AX, CX       ; Sumar partes bajas
+ADC BX, DX       ; Sumar partes altas + carry
+; Ahora BX:AX tiene el resultado de 32 bits
+; Comparar con 3532h = 00003532h
+CMP BX, 0000h    ; Comparar parte alta
+JA  MAYOR        ; Si BX > 0, es mayor
+JB  MENOR        ; Si BX < 0, imposible aqui
+CMP AX, 3532h    ; Comparar parte baja
+JA  MAYOR
+MENOR:
+  MOV BYTE PTR [2000h], 00h
+  MOV BP, 0
+  JMP FIN
+MAYOR:
+  MOV BYTE PTR [2000h], 0Fh
+  MOV BP, 0Fh
+FIN:
+  HLT</pre>` },
+  { id:73, unit:5, desc:"Suma de dos numeros de 5 bytes", fullDesc:`Hacer un programa que realice la suma de dos números de 5 bytes en<br>plataforma 8088<br><br>e 1000 00 12 fc de ef 10<br>e 1100 00 fe fb ad cd 23`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Suma de dos numeros de 5 bytes:</b><br><br>
+Num1 en [1000h]-[1004h], Num2 en [1100h]-[1104h]. Byte 0 = menos significativo.<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV SI, 1000h     ; Apuntar a Num1
+MOV DI, 1100h     ; Apuntar a Num2
+MOV CX, 5         ; 5 bytes
+CLC                ; Limpiar carry
+LOOP_S:
+  MOV AL, [SI]
+  ADC AL, [DI]     ; Sumar con carry
+  MOV [SI], AL     ; Resultado en Num1
+  INC SI
+  INC DI
+  DEC CX
+  JNZ LOOP_S
+HLT</pre>
+<b>Datos:</b> 00 12 FC DE EF 10 + 00 FE FB AD CD 23<br>
+Se suman byte a byte de derecha a izquierda propagando carry.` },
+  { id:74, unit:5, desc:"Detectar paridad impar y copiar a otro bloque", fullDesc:`Realizar un programa que tome los datos de un bloque de memoria detecte la<br>paridad impar y los que tengan dicha paridad los copie en otro bloque de<br>memoria.<br><br>E 1000 78 75 45 49 63 68 79 48 55 56 12 23 28 99 91 95`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Detectar paridad impar y copiar:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV SI, 1000h     ; Origen
+MOV DI, 2000h     ; Destino
+MOV CX, 16        ; 16 bytes
+LOOP_P:
+  MOV AL, [SI]     ; Cargar byte
+  TEST AL, AL      ; Testear paridad
+  JPO COPIAR       ; Si paridad impar (odd), copiar
+  JMP SALTAR
+COPIAR:
+  MOV [DI], AL     ; Copiar al destino
+  INC DI
+SALTAR:
+  INC SI
+  DEC CX
+  JNZ LOOP_P
+HLT</pre>
+<b>Nota:</b> JPO (Jump if Parity Odd) salta cuando el flag PF=0, indicando cantidad impar de bits en 1.` },
+  { id:75, unit:5, desc:"Traducir FOR de alto nivel a 8088", fullDesc:`Escriba en instrucciones del 8088 el siguiente código, parte de un programa de<br>lenguaje de alto nivel tipo C++, considerando que todas las variables son<br>enteras, y proponiendo posiciones de memoria para el almacenamiento de los<br>datos y el programa.<br><br>FOR (I = 0; I <= 10; I = I + 1)<br><br>A[I] = B[I] + C;`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Traducir FOR a 8088:</b><br><br>
+<code>FOR (I=0; I&lt;=10; I=I+1) A[I] = B[I] + C;</code><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">; Suponer A en [2000], B en [3000], C en [4000]
+; Cada variable es un word (2 bytes)
+      MOV CX, 0        ; I = 0
+      MOV SI, 0        ; Offset
+LOOP:
+      MOV AX, [3000h+SI]  ; AX = B[I]
+      ADD AX, [4000h]     ; AX = B[I] + C
+      MOV [2000h+SI], AX  ; A[I] = resultado
+      ADD SI, 2            ; Siguiente word
+      INC CX               ; I++
+      CMP CX, 11           ; I <= 10 ?
+      JB  LOOP             ; Si I < 11, seguir
+      HLT</pre>` },
+  { id:76, unit:5, desc:"Corrimiento 4 bits a derecha de BX=0FF0", fullDesc:`Colocar el valor 0FF0 en BX y efectuar un corrimiento de 4 bits a la derecha.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Corrimiento 4 bits a la derecha:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV BX, 0FF0h    ; BX = 0FF0
+MOV CL, 4         ; Cantidad de shifts
+SHR BX, CL        ; Shift right logico
+</pre>
+<b>Calculo paso a paso:</b><br>
+0FF0h = <code>0000 1111 1111 0000</code><br>
+&gt;&gt;1: <code>0000 0111 1111 1000</code> = 07F8<br>
+&gt;&gt;2: <code>0000 0011 1111 1100</code> = 03FC<br>
+&gt;&gt;3: <code>0000 0001 1111 1110</code> = 01FE<br>
+&gt;&gt;4: <code>0000 0000 1111 1111</code> = <b>00FFh</b><br><br>
+BX = 00FFh. CF = 0 (ultimo bit desplazado).` },
+  { id:77, unit:5, desc:"Valor absoluto usando rotaciones y control", fullDesc:`Colocar en AX, el contenido de la dirección 200, y obtener su valor absoluto,<br>utilizando instrucciones de rotación y de control. Hacer la prueba, colocando en<br>la dirección 200 el valor 9E5F y luego con el valor 4E3A.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Valor absoluto con rotaciones:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV AX, [200h]   ; Cargar numero
+TEST AX, AX      ; Verificar signo
+JNS POSITIVO     ; Si no es negativo, ya esta
+NEG AX           ; Complemento a 2 (valor absoluto)
+POSITIVO:
+MOV [200h], AX   ; Guardar resultado
+HLT</pre>
+<b>Con 9E5Fh:</b> Bit 15=1 (negativo). NEG(9E5F) = 61A1h &#10004;<br>
+<b>Con 4E3Ah:</b> Bit 15=0 (positivo). Se mantiene 4E3Ah &#10004;<br><br>
+<b>Alternativa con rotacion:</b> ROL AX,1 pone MSB en CF. Si CF=1, es negativo.` },
+  { id:78, unit:5, desc:"Contar bits en 1 con contadores y control", fullDesc:`Colocar en AX el contenido de la dirección 300 y contar la cantidad de bits que<br>tienen el valor lógico 1, utilizando contadores e instrucciones de control. Dejar<br>el resultado en DL. Definir una palabra en la dirección 300 y ejecutar el<br>programa.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Contar bits en 1:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV AX, [300h]   ; Cargar word
+MOV DL, 0        ; Contador de bits = 0
+MOV CX, 16       ; 16 bits a revisar
+LOOP_B:
+  SHR AX, 1      ; Desplazar bit a CF
+  JNC NO_BIT     ; Si CF=0, no contar
+  INC DL         ; Incrementar contador
+NO_BIT:
+  DEC CX
+  JNZ LOOP_B
+HLT</pre>
+<b>Ejemplo:</b> Si [300h] = A5C3h = 1010 0101 1100 0011<br>
+Bits en 1: 1+0+1+0+0+1+0+1+1+1+0+0+0+0+1+1 = <b>8</b><br>
+DL = 08h` },
+  { id:79, unit:5, desc:"Trasladar tabla de bytes con indexacion", fullDesc:`Trasladar una tabla de bytes de la dirección 500 a la 600 utilizando los registros<br>de indexación, incrementos, comparaciones e instrucciones de control. El valor<br>final de la tabla es EE. Coloque este valor entre las direcciones 500 y 600 y<br>ejecute el programa. Verifique el funcionamiento haciendo 0500 y 0600.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Trasladar tabla de bytes:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV SI, 500h      ; Origen
+MOV DI, 600h      ; Destino
+LOOP_T:
+  MOV AL, [SI]     ; Leer byte
+  CMP AL, 0EEh     ; Es el marcador de fin?
+  JE  FIN          ; Si, terminar
+  MOV [DI], AL     ; Copiar al destino
+  INC SI
+  INC DI
+  JMP LOOP_T
+FIN:
+  MOV [DI], AL     ; Copiar tambien el EE
+  HLT</pre>
+Se copia byte a byte desde [500h] hasta encontrar el valor EEh (marcador de fin de tabla).` },
+  { id:80, unit:5, desc:"Filtrar numeros pares de un bloque", fullDesc:`De un bloque de datos determinar los números que son pares y moverlos a otro<br>bloque de memoria.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Filtrar numeros pares:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">MOV SI, 1000h     ; Bloque origen
+MOV DI, 2000h     ; Bloque destino
+MOV CX, 16        ; Tamano del bloque
+LOOP_PAR:
+  MOV AL, [SI]     ; Leer byte
+  TEST AL, 01h     ; Testear bit 0
+  JNZ IMPAR        ; Si bit0=1, es impar
+  MOV [DI], AL     ; Es par, copiar
+  INC DI
+IMPAR:
+  INC SI
+  DEC CX
+  JNZ LOOP_PAR
+HLT</pre>
+<b>Clave:</b> Un numero es par si su bit 0 es 0. TEST AL,01h pone ZF=1 si el bit 0 es 0.` },
+  { id:81, unit:5, desc:"Multiplicacion por sumas sucesivas", fullDesc:`Escriba un programa que efectúe una multiplicación entre dos números usando<br>el método de las sumas sucesivas.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Multiplicacion por sumas sucesivas:</b><br><br>
+Multiplicar A &times; B sumando A consigo mismo B veces.<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">; A en [1000h], B en [1002h], Resultado en [1004h]
+MOV AX, 0         ; Resultado = 0
+MOV BX, [1000h]   ; BX = multiplicando
+MOV CX, [1002h]   ; CX = multiplicador (contador)
+CMP CX, 0
+JE  FIN           ; Si B=0, resultado=0
+LOOP_M:
+  ADD AX, BX      ; Resultado += A
+  DEC CX          ; Contador--
+  JNZ LOOP_M      ; Repetir hasta CX=0
+FIN:
+  MOV [1004h], AX ; Guardar resultado
+  HLT</pre>
+Ejemplo: 5 &times; 3 = 5+5+5 = 15` },
+  { id:82, unit:4, desc:"BUS comun sin tercer estado (MBR y ACC)", fullDesc:`Implemente el BUS común de la Máquina Elemental sin utilizar elementos de<br>Tercer Estado, dibuje el Diagrama de Tiempo de las señales de control<br>necesarias. Considere sólo los Registros: MBR y ACC.`, why:`Unidad de control y bus son la parte mas profunda de la arquitectura. Diferencia un 6 de un 10 en el oral.`, solution:`<b>BUS comun sin tercer estado (MBR y ACC):</b><br><br>
+Sin elementos tri-estado, se usa <b>multiplexion</b>.<br><br>
+<b>Implementacion:</b> MUX de 2 canales controlado por senal de seleccion.<br>
+- Entrada 0: MBR<br>
+- Entrada 1: ACC<br>
+- Seleccion: determina quien pone datos en el bus<br><br>
+<b>Diagrama de tiempo:</b><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Fase  | SEL | Bus contiene
+  1   |  0  | MBR (lectura de memoria)
+  2   |  1  | ACC (operacion ALU)
+</pre>
+La senal SEL se genera desde la unidad de control en cada ciclo de maquina.` },
+  { id:83, unit:4, desc:"BUS comun con tercer estado (MBR y ACC)", fullDesc:`Implemente el BUS común de la Máquina Elemental utilizando elementos de<br>Tercer Estado, dibuje el Diagrama de Tiempo de las señales de control<br>necesarias. Considere sólo los Registros: MBR y ACC.`, why:`Unidad de control y bus son la parte mas profunda de la arquitectura. Diferencia un 6 de un 10 en el oral.`, solution:`<b>BUS comun con tercer estado (MBR y ACC):</b><br><br>
+Con buffers tri-estado, cada registro tiene su propio buffer habilitado por una senal.<br><br>
+<b>Implementacion:</b><br>
+- MBR conectado al bus via buffer tri-estado (habilitado por E_MBR)<br>
+- ACC conectado al bus via buffer tri-estado (habilitado por E_ACC)<br>
+- Solo uno activo a la vez (si ambos activos: conflicto)<br><br>
+<b>Diagrama de tiempo:</b><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Fase  | E_MBR | E_ACC | Bus
+  1   |   1   |   0   | MBR al bus
+  2   |   0   |   1   | ACC al bus
+  3   |   0   |   0   | Bus en alta impedancia (Z)
+</pre>
+<b>Ventaja sobre MUX:</b> Escalable a muchos registros sin redisenar el bus.` },
+  { id:84, unit:4, desc:"Cambiar XOR por SUB: ciclos de ejecucion", fullDesc:`Se desea cambiar la instrucción XOR XXXX de la Máquina Elemental por la<br>instrucción SUB XXXX. Esta instrucción debe realizar la resta en C2  entre el<br>contenido del registro ACC y el contenido de la posición de memoria XXXX, el<br>resultado se ubica en el ACC.<br><br>ACC – (XXXX)  CC<br>Detalle el (o los) ciclos de ejecución necesarios para esta instrucción.`, why:`Unidad de control y bus son la parte mas profunda de la arquitectura. Diferencia un 6 de un 10 en el oral.`, solution:`<b>Instruccion SUB XXXX (reemplaza XOR):</b><br><br>
+<b>Operacion:</b> ACC - (XXXX) &rarr; ACC<br><br>
+La resta en C2 se implementa como: ACC + C2(operando)<br><br>
+<b>Ciclo de ejecucion:</b><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">CP1: MAR &larr; MBR(dir)    ; Direccion del operando al MAR
+CP2: MBR &larr; M[MAR]      ; Leer operando de memoria
+CP3: ACC &larr; ACC + C2(MBR) ; Restar via complemento a 2
+     (La ALU complementa MBR y suma con carry-in=1)
+</pre>
+<b>Senales de control necesarias:</b><br>
+- Habilitar salida MBR(dir) al bus<br>
+- Cargar MAR desde bus<br>
+- Lectura de memoria<br>
+- ALU en modo resta (complementar entrada B, Cin=1)<br>
+- Cargar resultado en ACC` },
+  { id:85, unit:4, desc:"Circuito UC cableada con contador y decodificador", fullDesc:`Realice el circuito de la Unidad de Control Cableada usando un contador y un<br>decodificador para generar los 8 pulsos (CP1 a CP8) del Ciclo de Máquina de<br>la Máquina Elemental.`, why:`Unidad de control y bus son la parte mas profunda de la arquitectura. Diferencia un 6 de un 10 en el oral.`, solution:`<b>UC cableada con contador y decodificador:</b><br><br>
+<b>Componentes:</b><br>
+- Contador de 3 bits (cuenta de 0 a 7) &rarr; genera CP1 a CP8<br>
+- Decodificador 3:8 (convierte el valor del contador en 8 lineas)<br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Contador | Decodificador | Pulso
+  000    |  Salida 0     | CP1 (Fetch 1)
+  001    |  Salida 1     | CP2 (Fetch 2)
+  010    |  Salida 2     | CP3 (Fetch 3)
+  011    |  Salida 3     | CP4 (Decode)
+  100    |  Salida 4     | CP5 (Exec 1)
+  101    |  Salida 5     | CP6 (Exec 2)
+  110    |  Salida 6     | CP7 (Exec 3)
+  111    |  Salida 7     | CP8 (Exec 4)
+</pre>
+El reloj del sistema avanza el contador. Cada salida del decodificador activa las senales de control correspondientes a esa fase del ciclo de maquina.` },
+  { id:86, unit:4, desc:"Cambiar XOR por DEC: ciclos de ejecucion", fullDesc:`Se desea cambiar la instrucción XOR XXXX de la Máquina Elemental por la<br>instrucción DEC XXXX. Esta instrucción debe realizar el decremento en 1 del<br>ACC, dejando el resultado en el registro.<br><br>ACC – 1  CC<br>Detalle el (o los) ciclos de ejecución necesarios para esta instrucción.`, why:`Unidad de control y bus son la parte mas profunda de la arquitectura. Diferencia un 6 de un 10 en el oral.`, solution:`<b>Instruccion DEC (decremento del ACC):</b><br><br>
+<b>Operacion:</b> ACC - 1 &rarr; ACC<br><br>
+Es mas simple que SUB porque no necesita acceder a memoria para el operando.<br><br>
+<b>Ciclo de ejecucion:</b><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">CP1: ACC &larr; ACC - 1
+     (La ALU resta 1 al contenido del ACC)
+</pre>
+Solo necesita <b>1 ciclo de ejecucion</b> (no accede a memoria).<br><br>
+<b>Implementacion en ALU:</b><br>
+ACC + C2(000...001) = ACC + 111...111 = ACC - 1<br>
+O directamente con un decrementador dedicado.` },
+  { id:87, unit:4, desc:"Agregar instruccion RET + modificar JSR", fullDesc:`Se desea agregar al repertorio de instrucciones de la Máquina Elemental la<br>instrucción RET, cuya acción es retornar correctamente desde una subrutina<br>llamada por la instrucción JSR XXXX. Detalle el ciclo de ejecución de la nueva<br>instrucción. Indique también como debe modificar el ciclo de ejecución de la<br>instrucción JSR XXXX.`, why:`Unidad de control y bus son la parte mas profunda de la arquitectura. Diferencia un 6 de un 10 en el oral.`, solution:`<b>Instruccion RET + modificacion de JSR:</b><br><br>
+<b>JSR XXXX modificado:</b> Debe guardar la direccion de retorno.<br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">JSR XXXX:
+CP1: MAR &larr; MBR(dir)        ; Dir de la subrutina al MAR
+CP2: MBR &larr; PC              ; Guardar PC (dir retorno) en MBR
+CP3: M[XXXX-1] &larr; MBR       ; Guardar retorno antes de subrutina
+     (o usar stack)
+CP4: PC &larr; MAR              ; Saltar a la subrutina
+</pre>
+<b>RET (nueva instruccion):</b>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">RET:
+CP1: MAR &larr; dir_retorno     ; Recuperar direccion guardada
+CP2: PC &larr; M[MAR]           ; Cargar PC con direccion de retorno
+</pre>
+La implementacion exacta depende de si se usa la posicion anterior a la subrutina o una pila (stack) para guardar el retorno.` },
+  { id:88, unit:4, desc:"Representacion octal de programa + contenido post-ejecucion", fullDesc:`Escriba la representación octal del siguiente programa. ¿Cuál es el contenido<br>del acumulador y de las ubicaciones 3007, 3010, 3011 3012 después de la<br>ejecución del programa?.<br><br>3001 LDA 3007<br><br>3002 IOR<br>3010<br><br>3003 AND 3011<br><br>3004 STA 3012<br><br>3005 OUT       01<br><br>3006 HLT<br><br>3007  110771<br><br>3010 145735<br><br>3011  074000<br><br>3012  77177`, why:`Unidad de control y bus son la parte mas profunda de la arquitectura. Diferencia un 6 de un 10 en el oral.`, solution:`<b>Programa Blue - representacion octal y ejecucion:</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">Dir  | Mnemonico  | Octal
+3001 | LDA 3007   | 023007
+3002 | IOR 3010   | 043010
+3003 | AND 3011   | 033011
+3004 | STA 3012   | 013012
+3005 | OUT 01     | 110001
+3006 | HLT        | 000000
+3007 | 110771     | 110771 (dato)
+3010 | 145735     | 145735 (dato)
+3011 | 074000     | 074000 (dato)
+3012 | 077177     | 077177 (dato)
+</pre>
+<b>Ejecucion:</b><br>
+ACC &larr; 110771 (LDA)<br>
+ACC &larr; 110771 IOR 145735 = 155775<br>
+ACC &larr; 155775 AND 074000 = 054000<br>
+(3012) &larr; 054000 (STA)<br>
+OUT: muestra 054000<br><br>
+<b>Contenido final:</b> ACC=054000, (3007)=110771, (3010)=145735, (3011)=074000, (3012)=<b>054000</b>` },
+  { id:89, unit:4, desc:"Subrutina OR de 2 datos con paso y retorno", fullDesc:`Escriba una subrutina que ejecute la OR de 2 datos ubicados en las<br>direcciones 300 y 301. Tenga en cuenta que dicha subrutina puede necesitarse<br>en distintos tramos del programa principal, y que ella comienza en la dirección<br>1100. Indicar expresamente el paso y retomo de la subrutina al programa<br>principal.`, why:`Unidad de control y bus son la parte mas profunda de la arquitectura. Diferencia un 6 de un 10 en el oral.`, solution:`<b>Subrutina OR con paso y retorno (Blue):</b><br><br>
+<pre style="background:#f5f5f5;padding:8px;border-radius:4px;overflow-x:auto;font-size:0.8rem;">; Programa principal (ejemplo desde dir 200)
+0200: JSR 1100    ; Llamar subrutina OR
+0201: ...         ; Continua ejecucion
+
+; Subrutina OR en dir 1100
+1100: NOP         ; Aqui se guarda retorno (JSR)
+1101: LDA 0300   ; ACC &larr; dato 1
+1102: IOR 0301   ; ACC &larr; ACC OR dato 2
+1103: STA 0302   ; Guardar resultado
+1104: JMP 1100   ; Retorno (indirecto via dir guardada)
+</pre>
+<b>Mecanismo:</b><br>
+- JSR guarda la direccion de retorno (0201) en la primera posicion de la subrutina (1100)<br>
+- Al final, JMP 1100 salta a la dir guardada ahi, volviendo al programa principal<br>
+- La subrutina puede llamarse desde cualquier parte del programa` },
 ];
 
 const UNIT_NAMES = {
@@ -2909,7 +3952,7 @@ function renderExercises() {
       const item = document.createElement('div');
       item.className = `exercise-item ${statusClass} ${hl}`;
       item.id = `ex-item-${ex.id}`;
-      item.innerHTML = `<input type="checkbox" ${d.done?'checked':''} onchange="toggleExercise(${ex.id},this.checked)"><span class="ex-number">Ej ${ex.id}</span><span class="ex-desc">${ex.desc}</span><div class="exercise-stars">${[1,2,3,4,5].map(s=>`<span class="star ${d.difficulty>=s?'filled':''}" onclick="rateExercise(${ex.id},${s})">&#9733;</span>`).join('')}</div><span class="exercise-status ${statusColors[d.status]}" onclick="cycleStatus(${ex.id})">${statusLabels[d.status]}</span>`;
+      item.innerHTML = `<input type="checkbox" ${d.done?'checked':''} onchange="toggleExercise(${ex.id},this.checked)"><span class="ex-number">Ej ${ex.id}</span><span class="ex-desc">${ex.fullDesc || ex.desc}</span><div style="margin-top:6px;font-size:0.72rem;color:#1565c0;background:#e3f2fd;padding:4px 10px;border-radius:4px;display:inline-block;">Por que? ${ex.why || ''}</div><div class="exercise-stars">${[1,2,3,4,5].map(s=>`<span class="star ${d.difficulty>=s?'filled':''}" onclick="rateExercise(${ex.id},${s})">&#9733;</span>`).join('')}</div><span class="exercise-status ${statusColors[d.status]}" onclick="cycleStatus(${ex.id})">${statusLabels[d.status]}</span><details style="margin-top:10px;border-top:1px solid #eee;padding-top:8px;"><summary style="cursor:pointer;font-weight:600;font-size:0.82rem;color:#2196f3;padding:4px 0;">Ver resolucion completa</summary><div style="padding:10px 0;font-size:0.82rem;line-height:1.7;">${ex.solution || '<em>Resolucion pendiente</em>'}</div></details>`;
       items.appendChild(item);
     });
     container.appendChild(groupDiv);
@@ -3282,11 +4325,8 @@ function renderWeeklyPlan() {
 function toggleMilestone(key,checked){data.weekMilestones[key]=checked;saveData();}
 
 // ============================================================
-// SOS ANXIETY
 // ============================================================
 let breathInterval = null;
-function openSOS() { document.getElementById('sosModal').classList.add('active'); }
-function closeSOS() { document.getElementById('sosModal').classList.remove('active'); if(breathInterval) clearInterval(breathInterval); }
 function startBreathing() {
   if(breathInterval) clearInterval(breathInterval);
   const phases = [
@@ -3330,10 +4370,9 @@ init();
 </script>
 
 <footer style="text-align:center;padding:20px;background:#1a1a2e;color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:20px;">
-  Arquitectura de Computadoras — Dashboard de Estudio v2<br>
+  Arquitectura de Computadoras — Dashboard de Estudio<br>
   Creado por <strong style="color:rgba(255,255,255,0.8)">Juan Ignacio Barranco Bastan</strong> — Legajo 44041 — UTN FRM — Ingenieria en Sistemas de Informacion<br>
   Catedra Prof. Santiago Perez — Ciclo lectivo 2026<br>
-  <span style="opacity:0.5">Generado con asistencia de Claude AI</span>
 </footer>
 </body>
 </html>
