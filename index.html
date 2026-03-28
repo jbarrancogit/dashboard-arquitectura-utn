@@ -982,6 +982,92 @@
       .main-content { margin-left: 0 !important; padding: 0 !important; }
     }
 
+
+    /* ============================================================
+       SIMULADORES & PRACTICA ORAL
+       ============================================================ */
+    .sim-tabs { display:flex; gap:4px; margin-bottom:20px; border-bottom:2px solid #e0e4e8; }
+    .sim-tab {
+      padding:10px 20px; border:none; border-radius:8px 8px 0 0;
+      background:#f0f4f8; font-size:0.85rem; font-weight:600; cursor:pointer;
+      font-family:inherit; color:var(--text-secondary); transition:all 0.2s;
+    }
+    .sim-tab.active { background:var(--accent-primary); color:white; }
+    .sim-panel { display:none; }
+    .sim-panel.active { display:block; }
+    .sim-layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .sim-editor textarea {
+      width:100%; font-family:'Consolas',monospace; font-size:0.82rem;
+      border:1px solid #ddd; border-radius:8px; padding:10px; resize:vertical;
+      min-height:160px; background:#1a1a2e; color:#e0e0e0; line-height:1.6;
+    }
+    .sim-controls { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0; }
+    .sim-output {
+      background:#1a1a2e; color:#7fc97f; border-radius:8px; padding:10px 14px;
+      font-family:'Consolas',monospace; font-size:0.78rem; min-height:48px;
+      white-space:pre-wrap; max-height:100px; overflow-y:auto;
+    }
+    .sim-status { font-size:0.8rem; margin-top:6px; padding:6px 10px; border-radius:6px; }
+    .sim-status.ok   { background:#eafaf1; color:var(--success); }
+    .sim-status.err  { background:#fef0f0; color:var(--danger); }
+    .sim-status.halt { background:#f0f4f8; color:var(--text-secondary); }
+    .sim-regs { background:var(--card-bg); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); }
+    .sim-reg-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:10px; }
+    .sim-reg {
+      display:flex; align-items:center; gap:8px; padding:6px 10px;
+      background:#f5f7fa; border-radius:6px; font-family:'Consolas',monospace; font-size:0.8rem;
+      transition:background 0.3s;
+    }
+    .sim-reg.changed { background:#c8f7d8; }
+    .sim-reg-label { font-weight:700; color:var(--accent-primary); min-width:36px; }
+    .sim-mem-wrap { background:var(--card-bg); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); overflow-x:auto; max-height:320px; overflow-y:auto; }
+    .sim-mem-table { width:100%; border-collapse:collapse; font-family:'Consolas',monospace; font-size:0.76rem; }
+    .sim-mem-table th { background:#f0f4f8; padding:5px 8px; text-align:left; font-size:0.7rem; color:var(--text-secondary); position:sticky; top:0; }
+    .sim-mem-table td { padding:3px 8px; border-bottom:1px solid #f0f0f0; }
+    .sim-mem-table tr.current-ip td { background:rgba(233,69,96,0.12); font-weight:700; }
+    .sim-mem-table tr.modified td { background:rgba(39,174,96,0.08); }
+    /* 8088 tracer */
+    .tracer-setup { background:var(--card-bg); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); margin-bottom:16px; }
+    .tracer-regs-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-bottom:12px; }
+    .tracer-reg-input { display:flex; flex-direction:column; gap:2px; }
+    .tracer-reg-input label { font-size:0.68rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; }
+    .tracer-reg-input input {
+      font-family:'Consolas',monospace; font-size:0.82rem; font-weight:600;
+      border:1px solid #ddd; border-radius:6px; padding:5px 6px; text-align:center;
+      background:#f5f7fa; width:100%;
+    }
+    .tracer-reg-input input:focus { outline:none; border-color:var(--accent-primary); background:white; }
+    .tracer-flags-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+    .tracer-flag { display:flex; flex-direction:column; align-items:center; gap:2px; }
+    .tracer-flag label { font-size:0.65rem; font-weight:700; color:var(--text-secondary); }
+    .tracer-flag input { width:34px; text-align:center; font-family:'Consolas',monospace; font-size:0.85rem; border:1px solid #ddd; border-radius:4px; padding:3px; }
+    .tracer-mem-setup { font-family:'Consolas',monospace; font-size:0.8rem; width:100%; border:1px solid #ddd; border-radius:6px; padding:8px; min-height:64px; resize:vertical; background:#f9f9f9; }
+    .tracer-trace { background:var(--card-bg); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); margin-top:16px; overflow-x:auto; }
+    .tracer-trace-table { width:100%; border-collapse:collapse; font-size:0.76rem; font-family:'Consolas',monospace; }
+    .tracer-trace-table th { background:#f0f4f8; padding:5px 8px; text-align:left; font-size:0.7rem; color:var(--text-secondary); white-space:nowrap; }
+    .tracer-trace-table td { padding:4px 8px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+    .tracer-trace-table .chg { color:var(--accent-secondary); font-weight:700; }
+    /* Oral practice */
+    .oral-q-card {
+      background:var(--card-bg); border-radius:var(--radius-lg); padding:28px 24px;
+      box-shadow:var(--shadow-hover); margin:16px 0; border-top:4px solid var(--accent-secondary);
+      text-align:center;
+    }
+    .oral-q-unit { display:inline-block; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:12px; color:white; margin-bottom:12px; }
+    .oral-q-text { font-size:1rem; font-weight:600; line-height:1.5; color:var(--text-primary); max-width:640px; margin:0 auto; }
+    .oral-answer { background:#f5f7fa; border-radius:var(--radius); padding:18px; margin-top:16px; text-align:left; font-size:0.85rem; line-height:1.7; display:none; border-left:4px solid var(--success); }
+    .oral-answer.show { display:block; }
+    .oral-controls { display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+    .oral-rate { display:none; gap:8px; justify-content:center; margin-top:12px; }
+    .oral-rate.show { display:flex; }
+    .oral-progress { font-size:0.82rem; color:var(--text-secondary); text-align:center; margin-bottom:6px; }
+    .oral-stats-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
+    .oral-stat { background:var(--card-bg); border-radius:8px; padding:10px 18px; box-shadow:var(--shadow); text-align:center; font-size:0.82rem; }
+    .oral-stat strong { display:block; font-size:1.3rem; color:var(--accent-primary); }
+    @media (max-width:768px) {
+      .sim-layout { grid-template-columns:1fr; }
+      .tracer-regs-grid { grid-template-columns:repeat(3,1fr); }
+    }
   </style>
 </head>
 <body>
@@ -1011,6 +1097,8 @@
           <a class="nav-item" data-section="bolillero"><span>Bolillero</span></a>
           <a class="nav-item" data-section="examen"><span>Modo Examen</span></a>
           <a class="nav-item" data-section="examenes"><span>Examenes Probables</span></a>
+          <a class="nav-item" data-section="simuladores"><span>Simuladores</span></a>
+          <a class="nav-item" data-section="oral"><span>Practica Oral</span></a>
         </div>
       </div>
       <a class="nav-item" data-section="recursos"><span>Recursos</span></a>
@@ -1803,6 +1891,189 @@ Puerto 01 = 054000
 </div>
 
     </div>
+    <!-- ==================== SIMULADORES ==================== -->
+    <div class="content-section" id="section-simuladores">
+      <div class="card">
+        <h2 style="margin-bottom:4px;">Simuladores</h2>
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:16px;">Herramientas interactivas para verificar ejercicios sin abrir un emulador externo.</p>
+        <div class="sim-tabs">
+          <button class="sim-tab active" onclick="simSwitchTab('blue',this)">Maquina Blue</button>
+          <button class="sim-tab" onclick="simSwitchTab('8088',this)">Trazador 8088</button>
+        </div>
+
+        <!-- Blue Simulator -->
+        <div class="sim-panel active" id="simBlue">
+          <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:12px;">
+            Escribe el programa en ensamblador (<code>LDA 0200</code>, <code>ADD 0201</code>, etc.) o en octal directo (<code>010200</code>).
+            Cada linea es una instruccion. Usa <code>; comentario</code> y etiquetas (<code>LOOP:</code>).
+          </p>
+          <div class="sim-layout">
+            <div>
+              <div class="sim-editor card" style="padding:14px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                  <strong style="font-size:0.85rem;">Programa</strong>
+                  <select id="blueExample" style="font-size:0.78rem;border:1px solid #ddd;border-radius:6px;padding:3px 6px;" onchange="blueLoadExample()">
+                    <option value="">Cargar ejemplo...</option>
+                    <option value="suma">Suma dos numeros</option>
+                    <option value="loop">Contador con loop</option>
+                    <option value="abs">Valor absoluto</option>
+                    <option value="ex88">Ejercicio 88 (examen)</option>
+                  </select>
+                </div>
+                <textarea id="blueCode" spellcheck="false" placeholder="LDA 0100  ; ACC = M[0100]
+ADD 0101  ; ACC = ACC + M[0101]
+STA 0102  ; M[0102] = ACC
+HLT       ; Detener"></textarea>
+                <div style="margin-top:8px;font-size:0.72rem;color:var(--text-secondary);">
+                  Datos iniciales (dir:valor en octal, uno por linea):
+                </div>
+                <textarea id="blueMemInit" spellcheck="false" style="width:100%;font-family:'Consolas',monospace;font-size:0.78rem;border:1px solid #ddd;border-radius:6px;padding:8px;min-height:60px;margin-top:4px;background:#f9f9f9;" placeholder="0100: 000005
+0101: 000003"></textarea>
+              </div>
+              <div class="sim-controls">
+                <button class="btn btn-sm btn-primary" onclick="blueAssemble()">Cargar</button>
+                <button class="btn btn-sm btn-secondary" onclick="blueStep()" id="blueStepBtn" disabled>Paso →</button>
+                <button class="btn btn-sm btn-secondary" onclick="blueRun()" id="blueRunBtn" disabled>Ejecutar</button>
+                <button class="btn btn-sm" style="background:#f0f4f8;" onclick="blueReset()">Reset</button>
+              </div>
+              <div id="blueStatus" class="sim-status halt">Listo. Presiona "Cargar" para ensamblar.</div>
+              <div style="margin-top:8px;font-size:0.8rem;font-weight:600;">Salida (OUT):</div>
+              <div id="blueOutput" class="sim-output">—</div>
+            </div>
+            <div>
+              <div class="sim-regs">
+                <strong style="font-size:0.85rem;">Registros</strong>
+                <div class="sim-reg-grid" id="blueRegs">
+                  <div class="sim-reg" id="brACC"><span class="sim-reg-label">ACC</span><span>000000</span></div>
+                  <div class="sim-reg" id="brIP"><span class="sim-reg-label">IP</span><span>0000</span></div>
+                  <div class="sim-reg" id="brMAR"><span class="sim-reg-label">MAR</span><span>0000</span></div>
+                  <div class="sim-reg" id="brMDR"><span class="sim-reg-label">MDR</span><span>000000</span></div>
+                  <div class="sim-reg" id="brIR" style="grid-column:1/-1;"><span class="sim-reg-label">IR</span><span style="font-size:0.75rem;">—</span></div>
+                </div>
+              </div>
+              <div class="sim-mem-wrap" style="margin-top:12px;">
+                <strong style="font-size:0.85rem;display:block;margin-bottom:8px;">Memoria del programa</strong>
+                <table class="sim-mem-table" id="blueMemTable">
+                  <thead><tr><th>Dir</th><th>Octal</th><th>Instruccion</th></tr></thead>
+                  <tbody id="blueMemBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:10px 14px;border-radius:6px;font-size:0.78rem;margin-top:12px;">
+            <strong>Set de instrucciones:</strong>
+            01=LDA &nbsp; 02=STA &nbsp; 03=ADD &nbsp; 04=AND &nbsp; 05=IOR &nbsp; 06=XOR &nbsp; 07=NOT &nbsp; 10=RAL &nbsp; 11=JPZ &nbsp; 12=JMP &nbsp; 13=SUB &nbsp; 14=OUT &nbsp; 15=HLT
+            (en octal &mdash; JPZ salta si bit17 ACC = 0, es decir ACC &ge; 0)
+          </div>
+        </div>
+
+        <!-- 8088 Tracer -->
+        <div class="sim-panel" id="sim8088">
+          <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:12px;">
+            Ingresa los valores iniciales de los registros, la memoria DS y el programa. Ejecuta paso a paso para ver como cambian registros y flags.
+          </p>
+          <div class="tracer-setup">
+            <strong style="font-size:0.85rem;">Registros iniciales (hexadecimal)</strong>
+            <div class="tracer-regs-grid" style="margin-top:10px;" id="tracerRegInputs">
+              <div class="tracer-reg-input"><label>AX</label><input type="text" id="tr_AX" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>BX</label><input type="text" id="tr_BX" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>CX</label><input type="text" id="tr_CX" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>DX</label><input type="text" id="tr_DX" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>SI</label><input type="text" id="tr_SI" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>DI</label><input type="text" id="tr_DI" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>SP</label><input type="text" id="tr_SP" value="FFFE" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>BP</label><input type="text" id="tr_BP" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>DS</label><input type="text" id="tr_DS" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>CS</label><input type="text" id="tr_CS" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>SS</label><input type="text" id="tr_SS" value="0000" maxlength="4"></div>
+              <div class="tracer-reg-input"><label>ES</label><input type="text" id="tr_ES" value="0000" maxlength="4"></div>
+            </div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;">
+              <div style="flex:1;min-width:200px;">
+                <strong style="font-size:0.82rem;">Flags iniciales (0 o 1)</strong>
+                <div class="tracer-flags-row" style="margin-top:8px;">
+                  <div class="tracer-flag"><label>CF</label><input type="text" id="tf_CF" value="0" maxlength="1"></div>
+                  <div class="tracer-flag"><label>ZF</label><input type="text" id="tf_ZF" value="0" maxlength="1"></div>
+                  <div class="tracer-flag"><label>SF</label><input type="text" id="tf_SF" value="0" maxlength="1"></div>
+                  <div class="tracer-flag"><label>OF</label><input type="text" id="tf_OF" value="0" maxlength="1"></div>
+                  <div class="tracer-flag"><label>AF</label><input type="text" id="tf_AF" value="0" maxlength="1"></div>
+                  <div class="tracer-flag"><label>PF</label><input type="text" id="tf_PF" value="0" maxlength="1"></div>
+                </div>
+              </div>
+              <div style="flex:1;min-width:200px;">
+                <strong style="font-size:0.82rem;">Memoria DS (dir:valor en hex, uno por linea)</strong>
+                <textarea class="tracer-mem-setup" id="tracerMem" style="margin-top:8px;" placeholder="168A: DC
+1A1B: 12
+269C: 21
+269D: A2"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="padding:14px;margin-bottom:0;">
+            <strong style="font-size:0.85rem;">Instrucciones</strong>
+            <textarea id="tracerCode" style="width:100%;font-family:'Consolas',monospace;font-size:0.82rem;border:1px solid #ddd;border-radius:8px;padding:10px;min-height:100px;margin-top:8px;background:#1a1a2e;color:#e0e0e0;line-height:1.6;resize:vertical;" spellcheck="false" placeholder="MOV AX, 1F1Ch
+MOV BX, 168Ah
+ADD AX, BX"></textarea>
+            <div class="sim-controls" style="margin-top:8px;">
+              <button class="btn btn-sm btn-primary" onclick="tracerInit()">Cargar</button>
+              <button class="btn btn-sm btn-secondary" onclick="tracerStep()" id="tracerStepBtn" disabled>Paso →</button>
+              <button class="btn btn-sm btn-secondary" onclick="tracerRunAll()" id="tracerRunBtn" disabled>Ejecutar Todo</button>
+              <button class="btn btn-sm" style="background:#f0f4f8;" onclick="tracerReset()">Reset</button>
+            </div>
+            <div id="tracerStatus" class="sim-status halt">Listo.</div>
+          </div>
+          <div class="tracer-trace" id="tracerTraceSection" style="display:none;">
+            <strong style="font-size:0.85rem;">Traza de ejecucion</strong>
+            <div style="overflow-x:auto;margin-top:10px;">
+              <table class="tracer-trace-table">
+                <thead id="tracerTraceHead"></thead>
+                <tbody id="tracerTraceBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ORAL PRACTICE ==================== -->
+    <div class="content-section" id="section-oral">
+      <div class="card">
+        <h2 style="margin-bottom:4px;">Practica Oral</h2>
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:16px;">Entrenamiento para el examen oral. Lee cada pregunta, formula tu respuesta mentalmente, luego revela y auto-evalua.</p>
+        <div class="oral-stats-row" id="oralStats">
+          <div class="oral-stat"><strong id="oralDone">0</strong>respondidas hoy</div>
+          <div class="oral-stat"><strong id="oralStreak">0</strong>bien / casi</div>
+          <div class="oral-stat"><strong id="oralTotal">—</strong>preguntas totales</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+          <button class="btn btn-sm btn-primary" id="oralFilterAll" onclick="oralSetFilter(0)">Todas</button>
+          <button class="btn btn-sm" style="background:#fde8e8;color:var(--u1);" onclick="oralSetFilter(1)">U1</button>
+          <button class="btn btn-sm" style="background:#fdf0e0;color:var(--u2);" onclick="oralSetFilter(2)">U2</button>
+          <button class="btn btn-sm" style="background:#fefce0;color:#c8a000;" onclick="oralSetFilter(3)">U3</button>
+          <button class="btn btn-sm" style="background:#e8fdf0;color:var(--u4);" onclick="oralSetFilter(4)">U4</button>
+          <button class="btn btn-sm" style="background:#e8f4fd;color:var(--u5);" onclick="oralSetFilter(5)">U5</button>
+          <button class="btn btn-sm" style="background:#f3eafd;color:var(--u6);" onclick="oralSetFilter(6)">U6</button>
+          <button class="btn btn-sm" style="background:#e0faf6;color:var(--u7);" onclick="oralSetFilter(7)">U7</button>
+        </div>
+        <div class="oral-progress" id="oralProgress"></div>
+        <div class="oral-q-card" id="oralCard">
+          <div class="oral-q-unit" id="oralUnit"></div>
+          <div class="oral-q-text" id="oralQuestion">Cargando...</div>
+        </div>
+        <div class="oral-controls">
+          <button class="btn btn-secondary" onclick="oralReveal()" id="oralRevealBtn">Ver respuesta esperada</button>
+          <button class="btn btn-sm" style="background:#f0f4f8;" onclick="oralNext()">Saltar →</button>
+        </div>
+        <div class="oral-answer" id="oralAnswer"></div>
+        <div class="oral-rate" id="oralRate">
+          <strong style="font-size:0.82rem;color:var(--text-secondary);align-self:center;">¿Como te fue?</strong>
+          <button class="btn" style="background:var(--danger);color:white;" onclick="oralRate('no')">No lo supe</button>
+          <button class="btn" style="background:var(--warning);color:white;" onclick="oralRate('casi')">Casi / Incompleto</button>
+          <button class="btn" style="background:var(--success);color:white;" onclick="oralRate('si')">Lo supe bien</button>
+        </div>
+      </div>
+    </div>
+
     <div class="content-section" id="section-recursos">
       <div class="card" style="margin-bottom:12px;">
         <h2>Material del Campus</h2>
@@ -5984,6 +6255,690 @@ impar:INC SI
     }
 
     // ============================================================
+    // SIMULADOR — BLUE MACHINE
+    // ============================================================
+    const BLUE_OPS = {
+      '01':{ m:'LDA', ha:true,  fn:(c,a)=>{ c.mar=a; c.mdr=c.mem[a]||0; c.acc=c.mdr; } },
+      '02':{ m:'STA', ha:true,  fn:(c,a)=>{ c.mar=a; c.mdr=c.acc; c.mem[a]=c.acc; } },
+      '03':{ m:'ADD', ha:true,  fn:(c,a)=>{ c.mar=a; c.mdr=c.mem[a]||0; c.acc=(c.acc+c.mdr)&0x3FFFF; } },
+      '04':{ m:'AND', ha:true,  fn:(c,a)=>{ c.mar=a; c.mdr=c.mem[a]||0; c.acc=c.acc&c.mdr; } },
+      '05':{ m:'IOR', ha:true,  fn:(c,a)=>{ c.mar=a; c.mdr=c.mem[a]||0; c.acc=c.acc|c.mdr; } },
+      '06':{ m:'XOR', ha:true,  fn:(c,a)=>{ c.mar=a; c.mdr=c.mem[a]||0; c.acc=c.acc^c.mdr; } },
+      '07':{ m:'NOT', ha:false, fn:(c,a)=>{ c.acc=(~c.acc)&0x3FFFF; } },
+      '10':{ m:'RAL', ha:false, fn:(c,a)=>{ const b=(c.acc>>17)&1; c.acc=((c.acc<<1)|b)&0x3FFFF; } },
+      '11':{ m:'JPZ', ha:true,  fn:(c,a)=>{ if(!(c.acc&0x20000)) c.ip=a; } },
+      '12':{ m:'JMP', ha:true,  fn:(c,a)=>{ c.ip=a; } },
+      '13':{ m:'SUB', ha:true,  fn:(c,a)=>{ c.mar=a; c.mdr=c.mem[a]||0; c.acc=(c.acc-c.mdr)&0x3FFFF; } },
+      '14':{ m:'OUT', ha:true,  fn:(c,a)=>{ c.output.push('Puerto '+a.toString(8).padStart(2,'0')+': '+c.acc.toString(8).padStart(6,'0')+' ('+blueSigned(c.acc)+'d)'); } },
+      '15':{ m:'HLT', ha:false, fn:(c,a)=>{ c.halted=true; } }
+    };
+    const BLUE_MNEM = {};
+    for(const op in BLUE_OPS) BLUE_MNEM[BLUE_OPS[op].m] = op;
+
+    let blueCPU = null;
+    let bluePrevRegs = {};
+
+    function blueSigned(v) {
+      v = v & 0x3FFFF;
+      return (v & 0x20000) ? (v - 0x40000) : v;
+    }
+
+    function blueParseWord(line) {
+      line = line.split(';')[0].trim();
+      if (!line) return null;
+      // Remove label
+      if (/^[A-Za-z_]\w*:/.test(line)) line = line.replace(/^[A-Za-z_]\w*:\s*/, '');
+      line = line.trim();
+      if (!line) return null;
+      // Octal literal: 6 octal digits
+      if (/^[0-7]{6}$/.test(line)) return parseInt(line, 8);
+      // Mnemonic format
+      const parts = line.toUpperCase().split(/\s+/);
+      const op = BLUE_MNEM[parts[0]];
+      if (!op) throw new Error('Instruccion desconocida: ' + parts[0]);
+      const opInfo = BLUE_OPS[op];
+      let addr = 0;
+      if (opInfo.ha) {
+        if (!parts[1]) throw new Error('Falta direccion en: ' + parts[0]);
+        addr = parseInt(parts[1], 8);
+        if (isNaN(addr)) throw new Error('Direccion invalida: ' + parts[1]);
+      }
+      return parseInt(op, 8) * 0x1000 + addr; // opcode*4096 + address
+    }
+
+    function blueDecodeWord(word) {
+      const op = Math.floor(word / 0x1000).toString(8).padStart(2,'0');
+      const addr = word % 0x1000;
+      const info = BLUE_OPS[op];
+      if (!info) return '???';
+      return info.m + (info.ha ? ' ' + addr.toString(8).padStart(4,'0') : '');
+    }
+
+    function blueAssemble() {
+      const code = document.getElementById('blueCode').value;
+      const memInit = document.getElementById('blueMemInit').value;
+      const lines = code.split('\n');
+      // First pass: resolve labels
+      const labelMap = {};
+      let addr = 0;
+      for (const ln of lines) {
+        const clean = ln.split(';')[0].trim();
+        if (!clean) continue;
+        const m = clean.match(/^([A-Za-z_]\w*):\s*(.*)/);
+        if (m) { labelMap[m[1].toUpperCase()] = addr; if (!m[2].trim()) continue; }
+        addr++;
+      }
+      // Second pass: encode
+      const mem = {};
+      addr = 0;
+      try {
+        for (let ln of lines) {
+          ln = ln.split(';')[0].trim();
+          if (!ln) continue;
+          const m2 = ln.match(/^([A-Za-z_]\w*):\s*(.*)/);
+          if (m2) ln = m2[2].trim();
+          if (!ln) continue;
+          // Replace labels in address
+          ln = ln.replace(/\b([A-Za-z_]\w*)\b/g, (tok) => {
+            const up = tok.toUpperCase();
+            return (up in BLUE_MNEM || up in labelMap) ? (up in labelMap ? labelMap[up].toString(8) : tok) : tok;
+          });
+          mem[addr] = blueParseWord(ln);
+          addr++;
+        }
+      } catch(e) {
+        blueSetStatus(e.message, 'err'); return;
+      }
+      // Load data memory
+      for (const ln of memInit.split('\n')) {
+        const m = ln.trim().match(/^([0-7]{1,4})\s*[:=]\s*([0-7]{1,6})$/);
+        if (m) mem[parseInt(m[1],8)] = parseInt(m[2],8) & 0x3FFFF;
+      }
+      blueCPU = { mem, acc:0, ip:0, mar:0, mdr:0, ir:'—', halted:false, output:[], progLen:addr };
+      bluePrevRegs = {};
+      document.getElementById('blueStepBtn').disabled = false;
+      document.getElementById('blueRunBtn').disabled = false;
+      document.getElementById('blueOutput').textContent = '—';
+      blueUpdateUI();
+      blueSetStatus('Programa cargado. ' + addr + ' instrucciones. IP=0000.', 'ok');
+    }
+
+    function blueStep() {
+      if (!blueCPU || blueCPU.halted) return;
+      const cpu = blueCPU;
+      const word = cpu.mem[cpu.ip];
+      if (word === undefined) { blueSetStatus('No hay instruccion en IP=' + cpu.ip.toString(8).padStart(4,'0'), 'err'); return; }
+      const op = Math.floor(word / 0x1000).toString(8).padStart(2,'0');
+      const addr = word % 0x1000;
+      const info = BLUE_OPS[op];
+      if (!info) { blueSetStatus('Opcode desconocido: ' + op, 'err'); return; }
+      cpu.ir = blueDecodeWord(word);
+      const prevIP = cpu.ip;
+      cpu.ip++;
+      bluePrevRegs = { acc: cpu.acc, ip: prevIP, mar: cpu.mar, mdr: cpu.mdr };
+      info.fn(cpu, addr);
+      blueUpdateUI();
+      if (cpu.halted) {
+        blueSetStatus('HLT — Maquina detenida en IP=' + prevIP.toString(8).padStart(4,'0'), 'halt');
+        document.getElementById('blueStepBtn').disabled = true;
+        document.getElementById('blueRunBtn').disabled = true;
+      } else {
+        blueSetStatus('Ejecutado: ' + cpu.ir + ' | IP=' + cpu.ip.toString(8).padStart(4,'0'), 'ok');
+      }
+    }
+
+    function blueRun() {
+      if (!blueCPU) return;
+      let steps = 0;
+      while (!blueCPU.halted && steps < 10000) { blueStep(); steps++; }
+      if (!blueCPU.halted) blueSetStatus('Limite de 10000 pasos alcanzado (posible loop infinito)', 'err');
+    }
+
+    function blueReset() {
+      blueCPU = null;
+      bluePrevRegs = {};
+      document.getElementById('blueStepBtn').disabled = true;
+      document.getElementById('blueRunBtn').disabled = true;
+      ['brACC','brIP','brMAR','brMDR'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) { el.classList.remove('changed'); el.querySelector('span:last-child').textContent = id==='brACC'||id==='brMDR'?'000000':'0000'; }
+      });
+      const irEl = document.getElementById('brIR');
+      if(irEl) irEl.querySelector('span:last-child').textContent = '—';
+      document.getElementById('blueMemBody').innerHTML = '';
+      document.getElementById('blueOutput').textContent = '—';
+      blueSetStatus('Listo.', 'halt');
+    }
+
+    function blueUpdateUI() {
+      const cpu = blueCPU;
+      if (!cpu) return;
+      const fmt6 = v => (v&0x3FFFF).toString(8).padStart(6,'0');
+      const fmt4 = v => v.toString(8).padStart(4,'0');
+      const setReg = (id, val, prevVal, fmtFn) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.querySelector('span:last-child').textContent = fmtFn(val);
+        el.classList.toggle('changed', prevVal !== undefined && prevVal !== val);
+      };
+      setReg('brACC', cpu.acc, bluePrevRegs.acc, fmt6);
+      setReg('brIP',  cpu.ip,  bluePrevRegs.ip,  fmt4);
+      setReg('brMAR', cpu.mar, bluePrevRegs.mar,  fmt4);
+      setReg('brMDR', cpu.mdr, bluePrevRegs.mdr,  fmt6);
+      const irEl = document.getElementById('brIR');
+      if(irEl) irEl.querySelector('span:last-child').textContent = cpu.ir;
+      // Memory table
+      const tbody = document.getElementById('blueMemBody');
+      tbody.innerHTML = '';
+      const addrs = Object.keys(cpu.mem).map(Number).sort((a,b)=>a-b);
+      for (const a of addrs) {
+        const word = cpu.mem[a];
+        const tr = document.createElement('tr');
+        if (a === cpu.ip) tr.className = 'current-ip';
+        else if (bluePrevRegs.mar === a) tr.className = 'modified';
+        tr.innerHTML = '<td>' + fmt4(a) + '</td><td>' + fmt6(word) + '</td><td>' + blueDecodeWord(word) + '</td>';
+        tbody.appendChild(tr);
+      }
+      // Output
+      if (cpu.output.length > 0) document.getElementById('blueOutput').textContent = cpu.output.join('\n');
+    }
+
+    function blueSetStatus(msg, cls) {
+      const el = document.getElementById('blueStatus');
+      el.textContent = msg; el.className = 'sim-status ' + cls;
+    }
+
+    function blueLoadExample() {
+      const ex = document.getElementById('blueExample').value;
+      const examples = {
+        suma: `; Suma M[0100] + M[0101] -> M[0102]
+LDA 0100  ; ACC = A
+ADD 0101  ; ACC = A + B
+STA 0102  ; M[0102] = resultado
+HLT`,
+        loop: `; Contador: decrementa desde N hasta 0
+LDA 0200  ; ACC = N
+LOOP:
+SUB 0201  ; ACC = ACC - 1
+JPZ FIN   ; si ACC <= 0, salir
+JMP LOOP  ; si no, seguir
+FIN:
+HLT`,
+        abs: `; Valor absoluto de M[0100] -> M[0101]
+LDA 0100   ; ACC = X
+JPZ POS    ; si X >= 0, ya es positivo
+NOT        ; C1: ~X
+ADD 0200   ; C2: ~X + 1
+POS:
+STA 0101   ; guardar resultado
+HLT`,
+        ex88: `; Ejercicio 88: programa dado con datos
+LDA 0007   ; ACC <- M[0007]
+IOR 0010   ; ACC <- ACC OR M[0010]
+AND 0011   ; ACC <- ACC AND M[0011]
+STA 0012   ; M[0012] <- ACC
+OUT 01     ; salida por puerto 01
+HLT`
+      };
+      const memInits = {
+        suma: '0100: 000005\n0101: 000003',
+        loop: '0200: 000003\n0201: 000001',
+        abs:  '0100: 777773\n0200: 000001',
+        ex88: '0007: 110771\n0010: 145735\n0011: 074000'
+      };
+      if (examples[ex]) {
+        document.getElementById('blueCode').value = examples[ex];
+        document.getElementById('blueMemInit').value = memInits[ex] || '';
+        blueReset();
+        document.getElementById('blueExample').value = '';
+      }
+    }
+
+    function simSwitchTab(tab, btn) {
+      document.querySelectorAll('.sim-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sim-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('sim' + (tab === 'blue' ? 'Blue' : '8088')).classList.add('active');
+    }
+
+    // ============================================================
+    // SIMULADOR — 8088 TRACER
+    // ============================================================
+    let tracerState = null;
+    let tracerLines = [];
+    let tracerLineIdx = 0;
+    let tracerHistory = [];
+
+    const REG16 = ['AX','BX','CX','DX','SI','DI','SP','BP','IP','CS','DS','SS','ES'];
+    const REG8_MAP = { AL:['AX',0], AH:['AX',8], BL:['BX',0], BH:['BX',8], CL:['CX',0], CH:['CX',8], DL:['DX',0], DH:['DX',8] };
+
+    function tracerInit() {
+      const state = { regs: {}, flags: {}, mem: {} };
+      for (const r of REG16) {
+        const el = document.getElementById('tr_' + r);
+        state.regs[r] = el ? (parseInt(el.value, 16) || 0) & 0xFFFF : 0;
+      }
+      for (const f of ['CF','ZF','SF','OF','AF','PF']) {
+        const el = document.getElementById('tf_' + f);
+        state.flags[f] = el ? (parseInt(el.value) || 0) & 1 : 0;
+      }
+      // Parse DS memory
+      for (const ln of document.getElementById('tracerMem').value.split('\n')) {
+        const m = ln.trim().match(/^([0-9A-Fa-f]{1,4})\s*[:=]\s*([0-9A-Fa-f]{1,4})$/);
+        if (m) state.mem[parseInt(m[1],16)] = parseInt(m[2],16) & 0xFF;
+      }
+      tracerState = JSON.parse(JSON.stringify(state));
+      tracerLines = document.getElementById('tracerCode').value.split('\n').filter(l => l.trim() && !l.trim().startsWith(';'));
+      tracerLineIdx = 0;
+      tracerHistory = [{ step:0, instr:'Estado inicial', regs: {...state.regs}, flags: {...state.flags} }];
+      document.getElementById('tracerStepBtn').disabled = false;
+      document.getElementById('tracerRunBtn').disabled = false;
+      document.getElementById('tracerTraceSection').style.display = 'block';
+      tracerRenderTrace();
+      tracerSetStatus('Listo. ' + tracerLines.length + ' instrucciones.', 'ok');
+    }
+
+    function tracerGetReg(state, name) {
+      const up = name.toUpperCase();
+      if (REG16.includes(up)) return state.regs[up] || 0;
+      if (up in REG8_MAP) { const [r,sh] = REG8_MAP[up]; return (state.regs[r]>>sh) & 0xFF; }
+      return 0;
+    }
+
+    function tracerSetReg(state, name, val) {
+      const up = name.toUpperCase();
+      if (REG16.includes(up)) { state.regs[up] = val & 0xFFFF; return; }
+      if (up in REG8_MAP) {
+        const [r, sh] = REG8_MAP[up];
+        const old = state.regs[r] || 0;
+        if (sh === 0) state.regs[r] = (old & 0xFF00) | (val & 0xFF);
+        else          state.regs[r] = (old & 0x00FF) | ((val & 0xFF) << 8);
+      }
+    }
+
+    function tracerIsReg(name) {
+      const up = name.toUpperCase();
+      return REG16.includes(up) || (up in REG8_MAP);
+    }
+
+    function tracerIs8bit(name) { return name.toUpperCase() in REG8_MAP; }
+
+    function tracerParseImm(tok) {
+      tok = tok.trim();
+      if (/^[0-9A-Fa-f]+[Hh]$/.test(tok)) return parseInt(tok.slice(0,-1), 16);
+      if (/^0[xX][0-9A-Fa-f]+$/.test(tok)) return parseInt(tok, 16);
+      if (/^[0-9]+$/.test(tok)) return parseInt(tok, 10);
+      if (/^[0-9A-Fa-f]+$/.test(tok) && /[A-Fa-f]/.test(tok)) return parseInt(tok, 16);
+      return NaN;
+    }
+
+    function tracerGetEA(state, operand) {
+      // Returns effective address (offset in DS segment) or null if not memory
+      operand = operand.trim();
+      if (operand.startsWith('[') && operand.endsWith(']')) {
+        const inner = operand.slice(1,-1).trim();
+        // Evaluate expression: sum of register values + immediate
+        let ea = 0;
+        const parts = inner.split(/([+\-])/);
+        let sign = 1;
+        for (let p of parts) {
+          p = p.trim();
+          if (p === '+') { sign = 1; continue; }
+          if (p === '-') { sign = -1; continue; }
+          if (!p) continue;
+          if (tracerIsReg(p)) ea += sign * tracerGetReg(state, p);
+          else { const imm = tracerParseImm(p); if (!isNaN(imm)) ea += sign * imm; }
+        }
+        return ea & 0xFFFF;
+      }
+      return null;
+    }
+
+    function tracerGetOperand(state, operand) {
+      operand = operand.trim();
+      if (tracerIsReg(operand)) return tracerGetReg(state, operand);
+      const ea = tracerGetEA(state, operand);
+      if (ea !== null) {
+        // Read 1 or 2 bytes from memory
+        const lo = state.mem[ea] || 0;
+        const hi = state.mem[(ea+1) & 0xFFFF] || 0;
+        return (hi << 8) | lo; // 16-bit read (may be 8-bit depending on context)
+      }
+      // Immediate
+      const imm = tracerParseImm(operand);
+      if (!isNaN(imm)) return imm;
+      throw new Error('Operando no reconocido: ' + operand);
+    }
+
+    function tracerSetOperand(state, operand, val) {
+      operand = operand.trim();
+      if (tracerIsReg(operand)) { tracerSetReg(state, operand, val); return; }
+      const ea = tracerGetEA(state, operand);
+      if (ea !== null) {
+        state.mem[ea] = val & 0xFF;
+        state.mem[(ea+1)&0xFFFF] = (val>>8) & 0xFF;
+        return;
+      }
+      throw new Error('Destino invalido: ' + operand);
+    }
+
+    function tracerComputeFlags(state, result, bits, op, src1, src2) {
+      const mask = bits === 8 ? 0xFF : 0xFFFF;
+      const signBit = bits === 8 ? 0x80 : 0x8000;
+      const res = result & mask;
+      state.flags.ZF = res === 0 ? 1 : 0;
+      state.flags.SF = (res & signBit) ? 1 : 0;
+      state.flags.PF = (res.toString(2).split('').filter(b=>b==='1').length % 2 === 0) ? 1 : 0;
+      if (op === 'add') {
+        state.flags.CF = result > mask ? 1 : 0;
+        const s1 = (src1 & signBit) ? 1 : 0, s2 = (src2 & signBit) ? 1 : 0, sr = (res & signBit) ? 1 : 0;
+        state.flags.OF = (s1 === s2 && s1 !== sr) ? 1 : 0;
+        state.flags.AF = (((src1 & 0xF) + (src2 & 0xF)) > 0xF) ? 1 : 0;
+      } else if (op === 'sub' || op === 'cmp') {
+        state.flags.CF = src1 < src2 ? 1 : 0;
+        const s1 = (src1 & signBit) ? 1 : 0, s2 = (src2 & signBit) ? 1 : 0, sr = (res & signBit) ? 1 : 0;
+        state.flags.OF = (s1 !== s2 && s1 !== sr) ? 1 : 0;
+        state.flags.AF = ((src1 & 0xF) < (src2 & 0xF)) ? 1 : 0;
+      } else { // logic
+        state.flags.CF = 0; state.flags.OF = 0; state.flags.AF = 0;
+      }
+    }
+
+    function tracerExecInstr(state, line) {
+      line = line.split(';')[0].trim();
+      if (!line) return;
+      const spaceIdx = line.search(/\s/);
+      const mnem = (spaceIdx === -1 ? line : line.slice(0, spaceIdx)).toUpperCase();
+      const rest = spaceIdx === -1 ? '' : line.slice(spaceIdx + 1).trim();
+      const parts = rest.split(',').map(s => s.trim());
+      const dst = parts[0] || '', src = parts[1] || '';
+      const bits = (dst && tracerIsReg(dst) && tracerIs8bit(dst)) || (src && tracerIsReg(src) && tracerIs8bit(src)) ? 8 : 16;
+      const mask = bits === 8 ? 0xFF : 0xFFFF;
+
+      if (mnem === 'MOV') {
+        tracerSetOperand(state, dst, tracerGetOperand(state, src) & mask);
+      } else if (mnem === 'ADD') {
+        const a = tracerGetOperand(state, dst) & mask, b = tracerGetOperand(state, src) & mask;
+        const r = a + b;
+        tracerSetOperand(state, dst, r & mask);
+        tracerComputeFlags(state, r, bits, 'add', a, b);
+      } else if (mnem === 'SUB') {
+        const a = tracerGetOperand(state, dst) & mask, b = tracerGetOperand(state, src) & mask;
+        const r = a - b;
+        tracerSetOperand(state, dst, r & mask);
+        tracerComputeFlags(state, r, bits, 'sub', a, b);
+      } else if (mnem === 'AND') {
+        const r = (tracerGetOperand(state, dst) & tracerGetOperand(state, src)) & mask;
+        tracerSetOperand(state, dst, r);
+        tracerComputeFlags(state, r, bits, 'logic', 0, 0);
+      } else if (mnem === 'OR') {
+        const r = (tracerGetOperand(state, dst) | tracerGetOperand(state, src)) & mask;
+        tracerSetOperand(state, dst, r);
+        tracerComputeFlags(state, r, bits, 'logic', 0, 0);
+      } else if (mnem === 'XOR') {
+        const r = (tracerGetOperand(state, dst) ^ tracerGetOperand(state, src)) & mask;
+        tracerSetOperand(state, dst, r);
+        tracerComputeFlags(state, r, bits, 'logic', 0, 0);
+      } else if (mnem === 'NOT') {
+        tracerSetOperand(state, dst, (~tracerGetOperand(state, dst)) & mask);
+      } else if (mnem === 'NEG') {
+        const a = tracerGetOperand(state, dst) & mask;
+        const r = (0 - a) & mask;
+        tracerSetOperand(state, dst, r);
+        tracerComputeFlags(state, r, bits, 'sub', 0, a);
+      } else if (mnem === 'INC') {
+        const a = tracerGetOperand(state, dst) & mask;
+        const r = a + 1;
+        tracerSetOperand(state, dst, r & mask);
+        const oldCF = state.flags.CF;
+        tracerComputeFlags(state, r, bits, 'add', a, 1);
+        state.flags.CF = oldCF; // INC does not affect CF
+      } else if (mnem === 'DEC') {
+        const a = tracerGetOperand(state, dst) & mask;
+        const r = a - 1;
+        tracerSetOperand(state, dst, r & mask);
+        const oldCF = state.flags.CF;
+        tracerComputeFlags(state, r, bits, 'sub', a, 1);
+        state.flags.CF = oldCF;
+      } else if (mnem === 'CMP') {
+        const a = tracerGetOperand(state, dst) & mask, b = tracerGetOperand(state, src) & mask;
+        tracerComputeFlags(state, a - b, bits, 'cmp', a, b);
+      } else if (mnem === 'TEST') {
+        const r = (tracerGetOperand(state, dst) & tracerGetOperand(state, src)) & mask;
+        tracerComputeFlags(state, r, bits, 'logic', 0, 0);
+      } else if (mnem === 'SHL' || mnem === 'SAL') {
+        const count = tracerGetOperand(state, src) & 0x1F;
+        const a = tracerGetOperand(state, dst) & mask;
+        const r = (a << count) & mask;
+        tracerSetOperand(state, dst, r);
+        state.flags.CF = count ? ((a >> (bits - count)) & 1) : state.flags.CF;
+        state.flags.ZF = r === 0 ? 1 : 0;
+        state.flags.SF = (r >> (bits-1)) & 1;
+      } else if (mnem === 'SHR') {
+        const count = tracerGetOperand(state, src) & 0x1F;
+        const a = tracerGetOperand(state, dst) & mask;
+        const r = (a >>> count) & mask;
+        tracerSetOperand(state, dst, r);
+        state.flags.CF = count ? ((a >> (count-1)) & 1) : state.flags.CF;
+        state.flags.ZF = r === 0 ? 1 : 0;
+        state.flags.SF = 0;
+      } else if (mnem === 'SAR') {
+        const count = tracerGetOperand(state, src) & 0x1F;
+        const a = tracerGetOperand(state, dst) & mask;
+        const signExt = bits === 8 ? ((a & 0x80) ? 0xFFFFFF00 : 0) : ((a & 0x8000) ? 0xFFFF0000 : 0);
+        const r = ((a | signExt) >> count) & mask;
+        tracerSetOperand(state, dst, r);
+        state.flags.CF = count ? ((a >> (count-1)) & 1) : state.flags.CF;
+        state.flags.ZF = r === 0 ? 1 : 0;
+        state.flags.SF = (r >> (bits-1)) & 1;
+      } else if (mnem === 'XCHG') {
+        const tmp = tracerGetOperand(state, dst);
+        tracerSetOperand(state, dst, tracerGetOperand(state, src));
+        tracerSetOperand(state, src, tmp);
+      } else if (mnem === 'NOP') {
+        // nothing
+      } else if (mnem === 'PUSH') {
+        state.regs.SP = (state.regs.SP - 2) & 0xFFFF;
+        const val = tracerGetOperand(state, dst);
+        state.mem[state.regs.SP] = val & 0xFF;
+        state.mem[(state.regs.SP+1)&0xFFFF] = (val>>8) & 0xFF;
+      } else if (mnem === 'POP') {
+        const lo = state.mem[state.regs.SP] || 0;
+        const hi = state.mem[(state.regs.SP+1)&0xFFFF] || 0;
+        tracerSetOperand(state, dst, (hi<<8)|lo);
+        state.regs.SP = (state.regs.SP + 2) & 0xFFFF;
+      } else {
+        throw new Error('Instruccion no soportada: ' + mnem + '. Soportadas: MOV ADD SUB AND OR XOR NOT NEG INC DEC CMP TEST SHL SHR SAR XCHG NOP PUSH POP');
+      }
+    }
+
+    function tracerStep() {
+      if (!tracerState || tracerLineIdx >= tracerLines.length) return;
+      const line = tracerLines[tracerLineIdx];
+      const prevState = JSON.parse(JSON.stringify(tracerState));
+      try {
+        tracerExecInstr(tracerState, line);
+      } catch(e) {
+        tracerSetStatus('Error: ' + e.message, 'err'); return;
+      }
+      tracerHistory.push({ step: tracerHistory.length, instr: line.trim(), regs: {...tracerState.regs}, flags: {...tracerState.flags}, prev: prevState });
+      tracerLineIdx++;
+      tracerRenderTrace();
+      if (tracerLineIdx >= tracerLines.length) {
+        tracerSetStatus('Ejecucion completada.', 'ok');
+        document.getElementById('tracerStepBtn').disabled = true;
+        document.getElementById('tracerRunBtn').disabled = true;
+      } else {
+        tracerSetStatus('Paso ' + tracerLineIdx + '/' + tracerLines.length + ': ejecutado. Siguiente: ' + tracerLines[tracerLineIdx], 'ok');
+      }
+    }
+
+    function tracerRunAll() {
+      while (tracerLineIdx < tracerLines.length) tracerStep();
+    }
+
+    function tracerReset() {
+      tracerState = null; tracerLines = []; tracerLineIdx = 0; tracerHistory = [];
+      document.getElementById('tracerStepBtn').disabled = true;
+      document.getElementById('tracerRunBtn').disabled = true;
+      document.getElementById('tracerTraceSection').style.display = 'none';
+      tracerSetStatus('Listo.', 'halt');
+    }
+
+    function tracerSetStatus(msg, cls) {
+      const el = document.getElementById('tracerStatus');
+      el.textContent = msg; el.className = 'sim-status ' + cls;
+    }
+
+    function tracerRenderTrace() {
+      const head = document.getElementById('tracerTraceHead');
+      const body = document.getElementById('tracerTraceBody');
+      const cols = ['Paso','Instruccion','AX','BX','CX','DX','SI','DI','SP','BP','CF','ZF','SF','OF'];
+      head.innerHTML = '<tr>' + cols.map(c=>'<th>'+c+'</th>').join('') + '</tr>';
+      body.innerHTML = '';
+      for (const row of tracerHistory) {
+        const tr = document.createElement('tr');
+        const fmt = v => v.toString(16).toUpperCase().padStart(4,'0');
+        const cells = [row.step, row.instr,
+          row.regs.AX, row.regs.BX, row.regs.CX, row.regs.DX,
+          row.regs.SI, row.regs.DI, row.regs.SP, row.regs.BP,
+          row.flags.CF, row.flags.ZF, row.flags.SF, row.flags.OF
+        ];
+        tr.innerHTML = cells.map((v,i) => {
+          const raw = (i >= 2 && i <= 9) ? fmt(v||0) : v;
+          const prev = row.prev;
+          let changed = false;
+          if (prev && i >= 2 && i <= 9) {
+            const regNames = ['AX','BX','CX','DX','SI','DI','SP','BP'];
+            changed = prev.regs[regNames[i-2]] !== (row.regs[regNames[i-2]]);
+          } else if (prev && i >= 10) {
+            const flagNames = ['CF','ZF','SF','OF'];
+            changed = prev.flags[flagNames[i-10]] !== row.flags[flagNames[i-10]];
+          }
+          return '<td class="' + (changed ? 'chg' : '') + '">' + raw + '</td>';
+        }).join('');
+        body.appendChild(tr);
+      }
+      // Scroll to bottom
+      body.scrollIntoView && body.lastElementChild && body.lastElementChild.scrollIntoView({ block:'nearest' });
+    }
+
+    // ============================================================
+    // PRACTICA ORAL
+    // ============================================================
+    const ORAL_QA = [
+      // U1 — Representacion de datos
+      {u:1,q:'¿Que es un sistema de numeracion posicional? Explique la formula general.',a:'Un sistema posicional de base b representa cualquier numero N como suma de digitos multiplicados por potencias de la base: N = aₙbⁿ + ... + a₀b⁰ + a₋₁b⁻¹ + ... La posicion de cada digito determina su valor relativo. En computacion se usa base 2 (binario) por confiabilidad (dos estados fisicos robustos) y costo optimo.'},
+      {u:1,q:'¿Como se convierte un numero decimal a binario? Explique parte entera y fraccionaria.',a:'Parte entera: division sucesiva por 2, los restos leidos de abajo a arriba forman el numero binario. Ej: 13 → 1101₂. Parte fraccionaria: multiplicacion sucesiva por 2, la parte entera de cada resultado es el siguiente bit. Puede ser periodica. Atajo: 1 digito octal = 3 bits; 1 digito hex = 4 bits.'},
+      {u:1,q:'Explique representacion en punto fijo (SM, C1, C2) y como detectar overflow.',a:'SM (signo-magnitud): 1 bit signo + magnitud. Dos ceros (+0 y -0). C1 (complemento a 1): se invierten todos los bits para el negativo. C2 (complemento a 2): C1 + 1. Rango de n bits: -2^(n-1) a 2^(n-1)-1. Overflow en C2: si los acarreos de los bits n-1 y n-2 difieren (V = Cₙ XOR Cₙ₋₁).'},
+      {u:1,q:'Explique IEEE 754 punto flotante. Formato de 32 bits.',a:'N = (-1)^S × 1.mantisa × 2^(exponente-127). Estructura: 1 bit signo (S), 8 bits exponente biased (exceso 127), 23 bits mantisa (bit implicito = 1). NaN si exponente = FF y mantisa ≠ 0. Infinito si exponente = FF y mantisa = 0. Cero: todo ceros. Desnormalizados: exponente = 00.'},
+      {u:1,q:'¿Que es el codigo BCD? ¿Y el codigo Gray? Aplicaciones.',a:'BCD (Binary Coded Decimal): cada digito decimal representado con 4 bits (0000-1001). Facilita E/S con humanos. Suma en BCD requiere correccion: si resultado > 9 o hay carry, sumar 0110. Gray (codigo reflejado): dos valores consecutivos difieren en 1 solo bit. Util en encoders rotativos y mapas de Karnaugh para minimizacion.'},
+      // U2 — Algebra de Boole
+      {u:2,q:'Enuncie los postulados del Algebra de Boole.',a:'Postulados (axiomas de Huntington): 1) Cierre: A+B∈B, A·B∈B. 2) Identidad: A+0=A, A·1=A. 3) Conmutatividad: A+B=B+A, A·B=B·A. 4) Distributividad: A·(B+C)=A·B+A·C, A+(B·C)=(A+B)·(A+C). 5) Complemento: A+A\'=1, A·A\'=0. 6) Idempotencia, absorcion y De Morgan se derivan de estos.'},
+      {u:2,q:'Enuncie los teoremas de De Morgan y demuestre uno.',a:'De Morgan: (A·B)\'=A\'+B\' y (A+B)\'=A\'·B\'. Demostracion de (A·B)\'=A\'+B\' usando tabla de verdad: para A=0,B=0: (0·0)\'=1, 1+1=1 ✓. Para A=1,B=1: (1·1)\'=0, 0+0=0 ✓. Aplicacion practica: implementar cualquier funcion solo con NAND o solo con NOR (compuertas universales).'},
+      {u:2,q:'Explique mapas de Karnaugh. ¿Como se minimizan funciones con "don\'t care"?',a:'K-map: tabla donde filas y columnas siguen codigo Gray (adyacencia 1 bit). Se agrupan 1s en grupos de 2^k (1,2,4,8,16). Grupos mas grandes eliminan mas variables. El mapa es toroidal (bordes adyacentes). Don\'t care (X): pueden incluirse o no en grupos segun convenga para maximizar el grupo. Resultado: SdP minimizada. Para PdS: agrupar los 0s.'},
+      {u:2,q:'¿Que es un multiplexor? ¿Como implementar una funcion con un MUX?',a:'MUX 2^n:1: 2^n canales de datos, n lineas de seleccion, 1 salida. Selecciona que canal pasa a la salida segun el codigo de seleccion. Para implementar f(a,b,c): usar MUX 4:1 con a,b como seleccion. Para cada combinacion de ab, la variable c define el canal: si f=1 para c=0 y c=1 → canal=1; si f=c → canal=c; si f=c\' → canal=c\'; si f=0 para ambos → canal=0.'},
+      {u:2,q:'¿Que es un decodificador? ¿Como implementar funciones combinacionales con decodificadores?',a:'DEC n→2^n: n entradas, 2^n salidas, activa una sola salida (el minterm correspondiente). Para implementar f(a,b,c)=Σ(m1,m3,m5): conectar un OR en las salidas 1,3,5 del DEC 3→8. Cada salida del DEC implementa un minterm. Con enable se usa como DEMUX. Cascada: conectar el carry de etapas para DEC de mas bits.'},
+      {u:2,q:'Biestables: ¿Cuales son los tipos principales? Explique el JK.',a:'SR (Set-Reset): entradas S y R, estado indeterminado si S=R=1. JK: resuelve el indeterminado de SR; si J=K=1 el estado se complementa (toggle). Ecuacion: Q+=J·Q\'+K\'·Q. D: almacena el valor de D en cada flanco. T: si T=1 toggle, si T=0 mantiene. Todos son biestables de 1 bit (celda de memoria). Los sincrónicos cambian solo en el flanco del clock.'},
+      {u:2,q:'¿Que es un contador sincrono? ¿Diferencia con asíncrono?',a:'Contador sincrono: todos los FF se activan con el mismo flanco de clock. Mas rapido, sin ripple delay. Contador asíncrono (ripple): cada FF se dispara por la salida del anterior. Mas simple pero introduce retardo acumulativo. Para un contador mod-N sincrono se usan compuertas en las entradas JK o D de cada FF para obtener la secuencia deseada. El contador BCD es mod-10.'},
+      // U3 — Memorias
+      {u:3,q:'Clasifique las memorias electronicas por tecnologia y acceso.',a:'Por acceso: RAM (acceso aleatorio, lectura/escritura), ROM (solo lectura). Por volatilidad: volatil (SRAM, DRAM, pierde al cortar tension), no volatil (ROM, Flash, EEPROM). Por tecnologia: SRAM (6 transistores/celda, biestable), DRAM (1T+capacitor, necesita refresh periodico, mayor densidad). ROM tipos: ROM (mascara), PROM (fusibles), EPROM (UV), EEPROM/Flash (electrica).'},
+      {u:3,q:'¿Como funciona internamente una celda SRAM y una DRAM?',a:'SRAM: 6 transistores (4 en latch cruzado + 2 de acceso). Almacena estado estable, no necesita refresh. Veloz, costosa, baja densidad. DRAM: 1 transistor + 1 capacitor. El capacitor almacena la carga (1=cargado, 0=descargado). La carga se pierde por fuga → refresh cada ~64ms (releer y reescribir). Mayor densidad, mas barata, mas lenta. SDRAM/DDR: sincroniza con el bus del sistema.'},
+      {u:3,q:'¿Como se amplian las memorias? Extension de palabra y de capacidad.',a:'Extension de palabra (mas bits por direccion): conectar chips en paralelo, mismas lineas de direccion y CS, cada chip aporta bits de la palabra. Ej: 4 chips 1K×4 → 1K×16. Extension de capacidad (mas direcciones): conectar chips en "cascada", bits altos de direccion seleccionan el chip (CS diferente para cada), mismas lineas de datos. Ej: 4 chips 1K×8 → 4K×8.'},
+      {u:3,q:'Explique la jerarquia de memoria y el principio de localidad.',a:'Jerarquia: registros (mas rapida, <1ns) → cache L1/L2/L3 (1-10ns) → RAM principal (50-100ns) → SSD (100µs) → disco (5-10ms). Principio de localidad: temporal (si se accedio a un dato, probablemente se acceda de nuevo pronto) y espacial (si se accedio a una direccion, probablemente se acceda a direcciones cercanas). Esto justifica el uso de cache: pequeña, rapida, almacena datos frecuentemente usados.'},
+      // U4 — Von Neumann / Blue
+      {u:4,q:'¿Cuales son los componentes del modelo Von Neumann?',a:'1) CPU (Unidad de Proceso): ALU (operaciones) + Unidad de Control (decodifica instrucciones). 2) Memoria (programa y datos en el mismo espacio). 3) Dispositivos E/S. 4) Bus del sistema (datos, direcciones, control). Caracteristica: programa almacenado en memoria, CPU ejecuta instrucciones secuencialmente. Cuello de botella Von Neumann: el bus es compartido por datos e instrucciones.'},
+      {u:4,q:'Describa el ciclo de instruccion (fetch-decode-execute) de la Maquina Elemental.',a:'1) FETCH: MAR←IP; IP←IP+1; MDR←M[MAR]; IR←MDR. 2) DECODE: la UC interpreta el opcode de IR. 3) EXECUTE: segun el opcode, la UC activa las microoperaciones (ej. para LDA: MAR←direccion; MDR←M[MAR]; ACC←MDR). Este ciclo se repite indefinidamente hasta HLT. La Blue tiene 8 instrucciones en 18 bits (opcode+direccion).'},
+      {u:4,q:'¿Que son los modos de direccionamiento? Explique directo, indirecto e inmediato.',a:'Inmediato: el operando es el propio valor en la instruccion. Directo: la instruccion contiene la direccion de memoria del operando (M[dir]). Indirecto: la instruccion contiene una direccion que apunta a otra direccion que contiene el operando (M[M[dir]]). Basado/indexado: dir efectiva = registro base + offset. Implícito: el operando esta implicito (ej. RAL actua sobre ACC).'},
+      // U5 — 8088
+      {u:5,q:'Explique la arquitectura interna del 8088: BIU y EU.',a:'BIU (Bus Interface Unit): maneja el bus externo. Contiene registros de segmento (CS,DS,SS,ES), IP, cola de prefetch de 4 bytes. La BIU busca instrucciones en memoria anticipadamente (prefetch) mientras la EU ejecuta la instruccion anterior. EU (Execution Unit): contiene ALU, registros generales (AX,BX,CX,DX,SI,DI,SP,BP) y registro de flags. La separacion BIU/EU permite pipeline de 2 etapas.'},
+      {u:5,q:'¿Que es la segmentacion de memoria en el 8088? Calcule una direccion fisica.',a:'El 8088 tiene bus de 20 bits (1MB) pero registros de 16 bits. Solucion: segmentacion. Direccion fisica = segmento×16 + offset. Ej: CS=FF22h, IP=1F3Ch → fisica = FF220h + 1F3Ch = 1011 5Ch. Cada segmento es de 64KB maximo. Segmentos pueden solaparse. CS:IP = codigo, DS:offset = datos, SS:SP = pila, ES:DI = destino en instrucciones de string.'},
+      {u:5,q:'Explique los modos de direccionamiento del 8088.',a:'Registro: MOV AX,BX. Inmediato: MOV AX,1234h. Directo: MOV AX,[1234h]. Indirecto por registro: MOV AX,[BX] (solo BX,SI,DI,BP). Basado: MOV AX,[BX+disp]. Indexado: MOV AX,[SI+disp]. Basado+indexado: MOV AX,[BX+SI]. Con desplazamiento: MOV AX,[BX+SI+disp]. Para [BP] el segmento por defecto es SS (no DS).'},
+      {u:5,q:'¿Que son los flags del 8088? Explique CF, ZF, SF, OF.',a:'CF (Carry): acarreo fuera del bit mas significativo (overflow sin signo). ZF (Zero): resultado = 0. SF (Sign): MSB del resultado (negativo en C2). OF (Overflow): overflow con signo (C2), = Cₙ XOR Cₙ₋₁. PF (Parity): numero par de 1s en byte bajo. AF (Aux Carry): carry del nibble bajo (usado en BCD). DF (Direction): sentido de string ops. IF (Interrupt), TF (Trap).'},
+      // U6 — Arquitectura avanzada
+      {u:6,q:'Compare arquitecturas CISC vs RISC.',a:'CISC (ej. x86): muchas instrucciones complejas, longitud variable, varios modos de direccionamiento, microcódigo. Objetivo: reducir instrucciones por programa. RISC (ej. SPARC, MIPS): pocas instrucciones simples, longitud fija (32 bits), solo LOAD/STORE accede a memoria, muchos registros. Objetivo: ejecutar 1 instruccion por ciclo de clock. Tendencia moderna: procesadores RISC con traduccion CISC (x86 internamente es RISC).'},
+      {u:6,q:'Explique el pipeline (segmentacion de cauce) y sus tipos de hazards.',a:'Pipeline: divide la ejecucion en etapas (Fetch, Decode, Execute, Memory, Writeback). En estado estable: 1 instruccion termina por ciclo (throughput = 1). Hazards: 1) Datos: instruccion necesita resultado de anterior todavia en pipeline → forwarding o stall. 2) Control: instrucciones de salto invalidan instrucciones ya buscadas → branch prediction. 3) Estructural: dos instrucciones necesitan el mismo recurso → duplicar recurso o stall.'},
+      {u:6,q:'Explique la memoria cache: tipos de mapeo.',a:'Cache: memoria pequena y rapida entre CPU y RAM. Principio de localidad. Tipos: 1) Mapeo directo: cada bloque RAM va a un solo lugar en cache (bajo costo, alta tasa de conflictos). 2) Totalmente asociativo: un bloque puede ir a cualquier lugar (maximo flexibilidad, caro). 3) Conjunto-asociativo (n-way): compromiso, n posibles lugares por bloque. Reemplazo: LRU (Least Recently Used) es el mas comun.'},
+      {u:6,q:'¿Que es DMA (Acceso Directo a Memoria)?',a:'DMA permite transferir bloques de datos entre E/S y RAM sin intervension directa del CPU. El DMA controller (DMAC) toma control del bus. Modos: 1) Burst: DMAC controla el bus hasta completar la transferencia (CPU no puede acceder al bus). 2) Ciclo robado (cycle steal): DMAC toma el bus un ciclo, luego lo devuelve (CPU va mas lento pero no se detiene). 3) Interleaved: DMAC usa ciclos de bus inactivos del CPU.'},
+      // U7 — E/S
+      {u:7,q:'Explique los metodos de transferencia de E/S: polling, interrupciones y DMA.',a:'1) Polling (E/S por programa): CPU consulta periodicamente el estado del dispositivo (activo, ineficiente). 2) Interrupciones: dispositivo avisa al CPU cuando esta listo. CPU atiende la ISR (Interrupt Service Routine). Mas eficiente. Tipos: mascarables (INTR) y no mascarables (NMI). Tabla de vectores en 8088: 0-3FFh (256 vectores × 4 bytes). 3) DMA: para grandes transferencias, DMAC maneja el bus directamente.'},
+      {u:7,q:'¿Como funciona el manejo de interrupciones en el 8088?',a:'Cuando ocurre INTR y IF=1: 1) CPU termina instruccion actual. 2) Guarda FLAGS, CS, IP en pila. 3) Lee el tipo de interrupcion (IRQ). 4) Busca el vector en la tabla (direccion = tipo×4). 5) Salta a la ISR. 6) Al final de ISR: IRET restaura IP, CS, FLAGS. NMI (pin 17): no mascarable, siempre atendida. INT n (software): tipo n, util para llamadas al sistema operativo (INT 21h en DOS).'}
+    ];
+
+    let oralFilter = 0;
+    let oralQueue = [];
+    let oralIdx = 0;
+    let oralDone = 0;
+    let oralGood = 0;
+
+    function oralSetFilter(unit) {
+      oralFilter = unit;
+      oralQueue = ORAL_QA.filter(q => unit === 0 || q.u === unit);
+      // Shuffle
+      for (let i = oralQueue.length-1; i > 0; i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [oralQueue[i], oralQueue[j]] = [oralQueue[j], oralQueue[i]];
+      }
+      oralIdx = 0; oralDone = 0; oralGood = 0;
+      document.getElementById('oralTotal').textContent = oralQueue.length;
+      oralShowQuestion();
+    }
+
+    function oralShowQuestion() {
+      if (oralIdx >= oralQueue.length) {
+        document.getElementById('oralQuestion').textContent = '¡Completaste todas las preguntas del filtro! Cambia el filtro o reinicia.';
+        document.getElementById('oralUnit').textContent = '';
+        document.getElementById('oralAnswer').classList.remove('show');
+        document.getElementById('oralRate').classList.remove('show');
+        document.getElementById('oralRevealBtn').disabled = true;
+        return;
+      }
+      const q = oralQueue[oralIdx];
+      const colors = ['','#e74c3c','#e67e22','#f1c40f','#2ecc71','#3498db','#9b59b6','#1abc9c'];
+      const unitEl = document.getElementById('oralUnit');
+      unitEl.textContent = 'Unidad ' + q.u;
+      unitEl.style.background = colors[q.u] || '#999';
+      document.getElementById('oralQuestion').textContent = q.q;
+      document.getElementById('oralAnswer').classList.remove('show');
+      document.getElementById('oralAnswer').innerHTML = '';
+      document.getElementById('oralRate').classList.remove('show');
+      document.getElementById('oralRevealBtn').disabled = false;
+      document.getElementById('oralProgress').textContent = (oralIdx+1) + '/' + oralQueue.length + ' en cola';
+      document.getElementById('oralDone').textContent = oralDone;
+      document.getElementById('oralStreak').textContent = oralGood;
+    }
+
+    function oralReveal() {
+      const q = oralQueue[oralIdx];
+      if (!q) return;
+      const ans = document.getElementById('oralAnswer');
+      ans.innerHTML = '<strong>Respuesta esperada:</strong><br>' + q.a;
+      ans.classList.add('show');
+      document.getElementById('oralRate').classList.add('show');
+      document.getElementById('oralRevealBtn').disabled = true;
+    }
+
+    function oralRate(rating) {
+      if (rating === 'si' || rating === 'casi') oralGood++;
+      oralDone++;
+      oralIdx++;
+      document.getElementById('oralAnswer').classList.remove('show');
+      document.getElementById('oralRate').classList.remove('show');
+      oralShowQuestion();
+    }
+
+    function oralNext() {
+      oralIdx++;
+      document.getElementById('oralAnswer').classList.remove('show');
+      document.getElementById('oralRate').classList.remove('show');
+      if (oralIdx < oralQueue.length) oralShowQuestion();
+      else { oralIdx = 0; oralShowQuestion(); }
+    }
+
+    function initSimuladores() { /* nothing to prerender */ }
+    function initOralMode() { oralSetFilter(0); }
+
+    // ============================================================
     // LAZY RENDERING
     // ============================================================
     const _rendered = {};
@@ -5998,6 +6953,8 @@ impar:INC SI
         case 'bolillero': renderBolilleroHistory(); break;
         case 'examen': renderQuizHistory(); break;
         case 'examenes': break; // static HTML
+        case 'simuladores': initSimuladores(); break;
+        case 'oral': initOralMode(); break;
         case 'recursos': renderRecursos(); break;
         case 'plan': renderWeeklyPlan(); updatePomDisplay(); updatePomStats(); break;
       }
