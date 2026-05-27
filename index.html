@@ -928,6 +928,65 @@
       font-size: 0.85rem; font-family: inherit;
     }
 
+    /* Bibliografia externa - book cards */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .book-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      border-top: 4px solid var(--accent-primary);
+    }
+    .book-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .book-cover {
+      height: 110px;
+      background: linear-gradient(135deg, var(--accent-primary), #0a2647);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+    }
+    .book-cover.coral { background: linear-gradient(135deg, var(--accent-secondary), #b73048); }
+    .book-cover.official { background: linear-gradient(135deg, var(--success), #1e8449); }
+    .book-cover.official::after {
+      content: 'OFICIAL';
+      position: absolute; top: 8px; right: 8px;
+      background: rgba(255,255,255,0.95); color: var(--success);
+      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;
+      padding: 3px 8px; border-radius: 10px;
+    }
+    .book-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; }
+    .book-title { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); line-height: 1.3; margin-bottom: 4px; }
+    .book-author { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .book-desc { font-size: 0.78rem; color: var(--text-primary); line-height: 1.5; margin-bottom: 10px; flex: 1; }
+    .book-units { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+    .book-unit-badge {
+      font-size: 0.68rem; font-weight: 700; padding: 3px 7px;
+      border-radius: 8px; color: white;
+    }
+    .book-links { display: flex; flex-direction: column; gap: 6px; }
+    .book-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 8px;
+      font-size: 0.78rem; font-weight: 600; text-decoration: none;
+      transition: var(--transition);
+    }
+    .book-link.primary { background: var(--accent-primary); color: white; }
+    .book-link.primary:hover { background: #0a2647; }
+    .book-link.secondary { background: #f0f4f8; color: var(--accent-primary); border: 1px solid #e0e6ed; }
+    .book-link.secondary:hover { background: #e0e6ed; }
+    .book-link-icon { font-size: 0.9rem; }
+
     /* ============================================================
        WEEKLY PLAN (Task 9)
        ============================================================ */
@@ -1103,6 +1162,7 @@
       </div>
       <a class="nav-item" data-section="recursos"><span>Recursos</span></a>
       <a class="nav-item" data-section="plan"><span>Plan</span></a>
+      <a class="nav-item" data-section="estado"><span>Estado</span></a>
     </nav>
     <div class="sidebar-footer">
       <button class="btn btn-sm btn-secondary" onclick="exportData()">Exportar</button>
@@ -2076,6 +2136,12 @@ ADD AX, BX"></textarea>
 
     <div class="content-section" id="section-recursos">
       <div class="card" style="margin-bottom:12px;">
+        <h2>Bibliografia Clasica (Teoria Profunda)</h2>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Libros estandar de oro en espanol para complementar la teoria de la catedra. Verificar enlaces antes del estudio (los mirrors rotan URLs).</p>
+      </div>
+      <div id="bookGrid" class="book-grid"></div>
+
+      <div class="card" style="margin:24px 0 12px;">
         <h2>Material del Campus</h2>
         <p style="font-size:0.85rem;color:var(--text-secondary);">Todo el material descargado, organizado por unidad. Los archivos PDF se abren desde la carpeta campus/.</p>
       </div>
@@ -2124,6 +2190,98 @@ ADD AX, BX"></textarea>
         </div>
       </div>
     </div>
+
+    <!-- =========================================================
+         SECTION: ESTADO (Modulo C - tracking gestionado en chat)
+         ========================================================= -->
+    <div class="content-section" id="section-estado">
+      <div class="card" style="margin-bottom:12px;">
+        <h2>Estado</h2>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Snapshot, log diario, decisiones, errores y metricas. Las entradas se agregan desde aqui o se las dicto a Claude en el chat (recomendado).</p>
+      </div>
+
+      <!-- SNAPSHOT -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Snapshot</h3>
+        <div id="estadoSnapshot" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;"></div>
+        <div id="estadoBloqueantes" style="margin-top:10px;padding:8px 12px;background:rgba(255,193,7,0.1);border-left:3px solid #ffc107;border-radius:4px;font-size:0.9rem;"></div>
+      </div>
+
+      <!-- METRICAS ACUMULADAS -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Metricas acumuladas</h3>
+        <div id="estadoMetricas" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;"></div>
+      </div>
+
+      <!-- LOG DIARIO -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Log diario</h3>
+        <form id="estadoDayForm" onsubmit="estadoAddDay(event)" style="display:grid;grid-template-columns:auto 1fr auto auto;gap:8px;align-items:center;margin-bottom:12px;">
+          <input type="date" id="estadoDayDate" style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+          <input type="text" id="estadoDayText" placeholder="Que hice / que falle / nota corta" required style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+          <select id="estadoDaySensacion" style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+            <option value="">Sensacion 1-10</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+          </select>
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap;">Agregar</button>
+        </form>
+        <div id="estadoDayList"></div>
+      </div>
+
+      <!-- DECISIONES -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Decisiones / ajustes al metodo</h3>
+        <form id="estadoDecisionForm" onsubmit="estadoAddDecision(event)" style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:12px;">
+          <input type="text" id="estadoDecisionText" placeholder="Decision o cambio al plan" required style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap;">Agregar</button>
+        </form>
+        <ul id="estadoDecisionList" style="list-style:none;padding:0;margin:0;"></ul>
+      </div>
+
+      <!-- ERRORES RECURRENTES -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Errores recurrentes</h3>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin:0 0 8px 0;">
+          <strong>CONCEPTUAL</strong>: agujero conceptual, merece re-estudio. &nbsp;
+          <strong>PROCESO</strong>: ejecucion mala, mas practica. &nbsp;
+          <strong>ATENCION</strong>: distraccion, checklist + simulacros.
+        </p>
+        <form id="estadoErrorForm" onsubmit="estadoAddError(event)" style="display:grid;grid-template-columns:1fr auto 1fr auto;gap:8px;align-items:center;margin-bottom:12px;">
+          <input type="text" id="estadoErrorText" placeholder="Descripcion del error" required style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+          <select id="estadoErrorCategory" required style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+            <option value="">Categoria</option>
+            <option value="CONCEPTUAL">CONCEPTUAL</option>
+            <option value="PROCESO">PROCESO</option>
+            <option value="ATENCION">ATENCION</option>
+          </select>
+          <input type="text" id="estadoErrorPlan" placeholder="Como lo arreglo" style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap;">Agregar</button>
+        </form>
+        <table id="estadoErrorTable" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+          <thead><tr style="background:rgba(0,0,0,0.04);">
+            <th style="text-align:left;padding:6px;">Fecha</th>
+            <th style="text-align:left;padding:6px;">Error</th>
+            <th style="text-align:left;padding:6px;">Categoria</th>
+            <th style="text-align:left;padding:6px;">Plan</th>
+            <th style="text-align:center;padding:6px;">Veces</th>
+            <th style="padding:6px;"></th>
+          </tr></thead>
+          <tbody id="estadoErrorBody"></tbody>
+        </table>
+      </div>
+
+      <!-- FEYNMANS -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Feynmans grabados</h3>
+        <form id="estadoFeynmanForm" onsubmit="estadoAddFeynman(event)" style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin-bottom:12px;">
+          <input type="date" id="estadoFeynmanDate" style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+          <input type="text" id="estadoFeynmanTema" placeholder="Tema explicado" required style="padding:6px 8px;border:1px solid var(--border-color,#ccc);border-radius:4px;">
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap;">Agregar</button>
+        </form>
+        <div id="estadoFeynmanList" style="font-size:0.9rem;"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Mobile bottom navigation -->
@@ -2131,8 +2289,8 @@ ADD AX, BX"></textarea>
     <button data-section="panel" class="active">Panel</button>
     <button data-section="teoria" data-group="estudiar">Estudiar</button>
     <button data-section="bolillero" data-group="practicar">Practicar</button>
-    <button data-section="recursos">Recursos</button>
     <button data-section="plan">Plan</button>
+    <button data-section="estado">Estado</button>
   </nav>
 
   <script>
@@ -2142,7 +2300,7 @@ ADD AX, BX"></textarea>
     const STORAGE_KEY_V3 = 'arq_comp_dashboard_v3';
     const STORAGE_KEY_V2 = 'arq_comp_dashboard_v2';
     const STORAGE_KEY_V1 = 'arq_comp_dashboard';
-    const EXAM_DATE = new Date(2026, 4, 15); // May 15, 2026
+    const EXAM_DATE = new Date(2026, 6, 3); // July 3, 2026 (3a mesa)
 
     function getDefaultData() {
       return {
@@ -2161,7 +2319,12 @@ ADD AX, BX"></textarea>
         version: 3,
         sidebarState: { estudiar: true, practicar: false },
         lastVisitedSection: '',
-        dailyRecommendation: { date: '', items: [] }
+        dailyRecommendation: { date: '', items: [] },
+        // === Modulo Estado (agregado 2026-05-27) ===
+        estadoDayLog: [],     // [{date:'2026-05-29', text:'...', sensacion:7}]
+        estadoDecisions: [],  // [{date:'2026-05-27', text:'...'}]
+        estadoErrors: [],     // [{date, error, category:'CONCEPTUAL'|'PROCESO'|'ATENCION', plan, count}]
+        estadoFeynmans: []    // [{date, tema}]
       };
     }
 
@@ -2217,13 +2380,21 @@ ADD AX, BX"></textarea>
     // ============================================================
     function loadData() {
       try {
+        let parsed;
         let raw = localStorage.getItem(STORAGE_KEY_V3);
-        if (raw) return JSON.parse(raw);
-        raw = localStorage.getItem(STORAGE_KEY_V2);
-        if (raw) { const migrated = migrateFromV2(JSON.parse(raw)); localStorage.setItem(STORAGE_KEY_V3, JSON.stringify(migrated)); return migrated; }
-        raw = localStorage.getItem(STORAGE_KEY_V1);
-        if (raw) { const migrated = migrateFromV2(JSON.parse(raw)); localStorage.setItem(STORAGE_KEY_V3, JSON.stringify(migrated)); return migrated; }
-        return getDefaultData();
+        if (raw) {
+          parsed = JSON.parse(raw);
+        } else {
+          raw = localStorage.getItem(STORAGE_KEY_V2);
+          if (raw) { parsed = migrateFromV2(JSON.parse(raw)); localStorage.setItem(STORAGE_KEY_V3, JSON.stringify(parsed)); }
+          else {
+            raw = localStorage.getItem(STORAGE_KEY_V1);
+            if (raw) { parsed = migrateFromV2(JSON.parse(raw)); localStorage.setItem(STORAGE_KEY_V3, JSON.stringify(parsed)); }
+            else parsed = getDefaultData();
+          }
+        }
+        // Merge with defaults to backfill fields added in later versions (Estado, etc.)
+        return Object.assign(getDefaultData(), parsed);
       } catch(e) { console.error('Data load error:', e); return getDefaultData(); }
     }
 
@@ -2420,6 +2591,58 @@ ADD AX, BX"></textarea>
     // ============================================================
     // CAMPUS RESOURCES DATA (Task 8 - copied from v2 backup)
     // ============================================================
+    const EXTERNAL_BOOKS = [
+      {
+        title: 'Sistemas Electronicos Digitales',
+        author: 'Enrique Mandado Perez',
+        edition: '8va edicion',
+        cover: 'official',
+        emoji: '&#128218;',
+        desc: 'Bibliografia oficial de la catedra. Domina sistemas de numeracion, algebra de Boole, biestables, multiplexores y ALU.',
+        units: [
+          { label: 'U1', color: 'var(--u1)' },
+          { label: 'U2', color: 'var(--u2)' }
+        ],
+        links: [
+          { label: 'Descargar (idoc.pub)', url: 'https://idoc.pub/download/sistemas-electronicos-digitales-8va-edicion-enrique-mandadopdf-34wp9mjwxjl7', primary: true },
+          { label: 'Mirror PDFCoffee', url: 'https://pdfcoffee.com/sistemas-electronicos-digitales-8va-edicion-enrique-mandadopdf-3-pdf-free.html', primary: false }
+        ]
+      },
+      {
+        title: 'Organizacion y Arquitectura de Computadores',
+        author: 'William Stallings',
+        edition: '7ma edicion',
+        cover: 'default',
+        emoji: '&#128187;',
+        desc: 'El libro mas didactico en espanol para CISC/RISC, memoria cache, pipeline, DMA, Von Neumann y ciclo de instruccion.',
+        units: [
+          { label: 'U4', color: 'var(--u4)' },
+          { label: 'U6', color: 'var(--u6)' },
+          { label: 'U7', color: 'var(--u7)' }
+        ],
+        links: [
+          { label: 'Internet Archive', url: 'https://archive.org/details/organizacion-y-arquitectura-de-computadores-7ma-edicion-william-stallings', primary: true },
+          { label: 'Mirror KUPDF', url: 'https://kupdf.net/download/organizacion-y-arquitectura-de-computado-stallings-william_5a57a62be2b6f5af4d30d5c2_pdf', primary: false }
+        ]
+      },
+      {
+        title: 'Estructura y Diseno de Computadores',
+        author: 'Patterson & Hennessy',
+        edition: 'Interfaz Hardware/Software',
+        cover: 'coral',
+        emoji: '&#128221;',
+        desc: 'Inmejorable para entender flujo de datos, rendimiento, MIPS y la Maquina Elemental. Denso pero canonico.',
+        units: [
+          { label: 'U4', color: 'var(--u4)' },
+          { label: 'U5', color: 'var(--u5)' }
+        ],
+        links: [
+          { label: 'Leer en DocPlayer', url: 'https://docplayer.es/65637152-Estructura-y-diseno-de-computadores.html', primary: true },
+          { label: 'Mirror PDFCoffee', url: 'https://pdfcoffee.com/estructura-y-diseno-de-computad-patterson-david-a-hennessy-pdf-2-pdf-free.html', primary: false }
+        ]
+      }
+    ];
+
     const CAMPUS_RESOURCES = [
       { unit:1, name:'Unidad 1 -- Representacion de datos y codigos', color:'var(--u1)', items:[
         {name:'Guia TP Sistemas de Numeracion',file:'Guia de Trabajos Practicos Sistemas de Numeracion.pdf',type:'pdf'},
@@ -6015,9 +6238,41 @@ impar:INC SI
     }
 
     // ============================================================
+    // RENDER BIBLIOGRAFIA EXTERNA
+    // ============================================================
+    function renderExternalBooks() {
+      const container = document.getElementById('bookGrid');
+      if (!container) return;
+      let html = '';
+      EXTERNAL_BOOKS.forEach(book => {
+        const coverClass = book.cover === 'default' ? '' : book.cover;
+        const units = book.units.map(u =>
+          '<span class="book-unit-badge" style="background:' + u.color + ';">' + u.label + '</span>'
+        ).join('');
+        const links = book.links.map(l => {
+          const cls = l.primary ? 'primary' : 'secondary';
+          const icon = l.primary ? '&#11015;' : '&#128279;';
+          return '<a class="book-link ' + cls + '" href="' + l.url + '" target="_blank" rel="noopener">'
+            + '<span class="book-link-icon">' + icon + '</span>' + l.label + '</a>';
+        }).join('');
+        html += '<div class="book-card">'
+          + '<div class="book-cover ' + coverClass + '">' + book.emoji + '</div>'
+          + '<div class="book-body">'
+          + '<div class="book-title">' + book.title + '</div>'
+          + '<div class="book-author">' + book.author + ' &middot; ' + book.edition + '</div>'
+          + '<div class="book-desc">' + book.desc + '</div>'
+          + '<div class="book-units">' + units + '</div>'
+          + '<div class="book-links">' + links + '</div>'
+          + '</div></div>';
+      });
+      container.innerHTML = html;
+    }
+
+    // ============================================================
     // RENDER RECURSOS (Task 8)
     // ============================================================
     function renderRecursos() {
+      renderExternalBooks();
       const container = document.getElementById('campusContainer');
       if (!container) return;
       const search = (document.getElementById('resourceSearch')?.value || '').toLowerCase();
@@ -6052,6 +6307,244 @@ impar:INC SI
 
       if (!html) html = '<p style="text-align:center;color:var(--text-secondary);padding:20px;">No se encontraron recursos.</p>';
       container.innerHTML = html;
+    }
+
+    // ============================================================
+    // ESTADO (Modulo C) - Snapshot, log diario, decisiones, errores, metricas
+    // ============================================================
+    function estadoFaseActual() {
+      const today = new Date();
+      const phases = [
+        { from: new Date(2026, 4, 28), to: new Date(2026, 5, 3),  label: 'Semana A — Diagnostico + U1' },
+        { from: new Date(2026, 5, 4),  to: new Date(2026, 5, 10), label: 'Semana B — U2 + U3 + U4' },
+        { from: new Date(2026, 5, 11), to: new Date(2026, 5, 17), label: 'Semana C — U5 8088' },
+        { from: new Date(2026, 5, 18), to: new Date(2026, 5, 24), label: 'Semana D — U6+U7 + Sim #1+#2' },
+        { from: new Date(2026, 5, 25), to: new Date(2026, 6, 2),  label: 'Semana E — Repaso puro + Sim #3-5' },
+        { from: new Date(2026, 6, 3),  to: new Date(2026, 6, 3),  label: 'Dia del examen' }
+      ];
+      for (const p of phases) if (today >= p.from && today <= p.to) return p.label;
+      if (today < phases[0].from) return 'Setup (pre-Semana A)';
+      return 'Post-examen';
+    }
+
+    function estadoBloqueantesText() {
+      // Estatico por ahora: el unico bloqueante real conocido es la consulta a catedra
+      const today = new Date();
+      const consulta = new Date(2026, 5, 1); // Lun 1 jun
+      if (today < consulta) return 'Pendiente: consulta con catedra Perez el lun 1 jun (carpeta TPs + monografia + status SIU). Sin esto, el examen no se rinde.';
+      return 'Sin bloqueantes registrados. Si surge algo, agregarlo como decision.';
+    }
+
+    function renderEstadoSnapshot() {
+      const cont = document.getElementById('estadoSnapshot');
+      if (!cont) return;
+      const dias = daysUntilExam();
+      const fase = estadoFaseActual();
+      cont.innerHTML =
+        '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Examen</div><div style="font-weight:600;">3 jul 2026 (vie)</div></div>' +
+        '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Dias restantes</div><div style="font-weight:600;font-size:1.4rem;color:var(--accent-primary,#ee5a6f);">' + dias + '</div></div>' +
+        '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Fase actual</div><div style="font-weight:600;">' + fase + '</div></div>' +
+        '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Chances restantes</div><div style="font-weight:600;">4 (jul 3 / jul 31 / ago 28 / sep)</div></div>';
+      const blocker = document.getElementById('estadoBloqueantes');
+      if (blocker) blocker.innerHTML = '<strong>Bloqueantes:</strong> ' + estadoBloqueantesText();
+    }
+
+    function renderEstadoMetricas() {
+      const cont = document.getElementById('estadoMetricas');
+      if (!cont) return;
+      const sims = (data.admissionHistory || []).length + (data.quizHistory || []).length;
+      const ejVistos = Object.values(data.exercises || {}).filter(e => e && e.state && e.state !== 'pendiente').length;
+      const flashMaduras = Object.values(data.flashcards || {}).filter(f => f && f.interval && f.interval >= 21).length;
+      const boll = (data.bolilleroHistory || []).length;
+      const feyn = (data.estadoFeynmans || []).length;
+      const horas = (data.weeklyHours && data.weeklyHours.hours) ? data.weeklyHours.hours : 0;
+      const items = [
+        { label: 'Simulacros', value: sims, target: 5 },
+        { label: 'Ejercicios vistos', value: ejVistos, target: 89 },
+        { label: 'Flashcards maduras', value: flashMaduras },
+        { label: 'Bolilleros hechos', value: boll },
+        { label: 'Feynmans grabados', value: feyn },
+        { label: 'Horas esta semana', value: horas }
+      ];
+      cont.innerHTML = items.map(i =>
+        '<div style="text-align:center;padding:10px;background:rgba(0,0,0,0.03);border-radius:6px;">' +
+          '<div style="font-size:0.7rem;color:var(--text-secondary);text-transform:uppercase;">' + i.label + '</div>' +
+          '<div style="font-weight:700;font-size:1.4rem;">' + i.value + (i.target ? ' / ' + i.target : '') + '</div>' +
+        '</div>'
+      ).join('');
+    }
+
+    function renderEstadoDayList() {
+      const cont = document.getElementById('estadoDayList');
+      if (!cont) return;
+      const list = (data.estadoDayLog || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+      if (!list.length) { cont.innerHTML = '<p style="color:var(--text-secondary);font-size:0.9rem;margin:0;">Sin entradas todavia. Agregar arriba o decirle a Claude en el chat.</p>'; return; }
+      cont.innerHTML = list.map((e, i) => {
+        const sensColor = e.sensacion >= 7 ? '#2eb872' : e.sensacion >= 4 ? '#d99a2b' : e.sensacion ? '#c0392b' : '#888';
+        const sensBadge = e.sensacion ? '<span style="background:' + sensColor + ';color:white;padding:2px 8px;border-radius:10px;font-size:0.75rem;font-weight:600;">' + e.sensacion + '/10</span>' : '';
+        return '<div style="padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);display:flex;gap:10px;align-items:start;">' +
+          '<div style="min-width:90px;font-weight:600;font-size:0.85rem;color:var(--text-secondary);">' + e.date + '</div>' +
+          '<div style="flex:1;">' + e.text + '</div>' +
+          sensBadge +
+          '<button onclick="estadoRemoveDay(' + (list.length - 1 - i) + ')" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:0.85rem;" title="Eliminar">x</button>' +
+        '</div>';
+      }).join('');
+    }
+
+    function renderEstadoDecisionList() {
+      const cont = document.getElementById('estadoDecisionList');
+      if (!cont) return;
+      const list = (data.estadoDecisions || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+      if (!list.length) { cont.innerHTML = '<li style="color:var(--text-secondary);font-size:0.9rem;list-style:none;">Sin decisiones registradas.</li>'; return; }
+      cont.innerHTML = list.map((d, i) =>
+        '<li style="padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.06);display:flex;gap:10px;align-items:start;list-style:none;">' +
+          '<span style="min-width:90px;font-size:0.85rem;color:var(--text-secondary);">' + d.date + '</span>' +
+          '<span style="flex:1;">' + d.text + '</span>' +
+          '<button onclick="estadoRemoveDecision(' + i + ')" style="background:none;border:none;color:#c0392b;cursor:pointer;">x</button>' +
+        '</li>'
+      ).join('');
+    }
+
+    function renderEstadoErrorTable() {
+      const tbody = document.getElementById('estadoErrorBody');
+      if (!tbody) return;
+      const list = (data.estadoErrors || []);
+      if (!list.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:12px;font-size:0.9rem;">Sin errores registrados.</td></tr>'; return; }
+      const catColor = { CONCEPTUAL: '#c0392b', PROCESO: '#d99a2b', ATENCION: '#4a6fd8' };
+      tbody.innerHTML = list.map((e, i) =>
+        '<tr style="border-top:1px solid rgba(0,0,0,0.06);">' +
+          '<td style="padding:6px;font-size:0.85rem;color:var(--text-secondary);">' + e.date + '</td>' +
+          '<td style="padding:6px;">' + e.error + '</td>' +
+          '<td style="padding:6px;"><span style="background:' + (catColor[e.category] || '#888') + ';color:white;padding:2px 8px;border-radius:10px;font-size:0.75rem;font-weight:600;">' + e.category + '</span></td>' +
+          '<td style="padding:6px;font-size:0.9rem;">' + (e.plan || '') + '</td>' +
+          '<td style="padding:6px;text-align:center;font-weight:600;">' +
+            '<button onclick="estadoIncError(' + i + ')" style="background:#0d2342;color:white;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;">+</button> ' +
+            (e.count || 1) +
+          '</td>' +
+          '<td style="padding:6px;"><button onclick="estadoRemoveError(' + i + ')" style="background:none;border:none;color:#c0392b;cursor:pointer;">x</button></td>' +
+        '</tr>'
+      ).join('');
+    }
+
+    function renderEstadoFeynmanList() {
+      const cont = document.getElementById('estadoFeynmanList');
+      if (!cont) return;
+      const list = (data.estadoFeynmans || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+      if (!list.length) { cont.innerHTML = '<p style="color:var(--text-secondary);margin:0;">Sin Feynmans grabados todavia.</p>'; return; }
+      cont.innerHTML = list.map((f, i) =>
+        '<div style="padding:4px 0;border-bottom:1px dashed rgba(0,0,0,0.06);display:flex;gap:10px;">' +
+          '<span style="min-width:90px;color:var(--text-secondary);">' + f.date + '</span>' +
+          '<span style="flex:1;">' + f.tema + '</span>' +
+          '<button onclick="estadoRemoveFeynman(' + i + ')" style="background:none;border:none;color:#c0392b;cursor:pointer;">x</button>' +
+        '</div>'
+      ).join('');
+    }
+
+    function renderEstado() {
+      // Set default dates on forms (today)
+      const today = getToday();
+      const dayDateEl = document.getElementById('estadoDayDate');
+      if (dayDateEl && !dayDateEl.value) dayDateEl.value = today;
+      const feynDateEl = document.getElementById('estadoFeynmanDate');
+      if (feynDateEl && !feynDateEl.value) feynDateEl.value = today;
+
+      renderEstadoSnapshot();
+      renderEstadoMetricas();
+      renderEstadoDayList();
+      renderEstadoDecisionList();
+      renderEstadoErrorTable();
+      renderEstadoFeynmanList();
+    }
+
+    // CRUD handlers
+    function estadoAddDay(e) {
+      if (e) e.preventDefault();
+      const date = document.getElementById('estadoDayDate').value;
+      const text = document.getElementById('estadoDayText').value.trim();
+      const sens = document.getElementById('estadoDaySensacion').value;
+      if (!date || !text) return;
+      data.estadoDayLog = data.estadoDayLog || [];
+      data.estadoDayLog.push({ date: date, text: text, sensacion: sens ? Number(sens) : null });
+      saveData();
+      document.getElementById('estadoDayText').value = '';
+      document.getElementById('estadoDaySensacion').value = '';
+      renderEstadoDayList();
+      renderEstadoMetricas();
+    }
+
+    function estadoRemoveDay(idx) {
+      if (!data.estadoDayLog) return;
+      data.estadoDayLog.splice(idx, 1);
+      saveData();
+      renderEstadoDayList();
+    }
+
+    function estadoAddDecision(e) {
+      if (e) e.preventDefault();
+      const text = document.getElementById('estadoDecisionText').value.trim();
+      if (!text) return;
+      data.estadoDecisions = data.estadoDecisions || [];
+      data.estadoDecisions.push({ date: getToday(), text: text });
+      saveData();
+      document.getElementById('estadoDecisionText').value = '';
+      renderEstadoDecisionList();
+    }
+
+    function estadoRemoveDecision(idx) {
+      if (!data.estadoDecisions) return;
+      data.estadoDecisions.splice(idx, 1);
+      saveData();
+      renderEstadoDecisionList();
+    }
+
+    function estadoAddError(e) {
+      if (e) e.preventDefault();
+      const error = document.getElementById('estadoErrorText').value.trim();
+      const category = document.getElementById('estadoErrorCategory').value;
+      const plan = document.getElementById('estadoErrorPlan').value.trim();
+      if (!error || !category) return;
+      data.estadoErrors = data.estadoErrors || [];
+      data.estadoErrors.push({ date: getToday(), error: error, category: category, plan: plan, count: 1 });
+      saveData();
+      document.getElementById('estadoErrorText').value = '';
+      document.getElementById('estadoErrorCategory').value = '';
+      document.getElementById('estadoErrorPlan').value = '';
+      renderEstadoErrorTable();
+    }
+
+    function estadoIncError(idx) {
+      if (!data.estadoErrors || !data.estadoErrors[idx]) return;
+      data.estadoErrors[idx].count = (data.estadoErrors[idx].count || 1) + 1;
+      saveData();
+      renderEstadoErrorTable();
+    }
+
+    function estadoRemoveError(idx) {
+      if (!data.estadoErrors) return;
+      data.estadoErrors.splice(idx, 1);
+      saveData();
+      renderEstadoErrorTable();
+    }
+
+    function estadoAddFeynman(e) {
+      if (e) e.preventDefault();
+      const date = document.getElementById('estadoFeynmanDate').value;
+      const tema = document.getElementById('estadoFeynmanTema').value.trim();
+      if (!date || !tema) return;
+      data.estadoFeynmans = data.estadoFeynmans || [];
+      data.estadoFeynmans.push({ date: date, tema: tema });
+      saveData();
+      document.getElementById('estadoFeynmanTema').value = '';
+      renderEstadoFeynmanList();
+      renderEstadoMetricas();
+    }
+
+    function estadoRemoveFeynman(idx) {
+      if (!data.estadoFeynmans) return;
+      data.estadoFeynmans.splice(idx, 1);
+      saveData();
+      renderEstadoFeynmanList();
+      renderEstadoMetricas();
     }
 
     // ============================================================
@@ -6957,6 +7450,7 @@ HLT`
         case 'oral': initOralMode(); break;
         case 'recursos': renderRecursos(); break;
         case 'plan': renderWeeklyPlan(); updatePomDisplay(); updatePomStats(); break;
+        case 'estado': renderEstado(); break;
       }
     }
 
