@@ -1148,6 +1148,7 @@
           <a class="nav-item" data-section="teoria"><span>Teoria</span></a>
           <a class="nav-item" data-section="ejercicios"><span>Ejercicios</span></a>
           <a class="nav-item" data-section="flashcards"><span>Flashcards</span></a>
+          <a class="nav-item" data-section="recall"><span>Active Recall</span></a>
         </div>
       </div>
       <div class="nav-group" data-group="practicar">
@@ -1300,6 +1301,22 @@
         <div id="fcContent"></div>
       </div>
     </div>
+
+    <!-- =========================================================
+         SECTION: ACTIVE RECALL (Modulo D)
+         ========================================================= -->
+    <div class="content-section" id="section-recall">
+      <div class="card" style="margin-bottom:12px;">
+        <h2>Active Recall</h2>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px;">Prompts elaborados por unidad. Lee el prompt, <strong>cerra todo el material</strong>, produci la respuesta de memoria en GoodNotes. Despues revelas los elementos clave y te auto-calificas 1-5.</p>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin:0;">Un prompt se considera "cerrado" cuando tenes <strong>2 ratings &ge; 4 espaciados &ge; 3 dias</strong>.</p>
+      </div>
+      <div class="card">
+        <div id="recallUnitTabs" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;border-bottom:1px solid rgba(0,0,0,0.08);padding-bottom:8px;"></div>
+        <div id="recallContent"></div>
+      </div>
+    </div>
+
     <div class="content-section" id="section-bolillero">
       <div class="card">
         <div class="bolillero-area">
@@ -2520,7 +2537,9 @@ ADD AX, BX"></textarea>
         estadoDayLog: [],     // [{date:'2026-05-29', text:'...', sensacion:7}]
         estadoDecisions: [],  // [{date:'2026-05-27', text:'...'}]
         estadoErrors: [],     // [{date, error, category:'CONCEPTUAL'|'PROCESO'|'ATENCION', plan, count}]
-        estadoFeynmans: []    // [{date, tema}]
+        estadoFeynmans: [],   // [{date, tema}]
+        // === Modulo Active Recall (agregado 2026-05-27) ===
+        recallProgress: {}    // { 'u1_1_1': [{date:'2026-05-29', rating:3}, ...] }
       };
     }
 
@@ -6506,6 +6525,152 @@ impar:INC SI
     }
 
     // ============================================================
+    // ACTIVE RECALL (Modulo D) - prompts elaborados con auto-rating espaciado
+    // ============================================================
+    const RECALL_PROMPTS = {
+      U1: [
+        { id:'u1_1_1', topic:'Conversiones', prompt:'Explica el procedimiento completo para convertir un decimal fraccionario (ej: 0.6875) a binario. Justifica por que funciona.',
+          key:'Multiplicaciones sucesivas de la fraccion por 2. Anotar la parte entera (0 o 1) en cada paso. Continuar con la fraccion restante. Detener al llegar a 0 o por precision. Binario se lee de ARRIBA hacia abajo (al reves que la parte entera). Justificacion: cada x2 desplaza el punto binario una posicion exponiendo el MSB de la fraccion.' },
+        { id:'u1_1_2', topic:'Conversiones', prompt:'Convierte 173 (decimal) a binario, octal y hexadecimal. Muestra el procedimiento corto.',
+          key:'Binario 10101101 (divisiones por 2, restos de abajo hacia arriba). Hex agrupando 4 bits: 1010 1101 = AD. Octal agrupando 3 bits: 010 101 101 = 255. Verificacion 0xAD = 10*16+13 = 173.' },
+        { id:'u1_2_1', topic:'Complemento a 2', prompt:'Por que se usa C2 en lugar de C1 para enteros con signo? Da 3 razones tecnicas.',
+          key:'1) Representacion unica del cero (C1 tiene +0 y -0). 2) Suma/resta usan el mismo circuito sumador sin correccion (C1 necesita end-around carry). 3) Rango asimetrico aprovecha un valor mas en negativos.' },
+        { id:'u1_2_2', topic:'Complemento a 2', prompt:'En 8 bits cual es el rango representable en C2, C1 y signo-magnitud? Cuantos valores distintos representa cada uno?',
+          key:'C2: -128 a 127, 256 combinaciones, una sola para 0. C1: -127 a 127, 256 combinaciones pero +0/-0, 255 valores distintos. Signo-magnitud: -127 a 127, igual situacion 255 distintos. Todos usan 8 bits = 256 patrones.' },
+        { id:'u1_2_3', topic:'Complemento a 2', prompt:'Calcula el C2 de 0110 1011 en 8 bits. Muestra los 2 metodos (invertir+1 y "preservar hasta primer 1 desde el LSB").',
+          key:'Metodo A: invertir 1001 0100, +1 = 1001 0101. Metodo B: preservar el LSB (1), invertir el resto = 1001 0101. Verificacion: original +107, C2 = -107. Decodificar como C2: bit signo 1, magnitud = C2 del resto = 107. -> -107.' },
+        { id:'u1_3_1', topic:'IEEE 754', prompt:'Describi la estructura IEEE 754 simple precision: bits por campo, que es el sesgo, que es el bit oculto.',
+          key:'32 bits = 1 signo + 8 exponente + 23 mantisa. Sesgo 127: E_almacenado = E_real + 127, permite exponentes negativos sin bit de signo separado. Bit oculto: normalizado es 1.xxxx * 2^E, el 1 es siempre 1 y no se almacena ganando 1 bit efectivo. Doble: 1+11(sesgo 1023)+52 = 64.' },
+        { id:'u1_3_2', topic:'IEEE 754', prompt:'Convierte -7.5 a IEEE 754 simple precision. Muestra los 4 pasos y el resultado en hex.',
+          key:'1) Binario 7.5 = 111.1. 2) Normalizar 1.111 x 2^2 -> E_real=2. 3) E_sesgado = 2+127 = 129 = 10000001. 4) Mantisa 111 + ceros = 11100000000000000000000. Signo 1. Armado 1|10000001|111...0. Hex 0xC0F00000.' },
+        { id:'u1_3_3', topic:'IEEE 754', prompt:'Casos especiales IEEE 754: cero, infinito, NaN, denormalizados. Para que sirven los denormalizados?',
+          key:'Cero: exp=0 y mantisa=0. Infinito: exp=todos1 y mantisa=0. NaN: exp=todos1 y mantisa!=0. Denormalizado: exp=0 y mantisa!=0, sin bit oculto. Sirven para underflow gradual: representar numeros muy chicos cercanos a cero sin "salto" hasta el menor normalizado.' },
+        { id:'u1_4_1', topic:'BCD', prompt:'Que es BCD natural (8421) y cuales son sus codigos prohibidos? Por que existen?',
+          key:'4 bits con pesos 8-4-2-1 representan cada digito decimal 0-9. 4 bits permiten 16 combinaciones pero solo 10 se usan. Codigos prohibidos: 1010 a 1111 (10 a 15) no representan digito decimal. Existen por el desajuste entre base 10 y base 2. BCD usa mas bits que binario puro pero facilita display y aritmetica decimal.' },
+        { id:'u1_4_2', topic:'BCD', prompt:'Que significa que un codigo sea auto-complementario? Da 2 ejemplos con sus pesos.',
+          key:'Un codigo es auto-complementario cuando el complemento a 9 de un digito se obtiene invirtiendo bit a bit la representacion. Ejemplo Aiken (2421): el 3 es 0011, el 6 (complemento a 9 de 3) es 1100 que es 0011 invertido. Ejemplos: Aiken (2-4-2-1), Exceso 3 (BCD+3), 5421. Util para resta en BCD usando sumadores (resta = suma del complemento).' },
+        { id:'u1_5_1', topic:'Gray', prompt:'Que hace especial al codigo Gray y donde se usa? Convertir binario 1011 a Gray.',
+          key:'Entre 2 numeros consecutivos cambia 1 solo bit (distancia Hamming = 1). Usado en encoders rotativos (evita errores transitorios) y mapas de Karnaugh (celdas adyacentes difieren en 1 bit). Conversion: G[MSB]=B[MSB], G[i]=B[i+1] XOR B[i]. 1011 -> G3=1, G2=1^0=1, G1=0^1=1, G0=1^1=0 -> 1110.' },
+        { id:'u1_5_2', topic:'Hamming', prompt:'Define distancia Hamming. Relacion entre distancia minima y capacidad de detectar/corregir errores?',
+          key:'Distancia Hamming entre 2 palabras: numero de posiciones en que difieren. Ej 10110 y 11100 = 2. Distancia minima d_min: la menor distancia entre cualquier par de palabras validas. Detecta hasta d_min-1 errores. Corrige hasta floor((d_min-1)/2). Ej d_min=3 detecta 2, corrige 1. d_min=4 detecta 3, corrige 1.' },
+        { id:'u1_5_3', topic:'Hamming', prompt:'Codigo Hamming para 8 bits de datos: cuantos bits de paridad? En que posiciones? Por que?',
+          key:'Formula: 2^k >= m+k+1. Con m=8: k=4 (2^4=16 >= 8+4+1=13). Total 12 bits. Paridad en posiciones potencia de 2: 1, 2, 4, 8. Datos en 3, 5, 6, 7, 9, 10, 11, 12. Por que potencias de 2: cada bit de paridad cubre un patron unico de datos dado por bits del indice de cada posicion. Sindrome (XOR de paridades) apunta directamente a la posicion del error.' },
+        { id:'u1_5_4', topic:'VRC/LRC', prompt:'Diferencia entre VRC y LRC. Por que se usan combinados?',
+          key:'VRC (Vertical): paridad por caracter. Detecta error en cantidad impar de bits dentro del caracter. LRC (Longitudinal): paridad por columna sobre un bloque de caracteres. Detecta errores que cruzan caracteres. Combinados: la interseccion de un VRC erroneo + un LRC erroneo localiza la posicion exacta del error y corrige 1 bit.' },
+        { id:'u1_resumen', topic:'Resumen U1', prompt:'En menos de 5 min, contame de que se trata U1. Grandes ideas y cuando se usa cada cosa.',
+          key:'U1 trata de como se representan los datos en una computadora a nivel de bits. 3 bloques: 1) Sistemas de numeracion (bin, oct, hex, dec). 2) Representacion de numeros: enteros sin signo, con signo (signo-magnitud, C1, C2 - C2 gano), reales (punto fijo vs flotante IEEE 754). 3) Codigos: BCD para display/aritmetica decimal (auto-complementarios para restas), Gray para encoders, ASCII para texto, deteccion/correccion (paridad, Hamming, VRC/LRC). Usos: C2 en cualquier CPU. IEEE 754 en GPU/CPU moderna. BCD en calculadoras. Gray en encoders. Hamming en ECC de DRAM servidores y transmision ruidosa.' }
+      ],
+      U2: [],
+      U3: [],
+      U4: [],
+      U5: [],
+      U6: [],
+      U7: []
+    };
+
+    let _recallActiveUnit = 'U1';
+    const _recallShown = {}; // { promptId: bool } - mostrar key elements toggle
+
+    function recallUnits() {
+      return ['U1','U2','U3','U4','U5','U6','U7'];
+    }
+
+    function renderRecall() {
+      // Tabs
+      const tabsCont = document.getElementById('recallUnitTabs');
+      if (tabsCont) {
+        tabsCont.innerHTML = recallUnits().map(u => {
+          const count = (RECALL_PROMPTS[u] || []).length;
+          const isActive = u === _recallActiveUnit;
+          const closed = countRecallClosed(u);
+          const badge = count ? '<span style="opacity:0.7;font-size:0.78rem;">(' + closed + '/' + count + ')</span>' : '<span style="opacity:0.5;font-size:0.78rem;">(0)</span>';
+          return '<button onclick="setRecallUnit(\'' + u + '\')" style="padding:6px 12px;border:none;background:' + (isActive ? 'var(--accent-primary,#ee5a6f)' : 'transparent') + ';color:' + (isActive ? 'white' : 'var(--text-primary,#1a2332)') + ';border-radius:6px 6px 0 0;cursor:pointer;font-weight:' + (isActive ? '600' : '500') + ';">' + u + ' ' + badge + '</button>';
+        }).join('');
+      }
+
+      // Content
+      const cont = document.getElementById('recallContent');
+      if (!cont) return;
+      const prompts = RECALL_PROMPTS[_recallActiveUnit] || [];
+      if (!prompts.length) {
+        cont.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:30px;">Prompts de ' + _recallActiveUnit + ' todavia no cargados. Pedirle a Claude cuando llegue la semana correspondiente.</p>';
+        return;
+      }
+
+      cont.innerHTML = prompts.map(p => {
+        const attempts = (data.recallProgress && data.recallProgress[p.id]) || [];
+        const lastRating = attempts.length ? attempts[attempts.length - 1].rating : null;
+        const closed = isRecallClosed(p.id);
+        const shown = _recallShown[p.id];
+        const ratingColor = lastRating >= 4 ? '#2eb872' : lastRating >= 3 ? '#d99a2b' : lastRating ? '#c0392b' : '#888';
+
+        return '<div style="margin-bottom:14px;padding:14px;background:rgba(0,0,0,0.02);border-left:3px solid ' + (closed ? '#2eb872' : 'var(--accent-primary,#ee5a6f)') + ';border-radius:4px;">' +
+          '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">' +
+            '<span style="background:var(--accent-primary,#ee5a6f);color:white;padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:600;white-space:nowrap;">' + p.topic + '</span>' +
+            (closed ? '<span style="background:#2eb872;color:white;padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:600;">CERRADO</span>' : '') +
+            (lastRating ? '<span style="background:' + ratingColor + ';color:white;padding:2px 8px;border-radius:10px;font-size:0.72rem;font-weight:600;">Ultimo: ' + lastRating + '/5</span>' : '') +
+            '<span style="margin-left:auto;font-size:0.78rem;color:var(--text-secondary);">' + attempts.length + ' intento(s)</span>' +
+          '</div>' +
+          '<div style="font-size:0.95rem;margin-bottom:10px;"><strong>' + p.prompt + '</strong></div>' +
+          (shown ? '<div style="padding:10px 12px;background:rgba(46,184,114,0.08);border-left:3px solid #2eb872;border-radius:4px;margin-bottom:10px;font-size:0.88rem;"><strong>Elementos clave:</strong> ' + p.key + '</div>' : '') +
+          '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">' +
+            '<button onclick="toggleRecallKey(\'' + p.id + '\')" style="padding:5px 10px;background:transparent;border:1px solid var(--accent-primary,#ee5a6f);color:var(--accent-primary,#ee5a6f);border-radius:4px;cursor:pointer;font-size:0.85rem;">' + (shown ? 'Ocultar clave' : 'Ver elementos clave') + '</button>' +
+            '<span style="font-size:0.85rem;color:var(--text-secondary);margin-left:8px;">Auto-rating:</span>' +
+            [1,2,3,4,5].map(r => '<button onclick="recordRecallRating(\'' + p.id + '\',' + r + ')" style="width:32px;height:32px;border:1px solid rgba(0,0,0,0.15);background:white;border-radius:4px;cursor:pointer;font-weight:600;">' + r + '</button>').join('') +
+            (attempts.length ? '<button onclick="undoRecallRating(\'' + p.id + '\')" style="margin-left:auto;background:none;border:none;color:#c0392b;cursor:pointer;font-size:0.85rem;" title="Deshacer ultimo intento">Deshacer</button>' : '') +
+          '</div>' +
+          (attempts.length ? '<div style="margin-top:8px;font-size:0.78rem;color:var(--text-secondary);">Historial: ' + attempts.map(a => a.date + ':' + a.rating).join(' · ') + '</div>' : '') +
+        '</div>';
+      }).join('');
+    }
+
+    function setRecallUnit(u) {
+      _recallActiveUnit = u;
+      renderRecall();
+    }
+
+    function toggleRecallKey(id) {
+      _recallShown[id] = !_recallShown[id];
+      renderRecall();
+    }
+
+    function recordRecallRating(id, rating) {
+      data.recallProgress = data.recallProgress || {};
+      data.recallProgress[id] = data.recallProgress[id] || [];
+      data.recallProgress[id].push({ date: getToday(), rating: rating });
+      saveData();
+      renderRecall();
+    }
+
+    function undoRecallRating(id) {
+      if (!data.recallProgress || !data.recallProgress[id]) return;
+      data.recallProgress[id].pop();
+      if (!data.recallProgress[id].length) delete data.recallProgress[id];
+      saveData();
+      renderRecall();
+    }
+
+    function isRecallClosed(id) {
+      const attempts = (data.recallProgress && data.recallProgress[id]) || [];
+      const good = attempts.filter(a => a.rating >= 4);
+      if (good.length < 2) return false;
+      // Need 2 good ratings spaced >= 3 days apart
+      for (let i = 0; i < good.length - 1; i++) {
+        for (let j = i + 1; j < good.length; j++) {
+          const d1 = new Date(good[i].date + 'T00:00:00');
+          const d2 = new Date(good[j].date + 'T00:00:00');
+          if (Math.abs(d2 - d1) / 86400000 >= 3) return true;
+        }
+      }
+      return false;
+    }
+
+    function countRecallClosed(unit) {
+      const prompts = RECALL_PROMPTS[unit] || [];
+      return prompts.filter(p => isRecallClosed(p.id)).length;
+    }
+
+    // ============================================================
     // ESTADO (Modulo C) - Snapshot, log diario, decisiones, errores, metricas
     // ============================================================
     function estadoFaseActual() {
@@ -7674,6 +7839,7 @@ HLT`
         case 'oral': initOralMode(); break;
         case 'recursos': renderRecursos(); break;
         case 'metodo': break; // static HTML, no rendering
+        case 'recall': renderRecall(); break;
         case 'plan': renderWeeklyPlan(); updatePomDisplay(); updatePomStats(); break;
         case 'estado': renderEstado(); break;
       }
