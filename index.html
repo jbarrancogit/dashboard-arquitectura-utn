@@ -2420,6 +2420,14 @@ ADD AX, BX"></textarea>
         <div id="estadoBloqueantes" style="margin-top:10px;padding:8px 12px;background:rgba(255,193,7,0.1);border-left:3px solid #ffc107;border-radius:4px;font-size:0.9rem;"></div>
       </div>
 
+      <!-- MATRIZ DE CALOR POR TEMA -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Matriz de calor por tema</h3>
+        <p style="font-size:0.82rem;color:var(--text-secondary);margin:0 0 10px 0;">Click en una celda para ciclar el estado. <strong>VERDE</strong>: lo resolves solo. <strong>AMARILLO</strong>: con esfuerzo o errores menores. <strong>NARANJA</strong>: lo intentas pero no llegas. <strong>ROJO</strong>: no se por donde empezar.</p>
+        <div id="estadoCalorSummary" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;font-size:0.85rem;"></div>
+        <div id="estadoCalorGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;"></div>
+      </div>
+
       <!-- METRICAS ACUMULADAS -->
       <div class="card" style="margin-bottom:12px;">
         <h3 style="margin-top:0;">Metricas acumuladas</h3>
@@ -2539,7 +2547,9 @@ ADD AX, BX"></textarea>
         estadoErrors: [],     // [{date, error, category:'CONCEPTUAL'|'PROCESO'|'ATENCION', plan, count}]
         estadoFeynmans: [],   // [{date, tema}]
         // === Modulo Active Recall (agregado 2026-05-27) ===
-        recallProgress: {}    // { 'u1_1_1': [{date:'2026-05-29', rating:3}, ...] }
+        recallProgress: {},   // { 'u1_1_1': [{date:'2026-05-29', rating:3}, ...] }
+        // === Modulo E - Matriz de calor por tema (agregado 2026-05-27) ===
+        temaCalor: {}         // { 't1': 'verde'|'amarillo'|'naranja'|'rojo' }
       };
     }
 
@@ -6671,6 +6681,91 @@ impar:INC SI
     }
 
     // ============================================================
+    // MATRIZ DE CALOR POR TEMA (Modulo E) - dentro de Estado
+    // ============================================================
+    const TEMAS_CALOR = [
+      { id:'t1',  unit:'U1', name:'Conversiones bin/hex/oct',                    init:'amarillo' },
+      { id:'t2',  unit:'U1', name:'Complemento a 2 + rangos',                    init:'naranja' },
+      { id:'t3',  unit:'U1', name:'Punto flotante IEEE 754',                     init:'naranja' },
+      { id:'t4',  unit:'U1', name:'Codigos BCD (Aiken/Exc3/5421)',               init:'rojo' },
+      { id:'t5',  unit:'U1', name:'Gray + Johnson + Hamming',                    init:'rojo' },
+      { id:'t6',  unit:'U2', name:'Algebra Boole + canonicas + De Morgan',       init:'amarillo' },
+      { id:'t7',  unit:'U2', name:'Karnaugh (minimizacion)',                     init:'naranja' },
+      { id:'t8',  unit:'U2', name:'Combinacionales (decoder/MUX/sumador)',       init:'naranja' },
+      { id:'t9',  unit:'U2', name:'Biestables (SR/JK/D/T)',                      init:'rojo' },
+      { id:'t10', unit:'U2', name:'Registros + contadores',                      init:'naranja' },
+      { id:'t11', unit:'U3', name:'RAM estatica/dinamica + tipos ROM',           init:'naranja' },
+      { id:'t12', unit:'U3', name:'FIFO/LIFO + asociativas',                     init:'naranja' },
+      { id:'t13', unit:'U3', name:'Extension de memoria (palabra/capacidad)',    init:'rojo' },
+      { id:'t14', unit:'U4', name:'Maquina Elemental + ciclo fetch/decode/exec', init:'amarillo' },
+      { id:'t15', unit:'U4', name:'Bus + UC cableada vs microprogramada',        init:'naranja' },
+      { id:'t16', unit:'U5', name:'8088: BIU/EU + registros AX-DX/SI-DI/segs',   init:'rojo' },
+      { id:'t17', unit:'U5', name:'8088: segmento:offset + modos direcc.',       init:'rojo' },
+      { id:'t18', unit:'U5', name:'8088: instrucciones (MOV/ADD/CMP/Jcc/CALL)',  init:'naranja' },
+      { id:'t19', unit:'U6', name:'CISC vs RISC',                                init:'amarillo' },
+      { id:'t20', unit:'U6', name:'Pipeline + hazards',                          init:'amarillo' },
+      { id:'t21', unit:'U6', name:'Cache (niveles/politicas/localidad)',         init:'amarillo' },
+      { id:'t22', unit:'U6', name:'DMA (modos)',                                 init:'naranja' },
+      { id:'t23', unit:'U7', name:'E/S (polling/interrupcion/DMA)',              init:'naranja' },
+      { id:'t24', unit:'U7', name:'Serie vs paralelo, UART',                     init:'naranja' }
+    ];
+
+    const CALOR_CICLO = ['verde', 'amarillo', 'naranja', 'rojo'];
+    const CALOR_COLORS = {
+      'verde':    { bg:'#2eb872', text:'white' },
+      'amarillo': { bg:'#f1c40f', text:'#1a1a2e' },
+      'naranja':  { bg:'#e07b2d', text:'white' },
+      'rojo':     { bg:'#c0392b', text:'white' },
+      '__none':   { bg:'rgba(0,0,0,0.08)', text:'var(--text-secondary,#888)' }
+    };
+
+    function estadoCalorOf(temaId) {
+      // si no esta seteado por el usuario, usar el init propuesto
+      if (data.temaCalor && data.temaCalor[temaId]) return data.temaCalor[temaId];
+      const t = TEMAS_CALOR.find(x => x.id === temaId);
+      return t ? t.init : 'amarillo';
+    }
+
+    function estadoCicleCalor(temaId) {
+      const cur = estadoCalorOf(temaId);
+      const idx = CALOR_CICLO.indexOf(cur);
+      const next = CALOR_CICLO[(idx + 1) % CALOR_CICLO.length];
+      data.temaCalor = data.temaCalor || {};
+      data.temaCalor[temaId] = next;
+      saveData();
+      renderEstadoCalor();
+      renderEstadoSnapshot(); // por si afecta algo del snapshot
+    }
+
+    function renderEstadoCalor() {
+      const grid = document.getElementById('estadoCalorGrid');
+      if (!grid) return;
+
+      // Resumen
+      const counts = { verde:0, amarillo:0, naranja:0, rojo:0 };
+      TEMAS_CALOR.forEach(t => counts[estadoCalorOf(t.id)]++);
+      const sumEl = document.getElementById('estadoCalorSummary');
+      if (sumEl) {
+        sumEl.innerHTML = ['verde','amarillo','naranja','rojo'].map(c => {
+          const col = CALOR_COLORS[c];
+          return '<span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:' + col.bg + ';color:' + col.text + ';border-radius:10px;font-weight:600;">' +
+            c.toUpperCase() + ': ' + counts[c] +
+          '</span>';
+        }).join('');
+      }
+
+      // Grid celdas
+      grid.innerHTML = TEMAS_CALOR.map(t => {
+        const cur = estadoCalorOf(t.id);
+        const col = CALOR_COLORS[cur];
+        return '<div onclick="estadoCicleCalor(\'' + t.id + '\')" style="cursor:pointer;padding:8px 10px;background:' + col.bg + ';color:' + col.text + ';border-radius:6px;font-size:0.82rem;display:flex;flex-direction:column;gap:2px;transition:transform 0.1s;" title="Click para ciclar verde-amarillo-naranja-rojo">' +
+          '<div style="font-size:0.7rem;opacity:0.85;font-weight:600;">' + t.unit + '</div>' +
+          '<div style="font-weight:600;line-height:1.25;">' + t.name + '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // ============================================================
     // ESTADO (Modulo C) - Snapshot, log diario, decisiones, errores, metricas
     // ============================================================
     function estadoFaseActual() {
@@ -6810,6 +6905,7 @@ impar:INC SI
       if (feynDateEl && !feynDateEl.value) feynDateEl.value = today;
 
       renderEstadoSnapshot();
+      renderEstadoCalor();
       renderEstadoMetricas();
       renderEstadoDayList();
       renderEstadoDecisionList();
