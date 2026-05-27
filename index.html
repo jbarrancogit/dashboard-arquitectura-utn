@@ -1161,6 +1161,7 @@
         </div>
       </div>
       <a class="nav-item" data-section="recursos"><span>Recursos</span></a>
+      <a class="nav-item" data-section="metodo"><span>Metodo</span></a>
       <a class="nav-item" data-section="plan"><span>Plan</span></a>
       <a class="nav-item" data-section="estado"><span>Estado</span></a>
     </nav>
@@ -2150,6 +2151,201 @@ ADD AX, BX"></textarea>
       </div>
       <div id="campusContainer"></div>
     </div>
+    <!-- =========================================================
+         SECTION: METODO (Modulo A - base cientifica)
+         ========================================================= -->
+    <div class="content-section" id="section-metodo">
+      <div class="card" style="margin-bottom:12px;">
+        <h2>Metodo</h2>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Base neurocientifica para aprobar finales. Tecnicas con evidencia experimental, no opiniones. Combinarlas multiplica el efecto.</p>
+      </div>
+
+      <!-- LECCION CENTRAL -->
+      <div class="card" style="margin-bottom:12px;background:linear-gradient(135deg,rgba(238,90,111,0.08),rgba(13,35,66,0.04));border-left:4px solid #ee5a6f;">
+        <h3 style="margin-top:0;">La leccion que sangra (AM2, marzo 2026)</h3>
+        <p style="margin:0;font-size:0.92rem;">Falle AM2 despues de meses de "prepararla". Estudio analitico + dashboards + lectura, casi nada de produccion bajo condiciones de examen. <strong>Regla derivada (no negociable):</strong> por cada minuto de leer/analizar, minimo <strong>3 minutos de producir desde memoria o resolver bajo timer</strong>.</p>
+      </div>
+
+      <!-- 7 TECNICAS -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Las 7 tecnicas que mas mueven la aguja</h3>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);">
+              <th style="text-align:left;padding:8px;">Tecnica</th>
+              <th style="text-align:left;padding:8px;">Por que funciona</th>
+              <th style="text-align:left;padding:8px;">Como aplicarla aca</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-top:1px solid rgba(0,0,0,0.06);">
+                <td style="padding:8px;"><strong>Active Recall</strong><br><span style="font-size:0.78rem;color:var(--text-secondary);">Karpicke & Roediger 2008</span></td>
+                <td style="padding:8px;">Recordar &gt; releer en factor 2x para retencion a 1 semana (80% vs 40%).</td>
+                <td style="padding:8px;">Despues de cada seccion, cerras todo y escribis lo recordado. El gap entre escrito y material = lo que tenes que estudiar.</td>
+              </tr>
+              <tr style="border-top:1px solid rgba(0,0,0,0.06);">
+                <td style="padding:8px;"><strong>Spaced Repetition</strong><br><span style="font-size:0.78rem;color:var(--text-secondary);">Ebbinghaus, SM-2</span></td>
+                <td style="padding:8px;">Repasar justo antes de olvidar maximiza retencion con minimo tiempo.</td>
+                <td style="padding:8px;">Anki desktop (139 cards UTN::Arquitectura) + Flashcards del dashboard. Intervalos crecientes 1d-3d-7d-14d-30d.</td>
+              </tr>
+              <tr style="border-top:1px solid rgba(0,0,0,0.06);">
+                <td style="padding:8px;"><strong>Interleaving</strong><br><span style="font-size:0.78rem;color:var(--text-secondary);">Rohrer & Taylor 2007</span></td>
+                <td style="padding:8px;">Mezclar temas &gt; bloquear temas. El cerebro aprende a discriminar que tecnica aplicar.</td>
+                <td style="padding:8px;">Fase 2 (semanas C-D): mini-simulacros con 3-4 ejercicios de temas distintos mezclados. NO estudies un tema completo despues otro.</td>
+              </tr>
+              <tr style="border-top:1px solid rgba(0,0,0,0.06);">
+                <td style="padding:8px;"><strong>Desirable Difficulties</strong><br><span style="font-size:0.78rem;color:var(--text-secondary);">Robert Bjork, UCLA</span></td>
+                <td style="padding:8px;">La fluidez es ilusion. Lo que se siente facil no se esta aprendiendo. Lo dificil y frustrante si.</td>
+                <td style="padding:8px;">Si una sesion te resulto comoda, mal. Si saliste cansado y con ganas de quemar el cuaderno, bien.</td>
+              </tr>
+              <tr style="border-top:1px solid rgba(0,0,0,0.06);">
+                <td style="padding:8px;"><strong>Dual Coding</strong><br><span style="font-size:0.78rem;color:var(--text-secondary);">Paivio</span></td>
+                <td style="padding:8px;">Imagen + palabra activan circuitos distintos = doble traza de memoria.</td>
+                <td style="padding:8px;">Dibuja todo en GoodNotes: circuitos, registros 8088, ciclo de maquina, mapas de Karnaugh. No solo texto.</td>
+              </tr>
+              <tr style="border-top:1px solid rgba(0,0,0,0.06);">
+                <td style="padding:8px;"><strong>Tecnica Feynman</strong></td>
+                <td style="padding:8px;">Explicar a un nino expone los huecos que la lectura oculta.</td>
+                <td style="padding:8px;">Cada sesion profunda cierra con 20 min de Feynman grabado (audio). Escuchar al dia siguiente. Trabaste? Ese es tu hueco.</td>
+              </tr>
+              <tr style="border-top:1px solid rgba(0,0,0,0.06);">
+                <td style="padding:8px;"><strong>Pretesting</strong><br><span style="font-size:0.78rem;color:var(--text-secondary);">Richland</span></td>
+                <td style="padding:8px;">Intentar antes de saber mejora la codificacion. Te equivocas, despues aprendes mas rapido.</td>
+                <td style="padding:8px;">Antes de leer una seccion: escribe 3 preguntas que esperas que responda. Lee buscando esas respuestas.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ESTRUCTURA DIARIA -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Estructura diaria estandar (sesion profunda de 2h)</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+          <thead><tr style="background:rgba(0,0,0,0.04);">
+            <th style="text-align:left;padding:6px;width:60px;">Bloque</th>
+            <th style="text-align:center;padding:6px;width:60px;">Min</th>
+            <th style="text-align:left;padding:6px;">Que hago</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);"><td style="padding:6px;text-align:center;font-weight:600;">1</td><td style="padding:6px;text-align:center;">20</td><td style="padding:6px;">Repaso espaciado (Anki vencidas)</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);"><td style="padding:6px;text-align:center;font-weight:600;">2</td><td style="padding:6px;text-align:center;">40</td><td style="padding:6px;">APRENDER: lectura activa (3 preguntas previas + free recall cada 2 paginas)</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);background:rgba(46,184,114,0.06);"><td style="padding:6px;text-align:center;">—</td><td style="padding:6px;text-align:center;">10</td><td style="padding:6px;">Descanso real (caminar, no celular)</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);"><td style="padding:6px;text-align:center;font-weight:600;">3</td><td style="padding:6px;text-align:center;">40</td><td style="padding:6px;">PRACTICAR: ejercicios del banco del tema recien aprendido</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);background:rgba(46,184,114,0.06);"><td style="padding:6px;text-align:center;">—</td><td style="padding:6px;text-align:center;">10</td><td style="padding:6px;">Descanso</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);background:rgba(238,90,111,0.08);"><td style="padding:6px;text-align:center;font-weight:600;">4</td><td style="padding:6px;text-align:center;">20</td><td style="padding:6px;"><strong>FEYNMAN grabado</strong>: explicar en voz alta a la camara/audio. Escuchar al dia siguiente.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LOOP CON IA -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Loop semanal con IA (Claude)</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+          <thead><tr style="background:rgba(0,0,0,0.04);">
+            <th style="text-align:left;padding:6px;width:90px;">Dia</th>
+            <th style="text-align:left;padding:6px;">Tarea con la IA</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);"><td style="padding:6px;font-weight:600;">Lunes</td><td style="padding:6px;">Pedile 10 flashcards nuevas del tema de la semana</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);"><td style="padding:6px;font-weight:600;">Miercoles</td><td style="padding:6px;">Sesion oral simulada 20 min (la IA actua como Perez, te repregunta, te lleva al limite)</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);"><td style="padding:6px;font-weight:600;">Viernes</td><td style="padding:6px;">Le pasas tus errores de la semana, te arma mini-test de refuerzo</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.06);"><td style="padding:6px;font-weight:600;">Domingo</td><td style="padding:6px;">Prediccion de bolillas + 1 simulacro escrito generado</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CATEGORIAS ERROR -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Categorias de error (anotar despues de cada simulacro)</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+          <div style="padding:12px;background:rgba(192,57,43,0.08);border-left:4px solid #c0392b;border-radius:4px;">
+            <div style="font-weight:700;color:#c0392b;margin-bottom:4px;">CONCEPTUAL</div>
+            <div style="font-size:0.88rem;">Agujero conceptual real. No sabia o lo entendi mal. <strong>Unico tipo que merece re-estudio profundo.</strong></div>
+          </div>
+          <div style="padding:12px;background:rgba(217,154,43,0.08);border-left:4px solid #d99a2b;border-radius:4px;">
+            <div style="font-weight:700;color:#d99a2b;margin-bottom:4px;">PROCESO</div>
+            <div style="font-size:0.88rem;">Sabia pero ejecute mal (cuenta, paso saltado, formula mal aplicada). <strong>Se arregla con mas practica del mismo tipo.</strong></div>
+          </div>
+          <div style="padding:12px;background:rgba(74,111,216,0.08);border-left:4px solid #4a6fd8;border-radius:4px;">
+            <div style="font-weight:700;color:#4a6fd8;margin-bottom:4px;">ATENCION</div>
+            <div style="font-size:0.88rem;">Distraccion, no lei bien el enunciado, prolijidad. <strong>Se arregla con simulacros bajo presion + checklist pre-entrega.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGLAS NO NEGOCIABLES -->
+      <div class="card" style="margin-bottom:12px;">
+        <h3 style="margin-top:0;">Reglas no negociables</h3>
+        <ol style="margin:0;padding-left:20px;font-size:0.92rem;">
+          <li><strong>Sueno 7-8h todas las noches.</strong> La consolidacion de memoria ocurre dormido. Sin sueno, lo estudiado hoy no existe manana.</li>
+          <li><strong>Gym minimo 3x/semana</strong> (martes/jueves/sabado). Mejora memoria de trabajo y reduce ansiedad.</li>
+          <li><strong>1h de aire libre sin auriculares</strong> los dias sin gym. Default network = consolidacion pasiva.</li>
+          <li><strong>No estudiar despues de las 21h</strong> salvo emergencia. Activacion nocturna arruina el sueno.</li>
+          <li><strong>Domingos a la tarde libres.</strong> La recuperacion es parte del entrenamiento.</li>
+          <li><strong>Jueves 2 jul (vispera del examen): tarde libre.</strong> No revisar nada nuevo. Cena temprana. 22h dormir.</li>
+        </ol>
+      </div>
+
+      <!-- DIA DEL EXAMEN -->
+      <div class="card" style="margin-bottom:12px;background:rgba(13,35,66,0.04);border:1px solid rgba(13,35,66,0.1);">
+        <h3 style="margin-top:0;">Protocolo del dia del examen</h3>
+
+        <div style="margin-bottom:10px;">
+          <strong>Noche previa (jue 2 jul):</strong>
+          <ul style="margin:4px 0 0 0;padding-left:20px;font-size:0.9rem;">
+            <li>21:00 stop total. Preparar DNI, libreta UTN, biromes (3: azul/negra/repuesto), calculadora, agua.</li>
+            <li>Cena con carbohidrato lento (arroz, fideos, pan integral). Sin alcohol.</li>
+            <li>Dormir 22h. 8h minimo.</li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <strong>Manana (vie 3 jul):</strong>
+          <ul style="margin:4px 0 0 0;padding-left:20px;font-size:0.9rem;">
+            <li>Despertar 2h antes del examen.</li>
+            <li>Desayuno proteina + carbohidrato lento. Cafe moderado. Sin azucar pico.</li>
+            <li>15 min de revision del mapa mental de 1 hoja. Nada mas.</li>
+            <li>Salir con tiempo.</li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <strong>En el aula (30 min antes):</strong>
+          <ul style="margin:4px 0 0 0;padding-left:20px;font-size:0.9rem;">
+            <li>5 ciclos de box breathing (4s inspirar, 4s mantener, 4s exhalar, 4s mantener) sentado, ojos cerrados.</li>
+            <li>Repetir mentalmente: "se lo que estudie, voy a producir lo que entrene".</li>
+          </ul>
+        </div>
+
+        <div>
+          <strong>Durante el examen:</strong>
+          <ul style="margin:4px 0 0 0;padding-left:20px;font-size:0.9rem;">
+            <li>Leer todo primero (5 min). Marcar lo que sabes si o si.</li>
+            <li>Empezar por lo seguro. Construir confianza.</li>
+            <li>Si trabas mas de 5 min en un punto: pasar al siguiente. Volver despues.</li>
+            <li>Box breathing si sentis bloqueo (2 ciclos, 30s).</li>
+            <li>Revisar los ultimos 10 min.</li>
+            <li>No comparar respuestas con companeros saliendo.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ANSIEDAD -->
+      <div class="card" style="background:rgba(74,111,216,0.05);border-left:4px solid #4a6fd8;">
+        <h3 style="margin-top:0;color:#4a6fd8;">Si te sentis tenso o presionado</h3>
+        <ul style="margin:0;padding-left:20px;font-size:0.92rem;">
+          <li><strong>Respiracion 4-7-8</strong>: inspirar 4s, mantener 7s, exhalar 8s (x3). O <strong>box breathing</strong> (4-4-4-4). El cortisol baja en ~90s.</li>
+          <li><strong>Recorda</strong>: tenes 4 chances. Si no sale el 3 de julio, hay mesa el 31 de julio y el 28 de agosto.</li>
+          <li><strong>Reencuadra</strong>: "estoy nervioso" -&gt; "estoy activado, mi cuerpo se esta preparando".</li>
+          <li><strong>En examen, si te bloqueas</strong>: saltar al siguiente ejercicio. Volver despues. Los primeros minutos resolviendo algo facil bajan el cortisol.</li>
+        </ul>
+      </div>
+
+      <div style="text-align:center;margin-top:16px;font-size:0.78rem;color:var(--text-secondary);">
+        Referencias: Karpicke & Roediger (2008) · Bjork (2011) · Rohrer & Taylor (2007) · Walker (2017) · Ebbinghaus (1885) · Dunlosky et al. (2013)
+      </div>
+    </div>
+
     <div class="content-section" id="section-plan">
       <div class="card" style="margin-bottom:12px;">
         <h2>Plan de Estudio — 5 Semanas + Examen</h2>
@@ -7477,6 +7673,7 @@ HLT`
         case 'simuladores': initSimuladores(); break;
         case 'oral': initOralMode(); break;
         case 'recursos': renderRecursos(); break;
+        case 'metodo': break; // static HTML, no rendering
         case 'plan': renderWeeklyPlan(); updatePomDisplay(); updatePomStats(); break;
         case 'estado': renderEstado(); break;
       }
