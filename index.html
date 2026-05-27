@@ -2152,8 +2152,8 @@ ADD AX, BX"></textarea>
     </div>
     <div class="content-section" id="section-plan">
       <div class="card" style="margin-bottom:12px;">
-        <h2>Plan de 8 Semanas</h2>
-        <p style="font-size:0.85rem;color:var(--text-secondary);">Semana actual resaltada. El progreso de ejercicios se calcula automaticamente.</p>
+        <h2>Plan de Estudio — 5 Semanas + Examen</h2>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Target: 3 jul 2026. Alineado al plan_estudio_03jul2026 (Diagnostico + Reconstruccion + Practica deliberada + Picada fina). Semana E = 8 dias de repaso puro, cero contenido nuevo. La semana actual aparece resaltada.</p>
       </div>
       <div id="weekTimeline" class="week-timeline"></div>
       <div id="weeklyPlanContainer"></div>
@@ -6548,27 +6548,50 @@ impar:INC SI
     }
 
     // ============================================================
-    // WEEKLY PLAN DATA (Task 9)
+    // WEEKLY PLAN DATA — Reescrito 2026-05-27, alineado a plan_estudio_03jul2026
+    // 5 semanas activas (A-E) + dia del examen. Semana E = 8 dias de repaso puro.
     // ============================================================
     const WEEKLY_PLAN = [
-      { week:1, dates:'Mar 22-28', learn:'U1: Conversiones, C2, punto flotante', practice:'Resolver Ej 1-10', demonstrate:'Explicar: decimal a IEEE 754 (Feynman)', exercises:[1,10] },
-      { week:2, dates:'Mar 29 - Abr 4', learn:'U1: Codigos BCD, Hamming, Gray', practice:'Resolver Ej 11-20, flashcards', demonstrate:'5 ej al azar de U1, timer 60min', exercises:[11,20] },
-      { week:3, dates:'Abr 5-11', learn:'U2: Boole, canonicas, Karnaugh', practice:'Resolver Ej 21-36', demonstrate:'Repasar U1 flashcards, explicar De Morgan', exercises:[21,36] },
-      { week:4, dates:'Abr 12-18', learn:'U2: Combinacionales + secuenciales', practice:'Resolver Ej 37-49', demonstrate:'5 ej al azar U1+U2, timer 90min', exercises:[37,49] },
-      { week:5, dates:'Abr 19-25', learn:'U3 memorias + U4 Maq. Elemental', practice:'Resolver Ej 50-61', demonstrate:'Bolillero: 2 al azar, oral 10min', exercises:[50,61] },
-      { week:6, dates:'Abr 26 - May 2', learn:'U5: 8088 assembler', practice:'Resolver Ej 62-78', demonstrate:'5 ej al azar toda la materia, bolillero x2', exercises:[62,78] },
-      { week:7, dates:'May 3-9', learn:'U4/U5: UC, bus + Ej 79-89', practice:'SIMULACRO COMPLETO #1', demonstrate:'Corregir, estudiar temas flojos', exercises:[79,89] },
-      { week:8, dates:'May 10-14', learn:'U6+U7 teoria oral', practice:'SIMULACRO COMPLETO #2', demonstrate:'May 14 noche: PARAR 21h, dormir 8h', exercises:[1,89] },
+      { week:1, label:'A', dates:'28 may - 3 jun', phase:'Fase 0+1: Diagnostico + U1',
+        learn:'Vie 29: Diagnostico Express (4 ej + 1 bolillera grabada + matriz de calor a ojo). Sab-Dom: U1 entera (conversiones, C2, IEEE 754, BCD, Gray, Hamming). Lun-Mie: arranque U2 (Boole + canonicas + De Morgan).',
+        practice:'Ej 1-29. Anki ~50 cards expuestas. Bolillero diario desde el lunes 1.',
+        demonstrate:'Feynman grabado al cierre de cada sesion profunda. Mie 3: mini-cierre con 5 ej al azar U1+U2, timer 90min.',
+        exercises:[1,29] },
+      { week:2, label:'B', dates:'4 - 10 jun', phase:'Fase 1: Reconstruccion profunda',
+        learn:'U2 completa (Karnaugh + combinacionales + secuenciales) + U3 memorias + U4 Maquina Elemental.',
+        practice:'Ej 30-63 + 82-89. Anki ~90 cards. Bolillero diario.',
+        demonstrate:'Feynman diario. Sab 7: mini-simulacro intercalado (5 ej de U1-U4 mezclados).',
+        exercises:[30,63] },
+      { week:3, label:'C', dates:'11 - 17 jun', phase:'Fase 1: Reconstruccion profunda',
+        learn:'U5 completa: 8088 (BIU/EU, registros, segmento:offset, 7 modos direccionamiento, MOV/ADD/CMP/Jcc/LOOP/PUSH/POP/CALL/INT).',
+        practice:'Ej 64-81. Anki ~120 cards. Probar emulador EMU8086 1 sesion. Bolillero diario.',
+        demonstrate:'Feynman 8088. Sab 14: mini-simulacro intercalado (3 temas mezclados). Dom 14 arranca Fase 2.',
+        exercises:[64,81] },
+      { week:4, label:'D', dates:'18 - 24 jun', phase:'Fase 2: Practica deliberada (inicio)',
+        learn:'U6 (CISC/RISC, pipeline, cache, DMA) + U7 (E/S, polling/interrupcion/DMA, UART). Solo oral, sin ejercicios.',
+        practice:'Interleaving puro de toda la materia. Anki 139 cards (todas). Bolillero diario.',
+        demonstrate:'SIMULACRO COMPLETO #1 Lun 22 (6 ej, timer 2h, sin apuntes, vestido como al examen). #2 Jue 25. Hito: 24 jun TODO visto + practicado al menos 1 vez.',
+        exercises:[1,89] },
+      { week:5, label:'E', dates:'25 jun - 2 jul', phase:'Fase 3: Picada fina (REPASO PURO - 8 dias)',
+        learn:'CERO contenido nuevo. Solo flashcards + bolillero + repaso de errores recurrentes + matriz de calor rojo->ambar->verde.',
+        practice:'SIMULACRO #3 Sab 27. #4 Lun 29. #5 Mie 1 jul (ultimo). Bolillero 2x/dia.',
+        demonstrate:'Bolillero final grabado mie 1. Mapa mental 1 hoja jue 2. Jue 2 tarde libre, dormir 22h.',
+        exercises:[1,89] },
+      { week:6, label:'EXAMEN', dates:'Vie 3 jul', phase:'Dia E (viernes)',
+        learn:'NADA NUEVO. 5 ciclos de box breathing antes de entrar.',
+        practice:'Llegada 30 min antes. Kit: DNI, libreta, biromes, calculadora si aplica, agua.',
+        demonstrate:'EXAMEN. Aprobas con 6+.',
+        exercises:[1,89] }
     ];
 
     // ============================================================
-    // WEEKLY PLAN RENDERING (Task 9)
+    // WEEKLY PLAN RENDERING
     // ============================================================
     function getCurrentWeek() {
-      const startDate = new Date(2026, 2, 22); // Mar 22, 2026
+      const startDate = new Date(2026, 4, 28); // May 28, 2026 (arranque Semana A)
       const now = new Date();
-      const diff = Math.ceil((now - startDate) / (7 * 86400000));
-      return Math.min(8, Math.max(1, diff));
+      const diff = Math.floor((now - startDate) / (7 * 86400000)) + 1;
+      return Math.min(6, Math.max(1, diff));
     }
 
     function renderWeekTimeline() {
@@ -6576,9 +6599,10 @@ impar:INC SI
       if (!container) return;
       const currentWeek = getCurrentWeek();
       let html = '';
-      for (let w = 1; w <= 8; w++) {
+      for (let w = 1; w <= 6; w++) {
         const cls = w < currentWeek ? 'past' : w === currentWeek ? 'current' : 'future';
-        html += '<div class="week-timeline-item ' + cls + '">S' + w + '</div>';
+        const label = WEEKLY_PLAN[w-1] ? WEEKLY_PLAN[w-1].label : ('S' + w);
+        html += '<div class="week-timeline-item ' + cls + '">' + label + '</div>';
       }
       container.innerHTML = html;
     }
@@ -6605,9 +6629,13 @@ impar:INC SI
 
         html += '<div class="week-card ' + cls + '">';
         html += '<div class="week-header">';
-        html += '<span class="week-label">Semana ' + w.week + (isCurrent ? ' \u2190 ACTUAL' : '') + '</span>';
+        const weekTitle = w.label ? ('Semana ' + w.label) : ('Semana ' + w.week);
+        html += '<span class="week-label">' + weekTitle + (isCurrent ? ' \u2190 ACTUAL' : '') + '</span>';
         html += '<span class="week-dates">' + w.dates + '</span>';
         html += '</div>';
+        if (w.phase) {
+          html += '<div style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:8px;font-style:italic;">' + w.phase + '</div>';
+        }
 
         // Progress bar
         html += '<div class="progress-bar-wrap" style="margin-bottom:10px;"><div class="progress-bar-fill" style="width:' + pct + '%;"></div></div>';
