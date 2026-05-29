@@ -1127,6 +1127,42 @@
       .sim-layout { grid-template-columns:1fr; }
       .tracer-regs-grid { grid-template-columns:repeat(3,1fr); }
     }
+
+    /* TPs section - bloques de calculo responsive */
+    #section-tps pre {
+      background: rgba(13,35,66,0.04);
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 8px 0;
+      border-left: 3px solid rgba(13,35,66,0.15);
+    }
+    #section-tps code {
+      background: rgba(13,35,66,0.06);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.88em;
+    }
+    #section-tps details > summary { list-style: none; }
+    #section-tps details > summary::-webkit-details-marker { display: none; }
+    #section-tps details > summary::before {
+      content: '\25B6 ';
+      display: inline-block;
+      margin-right: 6px;
+      transition: transform 0.15s;
+    }
+    #section-tps details[open] > summary::before {
+      transform: rotate(90deg);
+    }
+    @media (max-width:768px) {
+      #section-tps pre { font-size: 0.78rem; padding: 8px 10px; }
+      #section-tps table { font-size: 0.82rem !important; }
+    }
   </style>
 </head>
 <body>
@@ -1149,6 +1185,7 @@
           <a class="nav-item" data-section="ejercicios"><span>Ejercicios</span></a>
           <a class="nav-item" data-section="flashcards"><span>Flashcards</span></a>
           <a class="nav-item" data-section="recall"><span>Active Recall</span></a>
+          <a class="nav-item" data-section="tps"><span>TPs</span></a>
         </div>
       </div>
       <div class="nav-group" data-group="practicar">
@@ -1299,6 +1336,27 @@
         </div>
         <div class="progress-bar-wrap"><div class="progress-bar-fill" id="fcProgressBar" style="width:0%;"></div></div>
         <div id="fcContent"></div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         SECTION: TPs (Trabajos Practicos resueltos)
+         ========================================================= -->
+    <div class="content-section" id="section-tps">
+      <div class="card" style="margin-bottom:12px;">
+        <h2>Trabajos Practicos</h2>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px;">
+          13 TPs de la catedra Perez con procedimiento explicito. Para la carpeta a presentar en el final libre.
+        </p>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin:0;">
+          <strong>Flujo:</strong> leer el TP aqui &rarr; pasarlo a mano alzada en GoodNotes (requisito catedra) &rarr; exportar PDF e imprimir al cierre.
+        </p>
+      </div>
+
+      <div class="card">
+        <div id="tpsTabs" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;border-bottom:1px solid rgba(0,0,0,0.08);padding-bottom:8px;"></div>
+        <div id="tpsHeader" style="margin-bottom:12px;"></div>
+        <div id="tpsContent"></div>
       </div>
     </div>
 
@@ -2549,7 +2607,9 @@ ADD AX, BX"></textarea>
         // === Modulo Active Recall (agregado 2026-05-27) ===
         recallProgress: {},   // { 'u1_1_1': [{date:'2026-05-29', rating:3}, ...] }
         // === Modulo E - Matriz de calor por tema (agregado 2026-05-27) ===
-        temaCalor: {}         // { 't1': 'verde'|'amarillo'|'naranja'|'rojo' }
+        temaCalor: {},        // { 't1': 'verde'|'amarillo'|'naranja'|'rojo' }
+        // === Modulo TPs (agregado 2026-05-28) ===
+        tpProgress: {}        // { 'TP1': { leido:true, pasadoMano:false, impreso:false } }
       };
     }
 
@@ -6681,6 +6741,492 @@ impar:INC SI
     }
 
     // ============================================================
+    // TPs (Trabajos Practicos resueltos)
+    // ============================================================
+    const TPS_META = [
+      { id:'TP1',  title:'Sistemas de Numeracion',                    unit:'U1' },
+      { id:'TP2',  title:'Punto Fijo',                                unit:'U1' },
+      { id:'TP3',  title:'Punto Flotante',                            unit:'U1' },
+      { id:'TP4',  title:'Codigos',                                   unit:'U1' },
+      { id:'TP5',  title:'Algebra de Boole',                          unit:'U2' },
+      { id:'TP6',  title:'Minimizacion (Karnaugh)',                   unit:'U2' },
+      { id:'TP7',  title:'Sistemas Combinacionales',                  unit:'U2' },
+      { id:'TP8',  title:'Sistemas Secuenciales',                     unit:'U2' },
+      { id:'TP9',  title:'Memorias Electronicas',                     unit:'U3' },
+      { id:'TP10', title:'Programacion Maquina Elemental (Blue)',     unit:'U4' },
+      { id:'TP11', title:'Programacion MEI',                          unit:'U5' },
+      { id:'TP12', title:'8088 - Aspectos Basicos',                   unit:'U5' },
+      { id:'TP13', title:'8088 - Aspectos Avanzados',                 unit:'U5' }
+    ];
+
+    // Contenido completo TP1 (TP2-TP13 estan en estado "pendiente" hasta que se carguen)
+    const TPS_CONTENT = {
+      TP1: `
+        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.9rem;">
+          <strong>Conceptos clave:</strong> Polinomio de numeracion. Divisiones sucesivas (entera) y multiplicaciones sucesivas (fraccionaria). Agrupacion 3 bits (binario&harr;octal) y 4 bits (binario&harr;hex).
+        </div>
+
+        <h4 style="margin:18px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver en clase</h4>
+
+        ${tpExercise('tp1_e1', 'Ejercicio 1 &mdash; Convertir a decimal',
+          `<p>Convertir a decimal: <code>a) 1111000011<sub>2</sub></code>, <code>b) 1AC<sub>16</sub></code>, <code>c) 100101,10011<sub>2</sub></code>, <code>d) 536<sub>8</sub></code>, <code>e) 426,61<sub>8</sub></code>, <code>f) A2C,4<sub>16</sub></code></p>`,
+          `<p><strong>Metodo:</strong> Polinomio de numeracion. Cada digito multiplicado por la base elevada a su posicion. Para la parte fraccionaria, posiciones negativas.</p>
+          <p style="text-align:center;font-family:'Cambria Math','Georgia',serif;font-size:1.05rem;padding:8px;background:rgba(0,0,0,0.03);border-radius:4px;">
+            N = a<sub>n</sub>&middot;b<sup>n</sup> + a<sub>n-1</sub>&middot;b<sup>n-1</sup> + &hellip; + a<sub>0</sub>&middot;b<sup>0</sup> + a<sub>-1</sub>&middot;b<sup>-1</sup> + &hellip; + a<sub>-p</sub>&middot;b<sup>-p</sup>
+          </p>
+
+          <p><strong>a) 1111000011<sub>2</sub></strong></p>
+          <pre>1111000011&#8322; = 1&middot;2&#8313; + 1&middot;2&#8312; + 1&middot;2&#8311; + 1&middot;2&#8310; + 0&middot;2&#8309; + 0&middot;2&#8308; + 0&middot;2&#8307; + 0&middot;2&#8306; + 1&middot;2&#185; + 1&middot;2&#8304;
+            = 512 + 256 + 128 + 64 + 2 + 1
+            = 963</pre>
+          ${tpResult('1111000011<sub>2</sub> = 963<sub>10</sub>')}
+
+          <p><strong>b) 1AC<sub>16</sub></strong> (A=10, B=11, C=12, D=13, E=14, F=15)</p>
+          <pre>1AC&#8321;&#8326; = 1&middot;16&#178; + A&middot;16&#185; + C&middot;16&#8304;
+       = 256 + 10&middot;16 + 12
+       = 256 + 160 + 12
+       = 428</pre>
+          ${tpResult('1AC<sub>16</sub> = 428<sub>10</sub>')}
+
+          <p><strong>c) 100101,10011<sub>2</sub></strong></p>
+          <pre>Parte entera 100101&#8322; = 1&middot;2&#8309; + 0&middot;2&#8308; + 0&middot;2&#8307; + 1&middot;2&#8306; + 0&middot;2&#185; + 1&middot;2&#8304; = 32 + 4 + 1 = 37
+Parte fraccionaria 0,10011&#8322; = 1&middot;2&#8315;&#185; + 0&middot;2&#8315;&#178; + 0&middot;2&#8315;&#179; + 1&middot;2&#8315;&#8308; + 1&middot;2&#8315;&#8309;
+                                  = 0,5 + 0,0625 + 0,03125 = 0,59375</pre>
+          ${tpResult('100101,10011<sub>2</sub> = 37,59375<sub>10</sub>')}
+
+          <p><strong>d) 536<sub>8</sub></strong></p>
+          <pre>536&#8328; = 5&middot;8&#178; + 3&middot;8&#185; + 6&middot;8&#8304;
+       = 320 + 24 + 6
+       = 350</pre>
+          ${tpResult('536<sub>8</sub> = 350<sub>10</sub>')}
+
+          <p><strong>e) 426,61<sub>8</sub></strong></p>
+          <pre>Parte entera 426&#8328; = 4&middot;8&#178; + 2&middot;8&#185; + 6&middot;8&#8304; = 256 + 16 + 6 = 278
+Parte frac 0,61&#8328; = 6&middot;8&#8315;&#185; + 1&middot;8&#8315;&#178; = 0,75 + 0,015625 = 0,765625</pre>
+          ${tpResult('426,61<sub>8</sub> = 278,765625<sub>10</sub>')}
+
+          <p><strong>f) A2C,4<sub>16</sub></strong></p>
+          <pre>A2C&#8321;&#8326; = 10&middot;16&#178; + 2&middot;16&#185; + 12&middot;16&#8304; = 2560 + 32 + 12 = 2604
+0,4&#8321;&#8326; = 4&middot;16&#8315;&#185; = 4/16 = 0,25</pre>
+          ${tpResult('A2C,4<sub>16</sub> = 2604,25<sub>10</sub>')}`
+        )}
+
+        ${tpExercise('tp1_e2', 'Ejercicio 2 &mdash; Convertir a octal',
+          `<p>Convertir a octal: <code>a) 4362<sub>10</sub></code>, <code>b) 6278,412<sub>10</sub></code>, <code>c) 1001101001<sub>2</sub></code>, <code>d) 10010011,11001<sub>2</sub></code>, <code>e) C5FA<sub>16</sub></code>, <code>f) 1ADC,E2<sub>16</sub></code></p>`,
+          `<p><strong>Metodos:</strong></p>
+          <ul style="font-size:0.9rem;">
+            <li>Decimal &rarr; octal: divisiones sucesivas por 8 (entera) + multiplicaciones por 8 (fraccionaria).</li>
+            <li>Binario &rarr; octal: agrupar de a <strong>3 bits</strong> desde la coma decimal hacia afuera.</li>
+            <li>Hex &rarr; octal: pasar primero a binario (cada hex = 4 bits) y luego agrupar de a 3.</li>
+          </ul>
+
+          <p><strong>a) 4362<sub>10</sub></strong></p>
+          <pre>4362 / 8 = 545  resto 2
+ 545 / 8 =  68  resto 1
+  68 / 8 =   8  resto 4
+   8 / 8 =   1  resto 0
+   1 / 8 =   0  resto 1
+Lectura de abajo arriba: 10412&#8328;
+Verif: 1&middot;8&#8308; + 0&middot;8&#179; + 4&middot;8&#178; + 1&middot;8&#185; + 2&middot;8&#8304; = 4096 + 256 + 8 + 2 = 4362 &#10003;</pre>
+          ${tpResult('4362<sub>10</sub> = 10412<sub>8</sub>')}
+
+          <p><strong>b) 6278,412<sub>10</sub></strong></p>
+          <pre>6278 / 8 = 784  resto 6
+ 784 / 8 =  98  resto 0
+  98 / 8 =  12  resto 2
+  12 / 8 =   1  resto 4
+   1 / 8 =   0  resto 1
+Parte entera = 14206&#8328;
+
+0,412 &times; 8 = 3,296  &rarr; 3
+0,296 &times; 8 = 2,368  &rarr; 2
+0,368 &times; 8 = 2,944  &rarr; 2
+0,944 &times; 8 = 7,552  &rarr; 7
+0,552 &times; 8 = 4,416  &rarr; 4
+(no termina; truncamos)
+Parte fraccionaria &asymp; 0,32274&#8328;</pre>
+          ${tpResult('6278,412<sub>10</sub> &asymp; 14206,32274<sub>8</sub>')}
+
+          <p><strong>c) 1001101001<sub>2</sub></strong></p>
+          <pre>Agrupar 3 bits desde la derecha:
+1001101001  &rarr;  001 001 101 001
+                  1   1   5   1</pre>
+          ${tpResult('1001101001<sub>2</sub> = 1151<sub>8</sub>')}
+
+          <p><strong>d) 10010011,11001<sub>2</sub></strong></p>
+          <pre>Parte entera 10010011 &rarr; 010 010 011 = 223&#8328;
+Parte frac 0,11001 &rarr; 110 010 = 0,62&#8328;
+(rellenar con ceros para completar grupos de 3)</pre>
+          ${tpResult('10010011,11001<sub>2</sub> = 223,62<sub>8</sub>')}
+
+          <p><strong>e) C5FA<sub>16</sub></strong> (paso por binario)</p>
+          <pre>C=1100, 5=0101, F=1111, A=1010
+C5FA&#8321;&#8326; = 1100 0101 1111 1010&#8322;
+
+Agrupar 3 desde derecha:
+0011 000 101 111 110 10  &rarr;  001 100 010 111 111 010
+                                 1   4   2   7   7   2</pre>
+          ${tpResult('C5FA<sub>16</sub> = 142772<sub>8</sub>')}
+
+          <p><strong>f) 1ADC,E2<sub>16</sub></strong></p>
+          <pre>1=0001, A=1010, D=1101, C=1100  &rarr;  1ADC = 0001 1010 1101 1100&#8322;
+Agrupar 3: 001 101 011 011 100  &rarr;  1 5 3 3 4  =  15334&#8328;
+
+E=1110, 2=0010  &rarr;  0,11100010&#8322;
+Agrupar 3 desde izq: 111 000 100  &rarr;  7 0 4  =  0,704&#8328;</pre>
+          ${tpResult('1ADC,E2<sub>16</sub> = 15334,704<sub>8</sub>')}`
+        )}
+
+        ${tpExercise('tp1_e3', 'Ejercicio 3 &mdash; Convertir a hexadecimal',
+          `<p>Convertir a hex: <code>a) 1110010,1101<sub>2</sub></code>, <code>b) 762<sub>8</sub></code>, <code>c) 4261,45<sub>8</sub></code>, <code>d) 5284<sub>10</sub></code>, <code>e) 16723<sub>10</sub></code>, <code>f) 92463<sub>10</sub></code></p>`,
+          `<p><strong>Metodos:</strong></p>
+          <ul style="font-size:0.9rem;">
+            <li>Decimal &rarr; hex: divisiones sucesivas por 16.</li>
+            <li>Binario &rarr; hex: agrupar de a <strong>4 bits</strong> desde la coma.</li>
+            <li>Octal &rarr; hex: pasar a binario (3 bits por digito octal) y agrupar de a 4.</li>
+          </ul>
+
+          <p><strong>a) 1110010,1101<sub>2</sub></strong></p>
+          <pre>Parte entera, agrupar 4 desde derecha: 1110010 &rarr; 0111 0010 = 72
+Parte frac, agrupar 4 desde izq: 1101 = D</pre>
+          ${tpResult('1110010,1101<sub>2</sub> = 72,D<sub>16</sub>')}
+
+          <p><strong>b) 762<sub>8</sub></strong></p>
+          <pre>Octal a binario: 7=111, 6=110, 2=010  &rarr;  111110010&#8322;
+Agrupar 4 desde derecha: 0001 1111 0010 = 1F2</pre>
+          ${tpResult('762<sub>8</sub> = 1F2<sub>16</sub>')}
+
+          <p><strong>c) 4261,45<sub>8</sub></strong></p>
+          <pre>4=100, 2=010, 6=110, 1=001  &rarr;  100010110001&#8322;
+Agrupar 4: 1000 1011 0001 = 8B1
+
+0,45&#8328; &rarr; 100 101 &rarr; 0,100101&#8322;
+Agrupar 4 desde izq (relleno der): 1001 0100 = 9 4 = 0,94&#8321;&#8326;</pre>
+          ${tpResult('4261,45<sub>8</sub> = 8B1,94<sub>16</sub>')}
+
+          <p><strong>d) 5284<sub>10</sub></strong></p>
+          <pre>5284 / 16 = 330  resto  4
+ 330 / 16 =  20  resto 10 (= A)
+  20 / 16 =   1  resto  4
+   1 / 16 =   0  resto  1
+Verif: 1&middot;4096 + 4&middot;256 + 10&middot;16 + 4 = 5284 &#10003;</pre>
+          ${tpResult('5284<sub>10</sub> = 14A4<sub>16</sub>')}
+
+          <p><strong>e) 16723<sub>10</sub></strong></p>
+          <pre>16723 / 16 = 1045  resto 3
+ 1045 / 16 =   65  resto 5
+   65 / 16 =    4  resto 1
+    4 / 16 =    0  resto 4</pre>
+          ${tpResult('16723<sub>10</sub> = 4153<sub>16</sub>')}
+
+          <p><strong>f) 92463<sub>10</sub></strong></p>
+          <pre>92463 / 16 = 5778  resto 15 (= F)
+ 5778 / 16 =  361  resto  2
+  361 / 16 =   22  resto  9
+   22 / 16 =    1  resto  6
+    1 / 16 =    0  resto  1</pre>
+          ${tpResult('92463<sub>10</sub> = 1692F<sub>16</sub>')}`
+        )}
+
+        ${tpExercise('tp1_e4', 'Ejercicio 4 &mdash; Convertir a binario',
+          `<p>Convertir a binario: <code>a) 1262<sub>10</sub></code>, <code>b) 467,84<sub>10</sub></code>, <code>c) 633,37<sub>8</sub></code>, <code>d) 736,34<sub>8</sub></code>, <code>e) A1AC,1B<sub>16</sub></code>, <code>f) FA,B9<sub>16</sub></code></p>`,
+          `<p><strong>a) 1262<sub>10</sub></strong></p>
+          <pre>1262 / 2 = 631  R=0
+ 631 / 2 = 315  R=1
+ 315 / 2 = 157  R=1
+ 157 / 2 =  78  R=1
+  78 / 2 =  39  R=0
+  39 / 2 =  19  R=1
+  19 / 2 =   9  R=1
+   9 / 2 =   4  R=1
+   4 / 2 =   2  R=0
+   2 / 2 =   1  R=0
+   1 / 2 =   0  R=1
+Lectura de abajo arriba: 10011101110&#8322;
+Verif: 2&#185;&#8304; + 2&#8311; + 2&#8310; + 2&#8309; + 2&#179; + 2&#178; + 2&#185; = 1024 + 128 + 64 + 32 + 8 + 4 + 2 = 1262 &#10003;</pre>
+          ${tpResult('1262<sub>10</sub> = 10011101110<sub>2</sub>')}
+
+          <p><strong>b) 467,84<sub>10</sub></strong></p>
+          <pre>467 / 2 = 233  R=1
+233 / 2 = 116  R=1
+116 / 2 =  58  R=0
+ 58 / 2 =  29  R=0
+ 29 / 2 =  14  R=1
+ 14 / 2 =   7  R=0
+  7 / 2 =   3  R=1
+  3 / 2 =   1  R=1
+  1 / 2 =   0  R=1
+Parte entera = 111010011&#8322;
+
+0,84 &times; 2 = 1,68  &rarr; 1
+0,68 &times; 2 = 1,36  &rarr; 1
+0,36 &times; 2 = 0,72  &rarr; 0
+0,72 &times; 2 = 1,44  &rarr; 1
+0,44 &times; 2 = 0,88  &rarr; 0
+0,88 &times; 2 = 1,76  &rarr; 1
+0,76 &times; 2 = 1,52  &rarr; 1
+0,52 &times; 2 = 1,04  &rarr; 1
+(no termina, truncamos a 8 bits)
+Parte frac &asymp; 0,11010111&#8322;</pre>
+          ${tpResult('467,84<sub>10</sub> &asymp; 111010011,11010111<sub>2</sub>')}
+
+          <p><strong>c) 633,37<sub>8</sub></strong> (cada digito octal = 3 bits)</p>
+          <pre>Parte entera: 6=110, 3=011, 3=011  &rarr;  110011011&#8322;
+Parte frac: 3=011, 7=111  &rarr;  0,011111&#8322;</pre>
+          ${tpResult('633,37<sub>8</sub> = 110011011,011111<sub>2</sub>')}
+
+          <p><strong>d) 736,34<sub>8</sub></strong></p>
+          <pre>7=111, 3=011, 6=110  &rarr;  111011110&#8322;
+3=011, 4=100  &rarr;  0,011100&#8322;
+(los ceros finales del fraccionario se pueden omitir)</pre>
+          ${tpResult('736,34<sub>8</sub> = 111011110,0111<sub>2</sub>')}
+
+          <p><strong>e) A1AC,1B<sub>16</sub></strong> (cada digito hex = 4 bits)</p>
+          <pre>A=1010, 1=0001, A=1010, C=1100  &rarr;  1010000110101100&#8322;
+1=0001, B=1011  &rarr;  0,00011011&#8322;</pre>
+          ${tpResult('A1AC,1B<sub>16</sub> = 1010000110101100,00011011<sub>2</sub>')}
+
+          <p><strong>f) FA,B9<sub>16</sub></strong></p>
+          <pre>F=1111, A=1010  &rarr;  11111010&#8322;
+B=1011, 9=1001  &rarr;  0,10111001&#8322;</pre>
+          ${tpResult('FA,B9<sub>16</sub> = 11111010,10111001<sub>2</sub>')}`
+        )}
+
+        ${tpExercise('tp1_e5', 'Ejercicio 5 &mdash; 85,3<sub>10</sub> a binario (6 bits frac) y vuelta',
+          `<p>Convertir 85,3<sub>10</sub> a binario apreciando 6 bits fraccionarios, luego volver a decimal. <strong>&iquest;Que conclusiones resultan?</strong></p>`,
+          `<p><strong>Ida a binario:</strong></p>
+          <pre>85 / 2 = 42  R=1
+42 / 2 = 21  R=0
+21 / 2 = 10  R=1
+10 / 2 =  5  R=0
+ 5 / 2 =  2  R=1
+ 2 / 2 =  1  R=0
+ 1 / 2 =  0  R=1
+Parte entera = 1010101&#8322;
+
+0,3 &times; 2 = 0,6  &rarr; 0
+0,6 &times; 2 = 1,2  &rarr; 1
+0,2 &times; 2 = 0,4  &rarr; 0
+0,4 &times; 2 = 0,8  &rarr; 0
+0,8 &times; 2 = 1,6  &rarr; 1
+0,6 &times; 2 = 1,2  &rarr; 1
+(corte a 6 bits)
+Parte frac &asymp; 0,010011&#8322;
+
+85,3&#8321;&#8320; &asymp; 1010101,010011&#8322;</pre>
+
+          <p><strong>Vuelta a decimal:</strong></p>
+          <pre>1010101&#8322; = 64 + 16 + 4 + 1 = 85
+0,010011&#8322; = 1/4 + 1/32 + 1/64 = 0,25 + 0,03125 + 0,015625 = 0,296875
+Total = 85,296875&#8321;&#8320;</pre>
+
+          <div style="margin-top:12px;padding:10px 14px;background:rgba(238,90,111,0.06);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.9rem;">
+            <strong>Conclusion:</strong> La conversion NO es exacta. Se perdio precision: 0,3 &minus; 0,296875 = 0,003125. Muchos decimales finitos <strong>no tienen representacion binaria finita</strong> (solo los multiplos de potencias de 1/2 como 0,5; 0,25; 0,125...). El resto genera secuencias binarias infinitas que deben truncarse, introduciendo error de redondeo. Este es el origen practico del por que <code>0.1 + 0.2 != 0.3</code> en cualquier CPU que use IEEE 754.
+          </div>`
+        )}
+
+        ${tpExercise('tp1_e6', 'Ejercicio 6 &mdash; Mayor decimal en 4 y 7 digitos hex',
+          `<p>&iquest;Cual es el mayor numero decimal que puede ser representado por 4 y 7 digitos hexadecimales?</p>`,
+          `<p>El mayor numero en <em>n</em> digitos de base <em>b</em> es <code>b<sup>n</sup> &minus; 1</code> (todos los digitos en su maximo).</p>
+
+          <p><strong>4 digitos hex:</strong> FFFF<sub>16</sub></p>
+          <pre>FFFF&#8321;&#8326; = 15&middot;16&#179; + 15&middot;16&#178; + 15&middot;16 + 15
+       = 16&#8308; &minus; 1
+       = 65536 &minus; 1
+       = 65535</pre>
+          ${tpResult('Maximo con 4 hex: 65535<sub>10</sub>')}
+
+          <p><strong>7 digitos hex:</strong> FFFFFFF<sub>16</sub></p>
+          <pre>FFFFFFF&#8321;&#8326; = 16&#8311; &minus; 1
+          = 268435456 &minus; 1
+          = 268435455</pre>
+          ${tpResult('Maximo con 7 hex: 268435455<sub>10</sub>')}
+
+          <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;"><strong>Regla general:</strong> mayor numero en <em>n</em> digitos de cualquier base <em>b</em> = b<sup>n</sup> &minus; 1.</p>`
+        )}
+
+        <h4 style="margin:24px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver por el alumno</h4>
+
+        ${tpExercise('tp1_a1', 'Ejercicio 1 &mdash; Ordenar de mayor a menor',
+          `<p>Ordenar de mayor a menor para los siguientes casos.</p>
+          <p><strong>a)</strong> (AB3)<sub>16</sub>, (1011101001)<sub>2</sub>, (9652)<sub>10</sub>, (AA1E)<sub>16</sub>, (12734)<sub>8</sub>, (1001100011)<sub>2</sub></p>
+          <p><strong>b)</strong> (1001111)<sub>2</sub>, (FDF21)<sub>16</sub>, (5783)<sub>10</sub>, (C5CE7)<sub>16</sub>, (77751)<sub>10</sub>, (10101011)<sub>2</sub></p>
+          <p><strong>c)</strong> (1100)<sub>16</sub>, (10110111011)<sub>2</sub>, (73611)<sub>10</sub>, (7532)<sub>8</sub>, (D38A)<sub>16</sub>, (747)<sub>10</sub></p>`,
+          `<p><strong>Estrategia:</strong> llevar todos a decimal y comparar.</p>
+
+          <p><strong>Caso a)</strong></p>
+          <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="text-align:left;padding:6px;">Original</th><th style="text-align:right;padding:6px;">Decimal</th><th style="text-align:left;padding:6px;">Calculo</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:5px;">(AB3)<sub>16</sub></td><td style="text-align:right;padding:5px;">2739</td><td style="padding:5px;font-family:monospace;font-size:0.82rem;">10&middot;256 + 11&middot;16 + 3</td></tr>
+              <tr><td style="padding:5px;">(1011101001)<sub>2</sub></td><td style="text-align:right;padding:5px;">745</td><td style="padding:5px;font-family:monospace;font-size:0.82rem;">512+128+64+32+8+1</td></tr>
+              <tr><td style="padding:5px;">(9652)<sub>10</sub></td><td style="text-align:right;padding:5px;">9652</td><td style="padding:5px;">&mdash;</td></tr>
+              <tr><td style="padding:5px;">(AA1E)<sub>16</sub></td><td style="text-align:right;padding:5px;">43550</td><td style="padding:5px;font-family:monospace;font-size:0.82rem;">10&middot;4096 + 10&middot;256 + 16 + 14</td></tr>
+              <tr><td style="padding:5px;">(12734)<sub>8</sub></td><td style="text-align:right;padding:5px;">5596</td><td style="padding:5px;font-family:monospace;font-size:0.82rem;">4096+1024+448+24+4</td></tr>
+              <tr><td style="padding:5px;">(1001100011)<sub>2</sub></td><td style="text-align:right;padding:5px;">611</td><td style="padding:5px;font-family:monospace;font-size:0.82rem;">512+64+32+2+1</td></tr>
+            </tbody>
+          </table></div>
+          ${tpResult('(AA1E)<sub>16</sub> &gt; (9652)<sub>10</sub> &gt; (12734)<sub>8</sub> &gt; (AB3)<sub>16</sub> &gt; (1011101001)<sub>2</sub> &gt; (1001100011)<sub>2</sub>')}
+
+          <p><strong>Caso b)</strong></p>
+          <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="text-align:left;padding:6px;">Original</th><th style="text-align:right;padding:6px;">Decimal</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:5px;">(1001111)<sub>2</sub></td><td style="text-align:right;padding:5px;">79</td></tr>
+              <tr><td style="padding:5px;">(FDF21)<sub>16</sub></td><td style="text-align:right;padding:5px;">1040161</td></tr>
+              <tr><td style="padding:5px;">(5783)<sub>10</sub></td><td style="text-align:right;padding:5px;">5783</td></tr>
+              <tr><td style="padding:5px;">(C5CE7)<sub>16</sub></td><td style="text-align:right;padding:5px;">810215</td></tr>
+              <tr><td style="padding:5px;">(77751)<sub>10</sub></td><td style="text-align:right;padding:5px;">77751</td></tr>
+              <tr><td style="padding:5px;">(10101011)<sub>2</sub></td><td style="text-align:right;padding:5px;">171</td></tr>
+            </tbody>
+          </table></div>
+          ${tpResult('(FDF21)<sub>16</sub> &gt; (C5CE7)<sub>16</sub> &gt; (77751)<sub>10</sub> &gt; (5783)<sub>10</sub> &gt; (10101011)<sub>2</sub> &gt; (1001111)<sub>2</sub>')}
+
+          <p><strong>Caso c)</strong></p>
+          <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="text-align:left;padding:6px;">Original</th><th style="text-align:right;padding:6px;">Decimal</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:5px;">(1100)<sub>16</sub></td><td style="text-align:right;padding:5px;">4352</td></tr>
+              <tr><td style="padding:5px;">(10110111011)<sub>2</sub></td><td style="text-align:right;padding:5px;">1467</td></tr>
+              <tr><td style="padding:5px;">(73611)<sub>10</sub></td><td style="text-align:right;padding:5px;">73611</td></tr>
+              <tr><td style="padding:5px;">(7532)<sub>8</sub></td><td style="text-align:right;padding:5px;">3930</td></tr>
+              <tr><td style="padding:5px;">(D38A)<sub>16</sub></td><td style="text-align:right;padding:5px;">54154</td></tr>
+              <tr><td style="padding:5px;">(747)<sub>10</sub></td><td style="text-align:right;padding:5px;">747</td></tr>
+            </tbody>
+          </table></div>
+          ${tpResult('(73611)<sub>10</sub> &gt; (D38A)<sub>16</sub> &gt; (1100)<sub>16</sub> &gt; (7532)<sub>8</sub> &gt; (10110111011)<sub>2</sub> &gt; (747)<sub>10</sub>')}`
+        )}
+
+        ${tpExercise('tp1_a2', 'Ejercicio 2 &mdash; El numero &quot;10&quot; en distintas bases',
+          `<p>Dado el numero 10, convertirlo a base diez suponiendo que esta:</p>
+          <p>a) en base dos &nbsp; b) en base seis &nbsp; c) en base ocho &nbsp; d) en base quince</p>`,
+          `<p>Aplicando el polinomio de numeracion al numero &quot;10&quot;:</p>
+          <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="text-align:left;padding:6px;">Base</th><th style="text-align:left;padding:6px;">Calculo</th><th style="text-align:right;padding:6px;">Decimal</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:5px;">2</td><td style="padding:5px;font-family:monospace;font-size:0.85rem;">1&middot;2&#185; + 0&middot;2&#8304;</td><td style="text-align:right;padding:5px;font-weight:600;">2</td></tr>
+              <tr><td style="padding:5px;">6</td><td style="padding:5px;font-family:monospace;font-size:0.85rem;">1&middot;6&#185; + 0&middot;6&#8304;</td><td style="text-align:right;padding:5px;font-weight:600;">6</td></tr>
+              <tr><td style="padding:5px;">8</td><td style="padding:5px;font-family:monospace;font-size:0.85rem;">1&middot;8&#185; + 0&middot;8&#8304;</td><td style="text-align:right;padding:5px;font-weight:600;">8</td></tr>
+              <tr><td style="padding:5px;">15</td><td style="padding:5px;font-family:monospace;font-size:0.85rem;">1&middot;15&#185; + 0&middot;15&#8304;</td><td style="text-align:right;padding:5px;font-weight:600;">15</td></tr>
+            </tbody>
+          </table></div>
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(46,184,114,0.08);border-left:3px solid #2eb872;border-radius:4px;font-size:0.9rem;">
+            <strong>Regla:</strong> en <strong>cualquier</strong> base <em>b</em>, la cadena &quot;10&quot; representa el valor de la base en decimal. Es el primer numero que requiere 2 digitos en esa base.
+          </div>`
+        )}
+
+        ${tpExercise('tp1_a3', 'Ejercicio 3 &mdash; Simbolos de un sistema en base 15',
+          `<p>&iquest;Cuantos simbolos tendra un sistema de numeracion con base 15? Indicar los posibles individuos.</p>`,
+          `<p><strong>Cantidad:</strong> un sistema en base <em>b</em> usa exactamente <strong>b simbolos distintos</strong> (de 0 a b&minus;1). Por lo tanto base 15 usa <strong>15 simbolos</strong>.</p>
+
+          <p><strong>Simbolos</strong> (convencion hexadecimal extendida):</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;">
+            ${['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E'].map(s =>
+              '<span style="display:inline-block;width:36px;height:36px;line-height:36px;text-align:center;background:var(--accent-primary,#ee5a6f);color:white;border-radius:6px;font-weight:600;font-family:monospace;">' + s + '</span>'
+            ).join('')}
+          </div>
+          <p style="font-size:0.85rem;color:var(--text-secondary);">A=10, B=11, C=12, D=13, E=14. En base 15 <strong>no aparece F</strong> porque F=15 ya requeriria 2 digitos (10<sub>15</sub>).</p>`
+        )}
+
+        <div style="margin-top:24px;padding:14px;background:rgba(46,184,114,0.06);border-left:4px solid #2eb872;border-radius:6px;">
+          <strong>TP1 cerrado. Conceptos clave para el oral:</strong>
+          <ul style="margin:8px 0 0;font-size:0.9rem;">
+            <li>Polinomio de numeracion (cualquier base &rarr; decimal).</li>
+            <li>Divisiones sucesivas (decimal &rarr; cualquier base, parte entera).</li>
+            <li>Multiplicaciones sucesivas (decimal &rarr; cualquier base, parte fraccionaria).</li>
+            <li>Agrupamiento binario-octal (de a 3 bits) y binario-hex (de a 4 bits).</li>
+            <li>Por que 0,3 no es representable exactamente en binario finito (raiz del error de redondeo en IEEE 754).</li>
+          </ul>
+        </div>
+      `
+    };
+
+    let _tpsActive = 'TP1';
+
+    function tpExercise(id, title, enunciado, solucion) {
+      return '<div style="margin-bottom:14px;border:1px solid rgba(0,0,0,0.08);border-radius:6px;overflow:hidden;">' +
+        '<div style="padding:10px 14px;background:rgba(0,0,0,0.02);border-bottom:1px solid rgba(0,0,0,0.06);">' +
+          '<div style="font-weight:600;margin-bottom:6px;">' + title + '</div>' +
+          '<div style="font-size:0.92rem;">' + enunciado + '</div>' +
+        '</div>' +
+        '<details style="padding:0;"><summary style="padding:10px 14px;cursor:pointer;font-weight:600;color:var(--accent-primary,#ee5a6f);user-select:none;">Ver solucion</summary>' +
+          '<div style="padding:12px 14px;">' + solucion + '</div>' +
+        '</details>' +
+      '</div>';
+    }
+
+    function tpResult(text) {
+      return '<div style="margin:8px 0;padding:8px 12px;background:rgba(46,184,114,0.1);border-left:3px solid #2eb872;border-radius:4px;font-weight:600;">' + text + '</div>';
+    }
+
+    function renderTPs() {
+      // Tabs
+      const tabsCont = document.getElementById('tpsTabs');
+      if (tabsCont) {
+        tabsCont.innerHTML = TPS_META.map(tp => {
+          const isActive = tp.id === _tpsActive;
+          const hasContent = !!TPS_CONTENT[tp.id];
+          const opacity = hasContent ? 1 : 0.5;
+          return '<button onclick="setActiveTP(\'' + tp.id + '\')" style="padding:6px 12px;border:none;background:' + (isActive ? 'var(--accent-primary,#ee5a6f)' : 'transparent') + ';color:' + (isActive ? 'white' : 'var(--text-primary,#1a2332)') + ';border-radius:6px 6px 0 0;cursor:pointer;font-weight:' + (isActive ? '600' : '500') + ';opacity:' + opacity + ';font-size:0.88rem;">' +
+            tp.id + '</button>';
+        }).join('');
+      }
+
+      // Header
+      const tp = TPS_META.find(t => t.id === _tpsActive);
+      const hasContent = !!TPS_CONTENT[_tpsActive];
+      const progress = (data.tpProgress && data.tpProgress[_tpsActive]) || {};
+      const headerEl = document.getElementById('tpsHeader');
+      if (headerEl) {
+        headerEl.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.08);margin-bottom:14px;">' +
+          '<div>' +
+            '<div style="font-size:0.78rem;color:var(--text-secondary);text-transform:uppercase;font-weight:600;">' + tp.id + ' &middot; ' + tp.unit + '</div>' +
+            '<div style="font-size:1.1rem;font-weight:600;">' + tp.title + '</div>' +
+          '</div>' +
+          (hasContent ? '<div style="display:flex;flex-wrap:wrap;gap:14px;font-size:0.85rem;">' +
+            tpProgressCheckbox(_tpsActive, 'leido', 'Leido', progress.leido) +
+            tpProgressCheckbox(_tpsActive, 'pasadoMano', 'Pasado a mano', progress.pasadoMano) +
+            tpProgressCheckbox(_tpsActive, 'impreso', 'Impreso', progress.impreso) +
+          '</div>' : '') +
+        '</div>';
+      }
+
+      // Content
+      const cont = document.getElementById('tpsContent');
+      if (!cont) return;
+      if (!hasContent) {
+        cont.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text-secondary);">' +
+          '<div style="font-size:3rem;margin-bottom:12px;opacity:0.4;">&#9202;</div>' +
+          '<div style="font-size:1rem;font-weight:600;margin-bottom:6px;">' + tp.id + ' &mdash; ' + tp.title + '</div>' +
+          '<div style="font-size:0.9rem;">Pendiente. Se va a cargar cuando corresponda en el cronograma.</div>' +
+          '<div style="font-size:0.85rem;margin-top:8px;">Pedirle a Claude que arme este TP en chat.</div>' +
+        '</div>';
+      } else {
+        cont.innerHTML = TPS_CONTENT[_tpsActive];
+      }
+    }
+
+    function tpProgressCheckbox(tpId, field, label, checked) {
+      return '<label style="display:inline-flex;align-items:center;gap:5px;cursor:pointer;">' +
+        '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleTPProgress(\'' + tpId + '\',\'' + field + '\',this.checked)">' +
+        '<span>' + label + '</span>' +
+      '</label>';
+    }
+
+    function setActiveTP(tpId) {
+      _tpsActive = tpId;
+      renderTPs();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleTPProgress(tpId, field, value) {
+      data.tpProgress = data.tpProgress || {};
+      data.tpProgress[tpId] = data.tpProgress[tpId] || {};
+      data.tpProgress[tpId][field] = value;
+      saveData();
+    }
+
+    // ============================================================
     // MATRIZ DE CALOR POR TEMA (Modulo E) - dentro de Estado
     // ============================================================
     const TEMAS_CALOR = [
@@ -7935,6 +8481,7 @@ HLT`
         case 'oral': initOralMode(); break;
         case 'recursos': renderRecursos(); break;
         case 'metodo': break; // static HTML, no rendering
+        case 'tps': renderTPs(); break;
         case 'recall': renderRecall(); break;
         case 'plan': renderWeeklyPlan(); updatePomDisplay(); updatePomStats(); break;
         case 'estado': renderEstado(); break;
