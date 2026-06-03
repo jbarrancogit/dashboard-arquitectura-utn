@@ -7333,6 +7333,171 @@ C-1:   0000000001000010  (+66)
             <li>Detectar <strong>overflow</strong>: si dos operandos del mismo signo dan un resultado de signo opuesto, el resultado no entra en la palabra.</li>
           </ul>
         </div>
+      `,
+      TP3: `
+        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.9rem;">
+          <strong>Formato de la catedra (NO es IEEE 754 estandar):</strong> palabra de 32 bits = <strong>1 signo + 8 exponente + 23 mantisa</strong>. El exponente esta en <strong>exceso 128</strong> (almacenado = 128 + exponente real; 128 = exponente 0). La mantisa se normaliza con el <strong>bit/grupo lider explicito</strong> (no hay bit oculto como en IEEE).
+        </div>
+        <div style="margin-bottom:16px;padding:10px 14px;background:rgba(46,184,114,0.06);border-left:3px solid #2eb872;border-radius:4px;font-size:0.88rem;">
+          <strong>Normalizacion segun base del exponente:</strong><br>
+          &bull; <strong>Base 2</strong>: 0,5 &le; mantisa &lt; 1 &rarr; forma 0,1xxx &times; 2<sup>e</sup> (primer bit = 1). La coma se mueve de a 1 bit.<br>
+          &bull; <strong>Base 8</strong>: 1/8 &le; mantisa &lt; 1 &rarr; primer grupo de <strong>3 bits</strong> &ne; 0, &times; 8<sup>e</sup>. La coma se mueve de a 3 bits.<br>
+          &bull; <strong>Base 16</strong>: 1/16 &le; mantisa &lt; 1 &rarr; primer grupo de <strong>4 bits</strong> &ne; 0, &times; 16<sup>e</sup>. La coma se mueve de a 4 bits.
+        </div>
+        <div style="margin-bottom:14px;font-size:0.82rem;color:var(--text-secondary);">
+          Codigo de colores: <span style="color:#ee5a6f;font-weight:700;">signo</span> &nbsp; <span style="color:#4a6fd8;font-weight:700;">exponente (exc-128)</span> &nbsp; <span style="color:#2eb872;font-weight:700;">mantisa (23 bits)</span>
+        </div>
+
+        <h4 style="margin:18px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver en clase</h4>
+
+        ${tpExercise('tp3_e1', 'Ejercicio 1 &mdash; Representar en PF base 2, 8 y 16',
+          `<p>Representar en punto flotante (32 bits, exceso 128) y en base 2, 8 y 16: <code>a) 29</code>, <code>b) 52,73</code>, <code>c) 0,125</code>, <code>d) 0,011</code></p>`,
+          `<p><strong>Pasos:</strong> (1) pasar a binario, (2) normalizar segun la base, (3) signo + exponente en exceso 128 + mantisa.</p>
+
+          <p><strong>a) 29 = 11101<sub>2</sub></strong> &nbsp;(entero, 5 bits)</p>
+          ${pfBits('0','10000101','11101000000000000000000','base 2: 0,11101 &times; 2&#8309; (e=5, exc=133)')}
+          ${pfBits('0','10000010','01110100000000000000000','base 8: 0,35&#8328; &times; 8&#178; (e=2, exc=130)')}
+          ${pfBits('0','10000010','00011101000000000000000','base 16: 0,1D&#8321;&#8326; &times; 16&#178; (e=2, exc=130)')}
+
+          <p style="margin-top:14px;"><strong>b) 52,73 &asymp; 110100,1011101011100001<sub>2</sub></strong> &nbsp;(fraccion no terminante &rarr; mantisa truncada a 23 bits)</p>
+          ${pfBits('0','10000110','11010010111010111000010','base 2 (e=6, exc=134)')}
+          ${pfBits('0','10000010','11010010111010111000010','base 8 (e=2, exc=130)')}
+          ${pfBits('0','10000010','00110100101110101110000','base 16 (e=2, exc=130)')}
+
+          <p style="margin-top:14px;"><strong>c) 0,125 = 0,001<sub>2</sub></strong></p>
+          ${pfBits('0','01111110','10000000000000000000000','base 2: 0,1 &times; 2&#8315;&#178; (e=-2, exc=126)')}
+          ${pfBits('0','10000000','00100000000000000000000','base 8: 0,001 &times; 8&#8304; (e=0, exc=128)')}
+          ${pfBits('0','10000000','00100000000000000000000','base 16: 0,0010 &times; 16&#8304; (e=0, exc=128)')}
+
+          <p style="margin-top:14px;"><strong>d) 0,011 &asymp; 0,00000010110100001110<sub>2</sub></strong></p>
+          ${pfBits('0','01111010','10110100001110010101100','base 2 (e=-6, exc=122)')}
+          ${pfBits('0','01111110','10110100001110010101100','base 8 (e=-2, exc=126)')}
+          ${pfBits('0','01111111','00101101000011100101011','base 16 (e=-1, exc=127)')}
+
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid var(--accent-primary,#ee5a6f);border-radius:4px;font-size:0.86rem;">
+            <strong>Clave:</strong> para una misma base, la mantisa en binario es la misma; lo que cambia es <em>cuanto</em> mueve la coma cada base y por lo tanto el exponente. 52,73 y 0,011 no son exactos en binario &rarr; siempre se trunca a 23 bits (origen del error de redondeo).
+          </div>`
+        )}
+
+        ${tpExercise('tp3_e2', 'Ejercicio 2 &mdash; Sumar y representar en PF base 2',
+          `<p>Efectuar y representar el resultado en PF base 2:</p>
+          <p><code>a) 111001 + 10100,1011110 + 111,0011</code><br><code>b) 1100111,10111 + 11100,1011</code><br><code>c) 10111000,10001 + 0,001111001001</code></p>`,
+          `<p><strong>a)</strong> 57 + 20,7343750 + 7,1875 = <strong>84,921875</strong> = 1010100,111011<sub>2</sub></p>
+          ${pfBits('0','10000111','10101001110110000000000','e=7, exc=135')}
+          ${tpResult('a) 84,921875 = 0 10000111 10101001110110000000000')}
+
+          <p><strong>b)</strong> 103,71875 + 28,6875 = <strong>132,40625</strong> = 10000100,01101<sub>2</sub></p>
+          ${pfBits('0','10001000','10000100011010000000000','e=8, exc=136')}
+          ${tpResult('b) 132,40625 = 0 10001000 10000100011010000000000')}
+
+          <p><strong>c)</strong> 184,53125 + 0,236572&hellip; = <strong>184,767822&hellip;</strong> = 10111000,110001001001<sub>2</sub></p>
+          ${pfBits('0','10001000','10111000110001001001000','e=8, exc=136')}
+          ${tpResult('c) 184,767822&hellip; = 0 10001000 10111000110001001001000')}`
+        )}
+
+        ${tpExercise('tp3_e3', 'Ejercicio 3 &mdash; PF base 2 a decimal',
+          `<p>Obtener el decimal de: <code>a) 0 10010101 111111110100001&hellip;</code> &nbsp; <code>b) 1 01010111 1100010111100001&hellip;</code></p>`,
+          `<p><strong>Metodo:</strong> decimal = (&minus;1)<sup>signo</sup> &times; (0,mantisa)<sub>2</sub> &times; 2<sup>(exp&minus;128)</sup></p>
+
+          <p><strong>a)</strong> signo 0 (+); exp = 10010101<sub>2</sub> = 149 &rarr; e = 149&minus;128 = <strong>21</strong>; mantisa 0,11111111010000 1&hellip;</p>
+          <pre>= +0,111111110100001&#8322; &times; 2&#178;&#185;
+= +2.091.072  (aprox., con los bits dados)</pre>
+          ${tpResult('a) &asymp; +2.091.072')}
+
+          <p><strong>b)</strong> signo 1 (&minus;); exp = 01010111<sub>2</sub> = 87 &rarr; e = 87&minus;128 = <strong>&minus;41</strong>; mantisa 0,1100010111100001&hellip;</p>
+          <pre>= -0,1100010111100001&#8322; &times; 2&#8315;&#8308;&#185;
+&asymp; -3,515 &times; 10&#8315;&#185;&#179;  (numero muy chico por exponente negativo grande)</pre>
+          ${tpResult('b) &asymp; -3,515 &times; 10&#8315;&#185;&#179;')}`
+        )}
+
+        ${tpExercise('tp3_e4', 'Ejercicio 4 &mdash; Maximos y minimos (simple y doble precision)',
+          `<p>Indicar los maximos y minimos numeros positivos representables en simple y doble precision (base 2).</p>`,
+          `<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="text-align:left;padding:6px;">Precision</th><th style="text-align:left;padding:6px;">Minimo positivo</th><th style="text-align:left;padding:6px;">Maximo positivo</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:6px;"><strong>Simple</strong><br><span style="font-size:0.8rem;color:var(--text-secondary);">8 exp (exc 128)<br>23 mantisa</span></td>
+                  <td style="padding:6px;font-family:monospace;">0,5 &times; 2<sup>-128</sup> = 2<sup>-129</sup><br>&asymp; <strong>1,47 &times; 10<sup>-39</sup></strong></td>
+                  <td style="padding:6px;font-family:monospace;">(1&minus;2<sup>-23</sup>) &times; 2<sup>127</sup><br>&asymp; <strong>1,70 &times; 10<sup>38</sup></strong></td></tr>
+              <tr><td style="padding:6px;"><strong>Doble</strong><br><span style="font-size:0.8rem;color:var(--text-secondary);">11 exp (exc 1024)<br>52 mantisa</span></td>
+                  <td style="padding:6px;font-family:monospace;">0,5 &times; 2<sup>-1024</sup> = 2<sup>-1025</sup><br>&asymp; <strong>2,78 &times; 10<sup>-309</sup></strong></td>
+                  <td style="padding:6px;font-family:monospace;">(1&minus;2<sup>-52</sup>) &times; 2<sup>1023</sup><br>&asymp; <strong>8,99 &times; 10<sup>307</sup></strong></td></tr>
+            </tbody>
+          </table></div>
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(46,184,114,0.08);border-left:3px solid #2eb872;border-radius:4px;font-size:0.86rem;">
+            El <strong>minimo</strong> usa el exponente mas negativo y la mantisa minima normalizada (0,5). El <strong>maximo</strong> usa el exponente mas grande y la mantisa con todos 1 (&asymp; 1).
+          </div>`
+        )}
+
+        <h4 style="margin:24px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver por el alumno</h4>
+
+        ${tpExercise('tp3_a1', 'Ejercicio 1 &mdash; Representar en PF base 2, 8 y 16',
+          `<p>Representar: <code>a) 14,63</code>, <code>b) 0,35</code>, <code>c) 0,000052</code>, <code>d) 105,5787</code></p>`,
+          `<p><strong>a) 14,63 &asymp; 1110,10100001010001111<sub>2</sub></strong></p>
+          ${pfBits('0','10000100','11101010000101000111101','base 2 (e=4, exc=132)')}
+          ${pfBits('0','10000010','00111010100001010001111','base 8 (e=2, exc=130)')}
+          ${pfBits('0','10000001','11101010000101000111101','base 16 (e=1, exc=129)')}
+
+          <p style="margin-top:14px;"><strong>b) 0,35 &asymp; 0,0101100110011&hellip;<sub>2</sub></strong> (periodico)</p>
+          ${pfBits('0','01111111','10110011001100110011001','base 2 (e=-1, exc=127)')}
+          ${pfBits('0','10000000','01011001100110011001100','base 8 (e=0, exc=128)')}
+          ${pfBits('0','10000000','01011001100110011001100','base 16 (e=0, exc=128)')}
+
+          <p style="margin-top:14px;"><strong>c) 0,000052 &asymp; 0,0&hellip;01101101000011<sub>2</sub></strong> (muy chico)</p>
+          ${pfBits('0','01110010','11011010000110101001001','base 2 (e=-14, exc=114)')}
+          ${pfBits('0','01111100','00110110100001101010010','base 8 (e=-4, exc=124)')}
+          ${pfBits('0','01111101','00110110100001101010010','base 16 (e=-3, exc=125)')}
+
+          <p style="margin-top:14px;"><strong>d) 105,5787 &asymp; 1101001,1001010000100101<sub>2</sub></strong></p>
+          ${pfBits('0','10000111','11010011001010000100101','base 2 (e=7, exc=135)')}
+          ${pfBits('0','10000011','00110100110010100001001','base 8 (e=3, exc=131)')}
+          ${pfBits('0','10000010','01101001100101000010010','base 16 (e=2, exc=130)')}`
+        )}
+
+        ${tpExercise('tp3_a2', 'Ejercicio 2 &mdash; Sumar y representar en PF base 2',
+          `<p><code>a) 0,00011010110101 + 10001110,101</code><br><code>b) 0,11001011 + 0,001100111</code><br><code>c) 1101111011,0101 + 0,001101101101011</code></p>`,
+          `<p><strong>a)</strong> &asymp; <strong>142,729797&hellip;</strong> = 10001110,10111010110101<sub>2</sub></p>
+          ${pfBits('0','10001000','10001110101110101101010','e=8, exc=136')}
+          ${tpResult('a) &asymp; 142,7298 = 0 10001000 10001110101110101101010')}
+
+          <p><strong>b)</strong> = <strong>0,994140625</strong> = 0,111111101<sub>2</sub></p>
+          ${pfBits('0','10000000','11111110100000000000000','e=0, exc=128')}
+          ${tpResult('b) 0,994140625 = 0 10000000 11111110100000000000000')}
+
+          <p><strong>c)</strong> &asymp; <strong>891,526703&hellip;</strong> = 1101111011,100001101101011<sub>2</sub></p>
+          ${pfBits('0','10001010','11011110111000011011010','e=10, exc=138')}
+          ${tpResult('c) &asymp; 891,5267 = 0 10001010 11011110111000011011010')}`
+        )}
+
+        ${tpExercise('tp3_a3', 'Ejercicio 3 &mdash; PF base 2 a decimal',
+          `<p><code>a) 0 00101010 100010100101&hellip;</code> &nbsp; <code>b) 0 10100100 100010011001&hellip;</code></p>`,
+          `<p><strong>a)</strong> signo + ; exp = 00101010<sub>2</sub> = 42 &rarr; e = 42&minus;128 = <strong>&minus;86</strong></p>
+          <pre>= +0,100010100101&#8322; &times; 2&#8315;&#8312;&#8310;  &asymp;  +6,98 &times; 10&#8315;&#178;&#8311;</pre>
+          ${tpResult('a) &asymp; +6,98 &times; 10&#8315;&#178;&#8311;')}
+
+          <p><strong>b)</strong> signo + ; exp = 10100100<sub>2</sub> = 164 &rarr; e = 164&minus;128 = <strong>36</strong></p>
+          <pre>= +0,100010011001&#8322; &times; 2&#179;&#8310;  =  +36.926.652.416  (aprox.)</pre>
+          ${tpResult('b) &asymp; +36.926.652.416')}`
+        )}
+
+        ${tpExercise('tp3_a4', 'Ejercicio 4 &mdash; Maximos y minimos',
+          `<p>Idem ejercicio 4 de clase: maximos y minimos positivos en simple y doble precision.</p>`,
+          `<p>Mismas formulas que en clase:</p>
+          <ul style="font-size:0.9rem;line-height:1.6;">
+            <li><strong>Simple:</strong> min = 2<sup>-129</sup> &asymp; 1,47&times;10<sup>-39</sup> &nbsp;|&nbsp; max = (1&minus;2<sup>-23</sup>)&middot;2<sup>127</sup> &asymp; 1,70&times;10<sup>38</sup></li>
+            <li><strong>Doble:</strong> min = 2<sup>-1025</sup> &asymp; 2,78&times;10<sup>-309</sup> &nbsp;|&nbsp; max = (1&minus;2<sup>-52</sup>)&middot;2<sup>1023</sup> &asymp; 8,99&times;10<sup>307</sup></li>
+          </ul>`
+        )}
+
+        <div style="margin-top:24px;padding:14px;background:rgba(46,184,114,0.06);border-left:4px solid #2eb872;border-radius:6px;">
+          <strong>TP3 cerrado. Conceptos clave para el oral:</strong>
+          <ul style="margin:8px 0 0;font-size:0.9rem;">
+            <li>Estructura 1+8+23, exponente en <strong>exceso 128</strong> (no 127 como IEEE real).</li>
+            <li>Normalizar = mover la coma hasta que el primer bit/grupo sea no nulo; el exponente cuenta cuantos lugares.</li>
+            <li>Base 2 mueve de a 1 bit, base 8 de a 3, base 16 de a 4 (la mantisa binaria no cambia, cambia el exponente).</li>
+            <li>Mantisa siempre 23 bits &rarr; numeros no exactos se truncan (error de redondeo).</li>
+            <li>Rango: exponente da la <em>magnitud</em> (max/min), mantisa da la <em>precision</em>.</li>
+          </ul>
+        </div>
       `
     };
 
@@ -7352,6 +7517,16 @@ C-1:   0000000001000010  (+66)
 
     function tpResult(text) {
       return '<div style="margin:8px 0;padding:8px 12px;background:rgba(46,184,114,0.1);border-left:3px solid #2eb872;border-radius:4px;font-weight:600;">' + text + '</div>';
+    }
+
+    // Muestra una palabra de punto flotante con signo(rojo)/exponente(azul)/mantisa(verde)
+    function pfBits(sign, exp, mant, note) {
+      return '<div style="overflow-x:auto;margin:4px 0;"><code style="font-family:monospace;font-size:0.92rem;white-space:nowrap;letter-spacing:0.5px;">' +
+        '<span style="color:#ee5a6f;font-weight:700;">' + sign + '</span> ' +
+        '<span style="color:#4a6fd8;font-weight:700;">' + exp + '</span> ' +
+        '<span style="color:#2eb872;font-weight:700;">' + mant + '</span>' +
+        (note ? '<span style="color:var(--text-secondary);font-weight:400;font-family:inherit;">  &nbsp;' + note + '</span>' : '') +
+        '</code></div>';
     }
 
     function renderTPs() {
