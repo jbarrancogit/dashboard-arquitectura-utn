@@ -7498,6 +7498,231 @@ C-1:   0000000001000010  (+66)
             <li>Rango: exponente da la <em>magnitud</em> (max/min), mantisa da la <em>precision</em>.</li>
           </ul>
         </div>
+      `,
+      TP4: `
+        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.9rem;">
+          <strong>Conceptos clave:</strong> codigos <strong>continuos</strong> (Gray, Johnson: codigos adyacentes difieren en 1 bit), <strong>ponderados</strong> (cada posicion tiene un peso: 2421, 5421, 3421), <strong>no ponderados</strong> (EXC3), <strong>autocomplementarios</strong> (el codigo de d y de 9&minus;d son complemento bit a bit), <strong>detectores/correctores</strong> (paridad, m-entre-n, Hamming). <strong>Distancia minima</strong> = menor cantidad de bits que cambian entre dos codigos validos.
+        </div>
+
+        <h4 style="margin:18px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver en clase</h4>
+
+        ${tpExercise('tp4_e1', 'Ejercicio 1 &mdash; Codigo Gray de 6 bits',
+          `<p>Realizar la tabla de un codigo Gray de 6 bits (64 combinaciones).</p>`,
+          `<p><strong>Metodo:</strong> el Gray se obtiene del binario natural con <code>G = B XOR (B&gt;&gt;1)</code> (cada bit Gray = XOR del bit binario con el de su izquierda). Es un <strong>codigo continuo</strong>: dos codigos consecutivos difieren en <strong>un solo bit</strong> (incluido el salto 63&rarr;0, por eso es ciclico). Se usa en encoders de posicion para evitar errores de transicion.</p>
+          ${(function(){
+            let cols = [[],[],[],[]];
+            for(let i=0;i<64;i++){
+              const b=i.toString(2).padStart(6,'0');
+              const g=(i^(i>>1)).toString(2).padStart(6,'0');
+              cols[Math.floor(i/16)].push('<tr><td style="padding:2px 6px;color:var(--text-secondary);">'+i+'</td><td style="padding:2px 6px;font-family:monospace;">'+b+'</td><td style="padding:2px 6px;font-family:monospace;color:#2eb872;font-weight:600;">'+g+'</td></tr>');
+            }
+            let out='<div style="overflow-x:auto;"><div style="display:flex;gap:10px;min-width:560px;">';
+            for(let c=0;c<4;c++){
+              out += '<table style="border-collapse:collapse;font-size:0.78rem;"><thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 6px;">N</th><th style="padding:3px 6px;">Bin</th><th style="padding:3px 6px;">Gray</th></tr></thead><tbody>'+cols[c].join('')+'</tbody></table>';
+            }
+            out += '</div></div>';
+            return out;
+          })()}`
+        )}
+
+        ${tpExercise('tp4_e2', 'Ejercicio 2 &mdash; Codigo Johnson de 6 bits',
+          `<p>Realizar la tabla de un codigo Johnson de 6 bits e indicar sus caracteristicas.</p>`,
+          `<p><strong>Generacion:</strong> contador en anillo retroalimentado &mdash; se desplaza y entra por la izquierda el <em>complemento</em> del bit que sale por la derecha. Con n bits da <strong>2n estados</strong> (aca 6 bits &rarr; 12 estados).</p>
+          <div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.85rem;margin:8px 0;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:4px 8px;">Paso</th><th style="padding:4px 8px;">Codigo</th></tr></thead>
+            <tbody>${['000000','100000','110000','111000','111100','111110','111111','011111','001111','000111','000011','000001'].map((c,i)=>'<tr><td style="padding:3px 8px;color:var(--text-secondary);">'+i+'</td><td style="padding:3px 8px;font-family:monospace;color:#2eb872;font-weight:600;">'+c+'</td></tr>').join('')}</tbody>
+          </table></div>
+          <div style="padding:8px 12px;background:rgba(46,184,114,0.08);border-left:3px solid #2eb872;border-radius:4px;font-size:0.88rem;">
+            <strong>Caracteristicas:</strong> es un codigo <strong>continuo</strong> (distancia 1 entre adyacentes, ciclico), genera <strong>2n combinaciones</strong> de las 2<sup>n</sup> posibles, y la decodificacion es simple (la posicion del cambio 0&rarr;1 / 1&rarr;0 indica el estado). Solo usa 12 de las 64 combinaciones.
+          </div>`
+        )}
+
+        ${tpExercise('tp4_e3', 'Ejercicio 3 &mdash; Tabla BCD 2421 / EXC3 / 3421 / 5421',
+          `<p>Codificar 5, 18, 72,5, 88, 91,2, 115, 245, 1023,12 en cada codigo. &iquest;Cuales son autocomplementarios?</p>`,
+          `<p>Se codifica <strong>digito por digito</strong> (incluida la parte fraccionaria). Tablas base por digito:</p>
+          <div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.8rem;margin:6px 0;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 7px;">d</th><th style="padding:3px 7px;">2421</th><th style="padding:3px 7px;">EXC3</th><th style="padding:3px 7px;">3421</th><th style="padding:3px 7px;">5421</th></tr></thead>
+            <tbody>${[['0','0000','0011','0000','0000'],['1','0001','0100','0001','0001'],['2','0010','0101','0010','0010'],['3','0011','0110','0011','0011'],['4','0100','0111','0100','0100'],['5','1011','1000','0101','1000'],['6','1100','1001','0110','1001'],['7','1101','1010','0111','1010'],['8','1110','1011','1101','1011'],['9','1111','1100','1110','1100']].map(r=>'<tr><td style="padding:2px 7px;font-weight:600;">'+r[0]+'</td>'+r.slice(1).map(x=>'<td style="padding:2px 7px;font-family:monospace;">'+x+'</td>').join('')+'</tr>').join('')}</tbody>
+          </table></div>
+          <p style="margin-top:10px;"><strong>Numeros codificados:</strong></p>
+          <div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.76rem;width:100%;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:4px;text-align:left;">Dec</th><th style="padding:4px;text-align:left;">2421</th><th style="padding:4px;text-align:left;">EXC3</th><th style="padding:4px;text-align:left;">3421</th><th style="padding:4px;text-align:left;">5421</th></tr></thead>
+            <tbody>${[
+              ['5','1011','1000','0101','1000'],
+              ['18','0001 1110','0100 1011','0001 1101','0001 1011'],
+              ['72,5','1101 0010 1011','1010 0101 1000','0111 0010 0101','1010 0010 1000'],
+              ['88','1110 1110','1011 1011','1101 1101','1011 1011'],
+              ['91,2','1111 0001 0010','1100 0100 0101','1110 0001 0010','1100 0001 0010'],
+              ['115','0001 0001 1011','0100 0100 1000','0001 0001 0101','0001 0001 1000'],
+              ['245','0010 0100 1011','0101 0111 1000','0010 0100 0101','0010 0100 1000'],
+              ['1023,12','0001 0000 0010 0011 0001 0010','0100 0011 0101 0110 0100 0101','0001 0000 0010 0011 0001 0010','0001 0000 0010 0011 0001 0010']
+            ].map(r=>'<tr><td style="padding:3px 4px;font-weight:600;white-space:nowrap;">'+r[0]+'</td>'+r.slice(1).map(x=>'<td style="padding:3px 4px;font-family:monospace;white-space:nowrap;">'+x+'</td>').join('')+'</tr>').join('')}</tbody>
+          </table></div>
+          ${tpResult('Autocomplementarios: BCD 2421 (Aiken) y BCD EXC3. El 2421 por ser ponderado con suma de pesos = 9 (2+4+2+1); el EXC3 por construccion (d y 9&minus;d quedan complementados). El 3421 (suma 10) y el 5421 (suma 12) NO son autocomplementarios.')}`
+        )}
+
+        ${tpExercise('tp4_e4', 'Ejercicio 4 &mdash; Distancia minima Aiken + paridad impar',
+          `<p>Distancia minima del BCD Aiken. Agregar bit de paridad impar. &iquest;Nueva distancia minima?</p>`,
+          `<p>El <strong>BCD Aiken (2421)</strong> es un codigo BCD comun: existen pares de codigos validos que difieren en <strong>1 solo bit</strong> (ej. 0=0000 y 1=0001). Por lo tanto su <strong>distancia minima = 1</strong> (no detecta errores).</p>
+          <p>Al agregar un <strong>bit de paridad impar</strong> (se elige de modo que el total de unos sea impar), cualquier error de 1 bit cambia la paridad y se detecta. La <strong>distancia minima pasa a 2</strong>.</p>
+          ${tpResult('Aiken solo: distancia minima = 1. Con bit de paridad impar: distancia minima = 2 (detecta 1 error, no lo corrige).')}`
+        )}
+
+        ${tpExercise('tp4_e5', 'Ejercicio 5 &mdash; Codigos 2-entre-5 y biquinario',
+          `<p>Tablas de los codigos 2-entre-5 y biquinario. Distancia minima y denominacion.</p>`,
+          `<div style="display:flex;flex-wrap:wrap;gap:18px;">
+            <div><p style="font-weight:600;margin:0 0 4px;">2 entre 5 (pesos 7-4-2-1-0)</p>
+            <table style="border-collapse:collapse;font-size:0.82rem;"><thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 8px;">d</th><th style="padding:3px 8px;">Codigo</th></tr></thead><tbody>${[['0','11000'],['1','00011'],['2','00101'],['3','00110'],['4','01001'],['5','01010'],['6','01100'],['7','10001'],['8','10010'],['9','10100']].map(r=>'<tr><td style="padding:2px 8px;font-weight:600;">'+r[0]+'</td><td style="padding:2px 8px;font-family:monospace;">'+r[1]+'</td></tr>').join('')}</tbody></table>
+            <p style="font-size:0.78rem;color:var(--text-secondary);">Siempre exactamente dos 1. El 0 es excepcion (11000).</p></div>
+            <div><p style="font-weight:600;margin:0 0 4px;">Biquinario (50 - 43210)</p>
+            <table style="border-collapse:collapse;font-size:0.82rem;"><thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 8px;">d</th><th style="padding:3px 8px;">Codigo</th></tr></thead><tbody>${[['0','01 00001'],['1','01 00010'],['2','01 00100'],['3','01 01000'],['4','01 10000'],['5','10 00001'],['6','10 00010'],['7','10 00100'],['8','10 01000'],['9','10 10000']].map(r=>'<tr><td style="padding:2px 8px;font-weight:600;">'+r[0]+'</td><td style="padding:2px 8px;font-family:monospace;">'+r[1]+'</td></tr>').join('')}</tbody></table>
+            <p style="font-size:0.78rem;color:var(--text-secondary);">Un 1 en el grupo bi (2 bits) y un 1 en el quinario (5 bits).</p></div>
+          </div>
+          ${tpResult('Ambos tienen distancia minima = 2. Se denominan codigos de PESO CONSTANTE (o &quot;m-entre-n&quot;): cada combinacion valida tiene la misma cantidad de unos, por eso son DETECTORES de error (un error de 1 bit altera el conteo de unos).')}`
+        )}
+
+        ${tpExercise('tp4_e6', 'Ejercicio 6 &mdash; Hamming (deteccion y correccion) sobre BCD 3421',
+          `<p>Tabla del codigo Hamming para detectar y corregir 1 bit, tomando como base el BCD 3421.</p>`,
+          `<p><strong>Cantidad de bits de paridad p:</strong> se cumple <code>2<sup>p</sup> &ge; n + p + 1</code>. Con n=4 (bits del 3421): 2<sup>3</sup> = 8 &ge; 4+3+1 = 8 &rarr; <strong>p = 3</strong>. Total 7 bits.</p>
+          <p>Bits de informacion: b3, b5, b6, b7 (= los 4 bits del 3421). Bits correctores: b1, b2, b4 (potencias de 2), calculados como:</p>
+          <pre>b1 = b3 XOR b5 XOR b7
+b2 = b3 XOR b6 XOR b7
+b4 = b5 XOR b6 XOR b7</pre>
+          <div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.82rem;margin-top:8px;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 7px;">Dec</th><th style="padding:3px 7px;">b7</th><th style="padding:3px 7px;">b6</th><th style="padding:3px 7px;">b5</th><th style="padding:3px 7px;">b4</th><th style="padding:3px 7px;">b3</th><th style="padding:3px 7px;">b2</th><th style="padding:3px 7px;">b1</th></tr></thead>
+            <tbody>${[['0','0','0','0','0','0','0','0'],['1','0','0','0','0','1','1','1'],['2','0','0','1','1','0','0','1'],['3','0','0','1','1','1','1','0'],['4','0','1','0','1','0','1','0'],['5','0','1','0','1','1','0','1'],['6','0','1','1','0','0','1','1'],['7','0','1','1','0','1','0','0'],['8','1','1','0','0','1','1','0'],['9','1','1','1','1','0','0','0']].map(r=>'<tr><td style="padding:2px 7px;font-weight:600;">'+r[0]+'</td>'+r.slice(1).map((x,i)=>'<td style="padding:2px 7px;font-family:monospace;'+([1,2,4].includes(7-i)?'color:#ee5a6f;':'color:#2eb872;')+'">'+x+'</td>').join('')+'</tr>').join('')}</tbody>
+          </table></div>
+          <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:4px;"><span style="color:#2eb872;font-weight:600;">verde</span> = bits de informacion (b7 b6 b5 b3) &nbsp; <span style="color:#ee5a6f;font-weight:600;">rojo</span> = bits correctores (b4 b2 b1)</p>`
+        )}
+
+        ${tpExercise('tp4_e7', 'Ejercicio 7 &mdash; ASCII 7 bits de caracteres',
+          `<p>Combinacion binaria ASCII de 7 bits de: 5 ; $ ; , ; H ; ( ; 8 ; - ; / ; . ; K ; &iquest; ; &acute;</p>`,
+          `<div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.85rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 9px;">Char</th><th style="padding:3px 9px;">Dec</th><th style="padding:3px 9px;">Hex</th><th style="padding:3px 9px;">Binario (7 bits)</th></tr></thead>
+            <tbody>${[["'5'",'53','35','0110101'],["'$'",'36','24','0100100'],["','",'44','2C','0101100'],["'H'",'72','48','1001000'],["'('",'40','28','0101000'],["'8'",'56','38','0111000'],["'-'",'45','2D','0101101'],["'/'",'47','2F','0101111'],["'.'",'46','2E','0101110'],["'K'",'75','4B','1001011']].map(r=>'<tr><td style="padding:2px 9px;font-weight:600;">'+r[0]+'</td><td style="padding:2px 9px;">'+r[1]+'</td><td style="padding:2px 9px;font-family:monospace;">'+r[2]+'</td><td style="padding:2px 9px;font-family:monospace;color:#2eb872;">'+r[3]+'</td></tr>').join('')}</tbody>
+          </table></div>
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid var(--accent-primary,#ee5a6f);border-radius:4px;font-size:0.86rem;">
+            <strong>Ojo (trampa):</strong> <code>&iquest;</code> (191) y <code>&acute;</code> (180) <strong>NO existen en el ASCII de 7 bits</strong> (rango 0&ndash;127). Pertenecen al ASCII extendido / Latin-1 (8 bits). En 7 bits no son representables.
+          </div>`
+        )}
+
+        ${tpExercise('tp4_e8', 'Ejercicio 8 &mdash; ASCII desde codigos octales',
+          `<p>Indicar a que caracteres pertenecen los codigos ASCII (octal): 85 ; 32 ; 116 ; 82 ; 72 ; 33 ; 104 ; 182 ; 66 ; 31</p>`,
+          `<p><strong>Metodo:</strong> octal &rarr; decimal &rarr; caracter ASCII. Los imprimibles van de octal 040 (32) a 176 (126).</p>
+          <div style="margin-bottom:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid var(--accent-primary,#ee5a6f);border-radius:4px;font-size:0.86rem;">
+            <strong>Atencion:</strong> el enunciado tiene <strong>valores invalidos como octal</strong> (85, 82, 182 contienen el digito 8, que no existe en base 8) &mdash; son erratas de la guia. Los validos se decodifican asi:
+          </div>
+          <div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.84rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 9px;">Octal</th><th style="padding:3px 9px;">Decimal</th><th style="padding:3px 9px;">Caracter</th></tr></thead>
+            <tbody>${[['85','&mdash;','invalido (8 no es octal)'],['32','26','SUB (control)'],['116','78','N'],['82','&mdash;','invalido (8 no es octal)'],['72','58',':'],['33','27','ESC (control)'],['104','68','D'],['182','&mdash;','invalido (8 no es octal)'],['66','54','6'],['31','25','EM (control)']].map(r=>'<tr><td style="padding:2px 9px;font-family:monospace;">'+r[0]+'</td><td style="padding:2px 9px;">'+r[1]+'</td><td style="padding:2px 9px;font-weight:600;">'+r[2]+'</td></tr>').join('')}</tbody>
+          </table></div>
+          <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:6px;">Lo importante para el examen es el <strong>metodo</strong> (octal&rarr;dec&rarr;ASCII), no el resultado de los codigos erroneos.</p>`
+        )}
+
+        ${tpExercise('tp4_e9', 'Ejercicio 9 &mdash; Algoritmo de cifrado (Vigenere mod 27)',
+          `<p>Cifrar &quot;UNIVERSIDAD TECNOLOGICA NACIONAL&quot; con clave ESTUDIAR.</p>`,
+          `<p><strong>Alfabeto de 27 simbolos</strong> (espacio = +, sin W, con &Ntilde;):</p>
+          <div style="overflow-x:auto;font-size:0.8rem;font-family:monospace;background:rgba(0,0,0,0.03);padding:8px;border-radius:4px;white-space:nowrap;">
+            +=00 A=01 B=02 C=03 D=04 E=05 F=06 G=07 H=08 I=09 J=10 K=11 L=12 M=13 N=14 &Ntilde;=15 O=16 P=17 Q=18 R=19 S=20 T=21 U=22 V=23 X=24 Y=25 Z=26
+          </div>
+          <p style="margin-top:10px;"><strong>Algoritmo:</strong></p>
+          <ol style="font-size:0.9rem;line-height:1.5;">
+            <li>Reemplazar espacios por &quot;+&quot; y dividir en bloques del largo de la clave.</li>
+            <li>Convertir cada caracter (texto y clave) a su entero.</li>
+            <li>Cifrado<sub>i</sub> = (texto<sub>i</sub> + clave<sub>i</sub>) <strong>mod 27</strong>, repitiendo la clave.</li>
+            <li>Convertir cada entero resultante de vuelta a caracter.</li>
+          </ol>
+          <div style="margin-top:8px;padding:8px 12px;background:rgba(46,184,114,0.08);border-left:3px solid #2eb872;border-radius:4px;font-size:0.86rem;">
+            Resultado de la guia: <code style="font-weight:700;">+HCQIATYITYUYNDCTEJBMLBFSTXDSXBK</code>. <em>Nota:</em> el ejemplo impreso de la guia arrastra erratas aritmeticas (codifica R como 16 y N como 15 en algunos pasos, cuando la tabla dice R=19, N=14). Lo correcto es aplicar la suma mod 27 de forma <strong>consistente</strong> con la tabla &mdash; metodo validado en los ejercicios E6 y E7 del alumno, que descifran a frases con sentido.
+          </div>`
+        )}
+
+        <h4 style="margin:24px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver por el alumno</h4>
+
+        ${tpExercise('tp4_a1', 'Ejercicio 1 &mdash; Bits Gray para 360 angulos',
+          `<p>&iquest;Cuantos bits necesita un codigo Gray para codificar angulos de 1 en 1 grado hasta 360&deg;?</p>`,
+          `<p>Hacen falta 360 combinaciones distintas. El Gray usa la misma cantidad de bits que el binario: se busca el menor n con 2<sup>n</sup> &ge; 360.</p>
+          <pre>2&#8312; = 256  &lt; 360   (no alcanza)
+2&#8313; = 512  &ge; 360   (alcanza)</pre>
+          ${tpResult('Se necesitan 9 bits (512 combinaciones, sobran 152).')}`
+        )}
+
+        ${tpExercise('tp4_a2', 'Ejercicio 2 &mdash; &iquest;Cuales codigos son ponderados?',
+          `<p>Determinar cuales de los codigos a), b), c), d) son ponderados y sus pesos.</p>`,
+          `<p>Un codigo es <strong>ponderado</strong> si existen pesos fijos (P3,P2,P1,P0) tales que el decimal = &Sigma; P&middot;bit, consistentes para todos los digitos.</p>
+          <div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.86rem;width:100%;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:4px 8px;text-align:left;">Codigo</th><th style="padding:4px 8px;text-align:left;">&iquest;Ponderado?</th><th style="padding:4px 8px;text-align:left;">Pesos</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:4px 8px;">a) 1=0001, 3=0011, 4=0100, 7=1100</td><td style="padding:4px 8px;color:#2eb872;font-weight:600;">SI</td><td style="padding:4px 8px;font-family:monospace;">3 4 2 1</td></tr>
+              <tr><td style="padding:4px 8px;">b) 3=0011, 5=0101, 7=1101, 9=1111</td><td style="padding:4px 8px;color:#2eb872;font-weight:600;">SI</td><td style="padding:4px 8px;font-family:monospace;">2 4 2 1</td></tr>
+              <tr><td style="padding:4px 8px;">c) 1=0001, 3=0011, 5=0100, 7=1100</td><td style="padding:4px 8px;color:#2eb872;font-weight:600;">SI</td><td style="padding:4px 8px;font-family:monospace;">2 5 2 1</td></tr>
+              <tr><td style="padding:4px 8px;">d) 0=0000, 1=0001, 2=0011, 3=0010</td><td style="padding:4px 8px;color:#ee5a6f;font-weight:600;">NO</td><td style="padding:4px 8px;">incoherente (es un Gray)</td></tr>
+            </tbody>
+          </table></div>
+          <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:6px;">En d) el digito 2=0011 exige P1+P0=2 y el 3=0010 exige P1=3: contradiccion &rarr; no hay pesos &rarr; no es ponderado (es la secuencia Gray 00,01,11,10).</p>`
+        )}
+
+        ${tpExercise('tp4_a3', 'Ejercicio 3 &mdash; 847 en binario natural y BCD EXC3',
+          `<p>Representar 847 en binario natural y en BCD EXC3. Comparar.</p>`,
+          `<p><strong>Binario natural:</strong></p>
+          <pre>847 = 1101001111&#8322;   (10 bits)
+512+256+64+8+4+2+1 = 847</pre>
+          <p><strong>BCD EXC3</strong> (cada digito + 3, en binario):</p>
+          <pre>8 -> 8+3=11 -> 1011
+4 -> 4+3=7  -> 0111
+7 -> 7+3=10 -> 1010
+847 = 1011 0111 1010   (12 bits)</pre>
+          ${tpResult('Binario natural: 1101001111 (10 bits, compacto pero hay que convertir todo el numero). BCD EXC3: 1011 0111 1010 (12 bits, mas largo pero cada digito decimal se lee/convierte por separado &mdash; ideal para displays).')}`
+        )}
+
+        ${tpExercise('tp4_a4', 'Ejercicio 4 &mdash; Bits de Hamming para 5, 8 y 12 bits',
+          `<p>&iquest;Cuantos bits tendra el codigo Hamming (detectar y corregir 1 error) si los datos son de 5, 8 y 12 bits?</p>`,
+          `<p>Formula: <code>2<sup>p</sup> &ge; n + p + 1</code> (n = bits de datos, p = bits de paridad).</p>
+          <div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.86rem;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:4px 10px;">n (datos)</th><th style="padding:4px 10px;">p (paridad)</th><th style="padding:4px 10px;">Total</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:4px 10px;">5</td><td style="padding:4px 10px;">4 &nbsp;<span style="color:var(--text-secondary);font-size:0.8rem;">(2&#8308;=16 &ge; 10)</span></td><td style="padding:4px 10px;font-weight:600;">9</td></tr>
+              <tr><td style="padding:4px 10px;">8</td><td style="padding:4px 10px;">4 &nbsp;<span style="color:var(--text-secondary);font-size:0.8rem;">(2&#8308;=16 &ge; 13)</span></td><td style="padding:4px 10px;font-weight:600;">12</td></tr>
+              <tr><td style="padding:4px 10px;">12</td><td style="padding:4px 10px;">5 &nbsp;<span style="color:var(--text-secondary);font-size:0.8rem;">(2&#8309;=32 &ge; 18)</span></td><td style="padding:4px 10px;font-weight:600;">17</td></tr>
+            </tbody>
+          </table></div>`
+        )}
+
+        ${tpExercise('tp4_a5', 'Ejercicio 5 &mdash; Cifrar FACULTAD REGIONAL MENDOZA',
+          `<p>Cifrar &quot;FACULTAD REGIONAL MENDOZA&quot; con la clave NAND.</p>`,
+          `<p>Clave NAND = N(14) A(01) N(14) D(04), repetida. Suma mod 27 caracter a caracter (espacios = +):</p>
+          <pre>F A C U L T A D + R E G I O N A L + M E N D O Z A
+N A N D N A N D N A N D N A N D N A N D N A N D N
+(suma mod 27, convertir a caracter)</pre>
+          ${tpResult('Resultado: SBPZZU&Ntilde;HNSRKVPAEZA+IAECC&Ntilde; &nbsp;(el + es un espacio cifrado)')}
+          <p style="font-size:0.84rem;color:var(--text-secondary);">Lo clave es aplicar la suma mod 27 de forma consistente con la tabla de 27 simbolos.</p>`
+        )}
+
+        ${tpExercise('tp4_a6', 'Ejercicio 6 &mdash; Descifrar (clave AVANTI)',
+          `<p>Descifrar &Ntilde;LTN&Ntilde;NSANCNIFJAZUIDQNOMN con clave AVANTI.</p>`,
+          `<p><strong>Descifrado:</strong> texto<sub>i</sub> = (cifrado<sub>i</sub> &minus; clave<sub>i</sub>) mod 27. Clave AVANTI = A(01) V(23) A(01) N(14) T(21) I(09).</p>
+          ${tpResult('NOS VEREMOS EN LA CUMBRE')}
+          <p style="font-size:0.84rem;color:var(--text-secondary);">El texto cifrado de la guia tiene un caracter con errata (da una T literal en vez de V), pero el mensaje se reconstruye sin ambiguedad.</p>`
+        )}
+
+        ${tpExercise('tp4_a7', 'Ejercicio 7 &mdash; Descifrar (clave MATERIA)',
+          `<p>Descifrar NSL+ACFOUOXSIEQAXTEZVGBYTKJT con clave MATERIA.</p>`,
+          `<p>Clave MATERIA = M(13) A(01) T(21) E(05) R(19) I(09) A(01). Resta mod 27:</p>
+          ${tpResult('ARQUITECTURA DE COMPUTADORAS')}
+          <p style="font-size:0.84rem;color:var(--text-secondary);">Descifrado limpio &mdash; valida que el alfabeto correcto es N=14, sin W, con &Ntilde;.</p>`
+        )}
+
+        <div style="margin-top:24px;padding:14px;background:rgba(46,184,114,0.06);border-left:4px solid #2eb872;border-radius:6px;">
+          <strong>TP4 cerrado. Conceptos clave para el oral:</strong>
+          <ul style="margin:8px 0 0;font-size:0.9rem;">
+            <li>Gray y Johnson = codigos <strong>continuos</strong> (distancia 1). Gray: G = B XOR (B&gt;&gt;1). Johnson: 2n estados.</li>
+            <li>Ponderado vs no ponderado; autocomplementario (suma de pesos = 9, o EXC3).</li>
+            <li>Distancia minima &rarr; deteccion (d=2) y correccion (d=3) de errores.</li>
+            <li>Hamming: 2<sup>p</sup> &ge; n+p+1; bits correctores en posiciones potencia de 2.</li>
+            <li>Codigos de peso constante (2-entre-5, biquinario) = detectores por conteo de unos.</li>
+            <li>Cifrado Vigenere mod 27: aplicar la tabla de forma consistente.</li>
+          </ul>
+        </div>
       `
     };
 
