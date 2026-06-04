@@ -6801,7 +6801,7 @@ impar:INC SI
       { id:'TP13', title:'8088 - Aspectos Avanzados',                 unit:'U5' }
     ];
 
-    // Contenido completo TP1 y TP2 (TP3-TP13 estan en estado "pendiente" hasta que se carguen)
+    // Contenido completo TP1-TP5 (TP6-TP13 estan en estado "pendiente" hasta que se carguen)
     const TPS_CONTENT = {
       TP1: `
         <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.9rem;">
@@ -7721,6 +7721,158 @@ N A N D N A N D N A N D N A N D N A N D N A N D N
             <li>Hamming: 2<sup>p</sup> &ge; n+p+1; bits correctores en posiciones potencia de 2.</li>
             <li>Codigos de peso constante (2-entre-5, biquinario) = detectores por conteo de unos.</li>
             <li>Cifrado Vigenere mod 27: aplicar la tabla de forma consistente.</li>
+          </ul>
+        </div>
+      `,
+      TP5: `
+        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.9rem;">
+          <strong>Conceptos clave:</strong> <strong>minterm</strong> (producto canonico, 1 en una fila) y <strong>maxterm</strong> (suma canonica, 0 en una fila). <strong>Suma de productos (SoP)</strong> = &Sigma; de minterms; <strong>producto de sumas (PoS)</strong> = &Pi; de maxterms. Para pasar de una a otra: los indices que estan en una son los que <em>faltan</em> en la otra. Teoremas: identidad, complemento, De Morgan, absorcion a+a&prime;b=a+b.
+        </div>
+        <div style="margin-bottom:14px;font-size:0.82rem;color:var(--text-secondary);">
+          Notacion: <code>a&prime;</code> = complemento (negado) de a. &nbsp; <code>&Sigma;</code> = suma de minterms (SoP). &nbsp; <code>&Pi;</code> = producto de maxterms (PoS).
+        </div>
+
+        <h4 style="margin:18px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver en clase</h4>
+
+        ${tpExercise('tp5_e1', 'Ejercicio 1 &mdash; Expresiones canonicas y tabla de verdad',
+          `<p>Hallar las expresiones canonicas y la tabla de verdad de:</p>
+          <p><code>f(a,b,c) = ac&prime; + bc + ab&prime;c</code> &nbsp; <code>f(a,b,c,d) = ab&prime;cd + a&prime;b&prime;d</code> &nbsp; <code>f(a,b,c,d) = a + b&prime;c&prime; + bc</code></p>`,
+          `<p><strong>Metodo:</strong> a cada termino le falta alguna variable; se la introduce multiplicando por (x + x&prime;) y se distribuye, hasta que todos los terminos tengan todas las variables (minterms).</p>
+
+          <p><strong>f<sub>1</sub>(a,b,c) = ac&prime; + bc + ab&prime;c</strong></p>
+          <pre>= ac&prime;(b+b&prime;) + bc(a+a&prime;) + ab&prime;c
+= abc&prime; + ab&prime;c&prime; + abc + a&prime;bc + ab&prime;c</pre>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;">
+            <table style="border-collapse:collapse;font-size:0.82rem;"><thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 8px;">a</th><th style="padding:3px 8px;">b</th><th style="padding:3px 8px;">c</th><th style="padding:3px 8px;">f</th><th style="padding:3px 8px;">min</th></tr></thead>
+            <tbody>${[[0,0,0,0],[0,0,1,0],[0,1,0,0],[0,1,1,1],[1,0,0,1],[1,0,1,1],[1,1,0,1],[1,1,1,1]].map((r,i)=>'<tr><td style="padding:2px 8px;">'+r[0]+'</td><td style="padding:2px 8px;">'+r[1]+'</td><td style="padding:2px 8px;">'+r[2]+'</td><td style="padding:2px 8px;font-weight:600;color:'+(r[3]?'#2eb872':'var(--text-secondary)')+';">'+r[3]+'</td><td style="padding:2px 8px;color:var(--text-secondary);">'+(r[3]?'m'+i:'')+'</td></tr>').join('')}</tbody></table>
+            <div style="flex:1;min-width:200px;">${tpResult('SoP canonica: &Sigma;(3,4,5,6,7)<br>= a&prime;bc + ab&prime;c&prime; + ab&prime;c + abc&prime; + abc')}</div>
+          </div>
+
+          <p style="margin-top:14px;"><strong>f<sub>2</sub>(a,b,c,d) = ab&prime;cd + a&prime;b&prime;d</strong> &nbsp;<span style="font-size:0.82rem;color:var(--text-secondary);">(la variable e del enunciado no aparece en la funcion)</span></p>
+          <pre>= ab&prime;cd + a&prime;b&prime;d(c+c&prime;)
+= ab&prime;cd + a&prime;b&prime;cd + a&prime;b&prime;c&prime;d</pre>
+          ${tpResult('SoP canonica: &Sigma;(1,3,11) = a&prime;b&prime;c&prime;d + a&prime;b&prime;cd + ab&prime;cd')}
+
+          <p style="margin-top:14px;"><strong>f<sub>3</sub>(a,b,c,d) = a + b&prime;c&prime; + bc</strong></p>
+          <pre>a -> abcd con b,c,d libres (m8..m15)
+b&prime;c&prime; -> con a,d libres aporta m0,m1
+bc   -> con a,d libres aporta m6,m7</pre>
+          ${tpResult('SoP canonica: &Sigma;(0,1,6,7,8,9,10,11,12,13,14,15)')}`
+        )}
+
+        ${tpExercise('tp5_e2', 'Ejercicio 2 &mdash; Simplificar con teoremas',
+          `<p><code>f(p,q,r) = pqr + pq&prime; + p&prime;q&prime;r + pqr + pqr&prime;</code></p>`,
+          `<pre>f = pqr + pq&prime; + p&prime;q&prime;r + pqr + pqr&prime;
+  (pqr esta repetido -> idempotencia, queda una vez)
+= pqr + pqr&prime; + pq&prime; + p&prime;q&prime;r
+= pq(r + r&prime;) + pq&prime; + p&prime;q&prime;r        [r + r&prime; = 1]
+= pq + pq&prime; + p&prime;q&prime;r
+= p(q + q&prime;) + p&prime;q&prime;r                    [q + q&prime; = 1]
+= p + p&prime;q&prime;r
+= p + q&prime;r                                  [absorcion: p + p&prime;X = p + X]</pre>
+          ${tpResult('f(p,q,r) = p + q&prime;r &nbsp;(verificado por tabla de verdad: ambas dan 1 en las filas 1,4,5,6,7)')}`
+        )}
+
+        ${tpExercise('tp5_e3', 'Ejercicio 3 &mdash; Convertir entre SoP y PoS',
+          `<p>a) f(a,b,c) = &Sigma;(0,1,2,5,7) &rarr; pasar a PoS. &nbsp; b) f(a,b,c,d) = &Pi;(1,2,4,6,8,10,12,14) &rarr; pasar a SoP.</p>`,
+          `<p><strong>Regla:</strong> los indices presentes en una forma son exactamente los <em>ausentes</em> en la otra (sobre el total 0&hellip;2<sup>n</sup>&minus;1).</p>
+          <p><strong>a)</strong> 3 variables &rarr; total 0&hellip;7. Faltan en &Sigma;(0,1,2,5,7): {3,4,6}.</p>
+          ${tpResult('a) PoS: f = &Pi;(3,4,6)')}
+          <p><strong>b)</strong> 4 variables &rarr; total 0&hellip;15. Faltan en &Pi;(1,2,4,6,8,10,12,14): {0,3,5,7,9,11,13,15}.</p>
+          ${tpResult('b) SoP: f = &Sigma;(0,3,5,7,9,11,13,15)')}`
+        )}
+
+        ${tpExercise('tp5_e4', 'Ejercicio 4 &mdash; Funcion &quot;3 o mas variables en 1&quot; (PoS)',
+          `<p>Tabla de verdad y funcion canonica (PoS por comprension) de una funcion de 4 variables que vale 1 cuando 3 o mas variables valen 1.</p>`,
+          `<p>Filas con tres o cuatro unos: 7(0111), 11(1011), 13(1101), 14(1110), 15(1111).</p>
+          ${tpResult('SoP: f = &Sigma;(7,11,13,14,15)<br>PoS: f = &Pi;(0,1,2,3,4,5,6,8,9,10,12)')}
+          <p style="font-size:0.84rem;color:var(--text-secondary);">La PoS lista los maxterms = todas las combinaciones con 0, 1 o 2 unos (donde f = 0).</p>`
+        )}
+
+        ${tpExercise('tp5_e5', 'Ejercicio 5 &mdash; Menor peso = 0 y mayor peso = 1',
+          `<p>Funcion de 4 variables (a = mayor peso, d = menor peso) que vale 1 cuando la de menor peso vale 0 y la de mayor peso vale 1. SoP y PoS.</p>`,
+          `<p>Condicion: a = 1 y d = 0 (b, c libres). Filas: 8(1000), 10(1010), 12(1100), 14(1110).</p>
+          ${tpResult('Simplificada: f = a&middot;d&prime;<br>SoP canonica: &Sigma;(8,10,12,14)<br>PoS: &Pi;(0,1,2,3,4,5,6,7,9,11,13,15)')}`
+        )}
+
+        ${tpExercise('tp5_e6', 'Ejercicio 6 &mdash; Demostrar igualdades',
+          `<p>Demostrar: &nbsp;(1) &#8254;((p+a)&middot;d&middot;e&middot;c&prime;) = a&prime;p&prime; + d&prime; + e&prime; + c &nbsp;(2) a&oplus;b = a&prime;&oplus;b&prime; &nbsp;(3) a(b&oplus;c) = ab&oplus;ac</p>`,
+          `<p><strong>(1) De Morgan + involucion:</strong></p>
+          <pre>‾((p+a)&middot;d&middot;e&middot;c&prime;)
+= ‾(p+a) + d&prime; + e&prime; + ‾(c&prime;)     [De Morgan: ‾(producto) = suma de complementos]
+= (p&prime;&middot;a&prime;) + d&prime; + e&prime; + c       [De Morgan en (p+a); involucion ‾(c&prime;)=c]</pre>
+          ${tpResult('(1) Verdadera &mdash; verificada por tabla de verdad (5 variables, 32 filas)')}
+
+          <p style="margin-top:12px;"><strong>(2) a&oplus;b = a&prime;&oplus;b&prime;</strong></p>
+          <pre>a&prime;&oplus;b&prime; = a&prime;&middot;‾(b&prime;) + ‾(a&prime;)&middot;b&prime; = a&prime;b + ab&prime; = a&oplus;b  ✓</pre>
+          ${tpResult('(2) Verdadera: complementar ambas entradas no cambia el XOR')}
+
+          <p style="margin-top:12px;"><strong>(3) a(b&oplus;c) = ab&oplus;ac</strong></p>
+          <pre>ab&oplus;ac = ab&middot;‾(ac) + ‾(ab)&middot;ac
+        = ab(a&prime;+c&prime;) + (a&prime;+b&prime;)ac
+        = abc&prime; + ab&prime;c = a(bc&prime;+b&prime;c) = a(b&oplus;c)  ✓</pre>
+          ${tpResult('(3) Verdadera: distributividad del AND sobre el XOR')}`
+        )}
+
+        <h4 style="margin:24px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver por el alumno</h4>
+
+        ${tpExercise('tp5_a1', 'Ejercicio 1 &mdash; Las 16 funciones de 2 variables',
+          `<p>Obtener las 16 funciones distintas de dos variables, su expresion simplificada y su dual.</p>`,
+          `<div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.8rem;width:100%;">
+            <thead><tr style="background:rgba(0,0,0,0.04);"><th style="padding:3px 6px;">F</th><th style="padding:3px 6px;">00 01 10 11</th><th style="padding:3px 6px;">Expresion</th><th style="padding:3px 6px;">Nombre</th><th style="padding:3px 6px;">Dual</th></tr></thead>
+            <tbody>${[
+              ['F0','0 0 0 0','0','Cero','1'],
+              ['F1','0 0 0 1','a&middot;b','AND','a+b'],
+              ['F2','0 0 1 0','a&middot;b&prime;','Inhib.','a+b&prime;'],
+              ['F3','0 0 1 1','a','Transf. a','a'],
+              ['F4','0 1 0 0','a&prime;&middot;b','Inhib.','a&prime;+b'],
+              ['F5','0 1 0 1','b','Transf. b','b'],
+              ['F6','0 1 1 0','a&oplus;b','XOR','a&oplus;b (XNOR)'],
+              ['F7','0 1 1 1','a+b','OR','a&middot;b'],
+              ['F8','1 0 0 0','(a+b)&prime;','NOR','(a&middot;b)&prime;'],
+              ['F9','1 0 0 1','(a&oplus;b)&prime;','XNOR','XOR'],
+              ['F10','1 0 1 0','b&prime;','NOT b','b&prime;'],
+              ['F11','1 0 1 1','a+b&prime;','Implic.','a&middot;b&prime;'],
+              ['F12','1 1 0 0','a&prime;','NOT a','a&prime;'],
+              ['F13','1 1 0 1','a&prime;+b','Implic.','a&prime;&middot;b'],
+              ['F14','1 1 1 0','(a&middot;b)&prime;','NAND','(a+b)&prime;'],
+              ['F15','1 1 1 1','1','Uno','0']
+            ].map(r=>'<tr><td style="padding:2px 6px;font-weight:600;">'+r[0]+'</td><td style="padding:2px 6px;font-family:monospace;">'+r[1]+'</td><td style="padding:2px 6px;font-family:monospace;">'+r[2]+'</td><td style="padding:2px 6px;">'+r[3]+'</td><td style="padding:2px 6px;font-family:monospace;color:var(--text-secondary);">'+r[4]+'</td></tr>').join('')}</tbody>
+          </table></div>
+          <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:6px;">El <strong>dual</strong> se obtiene intercambiando AND&harr;OR y 0&harr;1. AND/OR/NAND/NOR/XOR/XNOR son las 6 funciones &quot;utiles&quot; no triviales.</p>`
+        )}
+
+        ${tpExercise('tp5_a2', 'Ejercicio 2 &mdash; &iquest;Cual igualdad de De Morgan es correcta?',
+          `<p>(i) &#8254;(ab + a&prime;c + c&prime;b) = (a&prime;+b&prime;)(a+c&prime;)(c+b&prime;) &nbsp; (ii) (a+b&prime;+c)(a&prime;+b&prime;+c&prime;) + ab = &#8254;((a&prime;b&prime;c&prime;+abc)(a&prime;+b))</p>`,
+          `<p>Verificando por tabla de verdad las dos:</p>
+          ${tpResult('La (i) es CORRECTA (coincide en las 8 filas). La (ii) es FALSA (difiere en al menos una fila).')}
+          <p style="font-size:0.86rem;"><strong>(i)</strong> aplica De Morgan al complemento de una suma de productos: &#8254;(X+Y+Z) = X&prime;&middot;Y&prime;&middot;Z&prime;, y luego &#8254;(ab)=a&prime;+b&prime;, etc. &rarr; (a&prime;+b&prime;)(a+c&prime;)(c+b&prime;). Da exactamente lo pedido.</p>`
+        )}
+
+        ${tpExercise('tp5_a3', 'Ejercicio 3 &mdash; Convertir entre SoP y PoS',
+          `<p>a) f(a,b,c,d) = &Sigma;(4,6,7,9,11,14,15) &rarr; PoS. &nbsp; b) f(a,b,c) = &Pi;(0,2,3,6) &rarr; SoP.</p>`,
+          `<p><strong>a)</strong> 4 variables (0&hellip;15). Faltan en la &Sigma;: {0,1,2,3,5,8,10,12,13}.</p>
+          ${tpResult('a) PoS: f = &Pi;(0,1,2,3,5,8,10,12,13)')}
+          <p><strong>b)</strong> 3 variables (0&hellip;7). Faltan en la &Pi;: {1,4,5,7}.</p>
+          ${tpResult('b) SoP: f = &Sigma;(1,4,5,7)')}`
+        )}
+
+        ${tpExercise('tp5_a4', 'Ejercicio 4 &mdash; Funcion &quot;2 variables en 0&quot; (SoP por extension)',
+          `<p>Tabla de verdad y funcion canonica por extension (SoP) de una funcion de 4 variables que vale 1 cuando exactamente 2 variables valen 0.</p>`,
+          `<p>Exactamente dos 0 = exactamente dos 1. Filas: 3(0011), 5(0101), 6(0110), 9(1001), 10(1010), 12(1100).</p>
+          ${tpResult('SoP por extension: f = &Sigma;(3,5,6,9,10,12)<br>= a&prime;b&prime;cd + a&prime;bc&prime;d + a&prime;bcd&prime; + ab&prime;c&prime;d + ab&prime;cd&prime; + abc&prime;d&prime;')}
+          <p style="font-size:0.84rem;color:var(--text-secondary);">Son las C(4,2) = 6 combinaciones con exactamente dos unos.</p>`
+        )}
+
+        <div style="margin-top:24px;padding:14px;background:rgba(46,184,114,0.06);border-left:4px solid #2eb872;border-radius:6px;">
+          <strong>TP5 cerrado. Conceptos clave para el oral:</strong>
+          <ul style="margin:8px 0 0;font-size:0.9rem;">
+            <li>Canonica = todos los terminos con todas las variables (minterms en SoP, maxterms en PoS).</li>
+            <li>Para canonizar: multiplicar cada termino por (x + x&prime;) de la variable que falta.</li>
+            <li>SoP &harr; PoS: los indices de una son los que faltan en la otra.</li>
+            <li>De Morgan: &#8254;(a+b) = a&prime;b&prime; ; &#8254;(ab) = a&prime;+b&prime;. Base de implementar todo con NAND/NOR.</li>
+            <li>Absorcion a + a&prime;b = a + b ; idempotencia a + a = a ; complemento a + a&prime; = 1.</li>
+            <li>Dual: intercambiar AND&harr;OR y 0&harr;1 (no es lo mismo que complemento).</li>
           </ul>
         </div>
       `
