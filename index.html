@@ -1383,7 +1383,7 @@
       <div class="card">
         <div class="bolillero-area">
           <h2>Simulador de Bolillero</h2>
-          <p style="color:var(--text-secondary);font-size:0.85rem;margin:8px 0 16px;">En el examen salen 2 bolillas al azar. Elegis una y la expones oralmente.</p>
+          <p style="color:var(--text-secondary);font-size:0.85rem;margin:8px 0 16px;">Bolillero OFICIAL (9 bolillas, cada una con 3 unidades &mdash; Programa Analitico 2026). Salen 2 al azar, elegis 1 y expones 2-3 unidades + consultas breves del resto. Cada unidad linkea a su TP resuelto.</p>
           <button class="btn btn-primary" onclick="drawBolillas()" id="drawBtn">Sacar Bolillas</button>
           <div class="bolilla-display" id="bolillaDisplay" style="display:none;"></div>
           <div id="bolillaInstruction" style="display:none;font-size:0.85rem;color:var(--text-secondary);margin:8px 0;">Hace click en la bolilla que quieras exponer</div>
@@ -6415,25 +6415,28 @@ impar:INC SI
     // BOLILLERO TAB (Task 7)
     // ============================================================
     let drawnBolillas = [], chosenBolilla = null, bolillaRating = 0;
+    function _bolLabel(b){ return b.units.map(u=>'U'+u).join(' &middot; '); }
+    function _bolColor(b){ return 'var(--u'+b.units[0]+',#4a6fd8)'; }
     function drawBolillas() {
-      const all = BOLILLAS.map(b=>b.id);
+      const all = BOLILLERO_OFICIAL;
       const i1 = Math.floor(Math.random()*all.length);
       let i2 = Math.floor(Math.random()*(all.length-1)); if (i2>=i1) i2++;
-      drawnBolillas = [BOLILLAS[i1], BOLILLAS[i2]]; chosenBolilla = null; bolillaRating = 0;
+      drawnBolillas = [all[i1], all[i2]]; chosenBolilla = null; bolillaRating = 0;
       const d = document.getElementById('bolillaDisplay');
       d.style.display = 'flex';
-      d.innerHTML = drawnBolillas.map(b=>`<div class="bolilla-ball" style="background:${b.color};" onclick="chooseBolilla(${b.id})" id="ball-${b.id}">${b.id}<span class="ball-label">${b.subtitle}</span></div>`).join('');
+      d.innerHTML = drawnBolillas.map(b=>`<div class="bolilla-ball" style="background:${_bolColor(b)};" onclick="chooseBolilla(${b.id})" id="ball-${b.id}">${b.id}<span class="ball-label">${_bolLabel(b)}</span></div>`).join('');
       document.getElementById('bolillaInstruction').style.display = 'block';
       document.getElementById('bolillaTopics').style.display = 'none';
       document.getElementById('bolillaRating').style.display = 'none';
     }
     function chooseBolilla(id) {
-      chosenBolilla = BOLILLAS.find(b=>b.id===id);
+      chosenBolilla = BOLILLERO_OFICIAL.find(b=>b.id===id);
       drawnBolillas.forEach(b => document.getElementById('ball-'+b.id).classList.toggle('selected',b.id===id));
       document.getElementById('bolillaInstruction').style.display = 'none';
       const t = document.getElementById('bolillaTopics');
       t.style.display = 'block';
-      t.innerHTML = `<h3>Bolilla ${chosenBolilla.id}: ${chosenBolilla.subtitle}</h3><p style="font-size:0.82rem;color:var(--text-secondary);margin:8px 0;">Temas a exponer:</p><ul>${chosenBolilla.topics.map(t=>`<li>${t}</li>`).join('')}</ul>`;
+      const blocks = chosenBolilla.units.map(u=>`<div style="margin:8px 0;padding:8px 10px;border-left:3px solid var(--u${u},#4a6fd8);background:rgba(0,0,0,0.02);border-radius:4px;"><div style="font-weight:700;">U${u} &middot; ${UNIT_NAMES[u]}</div><ul style="margin:6px 0 8px 18px;">${(UNIT_TOPICS[u]||[]).map(x=>`<li>${x}</li>`).join('')}</ul><div style="font-size:0.8rem;">${tpLinksHTML([u])}</div></div>`).join('');
+      t.innerHTML = `<h3>Bolilla ${chosenBolilla.id}: ${_bolLabel(chosenBolilla)}</h3><p style="font-size:0.82rem;color:var(--text-secondary);margin:8px 0;">Expone 2-3 de estas unidades + consultas breves del resto:</p>${blocks}`;
       const r = document.getElementById('bolillaRating'); r.style.display = 'block';
       document.getElementById('bolillaStars').innerHTML = [1,2,3,4,5].map(s=>`<span class="r-star" onclick="setBolillaRating(${s})">&#9733;</span>`).join('');
       document.getElementById('saveBolillaBtn').style.display = 'none'; bolillaRating = 0;
@@ -6442,7 +6445,7 @@ impar:INC SI
     function saveBolillaRating() {
       if (!chosenBolilla||!bolillaRating) return;
       if (!data.bolilleroHistory) data.bolilleroHistory = [];
-      data.bolilleroHistory.unshift({date:new Date().toLocaleString('es-AR'),drawn:drawnBolillas.map(b=>b.id),chosen:chosenBolilla.id,chosenName:chosenBolilla.subtitle,rating:bolillaRating});
+      data.bolilleroHistory.unshift({date:new Date().toLocaleString('es-AR'),drawn:drawnBolillas.map(b=>b.id),chosen:chosenBolilla.id,chosenName:_bolLabel(chosenBolilla),rating:bolillaRating});
       saveData(); renderBolilleroHistory(); document.getElementById('saveBolillaBtn').style.display='none';
     }
     function renderBolilleroHistory() {
@@ -6453,14 +6456,14 @@ impar:INC SI
       const w = document.getElementById('weakBolillas');
       if (hist.length < 2) { w.innerHTML = '<p style="font-size:0.85rem;color:var(--text-secondary);padding:8px;">Necesitas 2+ simulacros para estadisticas.</p>'; return; }
       const stats = {};
-      BOLILLAS.forEach(b=>{stats[b.id]={total:0,sum:0};});
+      BOLILLERO_OFICIAL.forEach(b=>{stats[b.id]={total:0,sum:0};});
       hist.forEach(h=>{if(stats[h.chosen]){stats[h.chosen].total++;stats[h.chosen].sum+=h.rating;}});
       const sorted = Object.entries(stats).filter(([_,v])=>v.total>0).map(([id,v])=>({id:parseInt(id),avg:v.sum/v.total,total:v.total})).sort((a,b)=>a.avg-b.avg);
       if (!sorted.length) { w.innerHTML = '<p style="font-size:0.85rem;color:var(--text-secondary);">Sin datos.</p>'; return; }
       w.innerHTML = sorted.map(s=>{
-        const b = BOLILLAS.find(bl=>bl.id===s.id);
+        const b = BOLILLERO_OFICIAL.find(bl=>bl.id===s.id);
         const color = s.avg<3?'var(--danger)':s.avg<4?'var(--warning)':'var(--success)';
-        return `<div style="display:flex;align-items:center;gap:12px;padding:8px;margin:4px 0;border-radius:8px;background:#fafbfc;"><div style="width:40px;height:40px;border-radius:50%;background:${b.color};color:white;display:flex;align-items:center;justify-content:center;font-weight:800;">${b.id}</div><div style="flex:1;"><div style="font-weight:600;font-size:0.85rem;">${b.subtitle}</div><div style="font-size:0.75rem;color:var(--text-secondary);">${s.total} intento(s)</div></div><div style="font-weight:700;color:${color};font-size:1.1rem;">${s.avg.toFixed(1)} &#9733;</div></div>`;
+        return `<div style="display:flex;align-items:center;gap:12px;padding:8px;margin:4px 0;border-radius:8px;background:#fafbfc;"><div style="width:40px;height:40px;border-radius:50%;background:${_bolColor(b)};color:white;display:flex;align-items:center;justify-content:center;font-weight:800;">${b.id}</div><div style="flex:1;"><div style="font-weight:600;font-size:0.85rem;">Bolilla ${b.id}: ${_bolLabel(b)}</div><div style="font-size:0.75rem;color:var(--text-secondary);">${s.total} intento(s)</div></div><div style="font-weight:700;color:${color};font-size:1.1rem;">${s.avg.toFixed(1)} &#9733;</div></div>`;
       }).join('');
     }
 
