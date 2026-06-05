@@ -9830,12 +9830,17 @@ t1:   inc si          ; avanzar origen (siempre)
 
     // Muestra una palabra de punto flotante con signo(rojo)/exponente(azul)/mantisa(verde)
     function pfBits(sign, exp, mant, note) {
-      return '<div style="overflow-x:auto;margin:4px 0;"><code style="font-family:monospace;font-size:0.92rem;white-space:nowrap;letter-spacing:0.5px;">' +
-        '<span style="color:#ee5a6f;font-weight:700;">' + sign + '</span> ' +
-        '<span style="color:#4a6fd8;font-weight:700;">' + exp + '</span> ' +
-        '<span style="color:#2eb872;font-weight:700;">' + mant + '</span>' +
-        (note ? '<span style="color:var(--text-secondary);font-weight:400;font-family:inherit;">  &nbsp;' + note + '</span>' : '') +
-        '</code></div>';
+      // Los bits van en <code> (monoespaciado). La nota va FUERA del <code>: KaTeX
+      // ignora por diseno los <code>/<pre> (ignoredTags), asi que adentro el \(..\)
+      // se veria crudo. Afuera, typesetMath() la renderiza bien.
+      return '<div style="overflow-x:auto;margin:4px 0;white-space:nowrap;">' +
+        '<code style="font-family:monospace;font-size:0.92rem;letter-spacing:0.5px;">' +
+          '<span style="color:#ee5a6f;font-weight:700;">' + sign + '</span> ' +
+          '<span style="color:#4a6fd8;font-weight:700;">' + exp + '</span> ' +
+          '<span style="color:#2eb872;font-weight:700;">' + mant + '</span>' +
+        '</code>' +
+        (note ? '<span style="color:var(--text-secondary);font-weight:400;margin-left:10px;">' + note + '</span>' : '') +
+        '</div>';
     }
 
     // ===== Helpers de presentacion profesional (Karnaugh, matematica, impresion) =====
