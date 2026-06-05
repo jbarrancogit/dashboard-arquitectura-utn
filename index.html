@@ -1408,6 +1408,10 @@
       <div class="card">
         <h2>Modo Examen</h2>
         <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:16px;">Practica como si fuera el examen real. Elegi un modo:</p>
+        <button class="quiz-mode-btn" id="modeMesaBtn" onclick="startMesa()" style="width:100%;margin-bottom:12px;border:2px solid var(--accent-primary,#ee5a6f);background:rgba(238,90,111,0.04);text-align:left;">
+          <h3>&#127891; Simulacro de Mesa Completa <span style="font-size:0.66rem;background:var(--accent-primary,#ee5a6f);color:#fff;padding:2px 8px;border-radius:10px;vertical-align:middle;letter-spacing:0.5px;">NUEVO</span></h3>
+          <p>El flujo REAL de la mesa: 1 ejercicio de admision (al azar de los 89, con la distribucion real por unidad) &rarr; 2 bolillas oficiales, elegis 1 &rarr; exposicion oral. Con la solucion y los TPs resueltos linkeados en cada paso, y cronometro de 15 min en la admision.</p>
+        </button>
         <div class="quiz-mode-selector">
           <button class="quiz-mode-btn" id="modeAdmBtn" onclick="startQuizMode('admission')">
             <h3>Simulacro de Admision</h3>
@@ -2855,6 +2859,25 @@ ADD AX, BX"></textarea>
         topics: ['Modulo E/S: funciones y diagrama','E/S programada (polling)','E/S por interrupciones','DMA: funcionamiento','Interface serie vs paralela','Buses estandar: PCI, PCIe, USB, SATA'] },
     ];
 
+    // Bolillero OFICIAL (Programa Analitico 2026, pto 8): 9 bolillas, cada una con 3 unidades tematicas.
+    const BOLILLERO_OFICIAL = [
+      { id:1, units:[1,5,7] }, { id:2, units:[2,3,6] }, { id:3, units:[3,4,5] },
+      { id:4, units:[1,2,5] }, { id:5, units:[2,4,6] }, { id:6, units:[3,5,7] },
+      { id:7, units:[2,5,6] }, { id:8, units:[1,4,7] }, { id:9, units:[3,6,7] }
+    ];
+    // Unidad -> TPs resueltos en el dashboard (de TPS_META). U6 y U7 son teoria pura (sin TP de practica).
+    const UNIT_TPS = { 1:['TP1','TP2','TP3','TP4'], 2:['TP5','TP6','TP7','TP8'], 3:['TP9'], 4:['TP10'], 5:['TP11','TP12','TP13'], 6:[], 7:[] };
+    // Temas de exposicion oral por unidad (derivados de los topics de BOLILLAS; U2 = Boole+combinacionales + secuenciales).
+    const UNIT_TOPICS = {
+      1: BOLILLAS[0].topics,
+      2: BOLILLAS[1].topics.concat(BOLILLAS[2].topics),
+      3: BOLILLAS[3].topics,
+      4: BOLILLAS[4].topics,
+      5: BOLILLAS[5].topics,
+      6: BOLILLAS[6].topics,
+      7: BOLILLAS[7].topics
+    };
+
     // ============================================================
     // QUIZ QUESTIONS - MOODLE MODE (Task 7)
     // ============================================================
@@ -3860,7 +3883,7 @@ HLT</pre>` },
 21 - 5 = 16 (R=3)
 16 - 7 = 9 (R=4)
  9 - 9 = 0 (R=5) &rarr; sqrt(25) = 5</pre>` },
-  { id:62, unit:5, desc:"Duplicar instrucciones manteniendo longitud de palabra", fullDesc:`Suponga que la Blue debe ser dotada del doble de instrucciones. ¿Cómo modificaría la estructura de la palabra, manteniendo su longitud con dicho objeto? ¿Cuántas palabras pueden direccionarse directamente según su propuesta?.`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Duplicar instrucciones manteniendo longitud de palabra:</b><br><br>
+  { id:62, unit:4, desc:"Duplicar instrucciones de la Blue manteniendo longitud de palabra", fullDesc:`Suponga que la Blue debe ser dotada del doble de instrucciones. ¿Cómo modificaría la estructura de la palabra, manteniendo su longitud con dicho objeto? ¿Cuántas palabras pueden direccionarse directamente según su propuesta?.`, why:`Estructura de palabra de la Maquina Elemental (Blue): opcode vs direccion. Tema clasico de admision de U4.`, solution:`<b>Duplicar instrucciones manteniendo longitud de palabra:</b><br><br>
 La Blue tiene 18 bits: 3 bits opcode (8 instrucciones) + 15 bits direccion (32K).<br><br>
 Para <b>duplicar instrucciones</b> (16 instrucciones), necesitamos 4 bits de opcode.<br>
 Si mantenemos 18 bits: 4 bits opcode + 14 bits direccion.<br><br>
@@ -3869,7 +3892,7 @@ Si mantenemos 18 bits: 4 bits opcode + 14 bits direccion.<br><br>
 - Direccion: 14 bits &rarr; 2<sup>14</sup> = <b>16K palabras</b> direccionables directamente<br>
 - Se pierde la mitad del espacio de direccionamiento (de 32K a 16K)<br><br>
 <b>Alternativa:</b> Usar instrucciones de longitud variable o paginas de memoria.` },
-  { id:63, unit:5, desc:"Agregar direccionamiento directo e indirecto", fullDesc:`Suponga que la Blue debe ser dotada de direccionamiento directo e indirecto, usando las mismas instrucciones de referencia a memoria. ¿Cómo modificaría la estructura de la palabra, manteniendo su longitud con dicho objeto?<br>¿Cuántas palabras pueden direccionarse directamente e indirectamente según su propuesta?`, why:`Assembler 8088 conecta hardware con software. Muchos ejercicios de admision son de aca.`, solution:`<b>Direccionamiento directo e indirecto:</b><br><br>
+  { id:63, unit:4, desc:"Agregar direccionamiento directo e indirecto a la Blue", fullDesc:`Suponga que la Blue debe ser dotada de direccionamiento directo e indirecto, usando las mismas instrucciones de referencia a memoria. ¿Cómo modificaría la estructura de la palabra, manteniendo su longitud con dicho objeto?<br>¿Cuántas palabras pueden direccionarse directamente e indirectamente según su propuesta?`, why:`Modos de direccionamiento de la Maquina Elemental (Blue). Tema clasico de admision de U4.`, solution:`<b>Direccionamiento directo e indirecto:</b><br><br>
 Se agrega 1 bit de modo (I): I=0 directo, I=1 indirecto.<br><br>
 <b>Nueva estructura (18 bits):</b> 3 bits opcode + 1 bit I + 14 bits direccion<br><br>
 <b>Directo (I=0):</b> Operando en Mem[direccion] &rarr; 2<sup>14</sup> = <b>16K posiciones</b><br>
@@ -6518,12 +6541,178 @@ impar:INC SI
       data.quizHistory.unshift({date:new Date().toLocaleString('es-AR'),type:'moodle',correct,total:moodleQuestions.length,pct,elapsed});
       saveData(); renderQuizHistory();
     }
-    function cancelQuiz() { stopQuizTimer(); document.getElementById('quizArea').innerHTML = ''; }
+    function cancelQuiz() { stopQuizTimer(); var b=document.getElementById('modeMesaBtn'); if(b) b.classList.remove('active'); document.getElementById('quizArea').innerHTML = ''; }
+
+    // ============================================================
+    // SIMULADOR DE MESA COMPLETA
+    // Encadena el flujo real: admision (1 ej. al azar de los 89, distribucion
+    // real emergente) -> bolillero oficial (2 de 9, elegis 1) -> oral, con
+    // solucion + TPs linkeados en cada paso. Reusa EXERCISES / TPS_META.
+    // ============================================================
+    var mesaState = null;
+
+    function openTP(tpId){ navigateTo('tps'); setActiveTP(tpId); }
+
+    function tpLinksHTML(units){
+      var seen={}, btns=[];
+      units.forEach(function(u){
+        (UNIT_TPS[u]||[]).forEach(function(tp){
+          if(seen[tp]) return; seen[tp]=1;
+          var meta=TPS_META.find(function(t){return t.id===tp;});
+          btns.push('<button onclick="openTP(\'' + tp + '\')" style="margin:3px;background:var(--u'+u+',#4a6fd8);color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:0.8rem;cursor:pointer;font-weight:600;">'+tp+': '+(meta?meta.title:tp)+'</button>');
+        });
+      });
+      if(!btns.length) return '<span style="color:var(--text-secondary);font-size:0.85rem;">Teoria pura (sin TP de practica): estudiar del libro / Active Recall.</span>';
+      return btns.join('');
+    }
+
+    function startMesa(){
+      quizMode='mesa';
+      var a=document.getElementById('modeAdmBtn'); if(a) a.classList.remove('active');
+      var m=document.getElementById('modeMoodleBtn'); if(m) m.classList.remove('active');
+      var x=document.getElementById('modeMesaBtn'); if(x) x.classList.add('active');
+      var ex=EXERCISES[Math.floor(Math.random()*EXERCISES.length)];
+      mesaState={ ex:ex, exResult:null, bolillas:null, chosen:null, oralResult:null, elapsed:0 };
+      quizSeconds=15*60;
+      renderMesaAdmission();
+      startQuizTimer();
+    }
+
+    function renderMesaAdmission(){
+      var ex=mesaState.ex, area=document.getElementById('quizArea');
+      area.innerHTML=
+        '<div class="card">'+
+          '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">'+
+            '<h3 style="margin:0;">&#127891; Mesa &mdash; Paso 1: Admision</h3>'+
+            '<span style="background:var(--u'+ex.unit+',#4a6fd8);color:#fff;padding:3px 10px;border-radius:12px;font-size:0.76rem;font-weight:600;">U'+ex.unit+' &middot; '+UNIT_NAMES[ex.unit]+'</span>'+
+          '</div>'+
+          '<p style="font-size:0.82rem;color:var(--text-secondary);margin:6px 0 12px;">1 ejercicio al azar de los 89 de gabinete (igual que en la mesa). Es el filtro: si no lo pasas, no hay oral.</p>'+
+          '<div class="quiz-timer" id="quizTimerDisplay">15:00</div>'+
+          '<div class="quiz-question"><h4>Ejercicio '+ex.id+'</h4><p style="font-size:1rem;line-height:1.6;">'+(ex.fullDesc||ex.desc)+'</p></div>'+
+          '<p style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin:12px 0;">Resolvelo en papel (iPad). Cuando termines, marca como te fue.</p>'+
+          '<div style="text-align:center;"><button class="btn btn-primary" onclick="mesaFinishAdmission()">Termine el ejercicio</button>'+
+          '<button class="btn btn-secondary" style="margin-left:8px;" onclick="cancelQuiz()">Cancelar mesa</button></div>'+
+        '</div>';
+      typesetMath(area);
+    }
+
+    function mesaFinishAdmission(){
+      stopQuizTimer();
+      mesaState.elapsed=15*60-quizSeconds;
+      var e=mesaState.elapsed, area=document.getElementById('quizArea');
+      area.innerHTML=
+        '<div class="card">'+
+          '<h3>&#127891; Mesa &mdash; Admision: autoevaluacion</h3>'+
+          '<p style="margin:10px 0;">Tiempo usado: '+Math.floor(e/60)+':'+String(e%60).padStart(2,'0')+'</p>'+
+          '<p style="font-weight:600;">Lo resolviste bien?</p>'+
+          '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0;">'+
+            '<button class="btn btn-primary" style="background:var(--success);" onclick="mesaSetAdmission(\'si\')">Si</button>'+
+            '<button class="btn btn-primary" style="background:var(--warning);" onclick="mesaSetAdmission(\'parcial\')">Parcialmente</button>'+
+            '<button class="btn btn-primary" style="background:var(--danger);" onclick="mesaSetAdmission(\'no\')">No</button>'+
+          '</div>'+
+        '</div>';
+    }
+
+    function mesaSetAdmission(result){
+      mesaState.exResult=result;
+      var ex=mesaState.ex, area=document.getElementById('quizArea');
+      var verdict = result==='si' ? '<span style="color:var(--success);font-weight:700;">Admision superada</span>'
+                  : result==='parcial' ? '<span style="color:var(--warning);font-weight:700;">Parcial &mdash; repasa la solucion</span>'
+                  : '<span style="color:var(--danger);font-weight:700;">No superada &mdash; clave: dominar este tipo de ejercicio</span>';
+      area.innerHTML=
+        '<div class="card">'+
+          '<h3>&#128221; Solucion &mdash; Ejercicio '+ex.id+' (U'+ex.unit+')</h3>'+
+          '<p style="margin:6px 0;">'+verdict+'</p>'+
+          '<details open style="margin:10px 0;"><summary style="cursor:pointer;font-weight:600;">Ver solucion completa</summary>'+
+            '<div style="margin-top:10px;font-size:0.92rem;line-height:1.6;">'+(ex.solution||'(sin solucion cargada para este ejercicio)')+'</div>'+
+          '</details>'+
+          '<div style="margin:12px 0;padding:10px 12px;background:rgba(74,111,216,0.06);border-radius:6px;">'+
+            '<div style="font-size:0.82rem;font-weight:600;margin-bottom:6px;">Practica este tipo en:</div>'+tpLinksHTML([ex.unit])+
+          '</div>'+
+          '<div style="text-align:center;margin-top:14px;"><button class="btn btn-primary" onclick="mesaDrawBolillas()">Continuar al oral &rarr;</button></div>'+
+        '</div>';
+      typesetMath(area);
+    }
+
+    function mesaDrawBolillas(){
+      var ids=[]; while(ids.length<2){ var r=Math.floor(Math.random()*9); if(ids.indexOf(r)<0) ids.push(r); }
+      mesaState.bolillas=[BOLILLERO_OFICIAL[ids[0]], BOLILLERO_OFICIAL[ids[1]]];
+      mesaState.chosen=null;
+      renderMesaBolillas();
+    }
+
+    function renderMesaBolillas(){
+      var bs=mesaState.bolillas, area=document.getElementById('quizArea');
+      function card(b){
+        var chosen=mesaState.chosen===b.id;
+        var chips=b.units.map(function(u){return '<span style="background:var(--u'+u+',#4a6fd8);color:#fff;padding:2px 8px;border-radius:10px;font-size:0.74rem;margin:2px;display:inline-block;">U'+u+' '+UNIT_NAMES[u]+'</span>';}).join(' ');
+        return '<div onclick="mesaChoose('+b.id+')" style="flex:1;min-width:240px;cursor:pointer;border:2px solid '+(chosen?'var(--accent-primary,#ee5a6f)':'rgba(0,0,0,0.12)')+';border-radius:10px;padding:14px;background:'+(chosen?'rgba(238,90,111,0.05)':'transparent')+';">'+
+          '<div style="font-weight:700;font-size:1.05rem;margin-bottom:8px;">Bolilla '+b.id+(chosen?' &#10003;':'')+'</div>'+chips+'</div>';
+      }
+      area.innerHTML=
+        '<div class="card">'+
+          '<h3>&#127908; Mesa &mdash; Paso 2: Oral (bolillero oficial)</h3>'+
+          '<p style="font-size:0.82rem;color:var(--text-secondary);margin:6px 0 12px;">Salieron 2 de las 9 bolillas oficiales. Elegi la que mejor domines. Despues exponunes 2-3 unidades + consultas breves del resto.</p>'+
+          '<div style="display:flex;gap:12px;flex-wrap:wrap;">'+card(bs[0])+card(bs[1])+'</div>'+
+          '<div id="mesaOralDetail"></div>'+
+        '</div>';
+    }
+
+    function mesaChoose(id){
+      mesaState.chosen=id;
+      renderMesaBolillas();
+      var b=mesaState.bolillas.find(function(x){return x.id===id;});
+      var blocks=b.units.map(function(u){
+        var topics=(UNIT_TOPICS[u]||[]).map(function(t){return '<li>'+t+'</li>';}).join('');
+        return '<div style="margin:10px 0;padding:10px 12px;border-left:3px solid var(--u'+u+',#4a6fd8);background:rgba(0,0,0,0.02);border-radius:4px;">'+
+          '<div style="font-weight:700;">U'+u+' &middot; '+UNIT_NAMES[u]+'</div>'+
+          '<ul style="margin:6px 0 8px 18px;font-size:0.88rem;line-height:1.5;">'+topics+'</ul>'+
+          '<div style="font-size:0.8rem;">'+tpLinksHTML([u])+'</div>'+
+        '</div>';
+      }).join('');
+      var det=document.getElementById('mesaOralDetail');
+      det.innerHTML=
+        '<div style="margin-top:14px;">'+
+          '<h4>Bolilla '+id+' &mdash; expones estos temas:</h4>'+blocks+
+          '<p style="font-weight:600;margin-top:14px;">Como te salio la exposicion oral?</p>'+
+          '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0;">'+
+            '<button class="btn btn-primary" style="background:var(--success);" onclick="mesaSetOral(\'si\')">Solido</button>'+
+            '<button class="btn btn-primary" style="background:var(--warning);" onclick="mesaSetOral(\'parcial\')">Con huecos</button>'+
+            '<button class="btn btn-primary" style="background:var(--danger);" onclick="mesaSetOral(\'no\')">Floja</button>'+
+          '</div>'+
+        '</div>';
+    }
+
+    function _mesaAdmLabel(r){ return r==='si'?'superada':r==='parcial'?'parcial':'no superada'; }
+    function _mesaOralLabel(r){ return r==='si'?'solido':r==='parcial'?'con huecos':'flojo'; }
+
+    function mesaSetOral(result){
+      mesaState.oralResult=result;
+      var ex=mesaState.ex, adm=mesaState.exResult, area=document.getElementById('quizArea');
+      var pass=(adm==='si'||adm==='parcial')&&(result==='si'||result==='parcial');
+      var msg, color;
+      if(adm==='no'){ msg='No pasarias la admision: sin oral. Foco en dominar U'+ex.unit+'.'; color='var(--danger)'; }
+      else if(pass&&adm==='si'&&result==='si'){ msg='Mesa aprobada con holgura. Asi se rinde.'; color='var(--success)'; }
+      else if(pass){ msg='Aprobarias, pero con huecos. Reforza lo que quedo flojo.'; color='var(--warning)'; }
+      else { msg='Oral flojo: repasa la bolilla elegida.'; color='var(--warning)'; }
+      if(!data.mesaHistory) data.mesaHistory=[];
+      data.mesaHistory.unshift({date:new Date().toLocaleString('es-AR'), exId:ex.id, unit:ex.unit, adm:adm, bolilla:mesaState.chosen, oral:result, elapsed:mesaState.elapsed||0});
+      saveData();
+      var resultCard=
+        '<div class="card" style="text-align:center;border:2px solid '+color+';">'+
+          '<h2 style="color:'+color+';margin:6px 0;font-size:1.15rem;">'+msg+'</h2>'+
+          '<p style="font-size:0.9rem;">Admision Ej'+ex.id+' (U'+ex.unit+'): <b>'+_mesaAdmLabel(adm)+'</b> &nbsp;|&nbsp; Oral Bolilla '+mesaState.chosen+': <b>'+_mesaOralLabel(result)+'</b></p>'+
+          '<button class="btn btn-primary" style="margin-top:12px;" onclick="startMesa()">Tirar otra mesa</button>'+
+          '<button class="btn btn-secondary" style="margin-left:8px;margin-top:12px;" onclick="cancelQuiz()">Terminar</button>'+
+        '</div>';
+      area.insertAdjacentHTML('afterbegin', resultCard);
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
     function startQuizTimer() {
       stopQuizTimer();
       quizTimer = setInterval(() => {
         quizSeconds--;
-        if (quizSeconds <= 0) { stopQuizTimer(); if (quizMode==='moodle') submitMoodle(); }
+        if (quizSeconds <= 0) { stopQuizTimer(); if (quizMode==='moodle') submitMoodle(); else if (quizMode==='mesa' && mesaState && !mesaState.exResult) mesaFinishAdmission(); }
         const m = Math.floor(quizSeconds/60), s = quizSeconds%60;
         const el = document.getElementById('quizTimerDisplay');
         if (el) {
