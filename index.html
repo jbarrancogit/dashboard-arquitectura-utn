@@ -1164,6 +1164,10 @@
       #section-tps table { font-size: 0.82rem !important; }
     }
   </style>
+  <!-- KaTeX: tipografia matematica de nivel libro (Karnaugh, algebra, punto flotante) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -7876,231 +7880,180 @@ bc   -> con a,d libres aporta m6,m7</pre>
           </ul>
         </div>
       `,
-      TP6: `        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.9rem;">
-          <strong>Conceptos clave:</strong> el mapa de Karnaugh ordena la tabla de verdad en codigo Gray (un solo bit cambia entre celdas adyacentes) para que los terminos adyacentes se agrupen visualmente. Cada grupo de 2<sup>k</sup> unos adyacentes (1, 2, 4, 8&hellip;) elimina k variables. La <strong>suma de productos (SoP)</strong> agrupa los <strong>1</strong>; el <strong>producto de sumas (PoS)</strong> agrupa los <strong>0</strong> (cada grupo de ceros da un factor suma, con la variable complementada respecto de la lectura de SoP). Un <strong>implicante primo</strong> es un grupo que no puede agrandarse; es <strong>esencial</strong> si cubre al menos un 1 que ningun otro implicante primo cubre. Las <strong>condiciones indiferentes (don&prime;t care, X)</strong> se usan como 1 o como 0 segun convenga para agrandar grupos. El metodo numerico de <strong>Quine&ndash;McCluskey</strong> hace lo mismo de forma tabular cuando hay muchas variables. Convencion de la catedra: variables a (mas significativa) &hellip; d (menos significativa); el indice del minitermino es el valor binario abcd.</div>
-        <div style="margin-bottom:16px;padding:10px 14px;background:rgba(238,90,111,0.06);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.86rem;">
-          <strong>Nota de verificacion:</strong> todas las minimizaciones de esta guia se comprobaron con un script en Node que compara fila por fila la tabla de verdad de la funcion original (miniterminos &Sigma;) contra la SoP y la PoS minimizadas en las 16 (o 8) combinaciones. Las que llevan don&prime;t care se verificaron ignorando esas filas. Resultado: coincidencia total.</div>
+      TP6: `
+        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:8px;font-size:0.92rem;line-height:1.55;">
+          <strong>Conceptos clave.</strong> El mapa de Karnaugh ordena la tabla de verdad en <strong>codigo Gray</strong> (entre celdas vecinas cambia un solo bit) para que los terminos adyacentes queden juntos. Un grupo de \\(2^{k}\\) unos adyacentes elimina \\(k\\) variables. La <strong>suma de productos</strong> \\(\\big(\\text{SoP}\\big)\\) agrupa los \\(1\\); el <strong>producto de sumas</strong> \\(\\big(\\text{PoS}\\big)\\) agrupa los \\(0\\) y cada grupo se lee con las variables complementadas. Un <strong>implicante primo</strong> es un grupo que no puede agrandarse; es <strong>esencial</strong> si cubre un \\(1\\) que ningun otro grupo cubre. Las <strong>condiciones indiferentes</strong> \\(\\big(\\text{don't care, } \\times\\big)\\) se usan como \\(1\\) o \\(0\\) segun convenga. Convencion de la catedra: \\(a\\) es la variable mas significativa y \\(d\\) la menos significativa; el indice del mintermino es el valor binario \\(abcd\\).
+        </div>
+        <div style="margin-bottom:18px;padding:10px 14px;background:rgba(46,184,114,0.07);border-left:3px solid #2eb872;border-radius:8px;font-size:0.86rem;">
+          <strong>Verificacion.</strong> Todas las minimizaciones se comprobaron con un script en Node que aplica Quine&ndash;McCluskey y luego compara, fila por fila, la tabla de verdad original contra la SoP y la PoS en las \\(16\\) (o \\(8\\)) combinaciones, ignorando las filas <em>don't care</em>. Resultado: coincidencia total.
+        </div>
 
-        <h4 style="margin:18px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver en clase</h4>
+        <h4 style="margin:22px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver en clase</h4>
 
-        ${tpExercise('tp6_e1', 'Ejercicio 1 &mdash; Minimizar las canonicas del TP de Algebra',
-          `<p>Minimizar por Karnaugh las funciones expresadas en forma canonica por extension del <strong>Ejercicio 2 del practico anterior</strong> (Algebra de Boole). Aquellas eran expresiones que ya simplificamos algebraicamente; aqui las llevamos a su forma canonica (todos sus miniterminos) y las minimizamos con el mapa para confirmar el resultado.</p>`,
-          `<p>La consigna remite a las dos funciones del Ej. 2 de Algebra de Boole, cuyas simplificaciones algebraicas conocidas fueron <code>f(p,q,r)=p+qr</code> y la de cuatro variables. El metodo es el mismo: se arma la tabla de verdad, se vuelcan los 1 al mapa y se agrupa.</p>
-          <p><strong>a) f(p,q,r)=&Sigma;(3,4,5,6,7)</strong> (canonica de <code>p+qr</code>: vale 1 cuando p=1 &mdash; miniterminos 4,5,6,7 &mdash; o cuando q=r=1 &mdash; miniterminos 3 y 7).</p>
-          <pre>          q r
-   p \\    00  01  11  10
-   0  |   0   0   1   0
-   1  |   1   1   1   1
-        \\____ p ____/   \\_ qr _/  (la columna 11 cubre m3 y m7)</pre>
-          <p>Grupo de la fila p=1 (cuatro celdas) &rarr; <code>p</code>. Columna qr=11 (celdas m3,m7) &rarr; <code>qr</code>.</p>
-          ${tpResult('f(p,q,r) = p + q&middot;r &nbsp; (SoP minima, confirma la simplificacion algebraica del TP anterior)')}
-          <p><strong>b)</strong> La segunda funcion del Ej. 2 de Algebra (cuatro variables) se minimiza identicamente: se vuelca su tabla de verdad al mapa de 4 variables y se agrupan los unos en bloques de 8/4/2. El procedimiento detallado de un caso de 4 variables esta resuelto integramente en el Ejercicio 2.b siguiente, que sirve de modelo.</p>
-          <div style="margin-top:8px;padding:8px 12px;background:rgba(238,90,111,0.06);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata de la guia / OCR:</strong> el enunciado original de las funciones del Ej. 2 de Algebra aparece con simbolos de complemento ilegibles en el PDF escaneado, por lo que el caso (b) se reconstruye a partir de su simplificacion conocida. El metodo (tabla &rarr; mapa &rarr; agrupacion) es el indicado y se ilustra completo en los ejercicios siguientes.</div>`
+        ${tpExercise('tp6_e1', 'Ejercicio 1 &mdash; Minimizar las canonicas del practico de Algebra',
+          `<p>Minimizar por Karnaugh las funciones del <strong>Ejercicio 2 del practico anterior</strong> (Algebra de Boole), llevadas a su forma canonica por extension.</p>`,
+          `<p>La consigna remite a las funciones cuya simplificacion algebraica conocida era \\(f(p,q,r)=p+qr\\). Su forma canonica vale \\(1\\) cuando \\(p=1\\) (minterminos \\(4,5,6,7\\)) o cuando \\(q=r=1\\) (minterminos \\(3,7\\)): \\(f=\\Sigma(3,4,5,6,7)\\).</p>
+          ${kmap(['p'],['q','r'], {3:1,4:1,5:1,6:1,7:1}, [
+            {cells:[4,5,6,7], label:'\\\\(p\\\\)'},
+            {cells:[3,7], label:'\\\\(q\\\\,r\\\\)'}
+          ], 'Fila \\\\(p=1\\\\): grupo de 4 &rarr; \\\\(p\\\\). Columna \\\\(qr=11\\\\): grupo de 2 &rarr; \\\\(q r\\\\).')}
+          ${tpResult('\\\\(f(p,q,r) = p + q\\\\,r\\\\) &nbsp; (confirma la simplificacion algebraica del practico anterior)')}
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata / OCR:</strong> la segunda funcion del Ej. 2 de Algebra aparece con los complementos ilegibles en el PDF escaneado. El metodo &mdash; tabla &rarr; mapa &rarr; agrupacion &mdash; es el mismo y queda ilustrado completo en el Ejercicio 2.b.</div>`
         )}
 
-        ${tpExercise('tp6_e2', 'Ejercicio 2 &mdash; Minimizar canonicas por comprension (SoP y PoS)',
-          `<p>Minimizar por Karnaugh las siguientes funciones dadas por comprension:</p>
-          <p><code>a) f(a,b,c) = &Sigma;<sub>3</sub>(0,2,5,7)</code><br>
-          <code>b) f(a,b,c,d) = &Sigma;<sub>4</sub>(1,4,5,7,8,10,11,14,15)</code></p>`,
-          `<p><strong>a) f(a,b,c)=&Sigma;(0,2,5,7).</strong> Mapa de 3 variables (filas a, columnas bc en Gray):</p>
-          <pre>          b c
-   a \\    00  01  11  10
-   0  |    1   0   0   1     <- m0(000), m2(010)
-   1  |    0   1   1   0     <- m5(101), m7(111)</pre>
-          <p><u>SoP (agrupando 1):</u> m0+m2 estan en la fila a=0 con c=0 &rarr; <code>a&prime;c&prime;</code>. m5+m7 estan en la fila a=1 con c=1 &rarr; <code>ac</code>. Ambos son implicantes primos esenciales.</p>
-          <pre>          b c
-   a \\    00  01  11  10
-   0  |   [1]  0   0  [1]    grupo a'c' (columnas bc=00 y 10, c=0)
-   1  |    0  [1] [1]  0     grupo ac</pre>
-          ${tpResult('SoP: f = a&prime;&middot;c&prime; + a&middot;c')}
-          <p><u>PoS (agrupando 0):</u> ceros en m1(001), m3(011), m4(100), m6(110). m1+m3 &rarr; a=0,c=1, el factor lleva las variables complementadas: <code>(a+c&prime;)</code>. m4+m6 &rarr; a=1,c=0 &rarr; <code>(a&prime;+c)</code>.</p>
-          ${tpResult('PoS: f = (a + c&prime;)&middot;(a&prime; + c)')}
-          <p>Observacion: f = a&prime;c&prime; + ac es el complemento del XOR de a y c, es decir <code>f = (a &oplus; c)&prime;</code> (XNOR de a y c, independiente de b).</p>
-          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.2);margin:14px 0;">
-          <p><strong>b) f(a,b,c,d)=&Sigma;(1,4,5,7,8,10,11,14,15).</strong> Mapa de 4 variables (filas ab, columnas cd en Gray):</p>
-          <pre>            c d
-   a b \\   00   01   11   10        indice de cada celda
-   00  |    0    1    0    0        0   1   3   2
-   01  |    1    1    1    0        4   5   7   6
-   11  |    0    0    1    1       12  13  15  14
-   10  |    1    0    1    1        8   9  11  10</pre>
-          <p><u>SoP (agrupando 1).</u> Implicantes primos hallados (verificados con Quine&ndash;McCluskey):</p>
-          <table style="border-collapse:collapse;font-size:0.82rem;margin:6px 0;">
-            <tr><th style="padding:3px 8px;">Grupo</th><th style="padding:3px 8px;">Celdas (miniterminos)</th><th style="padding:3px 8px;">Termino</th></tr>
-            <tr><td style="padding:2px 8px;">par horizontal</td><td style="padding:2px 8px;">1, 5</td><td style="padding:2px 8px;color:#2eb872;">a&prime;c&prime;d</td></tr>
-            <tr><td style="padding:2px 8px;">par horizontal</td><td style="padding:2px 8px;">4, 5</td><td style="padding:2px 8px;color:#2eb872;">a&prime;bc&prime;</td></tr>
-            <tr><td style="padding:2px 8px;">par horizontal</td><td style="padding:2px 8px;">5, 7</td><td style="padding:2px 8px;color:#2eb872;">a&prime;bd</td></tr>
-            <tr><td style="padding:2px 8px;">par (8,10)</td><td style="padding:2px 8px;">8, 10</td><td style="padding:2px 8px;color:#2eb872;">ab&prime;d&prime;</td></tr>
-            <tr><td style="padding:2px 8px;">cuarteto</td><td style="padding:2px 8px;">10, 11, 14, 15</td><td style="padding:2px 8px;color:#2eb872;">ac</td></tr>
-          </table>
-          <p>El cuarteto <code>ac</code> (filas ab=11 y ab=10, columnas cd=11 y 10) cubre m10,m11,m14,m15. Para m1,m4,m7,m8 hacen falta los pares restantes.</p>
-          ${tpResult('SoP: f = a&middot;c + a&prime;&middot;c&prime;&middot;d + a&prime;&middot;b&middot;c&prime; + a&prime;&middot;b&middot;d + a&middot;b&prime;&middot;d&prime;')}
-          <p><u>PoS (agrupando 0).</u> Ceros en 0,2,3,6,9,12,13. Implicantes primos del complemento &rarr; factores suma:</p>
-          ${tpResult('PoS: f = (a + b + d)&middot;(a + b + c&prime;)&middot;(a + c&prime; + d)&middot;(a&prime; + c + d&prime;)&middot;(a&prime; + b&prime; + c)')}
-          <div style="margin-top:8px;padding:8px 12px;background:rgba(238,90,111,0.06);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata de la guia:</strong> el PDF muestra para este inciso una PoS escaneada del estilo <code>(b+d)(a+b+d&prime;)(b&prime;+c+d&prime;)(a&prime;+c+d&prime;)(a&prime;+c&prime;+d)</code>, que <u>no</u> reproduce la tabla de verdad (falla por ejemplo en m1 y m3). La PoS correcta, verificada celda por celda con Node, es la del recuadro verde. Ambas formas (SoP y PoS) tienen 5 terminos: la implementacion es de complejidad similar.</div>`
+        ${tpExercise('tp6_e2', 'Ejercicio 2 &mdash; Minimizar por comprension (SoP y PoS)',
+          `<p>Minimizar por Karnaugh, dando SoP y PoS:</p>
+          ${mathBlock('\\\\text{a) } f(a,b,c)=\\\\Sigma(0,2,5,7) \\\\qquad \\\\text{b) } f(a,b,c,d)=\\\\Sigma(1,4,5,7,8,10,11,14,15)')}`,
+          `<p><strong>a)</strong> \\\\(f(a,b,c)=\\\\Sigma(0,2,5,7)\\\\). Agrupando los \\\\(1\\\\) (SoP):</p>
+          ${kmap(['a'],['b','c'], {0:1,2:1,5:1,7:1}, [
+            {cells:[0,2], label:'\\\\(\\\\overline a\\\\,\\\\overline c\\\\)'},
+            {cells:[5,7], label:'\\\\(a\\\\,c\\\\)'}
+          ], 'Dos implicantes primos esenciales.')}
+          ${tpResult('SoP: \\\\(f = \\\\overline a\\\\,\\\\overline c + a\\\\,c\\\\)')}
+          <p style="margin-top:12px;">Agrupando los \\\\(0\\\\) (PoS): ceros en \\\\(1,3,4,6\\\\).</p>
+          ${kmap(['a'],['b','c'], {0:1,2:1,5:1,7:1}, [
+            {cells:[1,3], label:'\\\\((a+\\\\overline c)\\\\)'},
+            {cells:[4,6], label:'\\\\((\\\\overline a + c)\\\\)'}
+          ], 'Cada grupo de ceros da un factor suma con las variables complementadas.')}
+          ${tpResult('PoS: \\\\(f = (a + \\\\overline c)\\\\,(\\\\overline a + c)\\\\)')}
+          <p style="font-size:0.88rem;color:var(--text-secondary);">Observacion: \\\\(f = \\\\overline a\\\\,\\\\overline c + a c = \\\\overline{a \\\\oplus c}\\\\) (XNOR de \\\\(a\\\\) y \\\\(c\\\\), independiente de \\\\(b\\\\)).</p>
+          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.18);margin:16px 0;">
+          <p><strong>b)</strong> \\\\(f(a,b,c,d)=\\\\Sigma(1,4,5,7,8,10,11,14,15)\\\\). Mapa de 4 variables (filas \\\\(ab\\\\), columnas \\\\(cd\\\\)):</p>
+          ${kmap(['a','b'],['c','d'], {1:1,4:1,5:1,7:1,8:1,10:1,11:1,14:1,15:1}, [
+            {cells:[10,11,14,15], label:'\\\\(a\\\\,c\\\\)'},
+            {cells:[1,5], label:'\\\\(\\\\overline a\\\\,\\\\overline c\\\\,d\\\\)'},
+            {cells:[4,5], label:'\\\\(\\\\overline a\\\\,b\\\\,\\\\overline c\\\\)'},
+            {cells:[5,7], label:'\\\\(\\\\overline a\\\\,b\\\\,d\\\\)'},
+            {cells:[8,10], label:'\\\\(a\\\\,\\\\overline b\\\\,\\\\overline d\\\\)'}
+          ], 'El cuarteto \\\\(a c\\\\) cubre 10,11,14,15; los pares cubren 1,4,7,8.')}
+          ${tpResult('SoP: \\\\(f = a c + \\\\overline a\\\\,\\\\overline c\\\\,d + \\\\overline a\\\\,b\\\\,\\\\overline c + \\\\overline a\\\\,b\\\\,d + a\\\\,\\\\overline b\\\\,\\\\overline d\\\\)')}
+          ${tpResult('PoS: \\\\(f = (a + b + d)(a + b + \\\\overline c)(a + \\\\overline c + d)(\\\\overline a + c + \\\\overline d)(\\\\overline a + \\\\overline b + c)\\\\)')}
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata de la guia:</strong> la PoS impresa en el PDF &mdash; \\\\((b+d)(a+b+\\\\overline d)(\\\\overline b+c+\\\\overline d)\\\\ldots\\\\) &mdash; <u>no</u> reproduce la tabla de verdad (falla en \\\\(m_1\\\\) y \\\\(m_3\\\\)). La PoS correcta, verificada celda por celda, es la del recuadro. Ambas formas tienen 5 terminos: complejidad similar.</div>`
         )}
 
         ${tpExercise('tp6_e3', 'Ejercicio 3 &mdash; De SoP minima a PoS minima',
-          `<p>Las siguientes expresiones son funciones ya minimizadas en suma de productos. Obtener la <strong>PoS minima equivalente</strong>. (Se reconstruyen los enunciados a partir del PDF; ver errata.)</p>
-          <p><code>f<sub>1</sub> = a&prime;b&prime;d + b&prime;cd&prime; + a&prime;c&prime;d + abd</code><br>
-          <code>f<sub>2</sub> = abc + b&prime;d + bc&prime;d</code><br>
-          <code>f<sub>3</sub> = ab + bc&prime;d + b&prime;c</code></p>`,
-          `<p><strong>Metodo:</strong> de la SoP se obtiene la lista de miniterminos (donde f=1); los <em>restantes</em> indices son los ceros, que se agrupan en el mapa para leer la PoS minima.</p>
-          <p><strong>f<sub>1</sub>.</strong> Miniterminos = &Sigma;(1,2,3,5,10,13,15). Ceros = {0,4,6,7,8,9,11,12,14}. Agrupando los ceros:</p>
-          ${tpResult('f<sub>1</sub> (PoS) = (c + d)&middot;(b&prime; + d)&middot;(a + b&prime; + c&prime;)&middot;(a&prime; + b + d&prime;)')}
-          <p><strong>f<sub>2</sub>.</strong> Miniterminos = &Sigma;(1,3,5,9,11,13,14,15). Ceros = {0,2,4,6,7,8,10,12}.</p>
-          ${tpResult('f<sub>2</sub> (PoS) = (b + d)&middot;(c + d)&middot;(a + b&prime; + c&prime;)')}
-          <p><strong>f<sub>3</sub>.</strong> Miniterminos = &Sigma;(2,3,5,10,11,12,13,14,15). Ceros = {0,1,4,6,7,8,9}.</p>
-          ${tpResult('f<sub>3</sub> (PoS) = (b + c)&middot;(a + c + d)&middot;(a + b&prime; + c&prime;)')}
-          <div style="margin-top:8px;padding:8px 12px;background:rgba(238,90,111,0.06);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata de la guia:</strong> los tres enunciados aparecen en el PDF con los complementos (primas) borrosos por el escaneo; aqui se interpretaron de la forma mas coherente con una SoP minima de cuatro variables. El procedimiento &mdash; pasar de SoP a lista de miniterminos, hallar los ceros y agruparlos &mdash; es el que pide la consigna y es independiente de la lectura exacta de cada prima.</div>`
+          `<p>Las siguientes son funciones ya minimizadas en suma de productos. Obtener la <strong>PoS minima equivalente</strong> (los enunciados se reconstruyen del PDF; ver errata).</p>
+          ${mathBlock('\\\\begin{aligned} f_1 &= \\\\overline a\\\\,\\\\overline b\\\\,d + \\\\overline b\\\\,c\\\\,\\\\overline d + \\\\overline a\\\\,\\\\overline c\\\\,d + a b d \\\\\\\\ f_2 &= a b c + \\\\overline b\\\\,d + b\\\\,\\\\overline c\\\\,d \\\\\\\\ f_3 &= a b + b\\\\,\\\\overline c\\\\,d + \\\\overline b\\\\,c \\\\end{aligned}')}`,
+          `<p><strong>Metodo:</strong> de la SoP se obtiene la lista de minterminos (donde \\\\(f=1\\\\)); los indices restantes son los ceros, que se agrupan en el mapa para leer la PoS minima.</p>
+          <p><strong>\\\\(f_1\\\\):</strong> minterminos \\\\(\\\\Sigma(1,2,3,5,10,13,15)\\\\), ceros \\\\(\\\\{0,4,6,7,8,9,11,12,14\\\\}\\\\).</p>
+          ${kmap(['a','b'],['c','d'], {1:1,2:1,3:1,5:1,10:1,13:1,15:1})}
+          ${tpResult('PoS: \\\\(f_1 = (c + d)(\\\\overline b + d)(a + \\\\overline b + \\\\overline c)(\\\\overline a + b + \\\\overline d)\\\\)')}
+          <p style="margin-top:12px;"><strong>\\\\(f_2\\\\):</strong> minterminos \\\\(\\\\Sigma(1,3,5,9,11,13,14,15)\\\\).</p>
+          ${tpResult('PoS: \\\\(f_2 = (b + d)(c + d)(a + \\\\overline b + \\\\overline c)\\\\)')}
+          <p style="margin-top:12px;"><strong>\\\\(f_3\\\\):</strong> minterminos \\\\(\\\\Sigma(2,3,5,10,11,12,13,14,15)\\\\).</p>
+          ${tpResult('PoS: \\\\(f_3 = (b + c)(a + c + d)(a + \\\\overline b + \\\\overline c)\\\\)')}
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata / OCR:</strong> los tres enunciados tienen las primas borrosas en el escaneo; se interpretaron como SoP minimas coherentes de 4 variables. El procedimiento &mdash; SoP &rarr; minterminos &rarr; agrupar ceros &rarr; PoS &mdash; es independiente de la lectura exacta de cada prima.</div>`
         )}
 
         ${tpExercise('tp6_e4', 'Ejercicio 4 &mdash; Generador de paridad impar en BCD Aiken',
-          `<p>En un sistema digital que opera con el codigo <strong>BCD Aiken (2&middot;4&middot;2&middot;1)</strong> se desea implementar un <strong>generador de paridad impar</strong>. Indicar la funcion mas simple (SoP o PoS) del bit de paridad P.</p>`,
-          `<p>El codigo Aiken es autocomplementario: representa los digitos 0&ndash;9 con los pesos 2-4-2-1 segun la tabla. Las seis combinaciones binarias 0101,0110,0111,1000,1001,1010 (indices 5,6,7,8,9,10) <strong>no se usan</strong>: son condiciones indiferentes (X).</p>
-          <table style="border-collapse:collapse;font-size:0.82rem;margin:6px 0;">
-            <tr><th style="padding:3px 8px;">Dec</th><th style="padding:3px 8px;">a b c d (Aiken)</th><th style="padding:3px 8px;"># de 1 en los datos</th><th style="padding:3px 8px;">P (paridad impar)</th></tr>
-            <tr><td style="padding:2px 8px;">0</td><td style="padding:2px 8px;">0 0 0 0</td><td style="padding:2px 8px;">0 (par)</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-            <tr><td style="padding:2px 8px;">1</td><td style="padding:2px 8px;">0 0 0 1</td><td style="padding:2px 8px;">1 (impar)</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">2</td><td style="padding:2px 8px;">0 0 1 0</td><td style="padding:2px 8px;">1</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">3</td><td style="padding:2px 8px;">0 0 1 1</td><td style="padding:2px 8px;">2</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-            <tr><td style="padding:2px 8px;">4</td><td style="padding:2px 8px;">0 1 0 0</td><td style="padding:2px 8px;">1</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">5</td><td style="padding:2px 8px;">1 0 1 1</td><td style="padding:2px 8px;">3</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">6</td><td style="padding:2px 8px;">1 1 0 0</td><td style="padding:2px 8px;">2</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-            <tr><td style="padding:2px 8px;">7</td><td style="padding:2px 8px;">1 1 0 1</td><td style="padding:2px 8px;">3</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">8</td><td style="padding:2px 8px;">1 1 1 0</td><td style="padding:2px 8px;">3</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">9</td><td style="padding:2px 8px;">1 1 1 1</td><td style="padding:2px 8px;">4</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-          </table>
-          <p>P impar vale 1 cuando los datos tienen un numero <em>par</em> de unos (para que el total con P sea impar). Es decir P=1 en los codigos {0000, 0011, 1100, 1111} = indices &Sigma;(0,3,12,15), con don&prime;t care en {5,6,7,8,9,10}.</p>
-          <pre>            c d
-   a b \\   00   01   11   10
-   00  |    1    .    1    .       m0, m3
-   01  |    .    X    X    X
-   11  |    1    .    1    .       m12, m15
-   10  |    X    X    X    X
-   (.=0 ; X=don't care)</pre>
-          <p>Aprovechando los X, los cuatro 1 se agrupan en dos pares por columna y dos por fila. El resultado se factoriza como dos XNOR:</p>
-          ${tpResult('SoP: P = a&prime;&middot;c&middot;d + a&middot;c&prime;&middot;d&prime; + b&middot;c&middot;d + b&prime;&middot;c&prime;&middot;d&prime;')}
-          ${tpResult('PoS (mas compacta): P = (c + d&prime;)&middot;(c&prime; + d)&middot;(a + b&prime;)&middot;(a&prime; + b)')}
-          <p>La PoS revela la estructura natural: <code>(c+d&prime;)(c&prime;+d) = (c &oplus; d)&prime;</code> y <code>(a+b&prime;)(a&prime;+b) = (a &oplus; b)&prime;</code>. Como en Aiken los pares (a,b) y (c,d) coinciden o se complementan en los codigos validos, la paridad se logra con compuertas XNOR.</p>`
+          `<p>En un sistema que opera con codigo <strong>BCD Aiken \\\\((2\\\\,4\\\\,2\\\\,1)\\\\)</strong> se desea un <strong>generador de paridad impar</strong>. Hallar la funcion mas simple del bit de paridad \\\\(P\\\\).</p>`,
+          `<p>Aiken es autocomplementario. Las seis combinaciones \\\\(0101,0110,0111,1000,1001,1010\\\\) (indices \\\\(5,6,7,8,9,10\\\\)) no se usan: son <em>don't care</em>. \\\\(P\\\\) (paridad impar) vale \\\\(1\\\\) cuando los datos tienen un numero <em>par</em> de unos, para que el total sea impar.</p>
+          ${dataTable(['Dec','\\\\(a\\\\,b\\\\,c\\\\,d\\\\) (Aiken)','# de 1','\\\\(P\\\\)'], [
+            ['0','0 0 0 0','0','1'],['1','0 0 0 1','1','0'],['2','0 0 1 0','1','0'],['3','0 0 1 1','2','1'],
+            ['4','0 1 0 0','1','0'],['5','1 0 1 1','3','0'],['6','1 1 0 0','2','1'],['7','1 1 0 1','3','0'],
+            ['8','1 1 1 0','3','0'],['9','1 1 1 1','4','1']
+          ], 3)}
+          <p>Entonces \\\\(P=1\\\\) en \\\\(\\\\Sigma(0,3,12,15)\\\\) con <em>don't care</em> en \\\\(\\\\{5,6,7,8,9,10\\\\}\\\\):</p>
+          ${kmap(['a','b'],['c','d'], {0:1,3:1,12:1,15:1, 5:'X',6:'X',7:'X',8:'X',9:'X',10:'X'})}
+          ${tpResult('SoP: \\\\(P = \\\\overline a\\\\,c\\\\,d + a\\\\,\\\\overline c\\\\,\\\\overline d + b\\\\,c\\\\,d + \\\\overline b\\\\,\\\\overline c\\\\,\\\\overline d\\\\)')}
+          ${tpResult('PoS (mas compacta): \\\\(P = (c + \\\\overline d)(\\\\overline c + d)(a + \\\\overline b)(\\\\overline a + b)\\\\)')}
+          <p style="font-size:0.88rem;color:var(--text-secondary);">La PoS revela la estructura: \\\\((c+\\\\overline d)(\\\\overline c + d)=\\\\overline{c \\\\oplus d}\\\\) y \\\\((a+\\\\overline b)(\\\\overline a + b)=\\\\overline{a \\\\oplus b}\\\\). La paridad se logra con compuertas XNOR.</p>`
         )}
 
-        <h4 style="margin:24px 0 10px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:4px;">Ejercicios a resolver por el alumno</h4>
+        <h4 style="margin:26px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver por el alumno</h4>
 
         ${tpExercise('tp6_a1', 'Ejercicio 1 &mdash; Minimizar dos funciones de 4 variables',
           `<p>Minimizar por Karnaugh:</p>
-          <p><code>a) f(a,b,c,d) = &Sigma;(0,1,4,5,7,8,11,13,15)</code><br>
-          <code>b) f(a,b,c,d) = &Sigma;(0,2,3,5,7,9,10,12,14,15)</code></p>`,
-          `<p><strong>a) &Sigma;(0,1,4,5,7,8,11,13,15).</strong></p>
-          <pre>            c d
-   a b \\   00   01   11   10
-   00  |    1    1    0    0      0  1  3  2
-   01  |    1    1    1    0      4  5  7  6
-   11  |    0    1    1    0     12 13 15 14
-   10  |    1    0    1    0      8  9 11 10</pre>
-          <p>Grupos: cuarteto (0,1,4,5) &rarr; <code>a&prime;c&prime;</code>; cuarteto (5,7,13,15) &rarr; <code>bd</code>; par (0,8) con vecinos &rarr; <code>b&prime;c&prime;d&prime;</code>; par (11,15)&rarr; <code>acd</code>.</p>
-          ${tpResult('SoP: f = a&prime;&middot;c&prime; + b&middot;d + b&prime;&middot;c&prime;&middot;d&prime; + a&middot;c&middot;d')}
-          ${tpResult('PoS: f = (c&prime; + d)&middot;(a + b + c&prime;)&middot;(a&prime; + b&prime; + d)&middot;(a&prime; + b + c + d&prime;)')}
-          <p>Aqui la PoS (4 factores) es algo mas simple que la SoP (4 terminos pero con un termino de 3 literales menos).</p>
-          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.2);margin:14px 0;">
-          <p><strong>b) &Sigma;(0,2,3,5,7,9,10,12,14,15).</strong></p>
-          <pre>            c d
-   a b \\   00   01   11   10
-   00  |    1    0    1    1      0  1  3  2
-   01  |    0    1    1    0      4  5  7  6
-   11  |    1    0    1    1     12 13 15 14
-   10  |    0    1    0    1      8  9 11 10</pre>
-          ${tpResult('SoP: f = a&prime;b&prime;d&prime; + a&prime;bd + ab&prime;c&prime;d + abd&prime; + a&prime;b&prime;c + b&prime;cd&prime; + bcd')}
-          ${tpResult('PoS: f = (a+b+c+d&prime;)&middot;(a+b&prime;+d)&middot;(a&prime;+b+c+d)&middot;(a&prime;+b+c&prime;+d&prime;)&middot;(a&prime;+b&prime;+c+d&prime;)')}
-          <p>Esta funcion es poco regular: ni SoP (7 terminos) ni PoS (5 factores) son particularmente compactas; la PoS resulta preferible por tener menos terminos.</p>`
+          ${mathBlock('\\\\text{a) } \\\\Sigma(0,1,4,5,7,8,11,13,15) \\\\qquad \\\\text{b) } \\\\Sigma(0,2,3,5,7,9,10,12,14,15)')}`,
+          `<p><strong>a)</strong> \\\\(\\\\Sigma(0,1,4,5,7,8,11,13,15)\\\\):</p>
+          ${kmap(['a','b'],['c','d'], {0:1,1:1,4:1,5:1,7:1,8:1,11:1,13:1,15:1}, [
+            {cells:[0,1,4,5], label:'\\\\(\\\\overline a\\\\,\\\\overline c\\\\)'},
+            {cells:[5,7,13,15], label:'\\\\(b\\\\,d\\\\)'},
+            {cells:[0,8], label:'\\\\(\\\\overline b\\\\,\\\\overline c\\\\,\\\\overline d\\\\)'},
+            {cells:[11,15], label:'\\\\(a\\\\,c\\\\,d\\\\)'}
+          ])}
+          ${tpResult('SoP: \\\\(f = \\\\overline a\\\\,\\\\overline c + b\\\\,d + \\\\overline b\\\\,\\\\overline c\\\\,\\\\overline d + a\\\\,c\\\\,d\\\\)')}
+          ${tpResult('PoS: \\\\(f = (\\\\overline c + d)(a + b + \\\\overline c)(\\\\overline a + \\\\overline b + d)(\\\\overline a + b + c + \\\\overline d)\\\\)')}
+          <p style="font-size:0.88rem;color:var(--text-secondary);">La PoS (4 factores) resulta algo mas simple que la SoP.</p>
+          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.18);margin:16px 0;">
+          <p><strong>b)</strong> \\\\(\\\\Sigma(0,2,3,5,7,9,10,12,14,15)\\\\):</p>
+          ${kmap(['a','b'],['c','d'], {0:1,2:1,3:1,5:1,7:1,9:1,10:1,12:1,14:1,15:1})}
+          ${tpResult('SoP: \\\\(f = \\\\overline a\\\\,\\\\overline b\\\\,\\\\overline d + \\\\overline a\\\\,b\\\\,d + a\\\\,\\\\overline b\\\\,\\\\overline c\\\\,d + a\\\\,b\\\\,\\\\overline d + \\\\overline a\\\\,\\\\overline b\\\\,c + \\\\overline b\\\\,c\\\\,\\\\overline d + b\\\\,c\\\\,d\\\\)')}
+          ${tpResult('PoS: \\\\(f = (a+b+c+\\\\overline d)(a+\\\\overline b+d)(\\\\overline a+b+c+d)(\\\\overline a+b+\\\\overline c+\\\\overline d)(\\\\overline a+\\\\overline b+c+\\\\overline d)\\\\)')}
+          <p style="font-size:0.88rem;color:var(--text-secondary);">Funcion poco regular: la PoS (5 factores) es preferible a la SoP (7 terminos).</p>`
         )}
 
         ${tpExercise('tp6_a2', 'Ejercicio 2 &mdash; Comparar cual es mas simple (SoP vs PoS)',
-          `<p>Minimizar y determinar si es mas simple la SoP o la PoS:</p>
-          <p><code>a) &Sigma;(2,3,4,7,9,10,11,13,14,15)</code> &nbsp; <code>b) &Sigma;(0,3,5,6,7,8,9,11,14,15)</code><br>
-          <code>c) &Sigma;(1,2,3,8,9,12)</code> &nbsp; <code>d) &Sigma;(0,1,2,5,6,8,9,10,12)</code></p>`,
-          `<p><strong>a) &Sigma;(2,3,4,7,9,10,11,13,14,15).</strong></p>
-          ${tpResult('SoP: f = c&middot;d + a&middot;d + a&middot;c + b&prime;&middot;c + a&prime;&middot;b&middot;c&prime;&middot;d&prime; &nbsp;(5 terminos)')}
-          ${tpResult('PoS: f = (a + c + d&prime;)&middot;(a&prime; + c + d)&middot;(a + b + c)&middot;(a + b&prime; + c&prime; + d) &nbsp;(4 factores)')}
-          <p><strong>Mas simple: PoS</strong> (4 factores vs 5 terminos).</p>
-          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.2);margin:12px 0;">
-          <p><strong>b) &Sigma;(0,3,5,6,7,8,9,11,14,15).</strong></p>
-          ${tpResult('SoP: f = c&middot;d + b&middot;c + a&prime;&middot;b&middot;d + b&prime;&middot;c&prime;&middot;d&prime; + a&middot;b&prime;&middot;c&prime; &nbsp;(5 terminos)')}
-          ${tpResult('PoS: f = (a + b + c + d&prime;)&middot;(b + c&prime; + d)&middot;(b&prime; + c + d)&middot;(a&prime; + b&prime; + c) &nbsp;(4 factores)')}
-          <p><strong>Mas simple: PoS</strong> (4 factores vs 5 terminos).</p>
-          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.2);margin:12px 0;">
-          <p><strong>c) &Sigma;(1,2,3,8,9,12).</strong></p>
-          <pre>            c d
-   a b \\   00   01   11   10
-   00  |    0    1    1    1      0  1  3  2
-   01  |    0    0    0    0      4  5  7  6
-   11  |    1    0    0    0     12 13 15 14
-   10  |    1    1    0    0      8  9 11 10</pre>
-          ${tpResult('SoP: f = a&prime;&middot;b&prime;&middot;c + a&middot;c&prime;&middot;d&prime; + b&prime;&middot;c&prime;&middot;d &nbsp;(3 terminos)')}
-          ${tpResult('PoS: f = (a + c + d)&middot;(a&prime; + c&prime;)&middot;(b&prime; + d&prime;)&middot;(a + b&prime;) &nbsp;(4 factores)')}
-          <p><strong>Mas simple: SoP</strong> (3 terminos vs 4 factores).</p>
-          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.2);margin:12px 0;">
-          <p><strong>d) &Sigma;(0,1,2,5,6,8,9,10,12).</strong></p>
-          ${tpResult('SoP: f = b&prime;&middot;c&prime; + b&prime;&middot;d&prime; + a&prime;&middot;c&prime;&middot;d + a&prime;&middot;c&middot;d&prime; + a&middot;c&prime;&middot;d&prime; &nbsp;(5 terminos)')}
-          ${tpResult('PoS: f = (c&prime; + d&prime;)&middot;(a + b&prime; + c + d)&middot;(a&prime; + b&prime; + d&prime;)&middot;(a&prime; + b&prime; + c&prime;) &nbsp;(4 factores)')}
-          <p><strong>Mas simple: PoS</strong> (4 factores vs 5 terminos).</p>`
+          `<p>Minimizar y determinar si conviene SoP o PoS:</p>
+          ${mathBlock('\\\\begin{aligned} \\\\text{a) } &\\\\Sigma(2,3,4,7,9,10,11,13,14,15) & \\\\text{b) } &\\\\Sigma(0,3,5,6,7,8,9,11,14,15) \\\\\\\\ \\\\text{c) } &\\\\Sigma(1,2,3,8,9,12) & \\\\text{d) } &\\\\Sigma(0,1,2,5,6,8,9,10,12) \\\\end{aligned}')}`,
+          `<p><strong>a)</strong> \\\\(\\\\Sigma(2,3,4,7,9,10,11,13,14,15)\\\\):</p>
+          ${tpResult('SoP: \\\\(f = c d + a d + a c + \\\\overline b\\\\,c + \\\\overline a\\\\,b\\\\,\\\\overline c\\\\,\\\\overline d\\\\) &nbsp;(5 terminos)')}
+          ${tpResult('PoS: \\\\(f = (a + c + \\\\overline d)(\\\\overline a + c + d)(a + b + c)(a + \\\\overline b + \\\\overline c + d)\\\\) &nbsp;(4 factores)')}
+          <p style="margin:4px 0 0;"><strong>Mas simple: PoS.</strong></p>
+          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.18);margin:14px 0;">
+          <p><strong>b)</strong> \\\\(\\\\Sigma(0,3,5,6,7,8,9,11,14,15)\\\\):</p>
+          ${tpResult('SoP: \\\\(f = c d + b c + \\\\overline a\\\\,b\\\\,d + \\\\overline b\\\\,\\\\overline c\\\\,\\\\overline d + a\\\\,\\\\overline b\\\\,\\\\overline c\\\\) &nbsp;(5 terminos)')}
+          ${tpResult('PoS: \\\\(f = (a + b + c + \\\\overline d)(b + \\\\overline c + d)(\\\\overline b + c + d)(\\\\overline a + \\\\overline b + c)\\\\) &nbsp;(4 factores)')}
+          <p style="margin:4px 0 0;"><strong>Mas simple: PoS.</strong></p>
+          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.18);margin:14px 0;">
+          <p><strong>c)</strong> \\\\(\\\\Sigma(1,2,3,8,9,12)\\\\):</p>
+          ${kmap(['a','b'],['c','d'], {1:1,2:1,3:1,8:1,9:1,12:1})}
+          ${tpResult('SoP: \\\\(f = \\\\overline a\\\\,\\\\overline b\\\\,c + a\\\\,\\\\overline c\\\\,\\\\overline d + \\\\overline b\\\\,\\\\overline c\\\\,d\\\\) &nbsp;(3 terminos)')}
+          ${tpResult('PoS: \\\\(f = (a + c + d)(\\\\overline a + \\\\overline c)(\\\\overline b + \\\\overline d)(a + \\\\overline b)\\\\) &nbsp;(4 factores)')}
+          <p style="margin:4px 0 0;"><strong>Mas simple: SoP.</strong></p>
+          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.18);margin:14px 0;">
+          <p><strong>d)</strong> \\\\(\\\\Sigma(0,1,2,5,6,8,9,10,12)\\\\):</p>
+          ${tpResult('SoP: \\\\(f = \\\\overline b\\\\,\\\\overline c + \\\\overline b\\\\,\\\\overline d + \\\\overline a\\\\,\\\\overline c\\\\,d + \\\\overline a\\\\,c\\\\,\\\\overline d + a\\\\,\\\\overline c\\\\,\\\\overline d\\\\) &nbsp;(5 terminos)')}
+          ${tpResult('PoS: \\\\(f = (\\\\overline c + \\\\overline d)(a + \\\\overline b + c + d)(\\\\overline a + \\\\overline b + \\\\overline d)(\\\\overline a + \\\\overline b + \\\\overline c)\\\\) &nbsp;(4 factores)')}
+          <p style="margin:4px 0 0;"><strong>Mas simple: PoS.</strong></p>`
         )}
 
         ${tpExercise('tp6_a3', 'Ejercicio 3 &mdash; Minimizar expresiones algebraicas y dar la PoS',
           `<p>Minimizar por Karnaugh y dar el resultado en <strong>producto de sumas</strong>:</p>
-          <p><code>f<sub>1</sub>(a,b,c,d) = (a &oplus; bc) + (ab &oplus; cd)</code><br>
-          <code>f<sub>2</sub>(a,b,c,d) = a(bc &oplus; a&prime;b) + ac(b&prime;d &oplus; a&prime;)(c &oplus; d)</code></p>`,
-          `<p>Primero se desarrolla cada expresion a tabla de verdad evaluando los XOR; luego se minimiza.</p>
-          <p><strong>f<sub>1</sub> = (a &oplus; bc) + (ab &oplus; cd).</strong> Evaluando las 16 filas, f=1 en &Sigma;(3,6,7,8,9,10,11,12,13,14). Mapa y agrupacion de ceros (ceros en 0,1,2,4,5,15):</p>
-          ${tpResult('PoS: f<sub>1</sub> = (a + c)&middot;(a + b + d)&middot;(a&prime; + b&prime; + c&prime; + d&prime;)')}
-          <p>(Su SoP equivalente es <code>ab&prime; + ac&prime; + a&prime;cd + bcd&prime;</code>; la PoS de 3 factores es mas simple.)</p>
-          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.2);margin:12px 0;">
-          <p><strong>f<sub>2</sub> = a(bc &oplus; a&prime;b) + ac(b&prime;d &oplus; a&prime;)(c &oplus; d).</strong> Como toda la expresion esta multiplicada por <code>a</code>, solo puede valer 1 con a=1, lo que anula <code>a&prime;</code>. Evaluando: el primer sumando da <code>a&middot;bc</code> (con a=1, a&prime;b=0, asi que bc &oplus; 0 = bc); el segundo sumando se anula porque contiene el factor <code>a&prime;</code> dentro del XOR que con a=1 queda <code>b&prime;d &oplus; 0 = b&prime;d</code>, pero exige tambien c=1 y c&oplus;d=1 (d=0), incompatible con b&prime;d. Resultado: f=1 solo en &Sigma;(14,15) = a&middot;b&middot;c.</p>
-          ${tpResult('SoP: f<sub>2</sub> = a&middot;b&middot;c')}
-          ${tpResult('PoS: f<sub>2</sub> = (a)&middot;(b)&middot;(c) &nbsp;[un solo producto de tres factores de un literal]')}
-          <div style="margin-top:8px;padding:8px 12px;background:rgba(238,90,111,0.06);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata de la guia / OCR:</strong> los operadores de f<sub>2</sub> aparecen muy degradados en el escaneo (no se distingue claramente XOR de complemento). Se interpreto <code>&oplus;</code> donde el PDF muestra un simbolo de suma encerrado. Bajo esa lectura, el factor comun <code>a</code> y la presencia de <code>a&prime;</code> dentro de los XOR colapsan la funcion a <code>abc</code>. Si la catedra usa otra lectura de los operadores, el metodo (desarrollar a tabla &rarr; mapa &rarr; PoS) es identico.</div>`
+          ${mathBlock('\\\\begin{aligned} f_1(a,b,c,d) &= (a \\\\oplus b c) + (a b \\\\oplus c d) \\\\\\\\ f_2(a,b,c,d) &= a\\\\,(b c \\\\oplus \\\\overline a\\\\,b) + a c\\\\,(\\\\overline b\\\\,d \\\\oplus \\\\overline a)(c \\\\oplus d) \\\\end{aligned}')}`,
+          `<p>Se desarrolla cada expresion a tabla de verdad evaluando los XOR y luego se minimiza.</p>
+          <p><strong>\\\\(f_1\\\\):</strong> evaluando las 16 filas, \\\\(f_1=\\\\Sigma(3,6,7,8,9,10,11,12,13,14)\\\\). Agrupando los ceros \\\\(\\\\{0,1,2,4,5,15\\\\}\\\\):</p>
+          ${kmap(['a','b'],['c','d'], {3:1,6:1,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:1}, [
+            {cells:[0,1,4,5], label:'ceros &rarr; \\\\((a+c)\\\\)'},
+            {cells:[0,2], label:'\\\\((a+b+d)\\\\)'},
+            {cells:[15], label:'\\\\((\\\\overline a+\\\\overline b+\\\\overline c+\\\\overline d)\\\\)'}
+          ])}
+          ${tpResult('PoS: \\\\(f_1 = (a + c)(a + b + d)(\\\\overline a + \\\\overline b + \\\\overline c + \\\\overline d)\\\\)')}
+          <p style="font-size:0.88rem;color:var(--text-secondary);">Su SoP equivalente es \\\\(a\\\\overline b + a\\\\overline c + \\\\overline a c d + b c \\\\overline d\\\\); la PoS de 3 factores es mas simple.</p>
+          <hr style="border:none;border-top:1px solid rgba(128,128,128,0.18);margin:14px 0;">
+          <p><strong>\\\\(f_2\\\\):</strong> toda la expresion esta multiplicada por \\\\(a\\\\), asi que solo vale \\\\(1\\\\) con \\\\(a=1\\\\) (lo que anula \\\\(\\\\overline a\\\\)). El primer sumando queda \\\\(a\\\\,b\\\\,c\\\\); el segundo se anula. Resultado: \\\\(f_2=\\\\Sigma(14,15)=a\\\\,b\\\\,c\\\\).</p>
+          ${tpResult('SoP: \\\\(f_2 = a\\\\,b\\\\,c\\\\) &nbsp;&middot;&nbsp; PoS: \\\\(f_2 = (a)(b)(c)\\\\)')}
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata / OCR:</strong> los operadores de \\\\(f_2\\\\) estan muy degradados en el escaneo (no se distingue XOR de complemento). Bajo la lectura adoptada, el factor comun \\\\(a\\\\) y la presencia de \\\\(\\\\overline a\\\\) dentro de los XOR colapsan la funcion a \\\\(abc\\\\). Con otra lectura, el metodo (tabla &rarr; mapa &rarr; PoS) es identico.</div>`
         )}
 
         ${tpExercise('tp6_a4', 'Ejercicio 4 &mdash; Detector en BCD Exceso&ndash;3',
-          `<p>En un registro de 4 bits se almacena un decimal en codigo <strong>BCD Exceso&ndash;3</strong>. Disenar un sistema que detecte cuando el numero contenido es <strong>superior a 6 o inferior a 3</strong> (es decir, cae fuera del rango 3&ndash;6 inclusive). Dar la funcion mas simple, SoP o PoS.</p>`,
-          `<p>En Exceso&ndash;3, el codigo binario = decimal + 3. Por lo tanto los digitos validos 0&ndash;9 ocupan los codigos binarios 0011 (=3) a 1100 (=12). Los codigos 0000,0001,0010 (0,1,2) y 1101,1110,1111 (13,14,15) <strong>no representan ningun digito</strong>: son don&prime;t care.</p>
-          <table style="border-collapse:collapse;font-size:0.82rem;margin:6px 0;">
-            <tr><th style="padding:3px 8px;">Decimal</th><th style="padding:3px 8px;">Codigo XS3 (abcd)</th><th style="padding:3px 8px;">&gt;6 o &lt;3 ?</th><th style="padding:3px 8px;">Salida f</th></tr>
-            <tr><td style="padding:2px 8px;">0</td><td style="padding:2px 8px;">0011 (3)</td><td style="padding:2px 8px;">&lt;3 si</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-            <tr><td style="padding:2px 8px;">1</td><td style="padding:2px 8px;">0100 (4)</td><td style="padding:2px 8px;">&lt;3 si</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-            <tr><td style="padding:2px 8px;">2</td><td style="padding:2px 8px;">0101 (5)</td><td style="padding:2px 8px;">&lt;3 si</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-            <tr><td style="padding:2px 8px;">3</td><td style="padding:2px 8px;">0110 (6)</td><td style="padding:2px 8px;">no</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">4</td><td style="padding:2px 8px;">0111 (7)</td><td style="padding:2px 8px;">no</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">5</td><td style="padding:2px 8px;">1000 (8)</td><td style="padding:2px 8px;">no</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">6</td><td style="padding:2px 8px;">1001 (9)</td><td style="padding:2px 8px;">no</td><td style="padding:2px 8px;">0</td></tr>
-            <tr><td style="padding:2px 8px;">7</td><td style="padding:2px 8px;">1010 (10)</td><td style="padding:2px 8px;">&gt;6 si</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-            <tr><td style="padding:2px 8px;">8</td><td style="padding:2px 8px;">1011 (11)</td><td style="padding:2px 8px;">&gt;6 si</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-            <tr><td style="padding:2px 8px;">9</td><td style="padding:2px 8px;">1100 (12)</td><td style="padding:2px 8px;">&gt;6 si</td><td style="padding:2px 8px;color:#2eb872;">1</td></tr>
-          </table>
-          <p>Entonces f=1 en los codigos &Sigma;(3,4,5,10,11,12) con don&prime;t care en {0,1,2,13,14,15}. Mapa (X = don&prime;t care):</p>
-          <pre>            c d
-   a b \\   00   01   11   10
-   00  |    X    X    1    1      0  1  3  2
-   01  |    1    1    0    0      4  5  7  6
-   11  |    1    X    X    X     12 13 15 14
-   10  |    0    0    1    1      8  9 11 10</pre>
-          <p>Aprovechando los X, los 1 se agrupan en dos cuartetos: las columnas cd=11 y cd=10 con b=0 (mas X) dan <code>b&prime;c</code>; las columnas cd=00 y cd=01 con b=1 (mas X) dan <code>bc&prime;</code>.</p>
-          ${tpResult('SoP: f = b&prime;&middot;c + b&middot;c&prime; = b &oplus; c')}
-          ${tpResult('PoS: f = (b + c)&middot;(b&prime; + c&prime;) = b &oplus; c')}
-          <p>La funcion mas simple es el <strong>XOR de los bits b y c</strong> (los dos bits centrales del codigo): una unica compuerta XOR resuelve la deteccion. SoP y PoS tienen identica complejidad (2 terminos), ambas son la expresion del XOR.</p>`
+          `<p>Un registro de 4 bits guarda un decimal en <strong>BCD Exceso&ndash;3</strong>. Disenar un sistema que detecte cuando el numero es <strong>mayor que 6 o menor que 3</strong> (fuera del rango \\\\(3\\\\le n \\\\le 6\\\\)). Dar la funcion mas simple.</p>`,
+          `<p>En Exceso&ndash;3, \\\\(\\\\text{codigo} = \\\\text{decimal} + 3\\\\); los digitos \\\\(0\\\\)&ndash;\\\\(9\\\\) ocupan los binarios \\\\(0011\\\\) a \\\\(1100\\\\). Los codigos \\\\(0,1,2\\\\) y \\\\(13,14,15\\\\) no representan ningun digito: son <em>don't care</em>.</p>
+          ${dataTable(['Decimal','XS3 \\\\((abcd)\\\\)','\\\\(>6\\\\) o \\\\(<3\\\\)?','\\\\(f\\\\)'], [
+            ['0','0011 (3)','\\\\(<3\\\\): si','1'],['1','0100 (4)','\\\\(<3\\\\): si','1'],['2','0101 (5)','\\\\(<3\\\\): si','1'],
+            ['3','0110 (6)','no','0'],['4','0111 (7)','no','0'],['5','1000 (8)','no','0'],['6','1001 (9)','no','0'],
+            ['7','1010 (10)','\\\\(>6\\\\): si','1'],['8','1011 (11)','\\\\(>6\\\\): si','1'],['9','1100 (12)','\\\\(>6\\\\): si','1']
+          ], 3)}
+          <p>\\\\(f=\\\\Sigma(3,4,5,10,11,12)\\\\) con <em>don't care</em> en \\\\(\\\\{0,1,2,13,14,15\\\\}\\\\):</p>
+          ${kmap(['a','b'],['c','d'], {3:1,4:1,5:1,10:1,11:1,12:1, 0:'X',1:'X',2:'X',13:'X',14:'X',15:'X'}, [
+            {cells:[2,3,10,11], label:'\\\\(\\\\overline b\\\\,c\\\\)'},
+            {cells:[4,5,12,13], label:'\\\\(b\\\\,\\\\overline c\\\\)'}
+          ])}
+          ${tpResult('SoP: \\\\(f = \\\\overline b\\\\,c + b\\\\,\\\\overline c = b \\\\oplus c\\\\) &nbsp;&middot;&nbsp; PoS: \\\\(f = (b + c)(\\\\overline b + \\\\overline c) = b \\\\oplus c\\\\)')}
+          <p style="font-size:0.88rem;color:var(--text-secondary);">La funcion mas simple es el <strong>XOR de los bits centrales \\\\(b\\\\) y \\\\(c\\\\)</strong>: una unica compuerta resuelve la deteccion.</p>`
         )}
 
-        <div style="margin-top:24px;padding:14px;background:rgba(46,184,114,0.06);border-left:4px solid #2eb872;border-radius:6px;">
-          <strong>TP6 cerrado. Conceptos clave para el oral:</strong>
-          <ul style="margin:8px 0 0;font-size:0.9rem;">
-            <li>El mapa de Karnaugh ordena la tabla en <strong>codigo Gray</strong>: celdas adyacentes (y los bordes, que se tocan) difieren en un solo bit, por eso se pueden agrupar.</li>
-            <li>Un grupo de 2<sup>k</sup> unos elimina k variables. Se agrupa lo mas grande posible: cuanto mayor el grupo, menos literales tiene el termino.</li>
-            <li><strong>SoP</strong> agrupa los 1 (cada grupo es un producto/minitermino reducido); <strong>PoS</strong> agrupa los 0 y se lee con las variables complementadas (cada grupo es una suma/maxitermino reducido).</li>
-            <li><strong>Implicante primo</strong> = grupo maximo; <strong>esencial</strong> = unico que cubre cierto 1. Primero se eligen los esenciales, luego se cubren los 1 restantes con los menos implicantes posibles.</li>
-            <li><strong>Don&prime;t care (X)</strong>: combinaciones que no ocurren (codigos no usados de BCD Aiken, Exceso&ndash;3, etc.). Se toman como 1 o 0 segun convenga para agrandar grupos; nunca obligan a crear un grupo solo para ellos.</li>
-            <li><strong>Quine&ndash;McCluskey</strong>: metodo tabular equivalente al mapa, sistematico, util con 5+ variables o para programar. Combina miniterminos que difieren en un bit hasta obtener todos los implicantes primos, luego resuelve la tabla de cobertura.</li>
-            <li>No siempre la SoP es mas simple que la PoS: depende de si hay menos 1 o menos 0 y de como se agrupan. En esta guia, varias funciones resultaron mas economicas en PoS.</li>
-            <li>Casos clasicos que colapsan a XOR/XNOR: paridad (Aiken) y deteccion de rango en Exceso&ndash;3 se reducen a <code>(b &oplus; c)</code> o XNOR, una sola compuerta.</li>
+        <div style="margin-top:26px;padding:16px;background:rgba(46,184,114,0.06);border-left:4px solid #2eb872;border-radius:8px;">
+          <strong>TP6 cerrado. Conceptos clave para el oral.</strong>
+          <ul style="margin:8px 0 0;font-size:0.92rem;line-height:1.6;">
+            <li>El mapa ordena la tabla en <strong>codigo Gray</strong>: celdas vecinas (y los bordes opuestos) difieren en un bit, por eso se agrupan.</li>
+            <li>Un grupo de \\\\(2^{k}\\\\) unos elimina \\\\(k\\\\) variables. Conviene el grupo mas grande posible.</li>
+            <li><strong>SoP</strong> agrupa los \\\\(1\\\\); <strong>PoS</strong> agrupa los \\\\(0\\\\) y se lee con las variables complementadas.</li>
+            <li><strong>Implicante primo</strong> = grupo maximo; <strong>esencial</strong> = unico que cubre cierto \\\\(1\\\\). Se eligen primero los esenciales.</li>
+            <li><strong>Don't care</strong>: codigos no usados (Aiken, Exceso&ndash;3, etc.); se toman como \\\\(1\\\\) o \\\\(0\\\\) segun convenga.</li>
+            <li><strong>Quine&ndash;McCluskey</strong>: metodo tabular equivalente, sistematico, util con 5+ variables.</li>
+            <li>La SoP no siempre es mas simple que la PoS: en esta guia varias funciones resultaron mas economicas en PoS.</li>
+            <li>Casos que colapsan a XOR/XNOR: paridad en Aiken y deteccion de rango en Exceso&ndash;3 se reducen a \\\\(b \\\\oplus c\\\\) o a un XNOR.</li>
           </ul>
         </div>
 `,
@@ -9157,6 +9110,136 @@ o1015  JMP ----     ; retorno (parcheado)
         '</code></div>';
     }
 
+    // ===== Helpers de presentacion profesional (Karnaugh, matematica, impresion) =====
+    var KMAP_PALETTE = [[238,90,111],[74,111,216],[46,184,114],[232,163,61],[155,89,182],[22,163,163],[210,77,87],[60,60,70]];
+    function _grayN(nbits){ var r=[]; var n=(nbits<=0)?1:(1<<nbits); for(var i=0;i<n;i++) r.push(i ^ (i>>1)); return r; }
+    function _bitsStr(val,n){ var s=''; for(var i=n-1;i>=0;i--) s+=((val>>i)&1); return s; }
+
+    // Mapa de Karnaugh como tabla HTML real.
+    //  rowVars: array de variables de fila (mas significativas). colVars: array de variables de columna.
+    //  values: objeto/array index(mintermino abcd) -> '0' | '1' | 'X'.
+    //  groups: array de {cells:[indices], label:'termino'} (resaltado por color + leyenda).
+    function kmap(rowVars, colVars, values, groups, caption){
+      var rb=rowVars.length, cb=colVars.length;
+      var rowG=_grayN(rb), colG=_grayN(cb);
+      groups = groups || [];
+      var cellGroups={};
+      groups.forEach(function(g,gi){ (g.cells||[]).forEach(function(c){ (cellGroups[c]=cellGroups[c]||[]).push(gi); }); });
+      function col(gi){ var p=KMAP_PALETTE[gi%KMAP_PALETTE.length]; return p; }
+      var h='<div class="kmap-wrap"><table class="kmap">';
+      h+='<thead><tr><th class="kmap-corner"><span>'+colVars.join('')+'</span><span>'+rowVars.join('')+'</span></th>';
+      colG.forEach(function(cg){ h+='<th>'+_bitsStr(cg,cb)+'</th>'; });
+      h+='</tr></thead><tbody>';
+      rowG.forEach(function(rg){
+        h+='<tr><th>'+_bitsStr(rg,rb)+'</th>';
+        colG.forEach(function(cg){
+          var idx=rg*(1<<cb)+cg;
+          var v=(values[idx]!==undefined&&values[idx]!==null)?(''+values[idx]):'0';
+          var gs=cellGroups[idx]||[];
+          var bg='transparent';
+          if(gs.length){ var p=col(gs[0]); bg='rgba('+p[0]+','+p[1]+','+p[2]+',0.16)'; }
+          var chips='';
+          gs.forEach(function(gi){ var p=col(gi); chips+='<span class="kchip" style="background:rgb('+p[0]+','+p[1]+','+p[2]+')"></span>'; });
+          var vcls='kval'+(v==='1'?' one':(v==='X'||v==='x'?' dc':''));
+          h+='<td style="background:'+bg+'"><span class="kidx">'+idx+'</span><span class="'+vcls+'">'+v+'</span><span class="kchips">'+chips+'</span></td>';
+        });
+        h+='</tr>';
+      });
+      h+='</tbody></table>';
+      if(groups.length){
+        h+='<div class="kleg">';
+        groups.forEach(function(g,gi){ var p=col(gi); h+='<span class="kleg-i"><span class="kchip" style="background:rgb('+p[0]+','+p[1]+','+p[2]+')"></span> '+g.label+'</span>'; });
+        h+='</div>';
+      }
+      if(caption){ h+='<div class="kmap-cap">'+caption+'</div>'; }
+      h+='</div>';
+      return h;
+    }
+
+    // Bloque de matematica centrado (display). El contenido es LaTeX; KaTeX lo renderiza al inyectar.
+    function mathBlock(latex){ return '<div class="math-block">\\[' + latex + '\\]</div>'; }
+
+    // Tabla generica prolija (cabeceras + filas). highlight: indice de columna a marcar en verde (o null).
+    function dataTable(headers, rows, highlightCol){
+      var h='<div class="dt-wrap"><table class="dt"><thead><tr>';
+      headers.forEach(function(c){ h+='<th>'+c+'</th>'; });
+      h+='</tr></thead><tbody>';
+      rows.forEach(function(r){ h+='<tr>'; r.forEach(function(c,ci){ h+='<td'+((highlightCol!=null&&ci===highlightCol)?' class="dt-hl"':'')+'>'+c+'</td>'; }); h+='</tr>'; });
+      h+='</tbody></table></div>';
+      return h;
+    }
+
+    // Tipografia matematica: corre KaTeX sobre un contenedor (si esta disponible).
+    function typesetMath(el){
+      try { if (window.renderMathInElement) window.renderMathInElement(el, {
+        delimiters: [ {left:'\\[',right:'\\]',display:true}, {left:'\\(',right:'\\)',display:false}, {left:'$$',right:'$$',display:true} ],
+        throwOnError: false
+      }); } catch(e){}
+    }
+
+    // Imprime / exporta a PDF el TP activo en una hoja A4 limpia (ventana nueva, soluciones expandidas).
+    function printTP(id){
+      var meta=(typeof TPS_META!=='undefined') ? TPS_META.find(function(t){return t.id===id;}) : null;
+      meta = meta || {id:id,title:'',unit:''};
+      var src=document.getElementById('tpsContent');
+      if(!src) return;
+      var body=src.innerHTML.replace(/<details/g,'<details open');
+      var katexCss='<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">';
+      var css='<style>'+
+        '@page{size:A4;margin:16mm 15mm 18mm;}'+
+        '*{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box;}'+
+        'body{font-family:Georgia,\'Times New Roman\',serif;color:#15202b;font-size:10.5pt;line-height:1.45;margin:0;}'+
+        '.doc-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #15202b;padding-bottom:6px;margin-bottom:16px;}'+
+        '.doc-head .inst{font-size:8.5pt;text-transform:uppercase;letter-spacing:.6px;color:#556;font-family:Arial,Helvetica,sans-serif;}'+
+        '.doc-head .tit{font-size:15pt;font-weight:700;line-height:1.1;}'+
+        '.doc-head .sub{font-size:9.5pt;color:#445;}'+
+        'summary{display:none!important;}'+
+        'details{border:1px solid #d4d9e0!important;border-radius:6px;margin:0 0 12px!important;overflow:visible!important;page-break-inside:avoid;}'+
+        'details>div{padding:10px 14px!important;}'+
+        'h4{font-family:Arial,Helvetica,sans-serif;font-size:11.5pt;margin:18px 0 8px;border-bottom:1.5px solid #15202b;padding-bottom:3px;}'+
+        'p{margin:6px 0;} pre{font-family:\'DejaVu Sans Mono\',Consolas,monospace;font-size:9pt;background:#f6f7f9;border:1px solid #e3e6ea;border-radius:4px;padding:8px 10px;white-space:pre-wrap;page-break-inside:avoid;}'+
+        'table{border-collapse:collapse;} .katex{font-size:1.04em;}'+
+        KMAP_CSS_TEXT()+
+        '</style>';
+      var head='<header class="doc-head"><div><div class="inst">UTN FRM &middot; Ing. en Sistemas de Informacion &middot; Catedra Perez</div>'+
+        '<div class="tit">'+meta.id+' &mdash; '+meta.title+'</div><div class="sub">Arquitectura de Computadoras &middot; Unidad '+(meta.unit||'')+' &middot; Trabajo practico resuelto</div></div>'+
+        '<div class="inst" style="text-align:right;">Alumno: ____________<br>Fecha: ____________</div></header>';
+      var w=window.open('','_blank');
+      if(!w){ alert('Habilita las ventanas emergentes para poder imprimir / exportar a PDF.'); return; }
+      w.document.open();
+      w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>'+meta.id+' - '+meta.title+'</title>'+katexCss+css+'</head><body>'+head+'<main>'+body+'</main></body></html>');
+      w.document.close();
+      w.focus();
+      setTimeout(function(){ try{ w.print(); }catch(e){} }, 500);
+    }
+
+    // CSS de los mapas de Karnaugh / tablas, reutilizado en pantalla y en la ventana de impresion.
+    function KMAP_CSS_TEXT(){ return ''+
+      '.kmap-wrap{margin:12px 0;overflow-x:auto;}'+
+      '.kmap{border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;margin:0 auto;}'+
+      '.kmap th{background:#eef1f6;color:#2a3340;font-size:0.72rem;font-weight:700;padding:4px 0;border:1px solid #c8cdd6;min-width:46px;text-align:center;font-family:\'DejaVu Sans Mono\',Consolas,monospace;}'+
+      '.kmap td{position:relative;border:1px solid #c8cdd6;width:52px;height:46px;text-align:center;vertical-align:middle;}'+
+      '.kmap .kmap-corner{position:relative;background:#dfe4ec;}'+
+      '.kmap .kmap-corner span:first-child{position:absolute;top:2px;right:5px;font-size:0.6rem;color:#566;}'+
+      '.kmap .kmap-corner span:last-child{position:absolute;bottom:2px;left:5px;font-size:0.6rem;color:#566;}'+
+      '.kmap .kmap-corner:before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(to top right,transparent 48%,#9aa3b2 49%,#9aa3b2 51%,transparent 52%);}'+
+      '.kidx{position:absolute;top:1px;left:3px;font-size:0.58rem;color:#8a93a3;}'+
+      '.kval{font-size:1.05rem;font-weight:700;color:#7a8494;}'+
+      '.kval.one{color:#15202b;}'+
+      '.kval.dc{color:#c07a1e;font-style:italic;}'+
+      '.kchips{position:absolute;bottom:2px;right:3px;display:flex;gap:2px;}'+
+      '.kchip{display:inline-block;width:7px;height:7px;border-radius:2px;}'+
+      '.kleg{margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:0.78rem;color:#33404f;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}'+
+      '.kleg-i .katex{font-size:0.92em;}'+
+      '.kmap-cap{text-align:center;font-size:0.76rem;color:#66707d;margin-top:5px;font-family:Arial,Helvetica,sans-serif;}'+
+      '.math-block{margin:10px 0;text-align:center;}'+
+      '.dt-wrap{overflow-x:auto;margin:10px 0;}'+
+      '.dt{border-collapse:collapse;font-size:0.82rem;width:100%;}'+
+      '.dt th{background:#eef1f6;border:1px solid #c8cdd6;padding:4px 9px;font-family:Arial,Helvetica,sans-serif;font-size:0.78rem;}'+
+      '.dt td{border:1px solid #d6dbe2;padding:3px 9px;text-align:center;}'+
+      '.dt td.dt-hl{color:#1d8f56;font-weight:700;background:rgba(46,184,114,0.08);}';
+    }
+
     function renderTPs() {
       // Tabs
       const tabsCont = document.getElementById('tpsTabs');
@@ -9181,10 +9264,11 @@ o1015  JMP ----     ; retorno (parcheado)
             '<div style="font-size:0.78rem;color:var(--text-secondary);text-transform:uppercase;font-weight:600;">' + tp.id + ' &middot; ' + tp.unit + '</div>' +
             '<div style="font-size:1.1rem;font-weight:600;">' + tp.title + '</div>' +
           '</div>' +
-          (hasContent ? '<div style="display:flex;flex-wrap:wrap;gap:14px;font-size:0.85rem;">' +
+          (hasContent ? '<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.85rem;">' +
             tpProgressCheckbox(_tpsActive, 'leido', 'Leido', progress.leido) +
             tpProgressCheckbox(_tpsActive, 'pasadoMano', 'Pasado a mano', progress.pasadoMano) +
             tpProgressCheckbox(_tpsActive, 'impreso', 'Impreso', progress.impreso) +
+            '<button onclick="printTP(\'' + _tpsActive + '\')" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:none;border-radius:6px;background:var(--accent-primary,#ee5a6f);color:#fff;font-weight:600;font-size:0.82rem;cursor:pointer;">&#128424; Imprimir / PDF</button>' +
           '</div>' : '') +
         '</div>';
       }
@@ -9200,8 +9284,19 @@ o1015  JMP ----     ; retorno (parcheado)
           '<div style="font-size:0.85rem;margin-top:8px;">Pedirle a Claude que arme este TP en chat.</div>' +
         '</div>';
       } else {
+        ensureKmapStyle();
         cont.innerHTML = TPS_CONTENT[_tpsActive];
+        typesetMath(cont);
       }
+    }
+
+    // Inyecta una sola vez el CSS de mapas de Karnaugh / tablas en la pagina.
+    function ensureKmapStyle(){
+      if (document.getElementById('kmap-style')) return;
+      var st=document.createElement('style');
+      st.id='kmap-style';
+      st.textContent=KMAP_CSS_TEXT();
+      document.head.appendChild(st);
     }
 
     function tpProgressCheckbox(tpId, field, label, checked) {
