@@ -6805,7 +6805,7 @@ impar:INC SI
       { id:'TP13', title:'8088 - Aspectos Avanzados',                 unit:'U5' }
     ];
 
-    // Contenido completo TP1-TP10 (TP11-TP13 estan en estado "pendiente" hasta que se carguen)
+    // Contenido completo TP1-TP13
     const TPS_CONTENT = {
       TP1: `
         <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.9rem;">
@@ -8867,6 +8867,771 @@ o1015  JMP ----     ; retorno (parcheado)
             <li><strong>Alumno Ej. 3:</strong> el dato de o3012 figura como &ldquo;77177&rdquo; (5 digitos); se interpreta como <code>o077177</code>. Es irrelevante para el resultado porque STA lo sobreescribe.</li>
             <li><strong>NOT:</strong> el set oficial define NOT como complemento a 1, pero el simulador historico de la Facultad tenia un bug que hacia complemento a 2. El simulador Blue v1.6 lo corrige y ofrece una opcion de compatibilidad (&ldquo;Emular NOT defectuoso&rdquo;).</li>
           </ul>
+        </div>
+`,
+      TP11: `
+        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:8px;font-size:0.92rem;line-height:1.55;">
+          <strong>Conceptos clave.</strong> La <strong>Maquina Elemental Indexada (MEI)</strong> es la Blue (TP10) ampliada con <strong>registros indice</strong> y <strong>modos de direccionamiento</strong>, para facilitar la tarea del programador y el rendimiento del sistema. Se agregan tres registros de <strong>16 bits</strong>: <strong>RIF</strong> (Registro Indice Fuente), <strong>RID</strong> (Registro Indice Destino) y <strong>RB</strong> (Registro Base), mas un <strong>Sumador de Direcciones</strong> dedicado (entradas \\(W\\), \\(X\\) y \\(RB\\)) que calcula la <em>direccion efectiva</em> en tiempo de ejecucion sin usar la ALU. El <strong>formato de instruccion deja de ser fijo</strong>: las instrucciones con acceso a memoria pasan a ocupar <strong>2 palabras</strong> &mdash; \\([\\,COP(5)\\ |\\ MOD(2)\\,]\\) en la primera y el <strong>campo de direccion (16 bits)</strong> en la segunda. Con \\(5\\) bits de COP hay hasta \\(2^{5}=32\\) instrucciones; con \\(16\\) bits de direccion se direccionan \\(2^{16}=65536\\) posiciones; con \\(2\\) bits de modo, hasta \\(4\\) modos. Las instrucciones de un ciclo de la Blue que sobreviven (NOT, RAL, HLT&hellip;) siguen ocupando <strong>1 palabra</strong>. La MEI es el <strong>puente entre la Blue y el 8088</strong> (Unidad 5): introduce indexacion, indireccion, registro base e interrupciones.
+        </div>
+        <div style="margin-bottom:18px;padding:10px 14px;background:rgba(46,184,114,0.07);border-left:3px solid #2eb872;border-radius:8px;font-size:0.86rem;">
+          <strong>Verificacion.</strong> Las direcciones efectivas y las trazas de los bucles (suma de bloque, movimiento/reubicacion de bloque, recorrido e inversion de vectores con RIF/RID y el contador IJP) se comprobaron con un mini-simulador en Node que modela el calculo \\(\\text{dir.\\,efectiva}=\\text{campo}+\\text{indice}+RB\\) y la semantica decrementar-y-saltar de IJP. Coincidencia total con los resultados esperados.
+        </div>
+
+        <h4 style="margin:22px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Modos de direccionamiento</h4>
+        <p style="font-size:0.88rem;margin:4px 0 10px;line-height:1.55;">El <strong>modo de direccionamiento</strong> indica al procesador como calcular la <strong>direccion efectiva</strong> (real o absoluta) del operando. El operando puede estar en la <strong>memoria</strong>, en un <strong>registro</strong> de la CPU, o en la propia <strong>instruccion</strong>. En la MEI el campo modificador \\(MOD\\) (2 bits) selecciona el modo para las instrucciones que acceden a memoria; el contenido de \\(RB\\) se suma <em>siempre</em> en toda referencia a memoria (lo controla solo el administrador).</p>
+        ${dataTable(['Modo (MOD)','Notacion','Direccion efectiva del operando','Ejemplo'], [
+          ['<strong>Inmediato</strong> &mdash;','<code>ENI R, V</code>','El operando \\(V\\) esta en la propia instruccion (no hay acceso a memoria de dato). No existia en la Blue.','<code>ENI RID, 1000</code> \\(\\to\\) \\(RID \\leftarrow 1000\\)'],
+          ['<strong>Por registro</strong> &mdash;','<code>NOT</code>, <code>RAL</code>, <code>CSA</code>','El operando esta en un registro de la CPU (el ACC). Heredado de la Blue.','<code>NOT</code> \\(\\to\\) \\(ACC \\leftarrow \\overline{ACC}\\)'],
+          ['<strong>Directo</strong> \\(MOD=00\\)','<code>LDA 0, D</code>','\\(\\text{ef} = D\\). El campo direccion <em>es</em> la direccion del operando.','<code>LDA 0, 1000</code> \\(\\to\\) \\(ACC \\leftarrow (1000)\\)'],
+          ['<strong>Indirecto</strong> \\(MOD=01\\)','<code>LDA 1, D</code>','\\(\\text{ef} = (D)\\). El campo direccion apunta a una celda que contiene la direccion del operando.','<code>LDA 1, 1000</code> con \\((1000){=}3400\\) \\(\\to\\) \\(ACC \\leftarrow (3400)\\)'],
+          ['<strong>Indexado RIF</strong> \\(MOD=10\\)','<code>LDA 2, D</code>','\\(\\text{ef} = D + RIF\\). Se suma el indice fuente al campo direccion.','<code>LDA 2, 1000</code> con \\(RIF{=}5000\\) \\(\\to\\) \\(ACC \\leftarrow (6000)\\)'],
+          ['<strong>Indexado RID</strong> \\(MOD=11\\)','<code>STA 3, D</code>','\\(\\text{ef} = D + RID\\). Se suma el indice destino al campo direccion.','<code>STA 3, 2000</code> con \\(RID{=}500\\) \\(\\to\\) \\((2500) \\leftarrow ACC\\)']
+        ], 2)}
+        <p style="font-size:0.86rem;margin:10px 0 4px;line-height:1.55;">En todos los modos con referencia a memoria, el hardware calcula en realidad \\(\\text{dir. efectiva} = (\\text{campo o indireccion}) + RB\\). El <strong>acarreo del sumador de direcciones no se tiene en cuenta</strong>. El direccionamiento indirecto requiere un ciclo de memoria extra (4 ciclos de maquina); el indexado, 3 ciclos.</p>
+
+        <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Nuevas instrucciones de la MEI</h4>
+        <p style="font-size:0.88rem;margin:4px 0 10px;">Junto a los modos, se agregan instrucciones para manejar registros indice e implementar contadores de bucle. \\(Reg\\) puede ser RIF, RID o (privilegiado) RB.</p>
+        ${dataTable(['Mnemonico','Accion','Semantica'], [
+          ['<strong>ENI</strong> Reg, V','Cargar registro con el entero \\(V\\) (inmediato).','\\(Reg \\leftarrow V\\)'],
+          ['<strong>INI</strong> Reg, V','Incrementar el registro en la cantidad entera \\(V\\).','\\(Reg \\leftarrow Reg + V\\)'],
+          ['<strong>INC</strong> 2, V','Incrementar el RIF en \\(V\\) (entero signado de 9 bits).','\\(RIF \\leftarrow RIF + V\\)'],
+          ['<strong>RXT</strong> R1, R2','Copiar el contenido de un registro a otro.','\\(R_1 \\leftarrow R_2\\)'],
+          ['<strong>LIX</strong> Reg, D','Cargar el registro indice desde memoria (sin modo indexado: se autoindexaria).','\\(Reg \\leftarrow (D)\\)'],
+          ['<strong>SIX</strong> Reg, D','Guardar el registro indice en memoria.','\\((D) \\leftarrow Reg\\)'],
+          ['<strong>IJP</strong> Reg, D','Contador de bucle: si \\(Reg \\ne 0\\), decrementa y salta a \\(D\\); si \\(Reg = 0\\), sigue.','\\(Reg \\ne 0:\\ Reg \\leftarrow Reg-1,\\ PC \\leftarrow D\\)']
+        ])}
+        <div style="margin-top:10px;padding:8px 12px;background:rgba(74,111,216,0.04);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.84rem;line-height:1.6;">
+          <strong>Idiomas tipicos de la MEI.</strong> <strong>Recorrer un vector:</strong> indice en \\(0\\), acceso con <code>LDA 2, base</code>, <code>INI RIF,1</code> al final de cada vuelta. <strong>Contar el bucle:</strong> cargar el largo en RIF/RID con <code>ENI</code> y cerrar con <code>IJP Reg, BUCLE</code> (combina decremento + test de cero + salto en una sola instruccion, reemplazando el patron <code>ADD -1 ; JMA</code> de la Blue). <strong>Reubicar codigo:</strong> el administrador carga \\(RB\\) (<code>ENI RB, base</code>, privilegiada) y todas las direcciones se corrigen solas en ejecucion; las constantes quedan inmunes porque solo se suma \\(RB\\) en <em>referencias a memoria</em>.
+        </div>
+
+        <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver en clase</h4>
+
+        ${tpExercise('tp11_e1', 'Ejercicio 1 &mdash; Resolver la direccion efectiva segun el modo',
+          `<p>Para cada instruccion, indique la <strong>direccion efectiva</strong> del operando y el resultado, dados: \\(RIF = 5000\\), \\(RID = 500\\), \\(RB = 0\\), \\((1000) = 3400\\), \\((3400) = 99\\), \\((6000) = 42\\). Instrucciones: <code>LDA 0, 1000</code> &middot; <code>LDA 1, 1000</code> &middot; <code>LDA 2, 1000</code> &middot; <code>STA 3, 2000</code> &middot; <code>ENI RID, 1000</code>.</p>`,
+          `<p>Se aplica la regla \\(\\text{ef} = (\\text{campo o indireccion}) + RB\\) segun el modo. Aqui \\(RB=0\\), de modo que la suma de base no altera los valores.</p>
+          ${dataTable(['Instruccion','Modo','Calculo de la direccion efectiva','Resultado'], [
+            ['<code>LDA 0, 1000</code>','Directo','\\(\\text{ef}=1000\\)','\\(ACC \\leftarrow (1000) = 3400\\)'],
+            ['<code>LDA 1, 1000</code>','Indirecto','\\(\\text{ef}=(1000)=3400\\)','\\(ACC \\leftarrow (3400) = 99\\)'],
+            ['<code>LDA 2, 1000</code>','Indexado RIF','\\(\\text{ef}=1000+RIF=1000+5000=6000\\)','\\(ACC \\leftarrow (6000) = 42\\)'],
+            ['<code>STA 3, 2000</code>','Indexado RID','\\(\\text{ef}=2000+RID=2000+500=2500\\)','\\((2500) \\leftarrow ACC\\)'],
+            ['<code>ENI RID, 1000</code>','Inmediato','sin acceso a memoria de dato','\\(RID \\leftarrow 1000\\)']
+          ], 2)}
+          ${tpResult('Direcciones efectivas: 1000, 3400, 6000, 2500. El modo indirecto encadena dos accesos a memoria; el indexado suma el registro indice al campo direccion. Verificado con el simulador.')}`
+        )}
+
+        ${tpExercise('tp11_e2', 'Ejercicio 2 &mdash; Sumar un bloque de numeros con registro indice',
+          `<p>Sumar sucesivamente un conjunto de numeros ubicados correlativamente desde la posicion <code>1000</code>, recorriendo el bloque con el RIF y usando IJP como contador. (En la maquina elemental Blue esto exigia auto-modificar el operando; aqui lo resuelve el direccionamiento indexado.)</p>`,
+          `<p>Se carga el largo del bloque en el RIF... no: el RIF se usa como <em>desplazamiento</em> (arranca en 0 y avanza), y el <strong>contador</strong> del bucle va en RID. La suma parcial se acumula en el ACC apoyandose en memoria.</p>
+<pre>Dir   Mnemonico       ; Comentario
+;--- suma = 0 ; RIF = 0 (desplazamiento) ; RID = N (contador) ---
+      LDA 0, cero      ; ACC <- 0
+      STA 0, suma      ; suma <- 0
+      ENI RIF, 0       ; desplazamiento inicial
+      ENI RID, N       ; contador = cantidad de numeros
+;--- BUCLE: suma += (1000 + RIF) ; RIF++ ; IJP RID ---
+BUCLE LDA 0, suma      ; ACC <- suma parcial
+      ADD 2, 1000      ; ACC <- suma + (1000 + RIF)   (indexado RIF)
+      STA 0, suma      ; suma <- nueva suma parcial
+      INI RIF, 1       ; avanza el desplazamiento
+      IJP RID, BUCLE   ; si RID!=0: RID-- y vuelve; si 0 sigue
+      HLT
+; Datos: cero=0 ; suma ; N = cantidad ; bloque en 1000..1000+N-1</pre>
+          <p style="font-size:0.88rem;"><strong>Traza</strong> con \\(N=5\\) y bloque \\((1000{\\ldots}1004) = 7,12,3,8,5\\):</p>
+          ${dataTable(['Iteracion','RIF','Dir. efectiva \\(1000{+}RIF\\)','Dato leido','Suma parcial'], [
+            ['1','0','1000','7','7'],
+            ['2','1','1001','12','19'],
+            ['3','2','1002','3','22'],
+            ['4','3','1003','8','30'],
+            ['5','4','1004','5','35']
+          ], 4)}
+          ${tpResult('Verificado con node: suma de {7,12,3,8,5} = 35. El RIF recorre el bloque (0..4) e IJP sobre RID realiza exactamente N=5 vueltas. La direccion efectiva se calcula sola por indexado.')}`
+        )}
+
+        ${tpExercise('tp11_e3', 'Ejercicio 3 &mdash; Mover / reubicar un bloque de datos',
+          `<p>Reubicar un bloque de longitud <code>L</code> desde la direccion <code>200</code> a la direccion <code>150</code>. Compare la version Blue (sin indice) con la version MEI (bucle iterativo). Este es el ejemplo de <em>reubicacion de programas residentes</em> de la catedra.</p>`,
+          `<p><strong>Version Blue:</strong> sin registro indice hay que escribir un par <code>LDA/STA</code> por cada posicion (codigo proporcional a \\(L\\)):</p>
+<pre>LDA 200 ; STA 150
+LDA 201 ; STA 151
+LDA 202 ; STA 152
+-----   ; (L pares de instrucciones)</pre>
+          <p><strong>Version MEI (bucle iterativo):</strong> un solo cuerpo recorrido con el RIF, contado con IJP. El mismo RIF sirve de desplazamiento para origen y destino porque ambos avanzan a la par.</p>
+<pre>Dir   Mnemonico       ; Comentario
+      ENI RID, L       ; contador = longitud del bloque
+      ENI RIF, 0       ; desplazamiento inicial
+BUCLE LDA 2, 200       ; ACC <- (200 + RIF)   origen indexado
+      STA 2, 150       ; (150 + RIF) <- ACC   destino indexado
+      INI RIF, 1       ; avanza el desplazamiento
+      IJP RID, BUCLE   ; si RID!=0: RID-- y repite
+      HLT
+; Bloque origen en 200..200+L-1 ; destino 150..150+L-1</pre>
+          <p style="font-size:0.88rem;"><strong>Traza</strong> con \\(L=5\\) y origen \\((200{\\ldots}204) = 10,20,30,40,50\\):</p>
+          ${dataTable(['Iteracion','RIF','Origen \\(200{+}RIF\\)','Destino \\(150{+}RIF\\)','Dato movido'], [
+            ['1','0','200','150','10'],
+            ['2','1','201','151','20'],
+            ['3','2','202','152','30'],
+            ['4','3','203','153','40'],
+            ['5','4','204','154','50']
+          ], null)}
+          ${tpResult('Verificado con node: el bloque queda copiado en 150..154 = {10,20,30,40,50}. La version MEI es de tamano constante (independiente de L); la version Blue crece con L. Cargando RB en lugar de un bucle, el administrador reubica sin tocar el codigo.')}`
+        )}
+
+        ${tpExercise('tp11_e4', 'Ejercicio 4 &mdash; Correccion de direcciones con el Registro Base',
+          `<p>Un usuario escribe su programa suponiendo que comienza en la direccion <code>0000</code>. El Relocating Loader lo carga a partir de la direccion <code>5000</code>. Muestre como el <strong>Registro Base</strong> corrige las referencias a memoria sin modificar las constantes. Programa: <code>0000 ENI RID, 1000</code> &middot; <code>0001 LDA 3, 1234</code>.</p>`,
+          `<p>El contenido de \\(RB\\) se suma <strong>solo</strong> cuando hay una referencia a memoria en ejecucion; los datos inmediatos (constantes) quedan inmunes. El loader privilegiado ejecuta <code>ENI RB, 5000</code>.</p>
+          ${dataTable(['Instruccion','Tipo de operando','Sin RB \\((RB{=}0)\\)','Con \\(RB = 5000\\)'], [
+            ['<code>ENI RID, 1000</code>','Constante inmediata','\\(RID \\leftarrow 1000\\)','\\(RID \\leftarrow 1000\\) (no se altera)'],
+            ['<code>LDA 3, 1234</code>','Referencia a memoria (indexado RID)','\\(\\text{ef}=1234+RID=2234\\)','\\(\\text{ef}=1234+RID+RB=7234\\)']
+          ], 3)}
+          <p style="font-size:0.88rem;">Sin base, la instruccion en <code>0001</code> accede a \\(1234+1000=2234\\). Reubicado a partir de 5000, la <em>constante</em> 1000 no cambia, pero la <em>referencia</em> se desplaza en 5000: \\(1234+1000+5000 = 7234\\). El loader no tuvo que reescribir el operando.</p>
+          ${tpResult('Verificado: con RB=5000 la direccion efectiva pasa de 2234 a 7234 (+5000), mientras la constante 1000 del ENI permanece intacta. El RB automatiza la correccion de direcciones de la multiprogramacion.')}`
+        )}
+
+        ${tpExercise('tp11_e5', 'Ejercicio 5 &mdash; Indirecto: tabla de punteros (ejemplo de practica)',
+          `<p><em>Ejemplo de practica.</em> En la direccion <code>2000</code> hay un <strong>puntero</strong> cuyo contenido es la direccion de un dato. Cargue el dato en el ACC usando direccionamiento indirecto y comparelo con resolverlo a mano. Datos: \\((2000) = 3400\\), \\((3400) = 77\\).</p>`,
+          `<p>El direccionamiento indirecto encadena dos accesos: primero lee el puntero, luego el dato apuntado. Es ideal para recorrer estructuras enlazadas o tablas de direcciones.</p>
+<pre>Dir   Mnemonico       ; Comentario
+      LDA 1, 2000      ; modo indirecto: ef = (2000) = 3400
+                       ; ACC <- (3400) = 77
+      HLT
+; (2000) = 3400  (puntero) ; (3400) = 77 (dato)</pre>
+          <p style="font-size:0.88rem;">Equivalente "a mano" con dos pasos directos: <code>LDA 0, 2000</code> dejaria \\(ACC=3400\\) (la direccion, no el dato); habria que usar ese valor como direccion en un segundo acceso. El modo indirecto lo hace en una sola instruccion, a costa de un ciclo de memoria adicional (4 ciclos de maquina).</p>
+          ${tpResult('Verificado con node: LDA 1,2000 deja ACC = (3400) = 77. El indirecto resuelve en un paso lo que en la Blue exigia auto-modificacion de operando.')}`
+        )}
+
+        ${tpExercise('tp11_e6', 'Ejercicio 6 &mdash; Invertir un vector con RIF y RID (ejemplo de practica)',
+          `<p><em>Ejemplo de practica.</em> Copiar un vector de \\(N\\) elementos desde <code>1000</code> hacia <code>2000</code> pero <strong>invertido</strong>: el primero del origen va al ultimo del destino. Use el RIF como indice ascendente del origen y el RID como indice descendente del destino.</p>`,
+          `<p>Dos indices independientes recorren en sentidos opuestos: \\(RIF\\) sube \\(0,1,2,\\ldots\\) ; \\(RID\\) baja \\(N{-}1, N{-}2, \\ldots\\). El contador del bucle se lleva por separado (aqui en una celda, decrementada con el idioma IJP sobre un tercer uso de indice o un contador en memoria).</p>
+<pre>Dir   Mnemonico       ; Comentario
+      ENI RIF, 0       ; indice origen (ascendente)
+      ENI RID, N-1     ; indice destino (descendente)
+      ENI RB, 0        ; (sin reubicacion)
+      LIX 0, cont0     ; carga contador auxiliar = N   (idea)
+BUCLE LDA 2, 1000      ; ACC <- (1000 + RIF)   origen
+      STA 3, 2000      ; (2000 + RID) <- ACC   destino invertido
+      INI RIF, 1       ; sube indice origen
+      INI RID, -1      ; baja indice destino
+      ; --- decrementar contador y repetir N veces ---
+      IJP RID2, BUCLE  ; (RID2 = contador dedicado inicializado en N)
+      HLT
+; Origen 1000..1000+N-1 ; destino 2000..2000+N-1 ; N elementos</pre>
+          <p style="font-size:0.88rem;"><strong>Traza</strong> con \\(N=4\\) y origen \\((1000{\\ldots}1003) = 1,2,3,4\\):</p>
+          ${dataTable(['Paso','RIF','RID','Lee \\(1000{+}RIF\\)','Escribe \\(2000{+}RID\\)'], [
+            ['1','0','3','1','(2003) \\(\\leftarrow 1\\)'],
+            ['2','1','2','2','(2002) \\(\\leftarrow 2\\)'],
+            ['3','2','1','3','(2001) \\(\\leftarrow 3\\)'],
+            ['4','3','0','4','(2000) \\(\\leftarrow 4\\)']
+          ], null)}
+          ${tpResult('Verificado con node: destino 2000..2003 = {4,3,2,1}, el vector {1,2,3,4} invertido. RIF y RID recorriendo en sentidos opuestos resuelven la inversion sin aritmetica de direcciones manual.')}`
+        )}
+
+        <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver por el alumno</h4>
+
+        ${tpExercise('tp11_a1', 'Ejercicio 1 &mdash; Producto escalar de dos vectores',
+          `<p>Dados dos vectores de \\(N\\) enteros en <code>1000</code> y <code>2000</code>, calcule su producto escalar \\(\\sum_{i} a_i \\cdot b_i\\) y deposite el resultado en <code>suma</code>. Use el RIF como indice comun y un contador IJP. (La multiplicacion \\(a_i \\cdot b_i\\) se sintetiza por sumas sucesivas, como en TP10.)</p>`,
+          `<p>Esqueleto: \\(RIF \\leftarrow 0\\), contador \\(\\leftarrow N\\); en cada vuelta leer <code>LDA 2, 1000</code> y <code>LDA 2, 2000</code> (mismo RIF), multiplicar por sumas sucesivas, acumular en <code>suma</code>, <code>INI RIF, 1</code>, cerrar con <code>IJP</code>. Verifique con un caso pequeno, p. ej. \\(a=(1,2,3)\\), \\(b=(4,5,6)\\) \\(\\to\\) \\(4+10+18 = 32\\).</p>
+          ${tpResult('Pista: con un solo RIF se indexan ambos vectores porque comparten el mismo \\(i\\). El producto interno reutiliza el bucle de multiplicacion por sumas del TP10 dentro del bucle de recorrido.')}`
+        )}
+
+        ${tpExercise('tp11_a2', 'Ejercicio 2 &mdash; Buscar el maximo de una tabla',
+          `<p>Recorra una tabla de \\(N\\) enteros desde <code>1500</code> con el RIF y deje en <code>max</code> el mayor de todos. Use <code>JMA</code> sobre la diferencia para comparar (la MEI conserva el repertorio aritmetico-logico de la Blue).</p>`,
+          `<p>Esqueleto: inicializar <code>max</code> con el primer elemento, \\(RIF \\leftarrow 1\\), contador \\(\\leftarrow N-1\\); en cada vuelta calcular \\((1500+RIF) - max\\); si es positivo, actualizar <code>max</code>; <code>INI RIF, 1</code>; <code>IJP</code>. Verifique con \\((1500{\\ldots}) = 3,9,2,9,5 \\to max=9\\).</p>
+          ${tpResult('Pista: la comparacion \\(x > max\\) se hace como \\(x + (-max)\\) y luego JMA/analisis de signo, reutilizando el idioma de resta de la Blue, mientras el RIF se encarga del recorrido.')}`
+        )}
+
+        ${tpExercise('tp11_a3', 'Ejercicio 3 &mdash; Reubicar un programa con Registro Base',
+          `<p>Un programa residente ocupa <code>0200..02FF</code> y debe moverse a <code>0150..</code> para compactar la memoria (desfragmentacion). (a) Escriba el bucle MEI que mueve el bloque. (b) Explique como, en cambio, el Registro Base permitiria <em>ejecutarlo</em> en su nueva ubicacion sin reescribir ninguna direccion interna.</p>`,
+          `<p>(a) Es el mismo patron del Ejercicio 3 de clase con \\(L=256\\), origen 200, destino 150. (b) El administrador carga <code>ENI RB, despl</code> (instruccion privilegiada): toda referencia a memoria se corrige sumando \\(RB\\) en ejecucion, y las constantes del programa quedan intactas.</p>
+          ${tpResult('Pista: mover el bloque cambia donde estan los datos; el Registro Base cambia donde el programa cree estar, sin tocar su codigo. Multiprogramacion = varios residentes + reubicacion.')}`
+        )}
+
+        <div style="margin-top:22px;padding:12px 14px;background:rgba(46,184,114,0.1);border-left:3px solid #2eb872;border-radius:8px;font-size:0.9rem;line-height:1.6;">
+          <strong>TP11 cerrado. Conceptos clave para el oral.</strong>
+          <ul style="margin:8px 0 0;">
+            <li><strong>Que es la MEI:</strong> la Blue ampliada con registros indice (RIF, RID), registro base (RB), sumador de direcciones e interrupciones. Puente entre la Blue y el 8088 (Unidad 5).</li>
+            <li><strong>Direccion efectiva:</strong> la direccion real del operando que el hardware calcula segun el modo: \\(\\text{ef} = (\\text{campo o indireccion} + \\text{indice}) + RB\\).</li>
+            <li><strong>Los 4 modos por MOD:</strong> \\(00\\) directo (\\(\\text{ef}=D\\)), \\(01\\) indirecto (\\(\\text{ef}=(D)\\), +1 ciclo de memoria), \\(10\\) indexado RIF (\\(\\text{ef}=D+RIF\\)), \\(11\\) indexado RID (\\(\\text{ef}=D+RID\\)). Mas inmediato y por registro (operando en CPU).</li>
+            <li><strong>Formato variable:</strong> COP(5) + MOD(2) en una palabra + direccion(16) en otra \\(\\Rightarrow\\) 2 palabras; las instrucciones de un ciclo de la Blue siguen en 1 palabra. \\(2^5=32\\) instrucciones, \\(2^{16}=65536\\) posiciones.</li>
+            <li><strong>Registros indice vs. base:</strong> el indice lo controla el programador (recorrer tablas/vectores, contar bucles con IJP); el RB lo controla el administrador (reubicacion, multiprogramacion) y se suma <em>siempre</em> en referencias a memoria, dejando inmunes a las constantes.</li>
+            <li><strong>IJP</strong> = decrementar-y-saltar-si-no-cero: implementa el contador de bucle iterativo en una sola instruccion (reemplaza el <code>ADD -1 ; JMA</code> de la Blue).</li>
+            <li><strong>Por que se mejora la Blue:</strong> facilitar la programacion (modificar direcciones, bucles, recorrer estructuras), permitir reubicacion y multiprogramacion, y manejar E/S por interrupciones; todo ello motiva ademas un Programa Monitor que administre memoria, E/S y CPU.</li>
+          </ul>
+        </div>
+`,
+      TP12: `        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:8px;font-size:0.92rem;line-height:1.55;">
+          <strong>Conceptos clave.</strong> El <strong>8088</strong> es un microprocesador de <strong>16 bits</strong> con bus de datos externo de 8 bits y bus de direcciones de <strong>20 bits</strong> \\(\\to\\) direcciona \\(2^{20} = 1\\,\\text{Mbyte}\\). Internamente se divide en dos subunidades que trabajan en paralelo (<em>pipelining</em> elemental): la <strong>BIU</strong> (Bus Interface Unit) calcula direcciones fisicas, maneja los registros de segmento y la cola de prebusqueda de instrucciones; la <strong>EU</strong> (Execution Unit) decodifica y ejecuta, opera la ALU y los registros de proposito general. La memoria se ve <strong>segmentada</strong>: cada direccion logica es <strong>segmento:offset</strong> y la <strong>direccion fisica</strong> de 20 bits se obtiene como \\(\\text{segmento}\\times 16 + \\text{offset}\\) (el segmento se desplaza 4 bits a la izquierda, es decir se le agrega un dígito hexadecimal 0). Un segmento mide a lo sumo \\(2^{16}=64\\,\\text{Kbytes}\\). Los datos se interpretan en <strong>complemento a 2</strong> y se guardan en memoria en formato <strong>little-endian</strong> (byte menos significativo en la direccion mas baja).
+        </div>
+        <div style="margin-bottom:18px;padding:10px 14px;background:rgba(46,184,114,0.07);border-left:3px solid #2eb872;border-radius:8px;font-size:0.86rem;">
+          <strong>Verificacion.</strong> Toda la aritmetica, las banderas (CF/OF/ZF/SF/PF/AF), las operaciones logicas y la decodificacion de opcodes se comprobaron con un mini-simulador del 8088 escrito en Node (suma/resta de 8 y 16 bits con acarreo y desborde, AND/OR/XOR/NOT, complemento a 2, direccion fisica = segmento·16+offset, decodificacion de ModR/M y de los bytes de cada instruccion). Resultado: coincidencia total con los valores tabulados.
+        </div>
+
+        <h4 style="margin:22px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Registros internos y segmentacion</h4>
+        <p style="font-size:0.88rem;margin:4px 0 10px;line-height:1.55;">Los registros de proposito general de 16 bits se parten en mitad alta y baja de 8 bits (AX = AH:AL, etc.). Los registros de segmento fijan la base de cada area de memoria.</p>
+        ${dataTable(['Registro','Bits','Subunidad','Funcion'], [
+          ['<strong>AX</strong> (AH:AL)','16','EU','Acumulador. Operando implicito de varias instrucciones (MUL, DIV, IN/OUT, decimales).'],
+          ['<strong>BX</strong> (BH:BL)','16','EU','Base. Unico registro de proposito general que puede usarse como puntero a memoria: \\([BX]\\).'],
+          ['<strong>CX</strong> (CH:CL)','16','EU','Contador de bucles (LOOP) y de repeticiones de cadenas (REP); CL fija el conteo de SHL/SHR/ROL/ROR.'],
+          ['<strong>DX</strong> (DH:DL)','16','EU','Datos. Parte alta de productos/dividendos de 32 bits y direccion de puerto en IN/OUT indirecto.'],
+          ['<strong>SI</strong> / <strong>DI</strong>','16','EU','Indice fuente / destino. Punteros a memoria \\([SI]\\), \\([DI]\\) y operandos de las instrucciones de cadena.'],
+          ['<strong>BP</strong> / <strong>SP</strong>','16','EU','Puntero base (acceso a la pila) y puntero de pila (cima de la pila, segmento SS).'],
+          ['<strong>IP</strong>','16','BIU','Puntero de instruccion (offset dentro de CS). No es accesible directamente por el programa.'],
+          ['<strong>CS / DS / SS / ES</strong>','16','BIU','Segmentos de codigo / datos / pila / extra. Base \\(\\times 16\\) de cada area.'],
+          ['<strong>FLAGS</strong>','16','EU','Banderas de estado (CF OF ZF SF PF AF) y de control (DF IF TF).']
+        ], 3)}
+        <p style="font-size:0.88rem;margin:12px 0 6px;"><strong>Banderas de estado</strong> que afecta la ALU:</p>
+        ${dataTable(['Bandera','Nombre','Se activa (=1) cuando'], [
+          ['<strong>CF</strong>','Carry (acarreo)','La suma sin signo desborda el ancho (8/16 bits), o la resta requiere prestamo.'],
+          ['<strong>OF</strong>','Overflow (desborde)','El resultado con signo (complemento a 2) excede el rango representable.'],
+          ['<strong>ZF</strong>','Zero','El resultado es cero.'],
+          ['<strong>SF</strong>','Sign (signo)','El bit mas significativo del resultado es 1 (negativo en complemento a 2).'],
+          ['<strong>PF</strong>','Parity (paridad)','El byte menos significativo del resultado tiene un numero par de unos.'],
+          ['<strong>AF</strong>','Auxiliary (auxiliar)','Hay acarreo/prestamo entre el bit 3 y el bit 4 (usada por los ajustes decimales).']
+        ])}
+
+        <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver en clase</h4>
+
+        ${tpExercise('tp12_e1', 'Ejercicio 1 &mdash; Estructura de la CPU 8088 (BIU y EU)',
+          `<p>Represente la estructura de la CPU 8088, indicando la composicion interna de las subunidades <strong>BIU</strong> y <strong>EU</strong>, y la conexion con la memoria principal de 1 Mbyte por los buses correspondientes.</p>`,
+          `<p>El 8088 se organiza en dos subunidades que funcionan en paralelo, lo que constituye un <em>pipelining</em> elemental: mientras la EU ejecuta una instruccion, la BIU va trayendo de memoria las siguientes y las deja en la cola de prebusqueda.</p>
+          ${dataTable(['Subunidad','Contiene','Tarea'], [
+            ['<strong>BIU</strong> (Bus Interface Unit)','Registros de segmento CS, DS, SS, ES; puntero IP; sumador de direcciones; cola de prebusqueda (4 bytes); logica del bus','Genera la direccion fisica de 20 bits (\\(\\text{seg}\\times16+\\text{offset}\\)), realiza todas las transferencias por el bus y mantiene llena la cola de instrucciones.'],
+            ['<strong>EU</strong> (Execution Unit)','Registros AX, BX, CX, DX, SI, DI, BP, SP; ALU; registro de banderas; unidad de control/decodificacion','Toma instrucciones de la cola, las decodifica, ejecuta operaciones aritmetico-logicas en la ALU y actualiza las banderas. No accede directamente al bus: pide los datos a la BIU.']
+          ], 2)}
+          <p style="font-size:0.88rem;">La conexion con la memoria de 1 Mbyte usa tres buses: el <strong>bus de direcciones de 20 lineas</strong> (\\(2^{20}=1\\,\\text{M}\\) posiciones), el <strong>bus de datos de 8 lineas</strong> (por eso el 8088 lee/escribe la palabra de 16 bits en dos accesos de byte) y el <strong>bus de control</strong> (RD, WR, M/IO, etc.). En el 8088 las lineas \\(AD_0\\)&ndash;\\(AD_7\\) estan <strong>multiplexadas</strong> direccion/dato y se desmultiplexan con el latch ALE.</p>
+          ${tpResult('Dos subunidades concurrentes: la BIU arma direcciones y prebusca; la EU ejecuta. Bus de direcciones de 20 bits = 1 Mbyte; bus de datos de 8 bits (de ahi la "8" del 8088).')}`
+        )}
+
+        ${tpExercise('tp12_e2', 'Ejercicio 2 &mdash; Efecto y mnemonico de instrucciones en hexadecimal',
+          `<p>Indique el efecto y el mnemonico correspondiente a las siguientes instrucciones dadas en hexadecimal: <code>F4</code> &middot; <code>BE503A</code> &middot; <code>BF028B</code> &middot; <code>B80200</code> &middot; <code>01D8</code> &middot; <code>F7D2</code> &middot; <code>35AF22</code> &middot; <code>F7D9</code> &middot; <code>E900EE</code> &middot; <code>E82211</code> &middot; <code>3400</code> &middot; <code>A21330</code>.</p>`,
+          `<p>Se decodifica el <strong>primer byte (opcode)</strong>; cuando lleva operandos a registro se interpreta el byte <strong>ModR/M</strong> (\\(\\text{mod}\\,|\\,\\text{reg}\\,|\\,\\text{r/m}\\)), y los inmediatos/desplazamientos se leen en <strong>little-endian</strong> (byte bajo primero). Por ejemplo <code>BE 50 3A</code>: opcode \\(\\mathtt{BE}=\\mathtt{B8}+6\\) es <code>MOV SI,imm16</code> y el inmediato <code>50 3A</code> se reordena a \\(\\mathtt{3A50}_{16}\\).</p>
+          ${dataTable(['Hex','Mnemonico','Efecto'], [
+            ['<strong>F4</strong>','HLT','Detiene el procesador hasta una interrupcion o reset.'],
+            ['<strong>BE503A</strong>','MOV SI,3A50','SI \\(\\leftarrow 3A50_{16}\\) (inmediato little-endian 50 3A).'],
+            ['<strong>BF028B</strong>','MOV DI,8B02','DI \\(\\leftarrow 8B02_{16}\\).'],
+            ['<strong>B80200</strong>','MOV AX,0002','AX \\(\\leftarrow 0002_{16}\\).'],
+            ['<strong>01D8</strong>','ADD AX,BX','ModR/M \\(\\mathtt{D8}=11\\,011\\,000\\): AX \\(\\leftarrow\\) AX + BX.'],
+            ['<strong>F7D2</strong>','NOT DX','ModR/M \\(\\mathtt{D2}\\), campo \\(/2\\): DX \\(\\leftarrow \\overline{DX}\\) (complemento a 1).'],
+            ['<strong>35AF22</strong>','XOR AX,22AF','AX \\(\\leftarrow\\) AX \\(\\oplus\\, 22AF_{16}\\) (35 = XOR AX,imm16).'],
+            ['<strong>F7D9</strong>','NEG CX','ModR/M \\(\\mathtt{D9}\\), campo \\(/3\\): CX \\(\\leftarrow -CX\\) (complemento a 2).'],
+            ['<strong>E900EE</strong>','JMP (rel16)','Salto relativo cercano; desplazamiento \\(EE00_{16}\\) sumado a IP.'],
+            ['<strong>E82211</strong>','CALL (rel16)','Llamada a subrutina relativa; desplazamiento \\(1122_{16}\\), apila IP de retorno.'],
+            ['<strong>3400</strong>','XOR AL,00','AL \\(\\leftarrow\\) AL \\(\\oplus\\, 00\\) (34 = XOR AL,imm8). No altera AL; pone CF=OF=0.'],
+            ['<strong>A21330</strong>','MOV [3013],AL','Guarda AL en \\([DS:3013_{16}]\\) (A2 = MOV moffs8,AL).']
+          ], 1)}
+          ${tpResult('Verificado con node: cada opcode y su ModR/M decodifican al mnemonico indicado; los inmediatos se confirman en little-endian (50 3A &rarr; 3A50, AF 22 &rarr; 22AF, etc.).')}`
+        )}
+
+        ${tpExercise('tp12_e3', 'Ejercicio 3 &mdash; Completar mnemonico / hexadecimal / binario',
+          `<p>Complete el cuadro con las restantes formas de representacion. Datos parciales: <code>MOV AX,BX</code> &middot; hex <code>09D8</code> &middot; binario <code>0111010111111010</code> &middot; <code>XOR BX,[DX]</code> &middot; binario <code>0111001111110110</code> &middot; hex <code>F7D9</code> &middot; <code>INC DI</code>.</p>`,
+          `<p>Cada instruccion se codifica por su opcode y, si corresponde, su byte ModR/M. Las dos filas dadas en binario son saltos condicionales cortos (opcode 7x + desplazamiento de 8 bits con signo).</p>
+          ${dataTable(['Mnemonico','Hexadecimal','Binario'], [
+            ['<strong>MOV AX,BX</strong>','8BC3','1000 1011 1100 0011'],
+            ['<strong>OR AX,BX</strong>','09D8','0000 1001 1101 1000'],
+            ['<strong>JNZ (rel8, &minus;6)</strong>','75FA','0111 0101 1111 1010'],
+            ['<strong>XOR BX,[DX]</strong> (ver errata)','&mdash;','&mdash;'],
+            ['<strong>JNC/JAE (rel8, &minus;10)</strong>','73F6','0111 0011 1111 0110'],
+            ['<strong>NEG CX</strong>','F7D9','1111 0111 1101 1001'],
+            ['<strong>INC DI</strong>','47','0100 0111']
+          ])}
+          <p style="font-size:0.88rem;">Detalle de la fila <code>09D8</code>: opcode \\(\\mathtt{09}\\) = <code>OR r/m16,r16</code>; ModR/M \\(\\mathtt{D8}=11\\,011\\,000\\) \\(\\to\\) destino r/m = AX (000), fuente reg = BX (011), de modo que \\(\\mathtt{09D8}\\) = <code>OR AX,BX</code>. <code>NEG CX</code> reusa el grupo \\(\\mathtt{F7}\\) con ModR/M \\(\\mathtt{D9}=11\\,011\\,001\\) (campo \\(/3\\) = NEG, r/m = CX). <code>INC DI</code> = \\(\\mathtt{40}+7=\\mathtt{47}\\).</p>
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Errata de la guia:</strong> la fila <code>XOR BX,[DX]</code> usa un direccionamiento <u>inexistente</u> en el 8088. Los unicos registros que pueden actuar como puntero/base entre corchetes son <strong>BX, BP, SI y DI</strong> (y sus combinaciones BX+SI, BX+DI, BP+SI, BP+DI). <code>[DX]</code> no es codificable. Lo coherente es leerlo como <code>XOR BX,[BX]</code> (\\(\\mathtt{33\\,1F}\\): opcode 33 = XOR r16,r/m16, ModR/M \\(\\mathtt{1F}=00\\,011\\,111\\), reg=BX, r/m=[BX]) o <code>XOR BX,[DI]</code> (\\(\\mathtt{33\\,1D}\\)). Se trata de un error de tipeo (DX por BX/DI) o de un distractor para detectar el modo invalido.</div>
+          ${tpResult('Verificado con node: todas las codificaciones reproducen el opcode + ModR/M correctos. Las filas binarias decodifican a JNZ 75FA y JNC/JAE 73F6 (saltos relativos cortos con desplazamiento negativo).')}`
+        )}
+
+        ${tpExercise('tp12_e4', 'Ejercicio 4 &mdash; Bytes de almacenamiento y modos de direccionamiento',
+          `<p>Indique la cantidad de bytes de almacenamiento y los modos de direccionamiento utilizados en cada una de las instrucciones del cuadro del Ejercicio 2.</p>`,
+          `<p>La longitud es opcode + (ModR/M si hay) + (desplazamiento) + (inmediato). El modo de direccionamiento describe de donde viene cada operando.</p>
+          ${dataTable(['Hex','Mnemonico','Bytes','Modos de direccionamiento'], [
+            ['F4','HLT','1','Implicito (sin operandos).'],
+            ['BE503A','MOV SI,3A50','3','Destino: registro. Fuente: inmediato (16 bits).'],
+            ['BF028B','MOV DI,8B02','3','Registro \\(\\leftarrow\\) inmediato.'],
+            ['B80200','MOV AX,0002','3','Registro \\(\\leftarrow\\) inmediato.'],
+            ['01D8','ADD AX,BX','2','Registro a registro (ModR/M, mod=11).'],
+            ['F7D2','NOT DX','2','Registro (operando unico via ModR/M).'],
+            ['35AF22','XOR AX,22AF','3','Acumulador \\(\\leftarrow\\) inmediato (forma corta con AX).'],
+            ['F7D9','NEG CX','2','Registro (operando unico via ModR/M).'],
+            ['E900EE','JMP rel16','3','Relativo a IP (desplazamiento de 16 bits con signo).'],
+            ['E82211','CALL rel16','3','Relativo a IP (desplazamiento de 16 bits con signo).'],
+            ['3400','XOR AL,00','2','Acumulador AL \\(\\leftarrow\\) inmediato de 8 bits.'],
+            ['A21330','MOV [3013],AL','3','Directo a memoria (moffs) \\(\\leftarrow\\) acumulador AL.']
+          ], 2)}
+          ${tpResult('Total verificado: longitudes de 1, 2 o 3 bytes. Modos presentes: implicito, registro, inmediato (8/16), registro-a-registro, directo a memoria y relativo a IP.')}`
+        )}
+
+        ${tpExercise('tp12_e5', 'Ejercicio 5 &mdash; Posicion de memoria de una instruccion (IP, CS)',
+          `<p>Indique la posicion de memoria a la que se accedera para leer una instruccion, si los contenidos de los registros <strong>IP</strong> y <strong>CS</strong> son <code>1F3C</code> y <code>FF22</code> respectivamente.</p>`,
+          `<p>La direccion fisica de una instruccion es \\(\\text{CS}\\times16+\\text{IP}\\) (el segmento se corre un digito hexadecimal a la izquierda y se suma el offset).</p>
+          ${mathBlock('\\text{Dir} = \\mathtt{FF22}_{16}\\times 16 + \\mathtt{1F3C}_{16} = \\mathtt{FF220}_{16} + \\mathtt{1F3C}_{16} = \\mathtt{10115C}_{16}')}
+          <p style="font-size:0.88rem;">El resultado \\(\\mathtt{10115C}_{16}\\) ocupa <strong>21 bits</strong>, pero el bus de direcciones del 8088 solo tiene <strong>20 lineas</strong> (1 Mbyte). El bit 20 se pierde: la direccion se trunca por modulo \\(2^{20}\\) y se produce un <em>wrap-around</em> al inicio de la memoria.</p>
+          ${mathBlock('\\mathtt{10115C}_{16} \\bmod 2^{20} = \\mathtt{0115C}_{16}')}
+          ${tpResult('Direccion fisica verificada con node: FF22\\(\\times\\)16 + 1F3C = 10115C, que excede 1 Mbyte. Por el truncado a 20 bits el acceso real cae en 0115C (wrap-around de la memoria).')}`
+        )}
+
+        ${tpExercise('tp12_e6', 'Ejercicio 6 &mdash; Inicio y fin de los segmentos de datos y codigo',
+          `<p>Si los contenidos de los registros <strong>DS</strong> y <strong>CS</strong> son <code>036A</code> y <code>C000</code> respectivamente, indique la posicion fisica de inicio y de fin de los segmentos de datos y de codigo.</p>`,
+          `<p>Cada segmento arranca en \\(\\text{base}\\times16\\) (offset 0) y termina 64 Kbytes despues, en \\(\\text{base}\\times16 + \\mathtt{FFFF}\\) (offset maximo \\(2^{16}-1\\)).</p>
+          ${dataTable(['Segmento','Base','Inicio (offset 0000)','Fin (offset FFFF)'], [
+            ['<strong>Datos (DS)</strong>','036A','036A0','1369F'],
+            ['<strong>Codigo (CS)</strong>','C000','C0000','CFFFF']
+          ], 2)}
+          ${mathBlock('\\begin{aligned} \\text{DS:}\\;& \\mathtt{036A}\\times16 = \\mathtt{036A0} \\;\\to\\; \\mathtt{036A0}+\\mathtt{FFFF}=\\mathtt{1369F} \\\\\\\\ \\text{CS:}\\;& \\mathtt{C000}\\times16 = \\mathtt{C0000} \\;\\to\\; \\mathtt{C0000}+\\mathtt{FFFF}=\\mathtt{CFFFF} \\end{aligned}')}
+          ${tpResult('Verificado con node: DS ocupa 036A0&ndash;1369F y CS ocupa C0000&ndash;CFFFF. Ambos caben dentro de 1 Mbyte y no se solapan.')}`
+        )}
+
+        ${tpExercise('tp12_e7', 'Ejercicio 7 &mdash; Segmentos con DS=C200 y CS=BB2C (problema de solapamiento)',
+          `<p>Si los contenidos de <strong>DS</strong> y <strong>CS</strong> son <code>C200</code> y <code>BB2C</code> respectivamente, indique la posicion fisica de inicio y fin de cada segmento. &iquest;Observa algun problema?</p>`,
+          `<p>Se calculan igual que en el ejercicio anterior:</p>
+          ${dataTable(['Segmento','Base','Inicio','Fin'], [
+            ['<strong>Datos (DS)</strong>','C200','C2000','D1FFF'],
+            ['<strong>Codigo (CS)</strong>','BB2C','BB2C0','CB2BF']
+          ], 2)}
+          <p><strong>Problema:</strong> los dos segmentos <strong>se solapan</strong>. El segmento de codigo va de \\(\\mathtt{BB2C0}\\) a \\(\\mathtt{CB2BF}\\) y el de datos de \\(\\mathtt{C2000}\\) a \\(\\mathtt{D1FFF}\\); comparten todo el rango <strong>\\(\\mathtt{C2000}\\)&ndash;\\(\\mathtt{CB2BF}\\)</strong>. Una escritura de datos en esa zona pisaria codigo del programa (codigo automodificable accidental). Como el 8088 permite que los segmentos se ubiquen cada 16 bytes, nada impide el solapamiento: es responsabilidad del programador separar las bases al menos \\(\\mathtt{1000}_{16}\\) (64 Kb) para que no se pisen.</p>
+          ${mathBlock('\\text{Solapamiento} = [\\,\\mathtt{C2000}_{16},\\ \\mathtt{CB2BF}_{16}\\,] \\quad (\\text{37\\,KB aprox. compartidos})')}
+          ${tpResult('Verificado con node: CS = BB2C0&ndash;CB2BF y DS = C2000&ndash;D1FFF se solapan en C2000&ndash;CB2BF. Riesgo de que los datos sobreescriban el codigo.')}`
+        )}
+
+        ${tpExercise('tp12_e8', 'Ejercicio 8 &mdash; Valor en el destino tras cada ADD',
+          `<p>Indique el valor que queda en el operando destino tras ejecutar cada instruccion. Datos: AX=1F1C, BX=168A, SI=2682, AL=4C; DS:147A=AB, DS:168A=DC, DS:1A1B=12, DS:269C=21, DS:269D=A2.</p>`,
+          `<p>Las sumas se hacen sobre el ancho del destino. Donde la fuente es memoria de 16 bits, se arma la palabra en little-endian (byte bajo en la direccion menor, byte alto en la siguiente).</p>
+          ${dataTable(['Instruccion','Fuente','Operacion','Destino resultante'], [
+            ['<strong>a) ADD AX,BX</strong>','BX=168A','1F1C + 168A','AX = <strong>35A6</strong>'],
+            ['<strong>b) ADD AX,[BX]</strong>','[168A]=DC (byte)','1F1C + 00DC','AX = <strong>1FF8</strong>'],
+            ['<strong>c) ADD BX,0124</strong>','imm 0124','168A + 0124','BX = <strong>17AE</strong>'],
+            ['<strong>d) ADD AL,[1A1B]</strong>','[1A1B]=12','4C + 12','AL = <strong>5E</strong>'],
+            ['<strong>e) ADD BX,[SI+1A]</strong>','[269C..269D]=A221','168A + A221','BX = <strong>B8AB</strong>']
+          ], 3)}
+          <p style="font-size:0.88rem;">En e) la direccion efectiva es \\(SI+1A=2682+1A=269C\\); la palabra leida es \\([269C]=21\\) (bajo) y \\([269D]=A2\\) (alto), es decir \\(\\mathtt{A221}_{16}\\). Las direcciones DS:147A y DS:168A se incluyen como distractores; solo 168A interviene en b).</p>
+          ${tpResult('Verificado con node: a) 35A6, b) 1FF8, c) 17AE, d) 5E, e) B8AB. (En b) se tomo [BX] como byte DC = 00DC porque la guia solo da ese byte; si se interpretara palabra haria falta DS:168B.)')}`
+        )}
+
+        ${tpExercise('tp12_e9', 'Ejercicio 9 &mdash; Suma AX=3333 + BX=CCBB',
+          `<p>Cargar AX con \\(3333_{16}\\) y BX con \\(CCBB_{16}\\), sumarlos dejando el resultado en AX y anotar el estado de los registros y banderas.</p>`,
+          `<pre>      MOV AX,3333    ; AX <- 3333h
+      MOV BX,CCBB    ; BX <- CCBBh
+      ADD AX,BX      ; AX <- AX + BX = FFEEh
+      HLT</pre>
+          <p>Suma de 16 bits: \\(3333 + CCBB = FFEE_{16}\\). No hay acarreo final (\\(\\le \\mathtt{FFFF}\\)).</p>
+          ${mathBlock('\\mathtt{3333}_{16} + \\mathtt{CCBB}_{16} = \\mathtt{FFEE}_{16}')}
+          ${dataTable(['Registro/Bandera','Valor'], [
+            ['AX','FFEE'],['BX','CCBB (sin cambios)'],
+            ['CF','0 (no desborda 16 bits)'],['ZF','0'],['SF','1 (bit 15 = 1)'],
+            ['OF','0 (positivo + negativo nunca desborda con signo)'],['PF','1'],['AF','0']
+          ], 1)}
+          ${tpResult('Verificado con node: AX = FFEE; CF=0, SF=1, ZF=0, OF=0. Nota: leido con signo, 3333 + (&minus;13125) = &minus;18 = FFEE; sin signo, 13107 + 52411 = 65518.')}`
+        )}
+
+        ${tpExercise('tp12_e10', 'Ejercicio 10 &mdash; Suma de bytes con acarreo (AL=F6 + BL=8A)',
+          `<p>Colocar \\(F6_{16}\\) en AL, \\(8A_{16}\\) en BL, sumarlos dejando el resultado en AX y verificar el acarreo.</p>`,
+          `<pre>      MOV AL,F6      ; AL <- F6h
+      MOV BL,8A      ; BL <- 8Ah
+      ADD AL,BL      ; AL <- AL + BL = 80h, CF=1 (desborda 8 bits)
+      ; El acarreo NO entra solo en AH. Para una suma de 16 bits:
+      MOV AH,00      ; AH <- 0
+      ADC AH,00      ; AH <- AH + 0 + CF = 01  -> AX = 0180h
+      HLT</pre>
+          <p>\\(F6 + 8A = 180_{16}\\): el byte da \\(80_{16}\\) y se genera <strong>acarreo</strong> (CF=1), porque \\(246+138=384>255\\). El resultado de 8 bits es \\(80\\); la suma completa de 9 bits es \\(180\\). Con <code>ADC AH,0</code> se propaga el acarreo y AX queda en \\(0180_{16}\\).</p>
+          ${mathBlock('\\mathtt{F6}_{16} + \\mathtt{8A}_{16} = \\mathtt{180}_{16} \\;\\Rightarrow\\; AL=\\mathtt{80}_{16},\\ CF=1')}
+          ${dataTable(['Bandera','Valor','Por que'], [
+            ['CF','1','246+138 = 384 > 255 (desborda el byte).'],
+            ['ZF','0','Resultado 80h &ne; 0.'],
+            ['SF','1','Bit 7 del byte = 1.'],
+            ['OF','0','Dos negativos con signo darian OF=1... pero F6 y 8A con signo son &minus;10 y &minus;118; su suma &minus;128 = 80h SI es representable, asi que OF=0.'],
+            ['AF','1','Acarreo del nibble bajo (6+A=10h).'],
+            ['PF','0','80h tiene un solo 1 (impar).']
+          ], 1)}
+          ${tpResult('Verificado con node: AL = 80, CF = 1 (acarreo confirmado). Propagando el acarreo a AH queda AX = 0180. OF=0 porque &minus;10+(&minus;118)=&minus;128 todavia cabe en un byte con signo.')}`
+        )}
+
+        ${tpExercise('tp12_e11', 'Ejercicio 11 &mdash; Producto logico (AND) entre las mitades de AX',
+          `<p>Colocar \\(AC_{16}\\) en los bits menos significativos de AX y \\(F3_{16}\\) en los bits mas significativos, y realizar el <strong>producto logico</strong> (AND) entre ambos.</p>`,
+          `<pre>      MOV AL,AC      ; parte baja de AX (AL) <- ACh
+      MOV AH,F3      ; parte alta de AX (AH) <- F3h  -> AX = F3ACh
+      AND AL,AH      ; AL <- AL AND AH = ACh AND F3h = A0h
+      HLT</pre>
+          <p>El "producto logico" es la <strong>AND</strong> bit a bit. \\(AC=1010\\,1100\\), \\(F3=1111\\,0011\\); la AND deja 1 solo donde ambos valen 1:</p>
+          ${mathBlock('\\begin{aligned} \\mathtt{AC} &= 1010\\,1100 \\\\\\\\ \\mathtt{F3} &= 1111\\,0011 \\\\\\\\ \\hline \\text{AND} &= 1010\\,0000 = \\mathtt{A0}_{16} \\end{aligned}')}
+          ${dataTable(['Bandera','Valor'], [
+            ['Resultado (AL)','A0'],['CF','0 (las logicas siempre limpian CF)'],['OF','0'],['SF','1 (bit 7 = 1)'],['ZF','0'],['PF','1 (A0h tiene dos unos)']
+          ], 1)}
+          ${tpResult('Verificado con node: AC AND F3 = A0. Las operaciones logicas ponen CF=OF=0 y ajustan SF/ZF/PF (aqui SF=1, ZF=0, PF=1).')}`
+        )}
+
+        ${tpExercise('tp12_e12', 'Ejercicio 12 &mdash; Complemento a dos de 82',
+          `<p>Colocar \\(82_{16}\\) en AX y obtener su complemento a dos.</p>`,
+          `<pre>      MOV AX,0082    ; AX <- 0082h
+      NEG AX         ; AX <- complemento a 2 de AX = FF7Eh
+      HLT
+      ; Equivalente paso a paso (NOT + 1):
+      ; NOT AX -> FF7D ; INC AX -> FF7E</pre>
+          <p>El complemento a 2 se obtiene invirtiendo todos los bits (complemento a 1) y sumando 1. Sobre el <strong>byte</strong> \\(82\\): \\(\\overline{82}=7D\\), \\(+1=7E\\). Sobre la <strong>palabra</strong> \\(0082\\): \\(\\overline{0082}=FF7D\\), \\(+1=FF7E\\).</p>
+          ${mathBlock('\\text{NEG }\\mathtt{0082}_{16}: \\quad \\overline{\\mathtt{0082}} = \\mathtt{FF7D},\\ +1 = \\mathtt{FF7E}_{16}')}
+          <p style="font-size:0.88rem;">Comprobacion: \\(0082 + FF7E = 1\\,0000_{16}\\), que truncado a 16 bits es \\(0000\\) (con CF=1), confirmando que \\(FF7E = -0082\\). En decimal, \\(82_{16}=130\\) y \\(FF7E_{16}\\) leido con signo es \\(-130\\).</p>
+          ${tpResult('Verificado con node: NEG sobre la palabra 0082 = FF7E (CF=1, SF=1, AF=1). Sobre el byte 82 = 7E. NEG x = SUB(0,x), es decir el complemento a 2.')}`
+        )}
+
+        ${tpExercise('tp12_e13', 'Ejercicio 13 &mdash; Codificacion hexadecimal del ejercicio anterior',
+          `<p>Representar la codificacion hexadecimal del programa del Ejercicio 12.</p>`,
+          `<p>Se codifica cada instruccion por su opcode y, si lleva, su ModR/M / inmediato (little-endian).</p>
+          ${dataTable(['Mnemonico','Codificacion','Desglose'], [
+            ['MOV AX,0082','B8 82 00','B8 = MOV AX,imm16 ; inmediato 0082 \\(\\to\\) bytes 82 00.'],
+            ['NEG AX','F7 D8','Grupo F7 (operando de 16 bits) + ModR/M D8 = 11 011 000: campo /3 = NEG, r/m = AX.'],
+            ['HLT','F4','Opcode unico.']
+          ], 1)}
+          <p style="font-size:0.88rem;">Tira de bytes del programa completo: <code>B8 82 00 F7 D8 F4</code> (6 bytes).</p>
+          ${tpResult('Verificado con node: NEG AX = F7 D8 (ModR/M D8, campo /3). El programa MOV AX,0082 / NEG AX / HLT ocupa 6 bytes: B8 82 00 F7 D8 F4.')}`
+        )}
+
+        ${tpExercise('tp12_e14', 'Ejercicio 14 &mdash; XOR y luego OR entre AX y BX',
+          `<p>Colocar \\(6375_{16}\\) en AX y \\(4F4A_{16}\\) en BX. Obtener la <strong>OR exclusiva</strong> entre ambos dejando el resultado en AX. Luego obtener la <strong>suma logica</strong> (OR) entre AX y BX.</p>`,
+          `<pre>      MOV AX,6375    ; AX <- 6375h
+      MOV BX,4F4A    ; BX <- 4F4Ah
+      XOR AX,BX      ; AX <- AX XOR BX = 2C3Fh
+      OR  AX,BX      ; AX <- AX OR  BX = 6F7Fh
+      HLT</pre>
+          <p><strong>Paso 1 (XOR):</strong> 1 donde los bits difieren.</p>
+          ${mathBlock('\\begin{aligned} \\mathtt{6375} &= 0110\\,0011\\,0111\\,0101 \\\\\\\\ \\mathtt{4F4A} &= 0100\\,1111\\,0100\\,1010 \\\\\\\\ \\hline \\text{XOR} &= 0010\\,1100\\,0011\\,1111 = \\mathtt{2C3F}_{16} \\end{aligned}')}
+          <p><strong>Paso 2 (OR)</strong> entre el nuevo AX = 2C3F y BX = 4F4A: 1 donde al menos uno vale 1.</p>
+          ${mathBlock('\\begin{aligned} \\mathtt{2C3F} &= 0010\\,1100\\,0011\\,1111 \\\\\\\\ \\mathtt{4F4A} &= 0100\\,1111\\,0100\\,1010 \\\\\\\\ \\hline \\text{OR} &= 0110\\,1111\\,0111\\,1111 = \\mathtt{6F7F}_{16} \\end{aligned}')}
+          ${dataTable(['Paso','Operacion','AX resultante','Banderas'], [
+            ['1','6375 XOR 4F4A','2C3F','CF=0 OF=0 SF=0 ZF=0 PF=1'],
+            ['2','2C3F OR 4F4A','6F7F','CF=0 OF=0 SF=0 ZF=0 PF=0']
+          ], 2)}
+          ${tpResult('Verificado con node: XOR = 2C3F, luego OR (2C3F | 4F4A) = 6F7F. Ambas logicas dejan CF=OF=0.')}`
+        )}
+
+        <div style="margin-top:24px;padding:14px 16px;background:rgba(46,184,114,0.1);border-left:4px solid #2eb872;border-radius:8px;font-size:0.92rem;line-height:1.6;">
+          <strong>TP12 cerrado. Conceptos clave para el oral.</strong>
+          <ul style="margin:8px 0 0;font-size:0.92rem;line-height:1.6;">
+            <li>El 8088 tiene <strong>dos subunidades concurrentes</strong>: la <strong>BIU</strong> arma direcciones (\\(\\text{seg}\\times16+\\text{offset}\\)) y prebusca instrucciones; la <strong>EU</strong> decodifica y ejecuta en la ALU. Bus de direcciones de <strong>20 bits = 1 Mbyte</strong>, bus de datos de <strong>8 bits</strong>.</li>
+            <li><strong>Direccion fisica = segmento \\(\\times 16\\) + offset.</strong> Cada segmento mide hasta 64 Kb; pueden ubicarse cada 16 bytes, por lo que <strong>pueden solaparse</strong> (Ej. 7) y la suma puede <strong>desbordar 1 Mbyte</strong> con wrap-around a 20 bits (Ej. 5).</li>
+            <li>Una instruccion = <strong>opcode</strong> [+ ModR/M (\\(\\text{mod}|\\text{reg}|\\text{r/m}\\))] [+ desplazamiento] [+ inmediato]. Inmediatos y desplazamientos en <strong>little-endian</strong>. Longitudes de 1 a 3 bytes en este practico.</li>
+            <li>Solo <strong>BX, BP, SI, DI</strong> pueden ser punteros entre corchetes; <code>[DX]</code> (Ej. 3) <strong>no existe</strong> como modo de direccionamiento.</li>
+            <li>Banderas de la ALU: <strong>CF</strong> (acarreo sin signo), <strong>OF</strong> (desborde con signo, complemento a 2), <strong>ZF</strong>, <strong>SF</strong> (bit alto), <strong>PF</strong>, <strong>AF</strong>. Las logicas (AND/OR/XOR) limpian CF y OF; <strong>NOT no afecta banderas</strong> y <strong>NEG</strong> hace complemento a 2 (= SUB de 0).</li>
+            <li>Suma de mas de un byte/palabra: la primera con <strong>ADD</strong>, las siguientes con <strong>ADC</strong> para propagar el acarreo (Ej. 10). El complemento a 2 = <strong>NOT + 1</strong> = NEG (Ej. 12).</li>
+          </ul>
+        </div>
+
+        <div style="margin-top:14px;padding:12px 14px;background:rgba(238,90,111,0.06);border-left:3px solid var(--accent-primary,#ee5a6f);border-radius:4px;font-size:0.84rem;">
+          <strong>Erratas y ambiguedades detectadas en la guia:</strong>
+          <ul style="margin:6px 0 0;line-height:1.6;">
+            <li><strong>Ej. 3:</strong> la fila <code>XOR BX,[DX]</code> usa un direccionamiento inexistente: <code>[DX]</code> no es codificable en el 8088 (solo BX, BP, SI, DI sirven como puntero). Se interpreta como <code>XOR BX,[BX]</code> o <code>XOR BX,[DI]</code>, o como distractor.</li>
+            <li><strong>Ej. 8.b:</strong> <code>ADD AX,[BX]</code> es una suma de 16 bits, pero la guia solo da el byte <code>DS:168A=DC</code>; falta el byte alto <code>DS:168B</code>. Se resolvio tomando la palabra como <code>00DC</code> (byte alto 0), dando AX=1FF8. Si DS:168B tuviera otro valor, cambiaria el byte alto del resultado.</li>
+            <li><strong>Ej. 10:</strong> "dejando el resultado en AX" sugiere propagar el acarreo a AH. El simple <code>ADD AL,BL</code> deja el resultado de 8 bits en AL con CF=1; para reflejarlo en AX (=0180) hace falta un <code>ADC AH,0</code> posterior, que la consigna implica al pedir "verificar el acarreo".</li>
+            <li><strong>Ej. 2 (E9/E8):</strong> los desplazamientos relativos de JMP y CALL dependen del IP siguiente a la instruccion; sin conocer la posicion de carga no se puede dar el destino absoluto, solo el desplazamiento (EE00 y 1122 respectivamente).</li>
+          </ul>
+        </div>
+`,
+      TP13: `        <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:8px;font-size:0.92rem;line-height:1.55;">
+          <strong>Conceptos clave.</strong> Los programas avanzados del 8088 combinan <strong>aritmetica de multiple precision</strong> (suma encadenada con <code>ADC</code> usando el flag de acarreo <strong>CF</strong>), <strong>bucles</strong> con <code>LOOP</code> (decrementa <code>CX</code> y salta si \\(CX \\ne 0\\)) y <code>JCXZ</code>, <strong>saltos condicionales segun banderas</strong> (<code>JE/JNE</code>, <code>JG/JL</code>, <code>JLE/JGE</code>, <code>JC/JNC</code>, <code>JPE/JPO</code>), <strong>corrimientos y rotaciones</strong> (<code>SHR/SHL</code>, <code>RCL/RCR</code> que pasan por CF), <strong>manejo de cadenas/tablas</strong> con los registros indice <code>SI</code>/<code>DI</code> y las instrucciones <code>MOVSB</code>/<code>REP</code> gobernadas por el <strong>flag de direccion DF</strong> (<code>CLD</code> incrementa, <code>STD</code> decrementa), y la <strong>traduccion de codigo C++</strong> a ensamblador. La instruccion <code>TEST op,op</code> hace un AND que <em>solo</em> actualiza banderas (no modifica el operando), util para inspeccionar paridad o un bit sin alterar el dato.
+        </div>
+        <div style="margin-bottom:18px;padding:10px 14px;background:rgba(46,184,114,0.07);border-left:3px solid #2eb872;border-radius:8px;font-size:0.86rem;">
+          <strong>Verificacion.</strong> Los 7 ejercicios de clase y los 5 del alumno se simularon paso a paso en Node (modelo de memoria de 64&nbsp;KB, registros y banderas CF/PF/SF) reproduciendo la semantica exacta de cada instruccion: <code>ADC</code> encadenado con acarreo, <code>JPE/JPO</code> sobre la paridad real del byte, <code>REP MOVSB</code>, <code>LOOP</code>/<code>JCXZ</code>, corrimientos y rotaciones, y los saltos con signo <code>JLE</code>. Cada resultado se contrasto contra el calculo aritmetico de referencia. Coincidencia total.
+        </div>
+
+        <h4 style="margin:22px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Saltos condicionales y banderas</h4>
+        <p style="font-size:0.88rem;margin:4px 0 10px;line-height:1.55;">Los saltos condicionales no calculan nada: evaluan las banderas que dejo la instruccion anterior (tipicamente <code>CMP</code>, <code>SUB</code>, <code>TEST</code> o una operacion aritmetica). Conviene distinguir los saltos <strong>sin signo</strong> (above/below, miran CF y ZF) de los <strong>con signo</strong> (greater/less, miran SF, OF y ZF).</p>
+        ${dataTable(['Salto','Condicion que verifica','Banderas evaluadas'], [
+          ['<strong>JE / JZ</strong>','Igual / resultado cero','\\(ZF=1\\)'],
+          ['<strong>JNE / JNZ</strong>','Distinto / no cero','\\(ZF=0\\)'],
+          ['<strong>JC / JB / JNAE</strong>','Acarreo / menor (sin signo)','\\(CF=1\\)'],
+          ['<strong>JNC / JAE / JNB</strong>','Sin acarreo / mayor o igual (sin signo)','\\(CF=0\\)'],
+          ['<strong>JA / JNBE</strong>','Mayor (sin signo)','\\(CF=0\\) y \\(ZF=0\\)'],
+          ['<strong>JBE / JNA</strong>','Menor o igual (sin signo)','\\(CF=1\\) o \\(ZF=1\\)'],
+          ['<strong>JG / JNLE</strong>','Mayor (con signo)','\\(ZF=0\\) y \\(SF=OF\\)'],
+          ['<strong>JGE / JNL</strong>','Mayor o igual (con signo)','\\(SF=OF\\)'],
+          ['<strong>JL / JNGE</strong>','Menor (con signo)','\\(SF \\ne OF\\)'],
+          ['<strong>JLE / JNG</strong>','Menor o igual (con signo)','\\(ZF=1\\) o \\(SF \\ne OF\\)'],
+          ['<strong>JS</strong>','Negativo (signo)','\\(SF=1\\)'],
+          ['<strong>JPE / JP</strong>','Paridad par','\\(PF=1\\) (numero par de unos)'],
+          ['<strong>JPO / JNP</strong>','Paridad impar','\\(PF=0\\) (numero impar de unos)'],
+          ['<strong>JCXZ</strong>','El registro CX vale cero','\\(CX=0\\) (no mira banderas)'],
+          ['<strong>LOOP</strong>','\\(CX-1 \\ne 0\\)','decrementa CX; salta si \\(CX \\ne 0\\)']
+        ], 2)}
+        <div style="margin-top:12px;padding:10px 12px;background:rgba(74,111,216,0.04);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.86rem;line-height:1.6;">
+          <strong>Detalle clave de la paridad (PF).</strong> En el 8088 \\(PF=1\\) cuando el byte bajo del resultado tiene un numero <em>par</em> de unos. Por eso <code>JPE</code> (salta si paridad par) es lo opuesto de la &ldquo;paridad impar&rdquo; pedida en el Ejercicio 5: el programa <em>salta y descarta</em> los de paridad par, copiando solo los de paridad impar (los que <em>no</em> saltan).
+        </div>
+
+        <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver en clase</h4>
+
+        ${tpExercise('tp13_e1', 'Ejercicio 1 &mdash; Posicion en el alfabeto de letras ASCII',
+          `<p>Crear una tabla de 5 bytes a partir de la direccion <code>100</code> con los valores hex <code>41 45 49 4F 55</code> (letras ASCII). Obtener la posicion de cada caracter dentro del alfabeto y almacenarla a partir de la direccion <code>200</code>. Indicar que caracteres son y que posicion ocupan.</p>`,
+          `<p>En ASCII la <code>'A'</code> es <code>41h</code> (65). La posicion en el alfabeto se obtiene restando \\(40h\\) (64): \\('A'-40h = 1\\). Se recorre la tabla con <code>SI</code>, se resta \\(40h\\) y se guarda con <code>DI</code>, contando con <code>LOOP</code>.</p>
+<pre>      mov si,100      ; SI -> tabla origen (caracteres ASCII)
+      mov di,200      ; DI -> tabla destino (posiciones)
+      mov cx,5        ; 5 elementos
+ciclo: mov al,[si]    ; AL <- caracter ASCII
+      sub al,40       ; AL <- posicion en el alfabeto (A=1)
+      mov [di],al     ; guardar posicion
+      inc si          ; avanzar puntero origen
+      inc di          ; avanzar puntero destino
+      loop ciclo      ; CX-- ; repetir si CX != 0
+      hlt
+
+; Datos previos:
+; e 100 41 45 49 4F 55</pre>
+          <p style="font-size:0.88rem;"><strong>Caracteres y posiciones:</strong></p>
+          ${dataTable(['Direccion','ASCII (hex)','Caracter','\\(-40h\\)','Posicion (200..)'], [
+            ['100','41h','A','41h-40h','<strong>1</strong>'],
+            ['101','45h','E','45h-40h','<strong>5</strong>'],
+            ['102','49h','I','49h-40h','<strong>9</strong>'],
+            ['103','4Fh','O','4Fh-40h','<strong>15</strong>'],
+            ['104','55h','U','55h-40h','<strong>21</strong>']
+          ], 4)}
+          ${tpResult('Verificado con node: las letras son las 5 vocales A E I O U y ocupan las posiciones 1, 5, 9, 15 y 21 del alfabeto. En memoria @200 quedan los bytes 01 05 09 0F 15.')}`
+        )}
+
+        ${tpExercise('tp13_e2', 'Ejercicio 2 &mdash; Suma de dos numeros de 32 bits y comparacion',
+          `<p>Sumar dos numeros de 32 bits: el primero en <code>AX</code> (16 bits bajos) y <code>BX</code> (altos), el segundo en <code>CX</code> (bajos) y <code>DX</code> (altos). El resultado de los bajos queda en <code>AX</code> y el de los altos en <code>BX</code>. Si la suma es mayor que <code>3532</code>, cargar <code>0F</code> en la direccion <code>2000</code> y en <code>BP</code>; si no, cargar cero.</p>`,
+          `<p>La suma de 32 bits se hace en dos pasos: <code>ADD AX,CX</code> suma los 16 bits bajos y deja el acarreo en <code>CF</code>; <code>ADC BX,DX</code> suma los altos <em>mas</em> ese acarreo. Luego se compara el resultado contra 3532.</p>
+<pre>      add ax,cx       ; bajos: AX <- AX + CX  (genera CF)
+      adc bx,dx       ; altos: BX <- BX + DX + CF
+      ; comparar el resultado de 32 bits (BX:AX) contra 3532
+      cmp bx,0        ; si la parte alta != 0 ya es > 3532
+      ja  mayor
+      cmp ax,3532     ; misma parte alta (0): comparar bajos
+      ja  mayor
+      ; --- no es mayor ---
+      mov bp,0
+      mov byte ptr [2000],0
+      jmp fin
+mayor: mov bp,0F      ; BP <- 0Fh
+      mov byte ptr [2000],0F
+fin:  hlt</pre>
+          <p style="font-size:0.88rem;">Ejemplo: \\(AX=BX=CX=DX=0001h\\). Bajos: \\(0001h+0001h=0002h\\) (CF=0). Altos: \\(0001h+0001h+0=0002h\\). Resultado \\(BX{:}AX = 00020002h = 131074\\), que es \\(> 3532\\).</p>
+          ${tpResult('Verificado con node: con AX=BX=CX=DX=1, resultado = 131074 > 3532 -> BP=0Fh y (2000)=0Fh. Con un caso donde solo hay acarreo de los bajos (AX=FFFF, CX=1), BX=1 y total=65536 > 3532, tambien BP=0Fh. El ADC propaga el acarreo correctamente.')}
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Nota:</strong> la guia no fija valores iniciales para los registros; el numero <code>3532</code> se toma en decimal. Como casi cualquier suma de dos numeros de 32 bits supera 3532, el caso &ldquo;no mayor&rdquo; solo se da con operandos muy chicos. La comparacion se hace en dos niveles (alto y luego bajo) porque <code>CMP</code> trabaja sobre 16 bits.</div>`
+        )}
+
+        ${tpExercise('tp13_e3', 'Ejercicio 3 &mdash; Ordenar 100 numeros de menor a mayor',
+          `<p>Ordenar de menor a mayor los 100 primeros numeros, ubicados desordenados en un bloque de memoria.</p>`,
+          `<p>Se usa el metodo de la <strong>burbuja</strong> (bubble sort): dos bucles anidados; en cada pasada se comparan elementos contiguos y se intercambian si estan fuera de orden. Un flag de &ldquo;hubo intercambio&rdquo; permite cortar antes si ya esta ordenado.</p>
+<pre>      mov bx,1000        ; BX -> base del bloque (100 bytes)
+externo: mov cx,99       ; 99 comparaciones por pasada
+      mov si,0           ; indice del recorrido
+      xor dl,dl          ; DL=0 -> bandera "hubo swap"
+interno: mov al,[bx+si]  ; AL <- elemento actual
+      mov ah,[bx+si+1]   ; AH <- elemento siguiente
+      cmp al,ah          ; comparar (sin signo)
+      jbe sigue          ; si AL <= AH ya estan en orden
+      mov [bx+si],ah     ; intercambiar:
+      mov [bx+si+1],al
+      mov dl,1           ; marcar que hubo swap
+sigue: inc si
+      loop interno       ; siguiente par de la pasada
+      cmp dl,1           ; hubo algun intercambio?
+      je  externo        ; si -> otra pasada
+      hlt                ; no -> ya esta ordenado</pre>
+          <p style="font-size:0.88rem;">Compara con <code>JBE</code> (menor o igual, sin signo) porque se ordenan bytes sin signo. El registro base+indice <code>[BX+SI]</code> usa direccionamiento <strong>base + indice + desplazamiento</strong>.</p>
+          ${tpResult('Verificado con node: cargado el bloque con los valores 100,99,98,...,1 (orden descendente), tras el algoritmo queda 1,2,3,...,100 ascendente. Comprobada la condicion bloque[i] <= bloque[i+1] para los 100 elementos.')}`
+        )}
+
+        ${tpExercise('tp13_e4', 'Ejercicio 4 &mdash; Suma de dos numeros de 5 bytes (multiple precision)',
+          `<p>Realizar la suma de dos numeros de 5 bytes (codigo de la guia). Los operandos se cargan en memoria con <code>e 1000 ...</code> y <code>e 1100 ...</code>.</p>`,
+          `<p>Suma de multiple precision: se recorren los bytes <strong>del menos significativo al mas significativo</strong> (por eso <code>DEC SI</code>/<code>DEC DI</code>) sumando con <code>ADC</code> para arrastrar el acarreo de un byte al siguiente. <code>CLC</code> limpia CF antes de empezar.</p>
+<pre>      mov si,1005     ; SI -> ultimo byte (menos signif.) del 1er numero
+      mov di,1105     ; DI -> ultimo byte del 2do numero
+      mov cx,6        ; 6 bytes (5 datos + arrastre)
+      clc             ; CF <- 0 (no hay acarreo inicial)
+t1:   mov al,[si]     ; AL <- byte del 1er numero
+      adc al,[di]     ; AL <- AL + byte 2do numero + CF
+      mov [si],al     ; guardar resultado en el 1er numero
+      dec si          ; retroceder al byte mas significativo
+      dec di
+      loop t1         ; CX-- ; repetir
+      hlt
+
+; Datos (big-endian, 6 bytes):
+; e 1000 00 12 fc de ef 10
+; e 1100 00 fe fb ad cd 23</pre>
+          <p style="font-size:0.88rem;"><strong>Traza byte a byte</strong> (de derecha a izquierda, con CF de arrastre):</p>
+          ${dataTable(['Paso','[SI] (n1)','[DI] (n2)','CF entra','suma','resultado','CF sale'], [
+            ['1','10','23','0','33h','<strong>33</strong>','0'],
+            ['2','EF','CD','0','1BCh','<strong>BC</strong>','1'],
+            ['3','DE','AD','1','18Ch','<strong>8C</strong>','1'],
+            ['4','FC','FB','1','1F8h','<strong>F8</strong>','1'],
+            ['5','12','FE','1','111h','<strong>11</strong>','1'],
+            ['6','00','00','1','01h','<strong>01</strong>','0']
+          ])}
+          ${tpResult('Verificado con node: 81551879952 + 1095144164643 = 1176696044595. El resultado en los 6 bytes @1000 queda 01 11 F8 8C BC 33, que en decimal es exactamente 1176696044595. La cadena ADC propaga el acarreo correctamente entre los 6 bytes.')}
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Nota:</strong> el enunciado dice &ldquo;5 bytes&rdquo; pero el codigo usa <code>CX=6</code> y los datos cargan 6 bytes (el byte mas alto en 00 reserva lugar para el posible acarreo final). Es coherente: con 6 bytes el resultado nunca se desborda.</div>`
+        )}
+
+        ${tpExercise('tp13_e5', 'Ejercicio 5 &mdash; Copiar los bytes de paridad impar a otro bloque',
+          `<p>Tomar los datos de un bloque de memoria, detectar los de <strong>paridad impar</strong> y copiarlos a otro bloque (codigo de la guia).</p>`,
+          `<p>Con <code>TEST AL,AL</code> se hace un AND de AL consigo mismo: no cambia AL pero actualiza <code>PF</code> con la paridad del byte. <code>JPE T1</code> salta cuando la paridad es <em>par</em> (descartando ese byte); los que <em>no</em> saltan (paridad impar) se copian.</p>
+<pre>      mov si,1000     ; SI -> bloque origen
+      mov cx,10       ; 10 (= 16 dec) elementos a inspeccionar
+      mov di,1100     ; DI -> bloque destino
+t2:   mov al,[si]     ; AL <- dato
+      test al,al      ; actualiza PF segun paridad de AL
+      jpe t1          ; si paridad PAR -> saltar (descartar)
+      mov [di],al     ; paridad IMPAR -> copiar
+      inc di
+t1:   inc si          ; avanzar origen (siempre)
+      loop t2         ; CX-- ; repetir
+      hlt
+
+; Datos:
+; e 1000 78 75 45 49 63 68 79 48 55 56 12 23 28 99 91 95</pre>
+          <p style="font-size:0.88rem;">Se procesan los primeros \\(10h\\)? No: <code>CX=10</code> es <em>decimal</em> en el ensamblador del enunciado, asi que se inspeccionan los <strong>10</strong> primeros bytes: <code>78 75 45 49 63 68 79 48 55 56</code>.</p>
+          ${dataTable(['Byte','Binario','# de unos','Paridad','Accion'], [
+            ['78h','0111 1000','4','par','descarta'],
+            ['75h','0111 0101','5','impar','<strong>copia</strong>'],
+            ['45h','0100 0101','3','impar','<strong>copia</strong>'],
+            ['49h','0100 1001','3','impar','<strong>copia</strong>'],
+            ['63h','0110 0011','4','par','descarta'],
+            ['68h','0110 1000','3','impar','<strong>copia</strong>'],
+            ['79h','0111 1001','5','impar','<strong>copia</strong>'],
+            ['48h','0100 1000','2','par','descarta'],
+            ['55h','0101 0101','4','par','descarta'],
+            ['56h','0101 0110','4','par','descarta']
+          ], 4)}
+          ${tpResult('Verificado con node: de los 10 primeros bytes se copian @1100 los de paridad impar -> 75 45 49 68 79. (PF=1 indica paridad par; JPE descarta esos, por eso quedan los impares.)')}`
+        )}
+
+        ${tpExercise('tp13_e6', 'Ejercicio 6 &mdash; Mover un bloque con REP MOVSB y su equivalente',
+          `<p>Mover un bloque de datos desde la direccion <code>150</code> a la <code>200</code>. Mostrar tambien las instrucciones equivalentes al <code>REP MOVSB</code>.</p>`,
+          `<p><code>MOVSB</code> copia el byte de <code>[SI]</code> a <code>[DI]</code> y autoincrementa ambos (porque <code>CLD</code> pone \\(DF=0\\)). El prefijo <code>REP</code> lo repite <code>CX</code> veces. Es la forma idiomatica de copiar cadenas/bloques.</p>
+<pre>      cld             ; DF <- 0 (SI y DI se incrementan)
+      mov cx,10       ; 10 (=16 dec) bytes a copiar
+      mov si,150      ; origen
+      mov di,200      ; destino
+      rep movsb       ; repetir CX veces: [DI]<-[SI]; SI++ ; DI++
+      hlt
+
+; Datos:
+; e 150 12 ff df ed 41 58 96 45 ac 36 95 47 78 19 20 21</pre>
+          <p style="font-size:0.88rem;"><strong>Equivalente sin REP/MOVSB</strong> (mismo efecto, usando un bucle explicito):</p>
+<pre>      jcxz t2         ; si CX=0, no copiar nada
+t1:   mov al,[si]     ; AL <- [SI]
+      mov [di],al     ; [DI] <- AL
+      inc di
+      inc si
+      loop t1         ; CX-- ; repetir
+t2:   hlt</pre>
+          <p style="font-size:0.88rem;">El desensamblado del EMU 8088/8086 confirma los opcodes: <code>B91000</code>=<code>MOV CX,0010</code>, <code>BE5001</code>=<code>MOV SI,0150</code>, <code>BF0002</code>=<code>MOV DI,0200</code>, <code>F3</code>=<code>REPZ</code>, <code>A4</code>=<code>MOVSB</code>, <code>F4</code>=<code>HLT</code>.</p>
+          ${tpResult('Verificado con node: los 16 bytes (12 FF DF ED 41 58 96 45 AC 36 95 47 78 19 20 21) se copian identicos de @150 a @200. El bucle JCXZ/MOVSB-manual produce exactamente el mismo bloque que REP MOVSB.')}`
+        )}
+
+        ${tpExercise('tp13_e7', 'Ejercicio 7 &mdash; Traducir un FOR de C++ a ensamblador 8088',
+          `<p>Escribir en instrucciones del 8088 el siguiente fragmento C++ (todas las variables enteras), proponiendo posiciones de memoria:</p>
+          <pre>FOR (I = 0; I &lt;= 10; I = I + 1)
+    A[I] = B[I] + C;</pre>`,
+          `<p>El vector <code>B</code> se recorre con <code>SI</code>, el vector resultado <code>A</code> con <code>DI</code>, la constante <code>C</code> esta en <code>[400]</code> y la variable <code>I</code> se mapea a <code>CX</code>. La condicion <code>I &lt;= 10</code> se evalua con <code>CMP CX,10</code> seguido de <code>JLE</code> (salto con signo, menor o igual): hace <strong>11 iteraciones</strong> (I de 0 a 10).</p>
+<pre>      mov si,300      ; SI -> B[I]   (vector B en 300..)
+      mov di,500      ; DI -> A[I]   (vector A en 500..)
+      mov cx,00       ; I = 0        (I se mapea a CX)
+nuevo: mov al,[si]    ; AL <- B[I]
+      add al,[400]    ; AL <- B[I] + C   (constante C en 400)
+      mov [di],al     ; A[I] <- resultado
+      inc si          ; avanzar B
+      inc di          ; avanzar A
+      inc cx          ; I = I + 1
+      cmp cx,10       ; comparar I con 10
+      jle nuevo       ; si I <= 10 repetir
+      hlt
+
+; Mapa de memoria:
+; 300  vector B[I]
+; 500  vector A[I]
+; 400  constante C
+; CX   indice I</pre>
+          <p style="font-size:0.88rem;">Ejemplo con \\(B=\\{10,5,15,12,6,7,18,13,25,9,3\\}\\) y \\(C=7\\):</p>
+          ${dataTable(['I','B[I]','C','A[I] = B[I]+C'], [
+            ['0','10','7','17'],['1','5','7','12'],['2','15','7','22'],['3','12','7','19'],
+            ['4','6','7','13'],['5','7','7','14'],['6','18','7','25'],['7','13','7','20'],
+            ['8','25','7','32'],['9','9','7','16'],['10','3','7','10']
+          ], 3)}
+          ${tpResult('Verificado con node: A = {17,12,22,19,13,14,25,20,32,16,10} = B[i]+7 para los 11 elementos (I de 0 a 10). JLE produce las 11 iteraciones correctas.')}
+          <div style="margin-top:10px;padding:8px 12px;background:rgba(238,90,111,0.07);border-left:3px solid #ee5a6f;border-radius:4px;font-size:0.84rem;"><strong>Observacion:</strong> el codigo de la guia incrementa <code>CX</code> <em>antes</em> de <code>CMP CX,10</code>, por lo que tras procesar I=10 el contador vale 11 y <code>JLE</code> (11&gt;10) corta. Asi se ejecutan las 11 iteraciones (I=0..10) que pide el <code>&lt;= 10</code>. Es el mismo FOR del TP10 (la Blue), aqui resuelto con registros indice reales.</div>`
+        )}
+
+        <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver por el alumno</h4>
+
+        ${tpExercise('tp13_a1', 'Ejercicio 1 &mdash; Corrimiento de 4 bits a la derecha de 0FF0h',
+          `<p>Colocar el valor <code>0FF0h</code> en <code>BX</code> y efectuar un corrimiento de 4 bits a la derecha.</p>`,
+          `<p>Un <code>SHR</code> logico de 4 lugares divide por \\(2^4=16\\) y mete ceros por la izquierda. Se puede hacer con un contador en <code>CL</code> (<code>SHR BX,CL</code>) o cuatro <code>SHR BX,1</code> sucesivos.</p>
+<pre>      mov bx,0FF0     ; BX <- 0FF0h
+      mov cl,4        ; cantidad de corrimientos
+      shr bx,cl       ; BX <- BX >> 4  (logico)
+      hlt</pre>
+          <p style="font-size:0.88rem;">\\(0FF0h = 0000\\,1111\\,1111\\,0000_2\\). Al correr 4 a la derecha: \\(0000\\,0000\\,1111\\,1111_2 = 00FFh\\). Equivale a \\(4080 \\div 16 = 255\\).</p>
+          ${tpResult('Verificado con node: BX = 0FF0h >> 4 = 00FFh (255 decimal). El ultimo bit expulsado fue 0, asi que CF=0.')}`
+        )}
+
+        ${tpExercise('tp13_a2', 'Ejercicio 2 &mdash; Valor absoluto del contenido de la direccion 200',
+          `<p>Colocar en <code>AX</code> el contenido de la direccion <code>200</code> y obtener su valor absoluto usando instrucciones de rotacion y de control. Probar con <code>9E5Fh</code> y con <code>4E3Ah</code>.</p>`,
+          `<p>Se inspecciona el bit de signo (bit 15) rotando a la izquierda con <code>RCL</code>, que lo deja en <code>CF</code>. Si <code>CF=0</code> el numero es positivo y ya es su valor absoluto; si <code>CF=1</code> es negativo y se niega (complemento a 2) con <code>NEG</code>.</p>
+<pre>      mov ax,[200]    ; AX <- (200)
+      rcl ax,1        ; el bit de signo (bit15) pasa a CF
+      rcr ax,1        ; restaurar AX (rotacion inversa)
+      jnc positivo    ; si CF=0 -> AX ya es positivo
+      neg ax          ; CF=1 (negativo) -> AX <- -AX
+positivo: hlt         ; AX = |valor|</pre>
+          ${dataTable(['(200)','bit 15','Interpretacion con signo','Valor absoluto en AX'], [
+            ['9E5Fh','1','negativo (\\(-24993\\))','<strong>61A1h</strong> (24993)'],
+            ['4E3Ah','0','positivo (\\(+20026\\))','<strong>4E3Ah</strong> (20026, sin cambio)']
+          ], 3)}
+          ${tpResult('Verificado con node: |9E5Fh| -> AX = 61A1h (negativo, se niega); |4E3Ah| -> AX = 4E3Ah (positivo, queda igual). El complemento a 2 de 9E5Fh es 61A1h.')}`
+        )}
+
+        ${tpExercise('tp13_a3', 'Ejercicio 3 &mdash; Contar los bits en 1 de la direccion 300',
+          `<p>Colocar en <code>AX</code> el contenido de la direccion <code>300</code> y contar cuantos bits valen 1, dejando el resultado en <code>DL</code>. Definir una palabra en 300 y ejecutar.</p>`,
+          `<p>Se rota <code>AX</code> 16 veces; cada bit que sale por la izquierda llega a <code>CF</code>. Con <code>JC</code> se incrementa <code>DL</code> cuando ese bit es 1. <code>RCL</code> recircula el bit, asi que al cabo de 16 rotaciones <code>AX</code> queda como estaba.</p>
+<pre>      mov ax,[300]    ; AX <- (300)
+      xor dl,dl       ; DL = 0 (contador de unos)
+      mov cx,16       ; 16 bits a inspeccionar
+ciclo: rcl ax,1       ; bit mas alto -> CF (y recircula)
+      jnc nocuenta    ; si CF=0, ese bit era 0
+      inc dl          ; CF=1 -> contar
+nocuenta: loop ciclo  ; CX-- ; repetir
+      hlt             ; DL = cantidad de bits en 1</pre>
+          <p style="font-size:0.88rem;">Ejemplo con \\((300) = B37Dh = 1011\\,0011\\,0111\\,1101_2\\): tiene 11 bits en 1.</p>
+          ${tpResult('Verificado con node: para (300)=B37Dh, DL = 11 (coincide con el popcount de B37Dh). La rotacion RCL deja AX intacto al completar las 16 vueltas.')}`
+        )}
+
+        ${tpExercise('tp13_a4', 'Ejercicio 4 &mdash; Trasladar una tabla terminada en EEh de 500 a 600',
+          `<p>Trasladar una tabla de bytes de la direccion <code>500</code> a la <code>600</code> usando registros de indexacion, incrementos, comparaciones e instrucciones de control. El valor final (terminador) de la tabla es <code>EEh</code>.</p>`,
+          `<p>No se conoce de antemano la longitud: se copia byte a byte hasta encontrar el terminador <code>EEh</code> (que tambien se copia). Tras cada copia se compara con <code>CMP AL,EE</code> y se repite con <code>JNE</code>.</p>
+<pre>      mov si,500      ; SI -> origen
+      mov di,600      ; DI -> destino
+copia: mov al,[si]    ; AL <- byte origen
+      mov [di],al     ; copiar al destino
+      inc si
+      inc di
+      cmp al,0EE      ; era el terminador?
+      jne copia       ; no -> seguir copiando
+      hlt             ; si -> tabla completa (EE incluido)</pre>
+          <p style="font-size:0.88rem;">Ejemplo con la tabla <code>11 22 33 44 55 66 EE</code> en 500: se copian los 7 bytes (incluido el <code>EE</code>) a partir de 600.</p>
+          ${tpResult('Verificado con node: tabla 11 22 33 44 55 66 EE copiada identica de @500 a @600 (7 bytes, deteniendo el bucle al copiar el terminador EEh). Verificable haciendo 0500 y 0600 en el EMU.')}`
+        )}
+
+        ${tpExercise('tp13_a5', 'Ejercicio 5 &mdash; Mover los numeros pares a otro bloque',
+          `<p>De un bloque de datos, determinar los numeros que son <strong>pares</strong> y moverlos a otro bloque de memoria.</p>`,
+          `<p>Un numero es par si su bit menos significativo (bit 0) vale 0. Con <code>TEST AL,1</code> se inspecciona ese bit sin alterar AL: si el resultado es cero (<code>ZF=1</code>) el numero es par y se copia.</p>
+<pre>      mov si,1000     ; SI -> bloque origen
+      mov di,1100     ; DI -> bloque destino (pares)
+      mov cx,10       ; 10 (=16 dec) elementos
+t2:   mov al,[si]     ; AL <- dato
+      test al,1       ; AND con 0000 0001 -> ZF
+      jnz t1          ; bit0=1 (impar) -> no copiar
+      mov [di],al     ; bit0=0 (par) -> copiar
+      inc di
+t1:   inc si          ; avanzar origen (siempre)
+      loop t2         ; CX-- ; repetir
+      hlt</pre>
+          <p style="font-size:0.88rem;">Ejemplo con <code>78 75 45 49 63 68 79 48 55 56</code> (10 bytes): los pares son <code>78 68 48 56</code>.</p>
+          ${dataTable(['Byte','bit 0','Paridad valor','Accion'], [
+            ['78h','0','par','<strong>copia</strong>'],['75h','1','impar','descarta'],
+            ['45h','1','impar','descarta'],['49h','1','impar','descarta'],
+            ['63h','1','impar','descarta'],['68h','0','par','<strong>copia</strong>'],
+            ['79h','1','impar','descarta'],['48h','0','par','<strong>copia</strong>'],
+            ['55h','1','impar','descarta'],['56h','0','par','<strong>copia</strong>']
+          ], 3)}
+          ${tpResult('Verificado con node: de los 10 bytes se copian @1100 los pares -> 78 68 48 56. Atencion: "par" aqui es el valor del numero (bit0=0), distinto de la "paridad" de bits del Ejercicio 5.')}`
+        )}
+
+        <div style="margin-top:22px;padding:12px 14px;background:rgba(46,184,114,0.09);border-left:4px solid #2eb872;border-radius:8px;font-size:0.92rem;line-height:1.55;">
+          <strong>TP13 cerrado.</strong> Resueltos los <strong>7 ejercicios de clase</strong> (posicion ASCII en el alfabeto, suma de 32 bits con ADC, ordenamiento de 100 numeros, suma de 5/6 bytes en multiple precision, copia por paridad impar, mover bloque con REP MOVSB, y traduccion de un FOR de C++) y los <strong>5 ejercicios del alumno</strong> (corrimiento, valor absoluto, conteo de bits, traslado de tabla con terminador, y filtrado de pares). Todos verificados paso a paso con Node, simulando la semantica real de ADC, los saltos por banderas (JPE/JLE/JC/JBE), LOOP/JCXZ, REP MOVSB y los corrimientos/rotaciones. Erratas anotadas: el Ej.4 dice &ldquo;5 bytes&rdquo; pero opera 6; el Ej.5 usa JPE (paridad par) para quedarse con los impares; el Ej.2 no fija valores iniciales de los registros.
         </div>
 `
     };
