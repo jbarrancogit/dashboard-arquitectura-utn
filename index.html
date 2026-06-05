@@ -9111,7 +9111,8 @@ o1015  JMP ----     ; retorno (parcheado)
     }
 
     // ===== Helpers de presentacion profesional (Karnaugh, matematica, impresion) =====
-    var KMAP_PALETTE = [[238,90,111],[74,111,216],[46,184,114],[232,163,61],[155,89,182],[22,163,163],[210,77,87],[60,60,70]];
+    // Funcion (no var) para que la paleta exista en build-time de TPS_CONTENT, antes de su asignacion textual.
+    function _kpal(){ return [[238,90,111],[74,111,216],[46,184,114],[232,163,61],[155,89,182],[22,163,163],[210,77,87],[60,60,70]]; }
     function _grayN(nbits){ var r=[]; var n=(nbits<=0)?1:(1<<nbits); for(var i=0;i<n;i++) r.push(i ^ (i>>1)); return r; }
     function _bitsStr(val,n){ var s=''; for(var i=n-1;i>=0;i--) s+=((val>>i)&1); return s; }
 
@@ -9120,6 +9121,7 @@ o1015  JMP ----     ; retorno (parcheado)
     //  values: objeto/array index(mintermino abcd) -> '0' | '1' | 'X'.
     //  groups: array de {cells:[indices], label:'termino'} (resaltado por color + leyenda).
     function kmap(rowVars, colVars, values, groups, caption){
+      var KMAP_PALETTE=_kpal();
       var rb=rowVars.length, cb=colVars.length;
       var rowG=_grayN(rb), colG=_grayN(cb);
       groups = groups || [];
