@@ -5718,6 +5718,48 @@ impar:INC SI
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el 8088 no es magia: es la <b>maquina elemental + MEI + estructura convencional</b> llevadas a silicio, donde cada pieza (indices, LOOP, pila, interrupciones, segmentacion, BIU/EU) resuelve un problema que el programa fue planteando unidad por unidad.
     </div>` },
+        ,
+          { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>Que agregan los libros de la catedra (mas alla del apunte):</b> el apunte de U5 te ensena a programar el 8088 (registros, modos, instrucciones). Los libros de la catedra te dan el <i>por que</i> de cada decision de diseno: por que existen tantos modos de direccionamiento, por que el 8086 usa segmentos, que gana y que pierde cada eleccion. Aca esta destilado lo util de cada uno, atribuido.</p>
+
+    <div style="background:#f5f4ff;border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b>STALLINGS &mdash; &laquo;Organizacion y Arquitectura de Computadores&raquo; (Cap. 10, 11 y 12)</b><br>
+    Es el libro que mas pega con el 8088. Lo que suma sobre el apunte:
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Tabla de modos de direccionamiento con su algoritmo (Tabla 11.1).</b> No solo lista los modos: para cada uno da la formula de la <b>direccion efectiva (EA)</b> y su pro/contra. Inmediato (operando = A, sin acceso a memoria pero numero chico), directo (EA = A, simple pero rango limitado), indirecto (EA = (A), rango grande pero referencias extra), con desplazamiento (EA = A + (R), la base de los modos del 8086). Esto explica <i>por que</i> hay tantos modos: cada uno es un compromiso entre rango de direcciones y costo de calcular la direccion.</li>
+    <li><b>Como sabe la CPU que modo se usa (seccion 11.1).</b> O lo dice el propio codigo de operacion, o hay un <b>campo de modo</b> en la instruccion. Detalle que el apunte no suele aclarar.</li>
+    <li><b>Por que existe la segmentacion (seccion 8.3).</b> Stallings la separa de la paginacion: la paginacion es invisible al programador; la <b>segmentacion es visible</b> y sirve para organizar el programa y ponerle permisos. Da 4 ventajas concretas: estructuras de datos que crecen, recompilar modulos por separado, compartir segmentos entre procesos y proteger por segmento. Asi entendes que los registros CS/DS/SS/ES del 8088 no son un capricho.</li>
+    <li><b>Organizacion de registros del 8086 comparada con el Motorola 68000 (seccion 12.4, Fig. 12.3).</b> Explica que el 8086 usa registros <b>de proposito casi-especial</b> (cada uno tiene un uso implicito: MUL siempre usa el acumulador, los punteros llevan un desplazamiento dentro de un segmento). Conclusion clave de Stallings: ese uso implicito da una <b>codificacion mas compacta a costa de menos flexibilidad</b>.</li>
+    <li><b>Interrupciones: clasificacion y mecanica con la pila (Tabla 3.1 y seccion 7.4).</b> Clasifica las interrupciones en 4 clases (de programa, de temporizacion, de E/S y de fallo de hardware) y muestra paso a paso que la CPU apila el <b>PSW y el contador de programa</b> (y luego los registros) antes de saltar al gestor. Tambien explica las <b>interrupciones vectorizadas</b>: el dispositivo pone en el bus un &laquo;vector&raquo; que apunta a la rutina de servicio &mdash; justo el mecanismo de la tabla de vectores del 8088.</li>
+    </ul>
+    </div>
+
+    <div style="background:#f5f4ff;border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b>PATTERSON &amp; HENNESSY &mdash; &laquo;Estructura y Diseno de Computadores&raquo; (Cap. 2, en espanol)</b><br>
+    Usa MIPS, pero los <i>conceptos</i> de ISA aplican igual y vienen muy bien explicados:
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Principio &laquo;la simplicidad favorece la regularidad&raquo; (seccion 2.5).</b> Toda instruccion MIPS mide lo mismo (32 bits) y los campos van siempre en el mismo lugar. Esto te da el contraste perfecto con el 8088: el x86 tiene instrucciones de <b>largo variable</b> y por eso es comodo de programar pero dificil de decodificar (lo dice tambien Stallings sobre el Pentium).</li>
+    <li><b>Formato de instruccion descompuesto en campos (seccion 2.5, formatos R / I / J).</b> Muestra que el codigo de operacion (codop) y los campos de operandos son trozos de bits con posicion fija. Sirve para entender que es un &laquo;formato&raquo; y por que el del 8088 es mas enredado.</li>
+    <li><b>Excepcion vs interrupcion bien diferenciadas (seccion 4.9).</b> Define la <b>excepcion</b> como un evento interno (desbordamiento, instruccion invalida) y la <b>interrupcion</b> como uno externo, y aclara que las dos son &laquo;una llamada a procedimiento no prevista&raquo;. Buena base conceptual antes de ver la INT del 8088.</li>
+    <li><b>Caso real x86 (seccion 2.17).</b> Repasa la historia y la codificacion real del x86 desde el 8086, e insiste en una idea util para examen: el x86 sobrevivio por compatibilidad hacia atras, no por elegancia de diseno.</li>
+    </ul>
+    </div>
+
+    <div style="background:#f5f4ff;border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b>PATTERSON &amp; HENNESSY &mdash; &laquo;Computer Organization and Design&raquo; (en ingles)</b><br>
+    Es el mismo libro anterior pero en ingles. Util si queres la terminologia original (<i>addressing mode, instruction format, opcode, exception</i>) o leer el detalle de la codificacion del x86 (la figura &laquo;mod, reg, r/m&raquo;), que es el formato real de las instrucciones de la familia 8086/8088.
+    </div>
+
+    <div style="background:#fff8e1;border-left:4px solid #f0a500;padding:10px 14px;margin:12px 0;border-radius:6px;font-size:0.9rem;">
+    <b>Nota:</b> Hennessy &amp; Patterson &laquo;A Quantitative Approach&raquo; y Mandado &laquo;Sistemas Electronicos Digitales&raquo; casi no aportan a U5 (el primero es de prestaciones/U6; Mandado es memorias y circuitos digitales). Mandado solo menciona al 8086 al pasar, como ejemplo de circuito VLSI.
+    </div>
+
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Que abrir si queres mas de cada subtema:</b><br>
+    &middot; <b>Modos de direccionamiento / formato de instruccion / registros del 8086:</b> Stallings, Cap. 11 y 12.<br>
+    &middot; <b>Segmentacion (por que CS/DS/SS/ES):</b> Stallings, seccion 8.3.<br>
+    &middot; <b>Interrupciones, pila y vectores:</b> Stallings, seccion 3.2 (Tabla 3.1) y 7.4.<br>
+    &middot; <b>Concepto limpio de ISA, formato y excepcion vs interrupcion:</b> Patterson &amp; Hennessy, Cap. 2 (y 4.9).
+    </div>` }
         ]
       },
 {
