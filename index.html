@@ -2181,6 +2181,7 @@ ADD AX, BX"></textarea>
 
     <!-- ==================== ORAL PRACTICE ==================== -->
     <div class="content-section" id="section-oral">
+      <div class="card" id="expoPlanCard"><div id="expoPlanInner"></div></div>
       <div class="card">
         <h2 style="margin-bottom:4px;">Practica Oral</h2>
         <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:16px;">Entrenamiento para el examen oral. Lee cada pregunta, formula tu respuesta mentalmente, luego revela y auto-evalua.</p>
@@ -11228,6 +11229,176 @@ HLT`
       {u:7,q:'¿Como funciona el manejo de interrupciones en el 8088?',a:'Cuando ocurre INTR y IF=1: 1) CPU termina instruccion actual. 2) Guarda FLAGS, CS, IP en pila. 3) Lee el tipo de interrupcion (IRQ). 4) Busca el vector en la tabla (direccion = tipo×4). 5) Salta a la ISR. 6) Al final de ISR: IRET restaura IP, CS, FLAGS. NMI (pin 17): no mascarable, siempre atendida. INT n (software): tipo n, util para llamadas al sistema operativo (INT 21h en DOS).'}
     ];
 
+    // ============================================================
+    // PLAN DE EXPOSICION ORAL (guion por unidad + cobertura Anki)
+    // Cobertura real medida sobre collection.anki2 (139 notas tagueadas por unidad).
+    // ============================================================
+    const ANKI_COVERAGE = {
+      1:{n:30,v:'sobrada'}, 2:{n:28,v:'sobrada'}, 3:{n:14,v:'ok'},
+      4:{n:13,v:'fina'}, 5:{n:28,v:'sobrada'}, 6:{n:14,v:'ok'}, 7:{n:12,v:'ok'}
+    };
+    const ANKI_TOTAL = 139;
+    const EXPO_VERDICT_COLOR = { sobrada:'#2eb872', ok:'#4a6fd8', fina:'#e67e22' };
+    const EXPO_CAPA2 = [4,6,7];      // peso del oral cae en exponer/dibujar (Anki fina u oral-only)
+    const EXPO_ORAL_ONLY = [6,7];    // 0 ejercicios de admision: solo caen en el oral
+    const EXPOSITION_PLAN = {
+      1:{ explain:[
+            'Por que la maquina usa binario (dos estados estables) y oct/hex como notacion compacta',
+            'Complemento a 2: por que es el preferido (suma unica, un solo cero, resta = suma del complemento), rango con N bits y deteccion de overflow',
+            'Punto flotante IEEE 754: signo, exponente en exceso (bias), mantisa con bit implicito, normalizacion y casos especiales (cero, infinito, NaN, denormalizados)',
+            'Codigos BCD (8421 y autocomplementarios como Exceso-3 o 2421): para que sirven',
+            'Deteccion vs correccion: paridad (detecta 1 error), Hamming (corrige 1, distancia minima), Gray (un bit cambia, encoders) y Johnson' ],
+          draw:[
+            'Layout de un float IEEE 754 simple precision: 1 bit signo + 8 exponente + 23 mantisa, con etiquetas',
+            'Posicion de los bits de paridad de Hamming (en potencias de 2: 1, 2, 4, 8...) y que bits cubre cada uno' ],
+          ask:[ 'Por que C2 y no C1?', 'Que representa un exponente en exceso?', 'Cuantos errores detecta y cuantos corrige Hamming?' ] },
+      2:{ explain:[
+            'Algebra de Boole: postulados, teoremas, De Morgan y dualidad',
+            'Formas canonicas SdP y PdS y minimizacion por Karnaugh (agrupar potencias de 2, usar indiferencias)',
+            'Universalidad de NAND y NOR (por que con una sola compuerta se arma cualquier funcion)',
+            'Bloques combinacionales: MUX/DEMUX, codificador/decodificador, sumador, comparador, generador de paridad, ALU',
+            'Secuenciales: biestables SR/JK/D/T y ecuacion caracteristica; diferencia combinacional vs secuencial (memoria + reloj); registros y contadores (sincronico vs asincronico)' ],
+          draw:[
+            'Un mapa de Karnaugh de 4 variables con un agrupamiento marcado',
+            'Biestable JK (o D) con su tabla de verdad y ecuacion caracteristica',
+            'Diagrama de tiempos de un contador (sincronico vs asincronico)' ],
+          ask:[ 'Por que NAND es universal?', 'Diferencia entre sistema combinacional y secuencial?', 'Sincronico vs asincronico en contadores?' ] },
+      3:{ explain:[
+            'Clasificacion: volatil vs no volatil y la jerarquia de memoria',
+            'RAM estatica vs dinamica: celda, refresh, velocidad y costo',
+            'Familia ROM: ROM, PROM, EPROM, EEPROM y Flash (como se graba y se borra cada una)',
+            'Organizacion: palabra x capacidad, calculo de lineas de direccion (2^n palabras -> n bits), expansion en palabra y en capacidad (bancos) y chip-select',
+            'Memorias asociativas, FIFO y LIFO' ],
+          draw:[
+            'Expansion de memoria: matriz de chips con un decodificador de seleccion (chip-select)',
+            'Celda SRAM (biestable) vs celda DRAM (transistor + capacitor)' ],
+          ask:[ 'Por que la DRAM necesita refresh?', 'Cuantos bits de direccion para X palabras?', 'Como expandis capacidad sin cambiar el ancho de palabra?' ] },
+      4:{ explain:[
+            'Modelo Von Neumann y el cuello de botella (CPU y memoria comparten un unico bus)',
+            'Arquitectura de la Maquina Elemental (Blue): registros ACC, MAR, MBR, IP, IR; ALU; Unidad de Control; bus',
+            'Ciclo de instruccion completo: fetch (IP->MAR, lectura, MBR->IR, IP++), decode, execute; microoperaciones registro a registro',
+            'Set de instrucciones de la ME y formato de instruccion',
+            'UC cableada (secuenciador + logica combinacional) vs UC microprogramada (microinstrucciones en memoria de control): ventajas y desventajas',
+            'Bus: datos, direcciones y control; tercer estado (alta impedancia) y arbitraje' ],
+          draw:[
+            'Datapath completo de la Blue: registros + ALU + bus + memoria + UC, con las flechas de transferencia',
+            'El ciclo fetch-decode-execute paso a paso con las microoperaciones de cada registro' ],
+          ask:[ 'Dibuja la Blue y explica un ciclo de instruccion completo', 'Que funcion cumplen el MAR y el MBR?', 'UC cableada vs microprogramada?' ] },
+      5:{ explain:[
+            'Arquitectura interna del 8088: BIU (cola de prefetch, segmentacion, bus) vs EU (ejecucion, ALU, registros) y su paralelismo',
+            'Registros: generales (AX-DX con mitades H/L), indice y puntero (SI, DI, BP, SP), segmento (CS, DS, SS, ES), IP y FLAGS',
+            'Segmentacion: direccion fisica = segmento x 16 + offset; por que (20 bits de direccion con registros de 16)',
+            'Modos de direccionamiento: inmediato, registro, directo, indirecto, base + indice + desplazamiento',
+            'Instrucciones tipicas y control de flujo (saltos condicionales segun flags, LOOP, CALL/RET y la pila); interrupciones (tabla de vectores, INT n, hardware vs software)' ],
+          draw:[
+            'Mapa de registros del 8088 (generales, segmento, punteros y flags)',
+            'Calculo de direccion fisica: segmento desplazado 4 bits + offset' ],
+          ask:[ 'Como forma los 20 bits de direccion fisica?', 'Que hace CALL con la pila?', 'BIU vs EU?' ] },
+      6:{ explain:[
+            'CISC vs RISC: filosofia, cantidad y formato de instrucciones, ejemplos',
+            'Pipeline: etapas (IF, ID, EX, MEM, WB), aceleracion ideal y hazards (estructural, de datos, de control) con sus soluciones (forwarding, stalls, prediccion de saltos)',
+            'Memoria cache: principio de localidad, niveles, mapeo (directo, asociativo, asociativo por conjuntos), politicas de escritura (write-through vs write-back) y de reemplazo',
+            'DMA: por que descarga a la CPU y el ciclo de robo' ],
+          draw:[
+            'Diagrama de pipeline: instrucciones (filas) vs etapas en el tiempo (columnas)',
+            'Mapeo de cache: division de la direccion en tag / indice / offset' ],
+          ask:[ 'Que es un hazard y como se resuelve?', 'Mapeo directo vs asociativo?', 'RISC vs CISC en una frase?' ] },
+      7:{ explain:[
+            'Modulo o interfaz de E/S: funciones (sincronizacion, buffering, traduccion) y por que hace falta entre CPU y periferico',
+            'Tecnicas de E/S: programada (polling, CPU esperando), por interrupciones (el periferico avisa) y por DMA (transferencia directa a memoria); trade-offs de cada una',
+            'Mapeo de E/S: aislada (instrucciones IN/OUT) vs mapeada en memoria',
+            'Comunicacion serie vs paralela; buses estandar (PCI, PCIe, USB, SATA)' ],
+          draw:[
+            'Modulo de E/S entre el bus del sistema y el periferico, con sus registros de datos / estado / control',
+            'Comparacion de las 3 tecnicas de E/S: quien mueve el dato en cada una' ],
+          ask:[ 'Programada vs interrupciones vs DMA?', 'Que registros tiene una interfaz de E/S?', 'E/S mapeada en memoria vs aislada?' ] }
+    };
+
+    function expoBolillasForUnit(u){
+      var r=[];
+      for(var i=0;i<BOLILLERO_OFICIAL.length;i++){ if(BOLILLERO_OFICIAL[i].units.indexOf(u)>=0) r.push(BOLILLERO_OFICIAL[i].id); }
+      return r;
+    }
+
+    function expoBlock(title, items, col){
+      var h='<div style="font-weight:700;font-size:0.74rem;letter-spacing:0.5px;color:'+col+';margin:10px 0 4px;text-transform:uppercase;">'+title+'</div>';
+      h+='<ul style="margin:0 0 4px;padding-left:18px;font-size:0.85rem;line-height:1.5;">';
+      for(var i=0;i<items.length;i++){ h+='<li style="margin:3px 0;">'+items[i]+'</li>'; }
+      return h+'</ul>';
+    }
+
+    function renderExpoPlan(){
+      var el=document.getElementById('expoPlanInner');
+      if(!el) return;
+      var h='';
+      h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:6px;">';
+      h+='<div><h2 style="margin:0 0 4px;">Plan de Exposicion Oral</h2>';
+      h+='<p style="color:var(--text-secondary);font-size:0.85rem;margin:0;max-width:640px;">Guion por unidad: que tenes que poder EXPONER en voz alta y que DIBUJAR de memoria, alineado al bolillero oficial. Estudialo antes de las preguntas de practica de abajo.</p></div>';
+      h+='<button class="btn btn-sm btn-primary" onclick="printExpoPlan()" style="white-space:nowrap;">Imprimir / PDF</button>';
+      h+='</div>';
+      h+='<div style="background:var(--bg-secondary,#f6f8fa);border-radius:10px;padding:12px 14px;margin:12px 0 16px;">';
+      h+='<div style="font-weight:700;font-size:0.9rem;margin-bottom:8px;">Cobertura de tus '+ANKI_TOTAL+' Anki por unidad</div>';
+      for(var u=1;u<=7;u++){
+        var c=ANKI_COVERAGE[u]; var pct=Math.round(c.n/30*100); var vc=EXPO_VERDICT_COLOR[c.v];
+        h+='<div style="display:flex;align-items:center;gap:8px;margin:3px 0;font-size:0.82rem;">';
+        h+='<span style="width:26px;font-weight:700;color:var(--u'+u+');">U'+u+'</span>';
+        h+='<div style="flex:1;background:#e4e8ee;border-radius:6px;height:14px;overflow:hidden;"><div style="width:'+pct+'%;height:100%;background:var(--u'+u+');"></div></div>';
+        h+='<span style="width:30px;text-align:right;font-weight:700;">'+c.n+'</span>';
+        h+='<span style="width:64px;text-align:right;color:'+vc+';font-weight:700;text-transform:uppercase;font-size:0.7rem;">'+c.v+'</span>';
+        h+='</div>';
+      }
+      h+='<div style="font-size:0.78rem;color:var(--text-secondary);margin-top:8px;">Las 139 cubren las 7 unidades (incluidas U6/U7 oral-only). Son recall atomico: sostienen U1/U2/U5 casi solas. En U4/U6/U7 (FOCO) el peso real esta en exponer y dibujar, no en la tarjeta.</div>';
+      h+='</div>';
+      for(var u=1;u<=7;u++){
+        var pl=EXPOSITION_PLAN[u]; if(!pl) continue;
+        var col='var(--u'+u+')';
+        var open=EXPO_CAPA2.indexOf(u)>=0?' open':'';
+        var bol=expoBolillasForUnit(u).map(function(b){return 'B'+b;}).join(' ');
+        var tps=(typeof UNIT_TPS!=='undefined'&&UNIT_TPS[u])?UNIT_TPS[u]:[];
+        h+='<details'+open+' style="border:1px solid var(--border-color,#e4e8ee);border-left:4px solid '+col+';border-radius:8px;margin:8px 0;padding:0 14px;">';
+        h+='<summary style="cursor:pointer;padding:11px 0;font-weight:700;font-size:0.95rem;color:'+col+';">';
+        h+='U'+u+' &mdash; '+UNIT_NAMES[u]+'<span style="float:right;font-weight:400;font-size:0.72rem;color:var(--text-secondary);">'+bol+'</span></summary>';
+        h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px;font-size:0.68rem;font-weight:700;">';
+        h+='<span style="background:var(--u'+u+');color:#fff;padding:2px 8px;border-radius:10px;">Anki '+ANKI_COVERAGE[u].n+'</span>';
+        if(EXPO_ORAL_ONLY.indexOf(u)>=0) h+='<span style="background:#7b2ff7;color:#fff;padding:2px 8px;border-radius:10px;">ORAL-ONLY (0 admision)</span>';
+        if(EXPO_CAPA2.indexOf(u)>=0) h+='<span style="background:#e67e22;color:#fff;padding:2px 8px;border-radius:10px;">FOCO: exponer + dibujar</span>';
+        h+='</div>';
+        h+=expoBlock('Exponer en voz alta', pl.explain, col);
+        h+=expoBlock('Dibujar de memoria', pl.draw, col);
+        h+=expoBlock('Preguntas tipicas del docente', pl.ask, col);
+        if(tps.length){
+          h+='<div style="margin:6px 0 12px;font-size:0.8rem;"><span style="color:var(--text-secondary);">Practica con TP resuelto: </span>';
+          for(var t=0;t<tps.length;t++){ h+='<button class="btn btn-sm" style="margin:2px 3px 2px 0;" onclick="openTP(\''+tps[t]+'\')">'+tps[t]+'</button>'; }
+          h+='</div>';
+        } else {
+          h+='<div style="margin:6px 0 12px;font-size:0.78rem;color:var(--text-secondary);font-style:italic;">Sin TP de practica: es teoria pura, se defiende solo en el oral.</div>';
+        }
+        h+='</details>';
+      }
+      el.innerHTML=h;
+    }
+
+    function printExpoPlan(){
+      renderExpoPlan();
+      var src=document.getElementById('expoPlanInner');
+      if(!src) return;
+      var body=src.innerHTML.replace(/<details/g,'<details open').replace(/<button[\s\S]*?<\/button>/g,'');
+      var css='<style>@page{size:A4;margin:14mm 13mm 16mm;}'+
+        '*{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box;}'+
+        'body{font-family:Arial,Helvetica,sans-serif;color:#15202b;font-size:10.5pt;line-height:1.45;margin:0;}'+
+        '.doc-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #15202b;padding-bottom:6px;margin-bottom:14px;}'+
+        '.doc-head .tit{font-size:15pt;font-weight:700;} .doc-head .inst{font-size:8.5pt;text-transform:uppercase;letter-spacing:.6px;color:#556;}'+
+        'summary{font-weight:700;font-size:11pt;padding:6px 0;list-style:none;}'+
+        'details{border:1px solid #d4d9e0;border-radius:6px;margin:7px 0;padding:2px 10px;break-inside:avoid;page-break-inside:avoid;}'+
+        'ul{margin:2px 0 8px;padding-left:18px;} li{margin:2px 0;} button{display:none!important;}'+
+        '</style>';
+      var head='<div class="doc-head"><div><div class="inst">UTN FRM &middot; Arquitectura de Computadoras &middot; Catedra Perez</div><div class="tit">Plan de Exposicion Oral</div></div><div class="inst">Mesa 3 jul 2026</div></div>';
+      var w=window.open('','_blank');
+      w.document.write('<html><head><title>Plan de Exposicion Oral</title>'+css+'</head><body>'+head+body+'</body></html>');
+      w.document.close();
+      setTimeout(function(){ w.focus(); w.print(); }, 300);
+    }
+
     let oralFilter = 0;
     let oralQueue = [];
     let oralIdx = 0;
@@ -11299,7 +11470,7 @@ HLT`
     }
 
     function initSimuladores() { /* nothing to prerender */ }
-    function initOralMode() { oralSetFilter(0); }
+    function initOralMode() { renderExpoPlan(); oralSetFilter(0); }
 
     // ============================================================
     // LAZY RENDERING
