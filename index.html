@@ -5465,190 +5465,262 @@ impar:INC SI
       {
         unit: 5, name: 'Unidad 5 — Assembler 8088', color: 'var(--u5)',
         cards: [
-          { title: 'Modos de direccionamiento', detail: `<h4>Definicion formal</h4><div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">Los <b>modos de direccionamiento</b> especifican como el procesador calcula la <b>direccion efectiva</b> (EA) del operando. Indican donde esta el dato: en la instruccion, en un registro, o en memoria.</div><h4>Tabla de modos</h4><table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.82rem;"><tr><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Modo</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Operando</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">EA</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Ejemplo 8088</th></tr><tr><td style="border:1px solid #ddd;padding:4px;">Inmediato</td><td style="border:1px solid #ddd;padding:4px;">En la instruccion</td><td style="border:1px solid #ddd;padding:4px;">N/A</td><td style="border:1px solid #ddd;padding:4px;">MOV AX, 1234h</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Registro</td><td style="border:1px solid #ddd;padding:4px;">En registro CPU</td><td style="border:1px solid #ddd;padding:4px;">N/A</td><td style="border:1px solid #ddd;padding:4px;">MOV AX, BX</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Directo</td><td style="border:1px solid #ddd;padding:4px;">Direccion en instruccion</td><td style="border:1px solid #ddd;padding:4px;">EA = dir</td><td style="border:1px solid #ddd;padding:4px;">MOV AX, [1000h]</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Indirecto reg.</td><td style="border:1px solid #ddd;padding:4px;">Direccion en registro</td><td style="border:1px solid #ddd;padding:4px;">EA = [reg]</td><td style="border:1px solid #ddd;padding:4px;">MOV AX, [BX]</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Indexado</td><td style="border:1px solid #ddd;padding:4px;">Base + desplazamiento</td><td style="border:1px solid #ddd;padding:4px;">EA = reg + desp</td><td style="border:1px solid #ddd;padding:4px;">MOV AX, [SI+10h]</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Base+indice</td><td style="border:1px solid #ddd;padding:4px;">Base + indice + desp</td><td style="border:1px solid #ddd;padding:4px;">EA = base+idx+desp</td><td style="border:1px solid #ddd;padding:4px;">MOV AX, [BX+SI+5]</td></tr></table><p>Los modos indirectos son utiles para: modificar direcciones en bucles, manejar arreglos, reubicar codigo, y facilitar el acceso a estructuras de datos.</p><h4>Errores comunes</h4><ul style="padding-left:20px;"><li>Confundir inmediato con directo: inmediato es el dato literal, directo es la direccion del dato.</li><li>Olvidar que en 8088, no todas las combinaciones de registros base+indice son validas.</li></ul><div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;"><b>Aplicacion en la vida real:</b> Compiladores modernos usan base+indice+desplazamiento para acceder a campos de structs, elementos de arrays y variables locales en el stack frame.</div>` },
-          { title: 'Intel 8088 — arquitectura', detail: `<h4>Definicion formal</h4><div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">El <b>Intel 8088</b> es un microprocesador de 16 bits internos con bus de datos externo de 8 bits. Internamente se divide en: <b>BIU</b> (Bus Interface Unit) y <b>EU</b> (Execution Unit), que operan en forma concurrente (pipeline de 2 etapas).</div><h4>BIU (Bus Interface Unit)</h4><p>Maneja el bus externo. Componentes: registros de segmento (CS, DS, SS, ES), sumador de direcciones (genera direccion fisica de 20 bits), <b>cola de prefetch</b> (4 bytes en 8088, 6 en 8086). Mientras la EU ejecuta, la BIU busca instrucciones por adelantado.</p><h4>EU (Execution Unit)</h4><p>Decodifica y ejecuta instrucciones. Componentes: ALU de 16 bits, registros generales (AX,BX,CX,DX), punteros (SP,BP), indices (SI,DI), registro de flags, decodificador de instrucciones.</p><h4>Pipeline basico</h4><p>La BIU y EU funcionan simultaneamente: mientras EU ejecuta la instruccion actual, BIU busca las siguientes y las guarda en la cola. Esto aumenta la velocidad promedio. Si hay un salto, la cola se descarta y se recarga.</p><h4>Errores comunes</h4><ul style="padding-left:20px;"><li>Confundir 8086 (bus 16 bits) con 8088 (bus 8 bits): son identicos internamente, solo difiere el bus externo.</li><li>Creer que la cola de prefetch es cache: es solo un buffer FIFO para instrucciones, no almacena datos.</li></ul><div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;"><b>Aplicacion en la vida real:</b> El 8088 fue el procesador de la IBM PC original (1981). Su arquitectura de segmentos influyo en toda la linea x86. Los procesadores x86 modernos mantienen compatibilidad con el set de instrucciones del 8088.</div>` },
-          { title: 'Registros del 8088', detail: `<h4>Definicion formal</h4><div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">El 8088 tiene <b>14 registros de 16 bits</b> organizados en: generales, segmento, punteros/indices y flags.</div><h4>Tabla completa de registros</h4><table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.82rem;"><tr><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Grupo</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Registro</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Uso especifico</th></tr><tr><td style="border:1px solid #ddd;padding:4px;" rowspan="4">Generales</td><td style="border:1px solid #ddd;padding:4px;">AX (AH|AL)</td><td style="border:1px solid #ddd;padding:4px;">Acumulador, E/S, multiplicacion, division</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">BX (BH|BL)</td><td style="border:1px solid #ddd;padding:4px;">Base para direccionamiento indirecto</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">CX (CH|CL)</td><td style="border:1px solid #ddd;padding:4px;">Contador de bucles (LOOP, REP), desplazamientos</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">DX (DH|DL)</td><td style="border:1px solid #ddd;padding:4px;">Datos, E/S (puerto), extension MUL/DIV</td></tr><tr><td style="border:1px solid #ddd;padding:4px;" rowspan="4">Segmento</td><td style="border:1px solid #ddd;padding:4px;">CS</td><td style="border:1px solid #ddd;padding:4px;">Segmento de codigo</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">DS</td><td style="border:1px solid #ddd;padding:4px;">Segmento de datos</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">SS</td><td style="border:1px solid #ddd;padding:4px;">Segmento de stack</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">ES</td><td style="border:1px solid #ddd;padding:4px;">Segmento extra</td></tr><tr><td style="border:1px solid #ddd;padding:4px;" rowspan="5">Punteros/Indices</td><td style="border:1px solid #ddd;padding:4px;">SP</td><td style="border:1px solid #ddd;padding:4px;">Stack Pointer (tope del stack)</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">BP</td><td style="border:1px solid #ddd;padding:4px;">Base Pointer (acceso a stack frame)</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">SI</td><td style="border:1px solid #ddd;padding:4px;">Source Index (cadenas, indexado)</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">DI</td><td style="border:1px solid #ddd;padding:4px;">Destination Index (cadenas)</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">IP</td><td style="border:1px solid #ddd;padding:4px;">Instruction Pointer (= PC)</td></tr></table><h4>Registro de Flags</h4><p>CF (Carry), ZF (Zero), SF (Sign), OF (Overflow), PF (Parity), AF (Auxiliary carry), IF (Interrupt enable), DF (Direction), TF (Trap/single-step).</p><h4>Errores comunes</h4><ul style="padding-left:20px;"><li>Olvidar que AX=AH:AL (parte alta y baja son accesibles por separado).</li><li>Confundir SP con BP: SP apunta al tope, BP se usa para acceder a parametros en el stack frame.</li></ul><div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;"><b>Aplicacion en la vida real:</b> Los registros del 8088 se extendieron a 32 bits (EAX, EBX...) en el 386 y a 64 bits (RAX, RBX...) en x86-64, manteniendo compatibilidad hacia atras. Hoy un procesador x86-64 tiene 16 registros de 64 bits + registros SIMD.</div>` },
-          { title: 'Segmentacion de memoria', detail: `<h4>Definicion formal</h4><div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">El 8088 genera <b>direcciones fisicas de 20 bits</b> (1 MB de espacio) a partir de registros de 16 bits usando la formula:<br><b>Direccion fisica = Segmento &times; 16 + Offset</b><br>Esto equivale a desplazar el segmento 4 bits a la izquierda y sumar el offset.</div><h4>Segmentos</h4><p>Cada segmento tiene 64 KB (2<sup>16</sup> bytes). Los segmentos pueden <b>solaparse</b>: diferentes combinaciones segmento:offset pueden dar la misma direccion fisica. Ejemplo: 1000h:0000h = 0FFF:0010h = 10000h.</p><h4>Ejemplo resuelto</h4><div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;">CS = 2000h, IP = 1234h<br>Dir. fisica = 2000h &times; 10h + 1234h = 20000h + 1234h = <b>21234h</b><br><br>DS = 3000h, dir. dato [0100h]<br>Dir. fisica = 3000h &times; 10h + 0100h = 30000h + 0100h = <b>30100h</b></div><h4>Asignacion por defecto</h4><p>CS:IP para instrucciones. DS:offset para datos. SS:SP/BP para stack. ES:DI para operaciones de cadena destino.</p><h4>Errores comunes</h4><ul style="padding-left:20px;"><li>Olvidar el &times;16: el segmento NO es la parte alta de la direccion, se multiplica por 16 (desplaza 4 bits).</li><li>Creer que segmentos no se solapan: pueden compartir areas de memoria completamente.</li></ul><div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;"><b>Aplicacion en la vida real:</b> La segmentacion del 8088 dio origen al modo real de x86. En el 386 se agrego paginacion y modo protegido con segmentos de hasta 4GB. Los SO modernos (64 bits) usan flat model: CS=DS=SS con base 0, y toda la memoria es un segmento plano.</div>` },
-          { title: 'Interrupciones', detail: `<h4>Definicion formal</h4><div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">Una <b>interrupcion</b> es una suspension temporaria del programa en ejecucion para atender un evento. El procesador guarda el contexto, ejecuta una <b>rutina de servicio de interrupcion (ISR)</b> y luego retorna al programa original con IRET.</div><h4>Tipos</h4><table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.85rem;"><tr><th style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">Tipo</th><th style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">Origen</th><th style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">Ejemplo</th></tr><tr><td style="border:1px solid #ddd;padding:5px;">Hardware (NMI)</td><td style="border:1px solid #ddd;padding:5px;">No enmascarable, externo</td><td style="border:1px solid #ddd;padding:5px;">Error de paridad, fallo critico</td></tr><tr><td style="border:1px solid #ddd;padding:5px;">Hardware (INTR)</td><td style="border:1px solid #ddd;padding:5px;">Enmascarable, externo</td><td style="border:1px solid #ddd;padding:5px;">Teclado, timer, disco</td></tr><tr><td style="border:1px solid #ddd;padding:5px;">Software</td><td style="border:1px solid #ddd;padding:5px;">Instruccion INT n</td><td style="border:1px solid #ddd;padding:5px;">INT 21h (DOS), INT 10h (video)</td></tr><tr><td style="border:1px solid #ddd;padding:5px;">Interna</td><td style="border:1px solid #ddd;padding:5px;">Evento interno CPU</td><td style="border:1px solid #ddd;padding:5px;">Division por cero, overflow</td></tr></table><h4>Tabla de vectores de interrupcion (IVT)</h4><p>256 entradas de 4 bytes cada una (CS:IP de cada ISR) ubicadas en las direcciones 0000:0000 a 0000:03FF. INT n &rarr; direccion = n &times; 4.</p><h4>Proceso de interrupcion</h4><ol style="padding-left:20px;"><li>Terminar la instruccion actual.</li><li>PUSH Flags, PUSH CS, PUSH IP al stack.</li><li>IF=0 (deshabilitar interrupciones). TF=0.</li><li>Cargar CS:IP desde IVT[n] &rarr; saltar a la ISR.</li><li>ISR ejecuta, termina con <b>IRET</b> que hace POP IP, POP CS, POP Flags.</li></ol><h4>Errores comunes</h4><ul style="padding-left:20px;"><li>Olvidar que las flags se guardan automaticamente: la ISR puede modificar flags sin perder el contexto.</li><li>Confundir NMI (siempre atendida) con INTR (depende de IF).</li></ul><div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;"><b>Aplicacion en la vida real:</b> Los SOs modernos usan interrupciones para todo: el teclado genera IRQ1, el timer IRQ0, los discos IRQ14/15. Linux/Windows reemplazan la IVT por la IDT (Interrupt Descriptor Table) en modo protegido.</div>` },
-          { title: 'Maquina Elemental Indexada (MEI)', detail: `<h4>Definicion formal</h4>
-    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">
-    La <b>Maquina Elemental Indexada (MEI)</b> es una evolucion de la BLUE que agrega: <b>registros indice</b> (RIF y RID, 16 bits cada uno), <b>registro base</b> (RB, 16 bits), un <b>sumador de direcciones</b> con registros W y X, y nuevos modos de direccionamiento. El formato de instruccion se amplia a: 5 bits opcode + 2 bits modificador + 16 bits campo de direccion (ocupando 2 palabras en memoria).
+          { title: 'Intel 8088 - arquitectura (BIU y EU)', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el 8088 es un microprocesador comercial real (Intel, 1979) que la catedra usa como "procesador de verdad" despues de las maquinas didacticas. Su gran truco es que esta partido en <b>dos sub-procesadores que trabajan en paralelo</b>: uno trae el trabajo de afuera (la BIU) y el otro lo hace adentro (la EU). Es como un gerente y su secretaria: mientras la secretaria consigue la llamada, el gerente sigue trabajando; los dos avanzan a la vez.</p>
+    <h4>Por que dividirlo en dos (procesamiento paralelo interno)</h4>
+    <p style="font-size:0.92rem;">En las maquinas anteriores la CPU buscaba una instruccion, la ejecutaba, recien ahi buscaba la siguiente: el bus pasaba mucho tiempo parado. El 8088 introduce el <b>paralelismo interno</b>: divide la CPU en subunidades especializadas que actuan <b>simultaneamente</b> para acelerar el conjunto.</p>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.93rem;">
+    <b>BIU (Bus Interface Unit / Unidad de Interfaz con el Bus):</b> habla con el mundo exterior. Genera las direcciones fisicas de 20 bits (tiene un <b>sumador dedicado</b> y los registros de segmento CS, DS, SS, ES y el IP), lee y escribe memoria y E/S, y mantiene llena la <b>cola</b>.<br><br>
+    <b>EU (Execution Unit / Unidad de Ejecucion):</b> hace el trabajo de calculo. Tiene la <b>ALU de 16 bits</b>, los registros de proposito general (AX, BX, CX, DX), los punteros e indices (SP, BP, SI, DI), el registro de <b>FLAGS</b> y el sistema de control. <b>No toca el bus externo</b>: cuando necesita un dato le pide a la BIU.
     </div>
-    <h4>Nuevo hardware agregado</h4>
-    <table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.85rem;">
-    <tr><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Componente</th><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Bits</th><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Funcion</th></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">RIF (Reg. Indice Fuente)</td><td style="border:1px solid #ddd;padding:6px 10px;">16</td><td style="border:1px solid #ddd;padding:6px 10px;">Indice para direccionamiento indexado (fuente)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">RID (Reg. Indice Destino)</td><td style="border:1px solid #ddd;padding:6px 10px;">16</td><td style="border:1px solid #ddd;padding:6px 10px;">Indice para direccionamiento indexado (destino)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">RB (Registro Base)</td><td style="border:1px solid #ddd;padding:6px 10px;">16</td><td style="border:1px solid #ddd;padding:6px 10px;">Reubicacion de programas (siempre se suma)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">Sumador de direcciones</td><td style="border:1px solid #ddd;padding:6px 10px;">16</td><td style="border:1px solid #ddd;padding:6px 10px;">Calcula: W + X + RB = direccion efectiva</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">W, X</td><td style="border:1px solid #ddd;padding:6px 10px;">16</td><td style="border:1px solid #ddd;padding:6px 10px;">Registros de entrada al sumador</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">Decod. campo modificador</td><td style="border:1px solid #ddd;padding:6px 10px;">2&rarr;4</td><td style="border:1px solid #ddd;padding:6px 10px;">Selecciona modo de direccionamiento</td></tr>
-    </table>
-    <h4>Modos de direccionamiento segun campo modificador</h4>
-    <table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.85rem;">
-    <tr><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Modif.</th><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Modo</th><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Direccion efectiva</th><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Ciclos</th></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">0</td><td style="border:1px solid #ddd;padding:6px 10px;">Directo</td><td style="border:1px solid #ddd;padding:6px 10px;">EA = campo_dir + RB</td><td style="border:1px solid #ddd;padding:6px 10px;">3</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">1</td><td style="border:1px solid #ddd;padding:6px 10px;">Indirecto por memoria</td><td style="border:1px solid #ddd;padding:6px 10px;">EA = M[campo_dir + RB] + RB</td><td style="border:1px solid #ddd;padding:6px 10px;">4</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">2</td><td style="border:1px solid #ddd;padding:6px 10px;">Indexado (RIF)</td><td style="border:1px solid #ddd;padding:6px 10px;">EA = campo_dir + RIF + RB</td><td style="border:1px solid #ddd;padding:6px 10px;">3</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">3</td><td style="border:1px solid #ddd;padding:6px 10px;">Indexado (RID)</td><td style="border:1px solid #ddd;padding:6px 10px;">EA = campo_dir + RID + RB</td><td style="border:1px solid #ddd;padding:6px 10px;">3</td></tr>
-    </table>
-    <h4>Nuevas instrucciones principales</h4>
-    <p><b>ENI n, XXXX:</b> cargar registro indice n con valor XXXX. <b>INC n, XXX:</b> incrementar registro indice n en XXX (signado 9 bits). <b>LIX n, XXXX:</b> cargar registro indice desde memoria. <b>SIX n, XXXX:</b> almacenar registro indice en memoria. <b>ION:</b> habilitar interrupciones. <b>IOF:</b> deshabilitar interrupciones.</p>
-    <h4>Ejemplo resuelto: recorrer un arreglo</h4>
-    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;">
-    Sumar 100 numeros almacenados a partir de la posicion 2000h:<br>
-    ENI 2, 0000 &nbsp;&nbsp;; RIF = 0<br>
-    LDA 0, CERO &nbsp;; ACC = 0<br>
-    LOOP: ADD 2, 2000 &nbsp;; ACC += M[2000 + RIF]<br>
-    INC 2, 1 &nbsp;&nbsp;&nbsp;&nbsp;; RIF = RIF + 1<br>
-    ... (comparar RIF con 100, saltar a LOOP si menor)<br>
-    El modo indexado (modif=2) permite recorrer posiciones consecutivas incrementando RIF.
+    <h4>La cola de instrucciones (prefetch queue)</h4>
+    <p style="font-size:0.92rem;">Es una pequena memoria interna FIFO de <b>4 bytes en el 8088</b> (6 bytes en el 8086). Cuando el bus esta libre, la BIU se adelanta y va copiando los proximos bytes de programa a la cola. Asi, cuando la EU pide la proxima instruccion, ya esta adentro y no hay que esperar un ciclo de lectura externo. Esto <b>solapa el fetch con la ejecucion</b>: se busca la siguiente instruccion mientras se ejecuta la actual.</p>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Gotcha de los saltos:</b> la cola rinde optimo solo si el programa va derecho. Cuando hay un <b>salto, CALL, RET o interrupcion</b>, las instrucciones que ya estaban en la cola no se van a ejecutar, asi que hay que <b>vaciarla y recargarla</b> desde el destino. Por eso los saltos son de las instrucciones mas lentas (despues de multiplicar y dividir).
     </div>
-    <h4>Registro Base y reubicacion</h4>
-    <p>El RB se suma <b>siempre</b> a la direccion efectiva en ejecucion. El usuario no lo controla (instruccion privilegiada). Permite al sistema operativo (Monitor) reubicar programas sin modificar las instrucciones: basta cambiar el RB. Asi se resuelve el problema de multiprogramacion donde varios programas residen en memoria.</p>
-    <h4>Errores comunes</h4>
-    <ul style="padding-left:20px;">
-    <li>Olvidar que la MEI tiene formato de instruccion <b>variable</b>: las instrucciones con acceso a memoria ocupan 2 palabras.</li>
-    <li>Confundir registro indice con registro base: el indice es controlado por el programador, la base por el SO.</li>
-    <li>No considerar que el modo indirecto requiere un ciclo extra (acceso adicional a memoria).</li>
-    </ul>
+    <p style="font-size:0.92rem;">El 8088 (vs 8086) tiene un <b>bus de datos externo de 8 bits</b> (por eso la cola de 4 y no de 6, y trae los bytes de a uno); internamente sigue siendo de 16 bits. Eso lo hizo mas barato de conectar y fue el que eligio la IBM PC.</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
-    <b>Aplicacion en la vida real:</b> Los registros indice de la MEI son el antecedente directo de SI y DI del 8088. El registro base es el precursor de los registros de segmento. El concepto de reubicacion mediante registro base evoluciono hacia la paginacion y memoria virtual de los procesadores modernos.
+    <b>En una frase:</b> el 8088 trabaja en paralelo: la <b>BIU</b> trae instrucciones/datos y llena la cola de 4 bytes mientras la <b>EU</b> ejecuta; ese solapamiento fetch+ejecucion es el germen del <b>pipeline</b> que se ve a fondo en la U6.
     </div>` },
-          { title: 'Sistema elemental de interrupciones', detail: `<h4>Definicion formal</h4>
-    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">
-    El <b>sistema de interrupciones</b> permite suspender temporalmente el programa en ejecucion para atender eventos externos (perifericos) sin inmovilizar la CPU esperando. Se agrega un biestable <b>SI</b> (Sistema de Interrupcion) en la UC, controlado por las instrucciones <b>ION</b> (habilitar) e <b>IOF</b> (deshabilitar). Cada dispositivo tiene una <b>Bandera de Dispositivo (BD)</b> que se conecta via OR a la linea <b>IRQ</b>.
-    </div>
-    <h4>E/S bajo control de CPU vs interrupciones</h4>
-    <table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.85rem;">
-    <tr><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Aspecto</th><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">E/S programada (BLUE)</th><th style="border:1px solid #ddd;padding:6px 10px;background:#f5f5f5;">Con interrupciones (MEI)</th></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">CPU durante transferencia</td><td style="border:1px solid #ddd;padding:6px 10px;">Inmovilizada (espera activa)</td><td style="border:1px solid #ddd;padding:6px 10px;">Libre, ejecuta otras instrucciones</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">Si el periferico falla</td><td style="border:1px solid #ddd;padding:6px 10px;">CPU espera eternamente</td><td style="border:1px solid #ddd;padding:6px 10px;">Timeout o seguimiento por software</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">Eficiencia</td><td style="border:1px solid #ddd;padding:6px 10px;">Baja (polling constante)</td><td style="border:1px solid #ddd;padding:6px 10px;">Alta (atencion solo cuando necesario)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px 10px;">Hardware requerido</td><td style="border:1px solid #ddd;padding:6px 10px;">Minimo</td><td style="border:1px solid #ddd;padding:6px 10px;">Biestable SI, logica OR, stack</td></tr>
+          { title: 'Registros del 8088', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> los registros son las "manos" del procesador: memoria internisima y rapidisima donde se hacen las cuentas. El 8088 tiene <b>14 registros de 16 bits</b>, ordenados en cuatro grupos: de proposito general, de puntero e indice, de segmento, y dos especiales (IP y FLAGS). Casi todos tienen, ademas, un <b>uso preferido</b>.</p>
+    <h4>1) De proposito general (la EU los usa para datos y cuentas)</h4>
+    <p style="font-size:0.92rem;">Son AX, BX, CX, DX. Cada uno es de 16 bits y se parte en <b>byte alto + byte bajo</b> manejables por separado: AX = AH + AL, BX = BH + BL, CX = CH + CL, DX = DH + DL.</p>
+    <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:0.85rem;">
+    <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Registro</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Apodo</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Uso especial implicito</th></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>AX</b></td><td style="border:1px solid #ddd;padding:6px;">Acumulador</td><td style="border:1px solid #ddd;padding:6px;">Multiplicacion/division, E/S por puerto (IN/OUT), ajustes decimales/ASCII</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>BX</b></td><td style="border:1px solid #ddd;padding:6px;">Base</td><td style="border:1px solid #ddd;padding:6px;">Registro base para direccionamiento indirecto; base de tablas (XLAT)</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>CX</b></td><td style="border:1px solid #ddd;padding:6px;">Contador</td><td style="border:1px solid #ddd;padding:6px;">Cuenta en LOOP, en REP (cadenas) y CL = cantidad de bits en shift/rotate</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>DX</b></td><td style="border:1px solid #ddd;padding:6px;">Datos</td><td style="border:1px solid #ddd;padding:6px;">Par con AX en mul/div de 16 bits; numero de puerto en E/S indirecta</td></tr>
     </table>
-    <h4>Proceso de interrupcion en la MEI</h4>
-    <ol style="padding-left:20px;">
-    <li>El dispositivo activa su BD (Bandera de Dispositivo) &rarr; IRQ = 1.</li>
-    <li>La CPU termina la instruccion actual.</li>
-    <li>Si SI = 1 (interrupciones habilitadas): la CPU acepta la interrupcion.</li>
-    <li><b>Guarda contexto:</b> PUSH PC, PUSH ACC, PUSH flags al stack (LIFO).</li>
-    <li><b>SI &larr; 0</b> (deshabilita interrupciones para evitar interrupciones anidadas).</li>
-    <li><b>PC &larr; direccion de la ISR</b> (rutina de servicio de interrupcion).</li>
-    <li>La ISR identifica el dispositivo, atiende la solicitud, borra la BD.</li>
-    <li><b>ION</b> (rehabilita interrupciones).</li>
-    <li><b>IRET:</b> restaura contexto: POP flags, POP ACC, POP PC &rarr; retorna al programa.</li>
-    </ol>
-    <h4>Identificacion del dispositivo: polling vs vectorizado</h4>
-    <div style="background:#f8f9fa;border-left:4px solid #9c27b0;padding:12px 16px;margin:10px 0;border-radius:6px;">
-    <b>Polling:</b> la ISR consulta secuencialmente cada BD para encontrar quien interrumpio. Simple pero lento si hay muchos dispositivos.<br>
-    <b>Vectorizado:</b> el dispositivo proporciona un vector (numero) que identifica directamente su ISR. Mas rapido. El 8088 usa interrupciones vectorizadas con la IVT (256 vectores &times; 4 bytes).
-    </div>
-    <h4>Tipos de interrupciones (clasificacion general)</h4>
-    <p><b>Externas (hardware):</b> originadas por perifericos. Pueden ser enmascarables (INTR, depende de IF) o no enmascarables (NMI, siempre atendidas). <b>Internas:</b> generadas dentro de la CPU (division por cero, opcode invalido, overflow). <b>Software:</b> disparadas por instrucciones especiales (INT n en el 8088). Todas siguen el mismo mecanismo basico: guardar contexto &rarr; saltar a ISR &rarr; IRET.</p>
-    <h4>DMA como caso especial</h4>
-    <p>El <b>DMA</b> (Direct Memory Access) permite transferencias memoria&harr;periferico sin CPU. El controlador DMA toma el bus, transfiere bloques de datos, y al terminar genera una interrupcion para notificar a la CPU. Es la evolucion maxima de la E/S: la CPU solo programa el inicio y atiende la interrupcion final.</p>
-    <h4>Errores comunes</h4>
-    <ul style="padding-left:20px;">
-    <li>Olvidar deshabilitar interrupciones (IOF/SI=0) al entrar a la ISR: podria producir interrupciones anidadas no deseadas.</li>
-    <li>No restaurar el contexto completo antes de IRET: corrompe el estado del programa principal.</li>
-    <li>Confundir NMI con INTR: NMI no puede enmascararse (errores criticos), INTR si.</li>
+    <h4>2) Punteros e indices (offsets de 16 bits para llegar a memoria)</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>SP (Stack Pointer):</b> apunta al <b>tope de la pila</b> (trabaja con el segmento SS). La pila crece hacia direcciones <b>menores</b>.</li>
+    <li><b>BP (Base Pointer):</b> apunta a marcos de pila / variables locales sin tocar SP (segmento por defecto SS). Clave en la interfaz con lenguajes de alto nivel.</li>
+    <li><b>SI (Source Index):</b> indice fuente; direccion de origen en operaciones con cadenas.</li>
+    <li><b>DI (Destination Index):</b> indice destino; direccion de destino en cadenas.</li>
     </ul>
+    <h4>3) Registros de segmento (viven en la BIU)</h4>
+    <p style="font-size:0.92rem;"><b>CS</b> (codigo), <b>DS</b> (datos), <b>SS</b> (pila) y <b>ES</b> (extra, auxiliar para cadenas). Cada uno apunta al <b>inicio</b> de una zona de 64 KB. Se desarrollan en la ficha de Segmentacion.</p>
+    <h4>4) Especiales</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>IP (Instruction Pointer):</b> offset de la proxima instruccion dentro de CS. La direccion fisica de lo que se ejecuta es siempre <b>CS:IP</b>. El programador no lo modifica directamente: lo cambian los saltos, CALL, RET e interrupciones.</li>
+    <li><b>FLAGS:</b> registro de banderas (se detalla abajo).</li>
+    </ul>
+    <h4>El registro de FLAGS (16 bits, 9 banderas utiles)</h4>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
+    <b>De estado</b> (las pone la ALU segun el resultado): <b>CF</b> Carry (arrastre/prestamo del bit mas alto), <b>ZF</b> Zero (resultado = 0), <b>SF</b> Sign (bit de signo, refleja el MSB), <b>OF</b> Overflow (desborde con signo), <b>PF</b> Parity (numero par de unos), <b>AF</b> Auxiliary Carry (arrastre del nibble bajo, para ajuste decimal).<br><br>
+    <b>De control</b> (las pone el programador o el sistema): <b>IF</b> Interrupt enable (1 = acepta interrupciones enmascarables por INTR), <b>DF</b> Direction (0 = cadenas suben, 1 = bajan), <b>TF</b> Trap (1 = modo paso a paso, genera interrupcion tras cada instruccion).
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
-    <b>Aplicacion en la vida real:</b> Todo sistema operativo depende de interrupciones: el timer (IRQ0) genera el tick del scheduler, el teclado (IRQ1) genera una interrupcion por cada tecla. Sin interrupciones, la multitarea seria imposible. El DMA moderno en SSD NVMe transfiere GB/s sin usar ciclos de CPU.
+    <b>En una frase:</b> 14 registros de 16 bits: AX/BX/CX/DX (datos, divisibles en alto/bajo), SP/BP/SI/DI (punteros e indices), CS/DS/SS/ES (segmentos), IP (proxima instruccion) y FLAGS (banderas de estado y control). Cada uno tiene su trabajo preferido.
     </div>` },
-          { title: 'Set de instrucciones del 8088', detail: `<h4>Definicion formal</h4>
-    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">
-    El <b>set de instrucciones del 8088</b> comprende mas de 100 instrucciones de longitud variable (1 a 6 bytes) organizadas en categorias: transferencia de datos, aritmeticas, logicas, desplazamiento/rotacion, control de flujo, manejo de cadenas, E/S y control de flags. Es una arquitectura <b>CISC</b> con multiples modos de direccionamiento y uso de segmentos.
+          { title: 'Segmentacion de memoria', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el 8088 tiene un bus de direcciones de <b>20 bits</b>, asi que puede direccionar 2<sup>20</sup> = <b>1 MB</b> de memoria. El problema: sus registros son de <b>16 bits</b> y con 16 bits solo llegas a 64 KB. La solucion de Intel es la <b>segmentacion</b>: dar la direccion en dos pedazos, <b>segmento:offset</b>, y combinarlos para armar los 20 bits.</p>
+    <h4>La cuenta de oro: direccion fisica = segmento &times; 16 + offset</h4>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.93rem;">
+    La BIU toma el <b>registro de segmento</b> (16 bits), lo <b>desplaza 4 bits a la izquierda</b> (que es lo mismo que multiplicar por 16, o sea agregarle un 0 en hexadecimal a la derecha) y le <b>suma el offset</b> de 16 bits. El resultado son los 20 bits de la direccion fisica.<br><br>
+    <b>Direccion fisica = (Segmento &times; 16) + Offset</b><br>
+    El segmento siempre apunta a un comienzo de 16 bytes (se le llama "parrafo"); el offset dice cuanto avanzas dentro de ese segmento.
     </div>
-    <h4>Transferencia de datos</h4>
-    <table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.82rem;">
-    <tr><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Instruccion</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Funcion</th></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">MOV dest, src</td><td style="border:1px solid #ddd;padding:4px;">Copiar dato de fuente a destino</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">PUSH src / POP dest</td><td style="border:1px solid #ddd;padding:4px;">Apilar / desapilar en el stack</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">XCHG dest, src</td><td style="border:1px solid #ddd;padding:4px;">Intercambiar contenidos</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">LEA dest, src</td><td style="border:1px solid #ddd;padding:4px;">Cargar direccion efectiva (no el dato)</td></tr>
-    </table>
-    <h4>Aritmeticas</h4>
-    <table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.82rem;">
-    <tr><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Instruccion</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Funcion</th></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">ADD / ADC</td><td style="border:1px solid #ddd;padding:4px;">Sumar / sumar con carry</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">SUB / SBB</td><td style="border:1px solid #ddd;padding:4px;">Restar / restar con borrow</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">MUL / IMUL</td><td style="border:1px solid #ddd;padding:4px;">Multiplicar sin signo / con signo</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">DIV / IDIV</td><td style="border:1px solid #ddd;padding:4px;">Dividir sin signo / con signo</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">INC / DEC</td><td style="border:1px solid #ddd;padding:4px;">Incrementar / decrementar en 1</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">NEG</td><td style="border:1px solid #ddd;padding:4px;">Negar (C2 del operando)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">CMP</td><td style="border:1px solid #ddd;padding:4px;">Comparar (resta sin guardar resultado, solo flags)</td></tr>
-    </table>
-    <h4>Logicas y desplazamiento</h4>
-    <table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.82rem;">
-    <tr><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Instruccion</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Funcion</th></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">AND / OR / XOR / NOT</td><td style="border:1px solid #ddd;padding:4px;">Operaciones logicas bit a bit</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">TEST</td><td style="border:1px solid #ddd;padding:4px;">AND sin guardar resultado (solo flags)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">SHL / SHR</td><td style="border:1px solid #ddd;padding:4px;">Desplazar a izquierda / derecha (logico)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">SAR</td><td style="border:1px solid #ddd;padding:4px;">Desplazar derecha aritmetico (preserva signo)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:4px;">ROL / ROR / RCL / RCR</td><td style="border:1px solid #ddd;padding:4px;">Rotaciones (con y sin carry)</td></tr>
-    </table>
-    <h4>Control de flujo</h4>
-    <p><b>JMP:</b> salto incondicional. <b>Jcc:</b> saltos condicionales (JZ, JNZ, JG, JL, JC, JNC, JO, etc.) segun flags. <b>LOOP:</b> decrementa CX, salta si CX&ne;0 (para bucles). <b>CALL:</b> PUSH IP (o CS:IP), salta a subrutina. <b>RET:</b> POP IP, retorna. <b>INT n:</b> interrupcion software. <b>IRET:</b> retorno de interrupcion.</p>
-    <h4>Operaciones de cadena (string)</h4>
-    <p><b>MOVSB/W:</b> mover byte/word de DS:SI a ES:DI. <b>CMPSB/W:</b> comparar. <b>LODSB/W:</b> cargar en AL/AX desde DS:SI. <b>STOSB/W:</b> almacenar AL/AX en ES:DI. Usadas con prefijo <b>REP</b> (repetir CX veces): permiten copiar, comparar o llenar bloques de memoria en una sola instruccion.</p>
-    <h4>E/S y flags</h4>
-    <p><b>IN AL, puerto / OUT puerto, AL:</b> leer/escribir puertos de E/S (espacio separado de 64K puertos). <b>CLC/STC:</b> borrar/setear carry. <b>CLI/STI:</b> deshabilitar/habilitar interrupciones. <b>CLD/STD:</b> borrar/setear flag de direccion (para cadenas).</p>
-    <h4>Errores comunes</h4>
-    <ul style="padding-left:20px;">
-    <li>Confundir MUL (sin signo) con IMUL (con signo): producen resultados diferentes para numeros negativos.</li>
-    <li>Olvidar que DIV puede generar excepcion si el cociente no cabe en el registro destino.</li>
-    <li>No diferenciar SHR (logico, llena con 0) de SAR (aritmetico, replica el bit de signo).</li>
+    <h4>Ejemplo resuelto 1 (el clasico de examen)</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    DS = 3000H, offset (SI) = 7C09H. &rarr; DS &times; 16 = 30000H. Direccion fisica = 30000H + 7C09H = <b>37C09H</b>.<br>
+    Truco rapido en hexa: a 3000H le agregas un 0 (queda 30000H) y le sumas el offset.
+    </div>
+    <h4>Ejemplo resuelto 2 (no hay acarreo: el "wrap around")</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    DS = FFFFH, SI = 000FH &rarr; FFFF0H + 000FH = <b>FFFFFH</b> (el ultimo byte del MB).<br>
+    Pero si SI = 0010H &rarr; FFFF0H + 0010H = 100000H, que <b>no cabe en 20 bits</b>: se descarta el acarreo y queda <b>00000H</b>. La posicion siguiente a FFFFFH es la 00000H (la memoria "da la vuelta").
+    </div>
+    <h4>Por que cuatro segmentos y para que sirve</h4>
+    <p style="font-size:0.92rem;">Con un segmento fijo y variando el offset recorres <b>64 KB</b> (de 0000 a FFFFH). Para usar mas, cada registro de segmento apunta a una zona distinta del mapa, dando <b>areas de trabajo separadas</b>:</p>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>CS:IP</b> &rarr; segmento de codigo (de donde se sacan las instrucciones).</li>
+    <li><b>DS</b> + offset &rarr; datos y variables (segmento por defecto para acceder datos; se puede invalidar con un prefijo, ej: <b>MOV CX, ES:COUNT</b>).</li>
+    <li><b>SS:SP</b> y <b>SS:BP</b> &rarr; pila.</li>
+    <li><b>ES</b> &rarr; datos extra / destino en cadenas.</li>
     </ul>
+    <p style="font-size:0.92rem;">Si los 4 no se superponen, hay hasta 4 &times; 64 KB = <b>256 KB</b> accesibles en un momento dado sin recargar segmentos. Para programas chicos (&le; 64 KB) se fijan los segmentos al inicio y se juega solo con offsets. Dato de arranque: tras el <b>reset</b> todos los registros valen 0000H salvo CS = FFFFH, asi que el 8088 empieza a ejecutar en CS:IP = FFFF:0000 = <b>FFFF0H</b> (ahi va la ROM de inicio).</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
-    <b>Aplicacion en la vida real:</b> El set de instrucciones del 8088 es la base de toda la familia x86. Cada instruccion moderna (AVX, SSE) se agrego manteniendo compatibilidad con las originales. Un programa DOS compilado para 8088 en 1981 puede ejecutarse hoy en un procesador x86-64 en modo real.
+    <b>En una frase:</b> con registros de 16 bits pero bus de 20, el 8088 arma cada direccion fisica como <b>segmento &times; 16 + offset</b>; eso da 1 MB total, organizado en zonas de 64 KB (codigo, datos, pila, extra).
     </div>` },
-          { title: 'De la Blue al 8088: hacia una estructura convencional', detail: `<h4>Definicion formal</h4>
-    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;">
-    La evolucion desde la <b>Maquina Elemental (BLUE)</b> hacia el <b>Intel 8088</b> representa el camino desde una computadora didactica simple hasta un procesador comercial complejo. Cada paso agrega hardware y capacidades para resolver limitaciones reales: mas registros, modos de direccionamiento, interrupciones, memoria segmentada, pipeline y E/S sofisticada.
-    </div>
-    <h4>Tabla evolutiva</h4>
-    <table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.82rem;">
-    <tr><th style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">Aspecto</th><th style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">BLUE</th><th style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">MEI</th><th style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">Intel 8088</th></tr>
-    <tr><td style="border:1px solid #ddd;padding:5px;">Registros</td><td style="border:1px solid #ddd;padding:5px;">ACC, PC, IR, MAR, MBR</td><td style="border:1px solid #ddd;padding:5px;">+ RIF, RID, RB, W, X</td><td style="border:1px solid #ddd;padding:5px;">14 registros (AX-DX, SP, BP, SI, DI, CS-ES, IP, Flags)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:5px;">Memoria</td><td style="border:1px solid #ddd;padding:5px;">4K &times; 16</td><td style="border:1px solid #ddd;padding:5px;">64K &times; 16</td><td style="border:1px solid #ddd;padding:5px;">1 MB (segmentada, 20 bits)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:5px;">Instrucciones</td><td style="border:1px solid #ddd;padding:5px;">16 (formato fijo)</td><td style="border:1px solid #ddd;padding:5px;">~32 (formato variable)</td><td style="border:1px solid #ddd;padding:5px;">100+ (longitud variable 1-6 bytes)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:5px;">Modos direc.</td><td style="border:1px solid #ddd;padding:5px;">Directo, Registro</td><td style="border:1px solid #ddd;padding:5px;">+ Indirecto, Indexado</td><td style="border:1px solid #ddd;padding:5px;">+ Inmediato, Base+Indice+Desp</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:5px;">Interrupciones</td><td style="border:1px solid #ddd;padding:5px;">No</td><td style="border:1px solid #ddd;padding:5px;">Si (polling/vectorizadas)</td><td style="border:1px solid #ddd;padding:5px;">256 vectores (IVT), NMI, INTR, INT n</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:5px;">Pipeline</td><td style="border:1px solid #ddd;padding:5px;">No</td><td style="border:1px solid #ddd;padding:5px;">No</td><td style="border:1px solid #ddd;padding:5px;">Si (BIU/EU, cola de prefetch)</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:5px;">E/S</td><td style="border:1px solid #ddd;padding:5px;">INP/OUT basico</td><td style="border:1px solid #ddd;padding:5px;">+ Interrupciones</td><td style="border:1px solid #ddd;padding:5px;">IN/OUT con 64K puertos, DMA</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:5px;">UC</td><td style="border:1px solid #ddd;padding:5px;">Cableada</td><td style="border:1px solid #ddd;padding:5px;">Cableada ampliada</td><td style="border:1px solid #ddd;padding:5px;">Microprogramada</td></tr>
+          { title: 'Modos de direccionamiento', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> un "modo de direccionamiento" es la <b>forma en que la instruccion dice donde esta el operando</b>: si es un valor pegado en la instruccion, si esta en un registro, o si esta en memoria (y como se calcula esa direccion de memoria). Recorda: cuando el operando esta en memoria, lo que se calcula es la <b>direccion efectiva (offset)</b> de 16 bits; despues la BIU le suma el segmento &times; 16 para llegar a los 20 bits fisicos.</p>
+    <h4>Operando que NO toca memoria</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Inmediato:</b> el operando es una constante escrita en la propia instruccion. Ej: <b>MOV AX, 1234H</b> (el 1234H viaja dentro del codigo de operacion).</li>
+    <li><b>Por registro:</b> el operando es un registro. Ej: <b>MOV AX, BX</b>. Es el mas rapido: no se genera ninguna direccion de 20 bits, todo pasa adentro de la EU.</li>
+    </ul>
+    <h4>Operando EN memoria (aca se calcula un offset)</h4>
+    <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:0.84rem;">
+    <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Modo</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Como se calcula el offset</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Ejemplo</th></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Directo</b></td><td style="border:1px solid #ddd;padding:6px;">La direccion va escrita en la instruccion (constante / etiqueta)</td><td style="border:1px solid #ddd;padding:6px;">MOV CX, COUNT &nbsp;/&nbsp; MOV AX, [1234H]</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Indirecto por registro</b></td><td style="border:1px solid #ddd;padding:6px;">El offset esta dentro de un registro (BX, BP, SI o DI)</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, [SI]</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Indirecto + desplazamiento</b></td><td style="border:1px solid #ddd;padding:6px;">registro (BX/BP/SI/DI) + constante</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, COUNT[DI]</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Base + indice</b></td><td style="border:1px solid #ddd;padding:6px;">registro base (BX o BP) + registro indice (SI o DI)</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, [BX][SI]</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Base + indice + desplaz.</b></td><td style="border:1px solid #ddd;padding:6px;">base + indice + constante (el mas completo)</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, COUNT[BX][DI]</td></tr>
     </table>
-    <h4>Que cambio y por que</h4>
-    <p><b>Mas registros:</b> reducir accesos a memoria (mas rapido). La BLUE con solo ACC obliga a usar memoria constantemente. El 8088 tiene 14 registros con funciones especializadas.</p>
-    <p><b>Memoria segmentada:</b> con registros de 16 bits, se accede a solo 64KB. Los segmentos permiten 1MB con la formula Segmento&times;16+Offset. Es la solucion de Intel al problema de direccionamiento limitado.</p>
-    <p><b>Pipeline (BIU/EU):</b> mientras la EU ejecuta una instruccion, la BIU busca la siguiente. La cola de prefetch (4 bytes) mantiene instrucciones pre-cargadas. Mejora de ~35% en velocidad de procesamiento.</p>
-    <p><b>Interrupciones reales:</b> la MEI introduce el concepto basico; el 8088 lo completa con 256 vectores, NMI hardware, interrupciones software (INT n), y la IVT en las primeras 1024 posiciones de memoria.</p>
-    <h4>Ejemplo: misma tarea en BLUE vs 8088</h4>
-    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;">
-    <b>Sumar dos numeros en memoria:</b><br><br>
-    <b>BLUE (3 instrucciones, 5 ciclos de memoria):</b><br>
-    LDA A &nbsp;&nbsp;; ACC &larr; M[A]<br>
-    ADD B &nbsp;&nbsp;; ACC &larr; ACC + M[B]<br>
-    STA C &nbsp;&nbsp;; M[C] &larr; ACC<br><br>
-    <b>8088 (3 instrucciones, mas rapido con pipeline):</b><br>
-    MOV AX, [A] &nbsp;; AX &larr; M[DS:A]<br>
-    ADD AX, [B] &nbsp;; AX &larr; AX + M[DS:B]<br>
-    MOV [C], AX &nbsp;; M[DS:C] &larr; AX
+    <h4>Ejemplo resuelto (modo mas complejo, base + indice + desplazamiento)</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>MOV AX, COUNT[BX][DI]</b> con BX = 7890H, DI = 0367H, COUNT = 0012H.<br>
+    Offset (direccion efectiva) = 7890H + 0367H + 0012H = <b>7C09H</b>.<br>
+    Si DS = 3000H &rarr; direccion fisica = DS &times; 16 + 7C09H = 30000H + 7C09H = <b>37C09H</b>. De ahi sale el dato que se carga en AX.
     </div>
-    <h4>Errores comunes</h4>
-    <ul style="padding-left:20px;">
-    <li>Pensar que la BLUE es inutil: es fundamental para entender los principios que subyacen en procesadores reales.</li>
-    <li>Creer que mas instrucciones siempre es mejor: la filosofia RISC demuestra que menos instrucciones bien implementadas pueden ser mas eficientes.</li>
-    <li>No ver la continuidad: cada mejora de la BLUE aparece en el 8088 en forma mas completa.</li>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
+    <b>Reglas que cierran el tema:</b> solo <b>BX, BP, SI, DI</b> sirven para apuntar a memoria (no AX, CX, DX). La base es siempre BX o BP; el indice siempre SI o DI. Si usas BP, el segmento por defecto es <b>SS</b>; con el resto, <b>DS</b>. Cuanto mas componentes tiene el calculo, mas tarda: en el 8088 esas sumas estan en microcodigo (CROM), por eso los modos complejos son mas lentos (recien el 80186 los cablea).
+    </div>
+    <p style="font-size:0.92rem;"><b>Hilo con la MEI:</b> estos modos son la version "comercial" de lo que la Maquina Elemental Indexada agrego de manera basica (directo, indirecto, indexado con RIF/RID); aca SI/DI cumplen el rol de los registros indice, y BX/BP el del registro base.</p>
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
+    <b>En una frase:</b> hay modos donde el dato esta en la instruccion (inmediato) o en un registro, y modos donde esta en memoria, cuyo <b>offset</b> se arma sumando base (BX/BP) + indice (SI/DI) + desplazamiento; ese offset siempre se combina con un segmento para dar los 20 bits.
+    </div>` },
+          { title: 'Set de instrucciones del 8088', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el repertorio del 8088 es el "vocabulario" del procesador: las ordenes que entiende. Se agrupan por familias. No hay que memorizar las 100+ instrucciones; hay que conocer <b>cada grupo, para que sirve y las instrucciones estrella</b> de cada uno (que son las que aparecen en los TP del EMU 8086 y en examen).</p>
+    <h4>1) Transferencia de datos (mover, sin cambiar el dato)</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>MOV</b> (la mas usada): copia dato entre registro, memoria e inmediato. <b>Restricciones clave:</b> no permite <b>memoria a memoria</b>, no permite poner un inmediato directo en un registro de segmento, y los dos operandos deben ser del mismo tamano.</li>
+    <li><b>XCHG</b> (intercambia), <b>PUSH/POP</b> (pila), <b>IN/OUT</b> (puertos de E/S), <b>XLAT</b> (traduce por tabla), <b>LEA</b> (carga la direccion efectiva, no el dato), <b>LDS/LES</b> (cargan un puntero en DS/ES), <b>LAHF/SAHF</b> (banderas a/desde AH).</li>
+    </ul>
+    <h4>2) Aritmeticas y logicas (las hace la ALU, afectan FLAGS)</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Aritmeticas:</b> ADD (suma), ADC (suma con carry), SUB (resta), SBB (resta con prestamo), INC (+1), DEC (-1), NEG (cambia signo), MUL/IMUL (mult. sin/con signo), DIV/IDIV (div. sin/con signo). <b>Ojo: INC y DEC NO tocan CF</b> (las demas afectan CF, ZF, SF, OF, PF, AF).</li>
+    <li><b>Logicas:</b> AND, OR, XOR, NOT, <b>TEST</b> (AND que solo deja banderas, no guarda resultado).</li>
+    <li><b>Comparacion:</b> <b>CMP</b> = resta los operandos pero <b>no guarda el resultado</b>, solo actualiza FLAGS; es el preludio tipico de un salto condicional.</li>
+    <li><b>Ajustes:</b> DAA/DAS (decimal tras suma/resta), AAA/AAS/AAM/AAD (ASCII), CBW/CWD (extender de byte a word / word a doble word).</li>
+    </ul>
+    <h4>3) Desplazamiento y rotacion (manejo de bits, usan CL para la cantidad)</h4>
+    <p style="font-size:0.92rem;"><b>SHL/SAL</b> y <b>SHR/SAR</b> (desplazan izq./der., logico o aritmetico) y <b>ROL/ROR/RCL/RCR</b> (rotan, las RCx pasando por el carry).</p>
+    <h4>4) Control de flujo (saltos, bucles, subrutinas)</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>JMP</b> incondicional: <b>short</b> (&plusmn;127 bytes), <b>near</b> (mismo segmento, offset 16 bits), <b>far</b> (cambia CS:IP entero).</li>
+    <li><b>Saltos condicionales (Jcc)</b>, se usan justo despues de CMP A,B: <b>JE/JZ</b> (igual), <b>JNE/JNZ</b> (distinto), <b>JA/JB</b> (mayor/menor SIN signo), <b>JG/JL</b> (mayor/menor CON signo), <b>JC/JNC</b> (segun carry), <b>JCXZ</b> (si CX=0).</li>
+    <li><b>LOOP:</b> decrementa CX y salta si CX &ne; 0 (equivale a DEC CX; JNZ). Ideal para bucles con cuenta conocida. Variantes LOOPE/LOOPNE.</li>
+    <li><b>CALL / RET:</b> llamada y retorno de subrutina (ver detalle de pila en la caja de abajo).</li>
+    </ul>
+    <h4>5) Cadenas, interrupciones y control del procesador</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Cadenas:</b> MOVS, CMPS, SCAS, LODS, STOS, con prefijo <b>REP</b> (repite CX veces); usan SI/DI y el flag DF para el sentido.</li>
+    <li><b>Interrupciones:</b> INT n, INTO, IRET (ver ficha de interrupciones).</li>
+    <li><b>Control de banderas:</b> STC/CLC (carry), STD/CLD (direccion), STI/CLI (interrupciones). <b>Otras:</b> NOP (no hace nada), HLT (detiene la CPU), LOCK (bloquea el bus), WAIT/ESC (coprocesador).</li>
+    </ul>
+    <h4>La pila en CALL/RET (ejemplo resuelto)</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>PUSH</b> hace SP &larr; SP &minus; 2 y guarda en [SS:SP] (la pila crece hacia direcciones <b>menores</b>); <b>POP</b> lee de [SS:SP] y hace SP &larr; SP + 2.<br>
+    <b>CALL near</b> empuja IP en la pila y salta; <b>RET near</b> saca IP y vuelve. <b>CALL far</b> empuja CS e IP; <b>RET far</b> saca ambos.<br>
+    Ej: antes de un CALL, IP = 100H y SP = 100H. Tras <b>CALL 1000H</b>: se empuja el IP de retorno (SP pasa a 0FEH) e IP toma 1000H. Cuando la subrutina haga RET, se saca ese IP de [SS:0FEH], SP vuelve a 100H y la ejecucion continua donde habia quedado. Por usar la <b>pila LIFO</b> es que las subrutinas pueden <b>anidarse</b>.
+    </div>
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
+    <b>En una frase:</b> el set se ordena en familias (transferencia, aritmetica/logica, bits, control de flujo, cadenas, interrupciones y control); las estrella de examen son <b>MOV, ADD/SUB, CMP+Jcc, LOOP y CALL/RET</b>, y el detalle critico es que la pila guarda la direccion de retorno.
+    </div>` },
+          { title: 'Interrupciones', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> una interrupcion es un "te necesito ya" que hace que el procesador <b>pause lo que esta haciendo, atienda el pedido y despues vuelva</b> exactamente donde estaba, como si nada hubiera pasado. Sirve para que la CPU no pierda tiempo preguntando todo el rato a los perifericos ("estas listo? estas listo?") y para reaccionar a eventos que llegan en cualquier momento.</p>
+    <h4>Que hace la CPU cuando llega una interrupcion</h4>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    1) <b>Termina la instruccion actual.</b><br>
+    2) <b>Salva el contexto</b> en la pila: en el 8088 empuja <b>FLAGS, CS e IP</b>.<br>
+    3) <b>Inhabilita las interrupciones</b> (baja IF) para no ser interrumpido a su vez.<br>
+    4) <b>Salta a la rutina de servicio</b> (ISR) que atiende el evento.<br>
+    5) Al terminar, <b>restaura el contexto</b> y vuelve al programa: lo hace la instruccion <b>IRET</b>, que saca de la pila IP, CS y FLAGS (asi se rehabilita IF).
+    </div>
+    <h4>Tipos de interrupcion en el 8088</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Hardware enmascarables:</b> entran por el pin <b>INTR</b>. Se atienden <b>solo si IF = 1</b> (se "enmascaran" bajando IF con CLI; se habilitan con STI).</li>
+    <li><b>Hardware NO enmascarables:</b> entran por <b>NMI</b>. Se atienden <b>siempre</b>, IF no las frena (para fallas graves, ej. error de memoria).</li>
+    <li><b>Software:</b> la instruccion <b>INT n</b> (n de 0 a 255) genera la interrupcion numero n. Asi se piden los servicios del DOS/BIOS (ej. INT 21H).</li>
+    <li><b>Internas (excepciones):</b> las genera el propio procesador, como la <b>division por cero</b> (INT 0) o el modo paso a paso por TF (INT 1).</li>
+    </ul>
+    <h4>La tabla de vectores de interrupcion</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    Esta en los <b>primeros 1024 bytes</b> de memoria (direcciones 00000H a 003FFH). Hay <b>256 vectores</b>, uno por cada numero de interrupcion. Cada vector ocupa <b>4 bytes</b>: 2 para el nuevo IP y 2 para el nuevo CS de la rutina.<br>
+    Para una INT n, el procesador va a buscar el vector a la direccion <b>n &times; 4</b>. Ej: INT 0 (division por cero) lee su CS:IP de la direccion 0; INT 21H lo lee de 21H &times; 4 = 84H.
+    </div>
+    <p style="font-size:0.92rem;">La senal <b>/INTA</b> (Interrupt Acknowledge) es como el 8088 le avisa al exterior que acepto el pedido y va a leer el numero de interrupcion que el dispositivo coloca en el bus.</p>
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
+    <b>En una frase:</b> ante un pedido el 8088 apila <b>FLAGS, CS e IP</b>, baja IF, busca el CS:IP de la rutina en el <b>vector n &times; 4</b> (tabla de 256 vectores en los primeros 1 KB) y vuelve con <b>IRET</b>; las hay enmascarables (INTR), no enmascarables (NMI), por software (INT n) e internas.
+    </div>` },
+          { title: 'Sistema elemental de interrupciones', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> antes de ver las interrupciones "comerciales" del 8088, la catedra las construye <b>desde cero sobre la maquina didactica</b>, para entender por que existe cada pieza. Aca cada periferico levanta una banderita cuando quiere atencion, y vamos resolviendo dos problemas: <b>quien pidio</b> y <b>como volver despues</b>. Es el puente conceptual entre la maquina elemental y el sistema real.</p>
+    <h4>Por que se inventan (el problema que resuelven)</h4>
+    <p style="font-size:0.92rem;">Sin interrupciones, la CPU tiene que <b>encuestar</b> (polling activo) a cada periferico una y otra vez para ver si tiene algo: pierde muchisimo tiempo esperando. Caxton Foster lo define como "agregar hardware para que, cuando un evento externo necesite atencion, el programa se suspenda solo, se atienda con una rutina especial, y se vuelva como si nada". Es la forma eficiente de manejar E/S y eventos extemporaneos.</p>
+    <h4>El hardware minimo (Banderas de Dispositivo + IRQ)</h4>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    Cada periferico tiene una <b>Bandera de Dispositivo (BDn)</b> que pone en 1 cuando solicita atencion. Todas se combinan en una linea <b>IRQ</b> (Interrupt ReQuest) hacia la UC. Ademas se agregan dos instrucciones de un ciclo para controlar el sistema: <b>ION</b> (habilita interrupciones) e <b>IOF</b> (las deshabilita), mas un biestable de estado que recuerda si el sistema esta habilitado. Tambien aparece un <b>Registro Mascara (RM)</b> para habilitar/inhabilitar perifericos individualmente.
+    </div>
+    <h4>El ciclo de interrupcion (que pasos hace la UC)</h4>
+    <p style="font-size:0.92rem;">Cuando hay IRQ y el sistema esta habilitado, se intercala un <b>ciclo de interrupcion</b> que: <b>salva la direccion de retorno (el PC)</b>, deshabilita el sistema, y carga el PC con la direccion de la rutina de atencion. Luego la rutina: <b>salva el contexto</b> &rarr; determina quien pidio &rarr; atiende al periferico &rarr; <b>restaura el contexto</b> &rarr; <b>rehabilita interrupciones</b> &rarr; retorna.</p>
+    <h4>Como saber QUIEN pidio: dos metodos</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Por software (POLLING):</b> se agrega la instruccion <b>SKF BDn</b> ("salta la proxima instruccion si BDn = 0"). La rutina recorre los dispositivos uno por uno: SKF BD0 / JUMP SRD0 / SKF BD1 / JUMP SRD1 ... El <b>orden de chequeo fija la prioridad</b> (el primero que se prueba tiene mas prioridad). Simple pero lento.</li>
+    <li><b>Vectorizado (por hardware):</b> el propio dispositivo, al recibir el <b>ACK</b>, le entrega a la CPU un numero que la lleva directo a su <b>vector</b> (la direccion de su rutina, RIP n). No hay que encuestar: se salta directo a la rutina correcta. Mas rapido. Este es el metodo que termina usando el 8088 con su tabla de 256 vectores.</li>
+    </ul>
+    <h4>Interrupciones anidadas y el nacimiento del SP</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    Si en vez de guardar el contexto en un lugar fijo lo vamos <b>apilando en memoria (PILA / stack)</b>, se pueden soportar <b>interrupciones anidadas</b> (una interrupcion dentro de otra) sin pisar el contexto anterior. Para eso hace falta un registro nuevo: el <b>Puntero de Pila (SP)</b>, que apunta a la primera posicion libre de la pila. Esta es la razon de fondo por la que el 8088 trae SP y guarda el contexto en la pila.
+    </div>
+    <p style="font-size:0.92rem;"><b>Hilo:</b> la pila viene del <b>LIFO de la U3</b>; aca se ve para que sirve de verdad. Y de aca surge la necesidad de un <b>programa monitor</b> que administre memoria, E/S y CPU: el embrion del sistema operativo.</p>
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
+    <b>En una frase:</b> se agrega hardware (banderas BDn, IRQ, ION/IOF, registro mascara) y software para suspender el programa, identificar quien pidio (polling con SKF o vectorizado), y la <b>pila + SP</b> permiten anidar interrupciones y volver siempre al punto exacto.
+    </div>` },
+          { title: 'Maquina Elemental Indexada (MEI)', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> la MEI es la <b>maquina elemental con upgrades</b>. A la maquina didactica basica se le agregan registros, modos de direccionamiento e instrucciones nuevas para que <b>sea mas comoda de programar</b> (bucles, arrays, reubicar programas) y para preparar el terreno hacia un procesador real como el 8088. Es el ultimo escalon didactico antes del 8088.</p>
+    <h4>Por que mejorar la maquina elemental</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Modificar direcciones al vuelo</b> &rarr; agregar <b>indexacion</b> y <b>direccionamiento indirecto</b> (nuevos registros indice y nuevas instrucciones).</li>
+    <li><b>Programar bucles iterativos</b> &rarr; registros indice usados como <b>contadores</b> con instrucciones dedicadas.</li>
+    <li><b>Reubicar programas residentes</b> en memoria &rarr; un <b>registro base</b>.</li>
+    <li><b>Manejar E/S por interrupciones</b> &rarr; mas hardware y software (lo de la ficha anterior).</li>
+    </ul>
+    <h4>Registros nuevos</h4>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>RIF</b> (Registro Indice Fuente, 16 bits), <b>RID</b> (Registro Indice Destino, 16 bits) y <b>RB</b> (Registro Base, 16 bits). RIF y RID son los antepasados directos de <b>SI y DI</b> del 8088; RB anticipa el rol de <b>BX/BP</b>.
+    </div>
+    <h4>Modos de direccionamiento de la MEI</h4>
+    <p style="font-size:0.92rem;">Se usa un <b>formato de instruccion variable</b> con un campo de modo (MOD) de 2 bits que selecciona como interpretar el campo direccion:</p>
+    <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:0.85rem;">
+    <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">MOD</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Modo</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Que es el operando</th></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">00</td><td style="border:1px solid #ddd;padding:6px;"><b>Directo</b></td><td style="border:1px solid #ddd;padding:6px;">El campo direccion ES la direccion del operando</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">01</td><td style="border:1px solid #ddd;padding:6px;"><b>Indirecto</b></td><td style="border:1px solid #ddd;padding:6px;">El campo direccion es la direccion de la direccion del operando</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">10</td><td style="border:1px solid #ddd;padding:6px;"><b>Indexado RIF</b></td><td style="border:1px solid #ddd;padding:6px;">direccion + RIF = direccion del operando</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">11</td><td style="border:1px solid #ddd;padding:6px;"><b>Indexado RID</b></td><td style="border:1px solid #ddd;padding:6px;">direccion + RID = direccion del operando</td></tr>
+    </table>
+    <p style="font-size:0.92rem;">Tambien hay operandos que no van a memoria: <b>inmediato</b> (en la instruccion) y <b>por registro</b>. Es exactamente la misma logica que despues vas a ver en el 8088.</p>
+    <h4>Instrucciones nuevas (relacionadas a los registros indice)</h4>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
+    <b>RXT</b> Reg,Reg (copia un registro en otro) &middot; <b>SIX</b> Reg,Dir (guarda registro en memoria) &middot; <b>LIX</b> Reg,Dir (carga registro desde memoria) &middot; <b>ENI</b> Reg,Valor (carga el registro con un entero) &middot; <b>INI</b> Reg,Valor (incrementa el registro) &middot; <b>IJP</b> Reg,Dir (si Reg &ne; 0, lo decrementa y salta; si es 0, sigue).
+    </div>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Por que importa IJP:</b> permite armar un <b>contador para un bucle iterativo</b> con una sola instruccion (cargar el indice, y mientras no sea cero decrementar y volver). Es el antepasado directo de la instruccion <b>LOOP</b> del 8088.
+    </div>
+    <h4>El registro base RB</h4>
+    <p style="font-size:0.92rem;">La Unidad de Control le <b>suma el contenido de RB al campo direccion en tiempo de ejecucion</b>. Asi un mismo programa puede correr en distintas zonas de memoria sin reescribir las direcciones: se cambia RB y listo (reubicacion). Por eso su control esta <b>reservado al administrador</b> (instruccion privada ENI RB), lo que ya anticipa la idea de proteccion del sistema operativo.</p>
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
+    <b>En una frase:</b> la MEI suma <b>RIF, RID y RB</b> mas modos (directo, indirecto, indexado) e instrucciones (RXT, SIX/LIX, ENI/INI, IJP) para programar arrays, bucles (IJP &rarr; LOOP) y reubicar programas (RB); es el ensayo didactico de lo que el 8088 hace en serio.
+    </div>` },
+          { title: 'De la Blue al 8088: hacia una estructura convencional', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> esta ficha es el <b>mapa que une todo el cuatrimestre</b>. Arrancamos con una computadora elemental (la Blue de la U4), le fuimos agregando mejoras (la MEI) y terminamos en un procesador comercial real (el 8088). El objetivo es ver que <b>cada pieza del 8088 nacio para resolver un problema concreto</b> que ya vimos antes, no cae del cielo.</p>
+    <h4>El recorrido, paso a paso</h4>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>1) Maquina elemental (Blue, U4):</b> un acumulador (ACC), PC, IR, MAR, MBR, una UC y poco mas. Ciclo simple buscar-decodificar-ejecutar. Programable pero incomoda.<br>
+    <b>2) Maquina Elemental Indexada (MEI):</b> se le agregan registros indice (RIF/RID), registro base (RB), modos de direccionamiento e interrupciones. Mas comoda y potente.<br>
+    <b>3) Maquina convencional:</b> aparece la <b>pila y el puntero SP</b>, el sistema de interrupciones completo y la necesidad de un <b>programa monitor</b> (administra memoria, E/S y CPU): el embrion del sistema operativo.<br>
+    <b>4) 8088 (procesador real):</b> implementa todo eso en silicio comercial y suma el <b>paralelismo BIU/EU</b> y la <b>segmentacion</b> para direccionar 1 MB.
+    </div>
+    <h4>Que problema resolvio cada agregado</h4>
+    <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:0.84rem;">
+    <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Necesidad</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">En la MEI</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">En el 8088</th></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">Recorrer arrays</td><td style="border:1px solid #ddd;padding:6px;">RIF / RID, indexado</td><td style="border:1px solid #ddd;padding:6px;">SI / DI, modos indexados</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">Bucles con contador</td><td style="border:1px solid #ddd;padding:6px;">IJP</td><td style="border:1px solid #ddd;padding:6px;">LOOP (con CX)</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">Reubicar programas</td><td style="border:1px solid #ddd;padding:6px;">Registro base RB</td><td style="border:1px solid #ddd;padding:6px;">BX/BP y registros de segmento</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">Atender E/S sin esperar</td><td style="border:1px solid #ddd;padding:6px;">Interrupciones + pila/SP</td><td style="border:1px solid #ddd;padding:6px;">INTR/NMI/INT, tabla de vectores</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">Direccionar mucha memoria</td><td style="border:1px solid #ddd;padding:6px;">(no llegaba)</td><td style="border:1px solid #ddd;padding:6px;">Segmentacion (1 MB)</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;">Velocidad</td><td style="border:1px solid #ddd;padding:6px;">(ciclo secuencial)</td><td style="border:1px solid #ddd;padding:6px;">Paralelismo BIU/EU + cola</td></tr>
+    </table>
+    <h4>La idea de compatibilidad hacia arriba</h4>
+    <p style="font-size:0.92rem;">Un concepto clave que introdujo Intel: <b>upward compatible</b>. Un programa escrito para un procesador previo (8080/8085) corre igual (mas rapido) en uno posterior, sin reescribirlo. Por eso muchos registros del 8088 son "versiones potenciadas" de los anteriores (AL es el viejo acumulador, BX una version del par HL).</p>
+    <h4>Como se cose con el resto del programa</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li>El <b>ciclo de instruccion</b> y la UC vienen de la <b>Blue (U4)</b>.</li>
+    <li>La <b>pila LIFO</b> que usan CALL/RET e interrupciones viene de las memorias <b>serie de la U3</b>.</li>
+    <li>El <b>paralelismo BIU/EU + cola</b> es el primer paso hacia el <b>pipeline y la segmentacion del cauce de la U6</b>.</li>
+    <li>Las <b>interrupciones</b> se profundizan al ver <b>entradas/salidas en la U7</b> (E/S por interrupcion vs polling vs DMA).</li>
     </ul>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
-    <b>Aplicacion en la vida real:</b> El 8088 inicio la era de las PCs (IBM PC, 1981). Sus conceptos (segmentacion, interrupciones, pipeline) evolucionaron a traves del 286, 386, Pentium hasta los procesadores x86-64 actuales. Entender la BLUE facilita comprender cada salto evolutivo hasta los modernos Intel Core y AMD Ryzen.
-    </div>` }
+    <b>En una frase:</b> el 8088 no es magia: es la <b>maquina elemental + MEI + estructura convencional</b> llevadas a silicio, donde cada pieza (indices, LOOP, pila, interrupciones, segmentacion, BIU/EU) resuelve un problema que el programa fue planteando unidad por unidad.
+    </div>` },
         ]
       },
-      {
+{
         unit: 6, name: 'Unidad 6 — Arquitecturas avanzadas', color: 'var(--u5)',
         cards: [
           { title: 'CISC vs RISC', detail: `<h4>Definicion formal</h4><div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.97rem;"><b>CISC</b> (Complex Instruction Set Computer): muchas instrucciones de longitud variable, muchos modos de direccionamiento, UC microprogramada. <b>RISC</b> (Reduced Instruction Set Computer): pocas instrucciones de longitud fija, pocos modos, UC cableada, pipeline intensivo, load/store architecture.</div><h4>Comparacion detallada</h4><table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.82rem;"><tr><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">Criterio</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">CISC</th><th style="border:1px solid #ddd;padding:4px;background:#f5f5f5;">RISC</th></tr><tr><td style="border:1px solid #ddd;padding:4px;">Instrucciones</td><td style="border:1px solid #ddd;padding:4px;">100-300+</td><td style="border:1px solid #ddd;padding:4px;">30-100</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Longitud</td><td style="border:1px solid #ddd;padding:4px;">Variable (1-15 bytes)</td><td style="border:1px solid #ddd;padding:4px;">Fija (4 bytes tipico)</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Modos direc.</td><td style="border:1px solid #ddd;padding:4px;">Muchos (8-20)</td><td style="border:1px solid #ddd;padding:4px;">Pocos (3-5)</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">UC</td><td style="border:1px solid #ddd;padding:4px;">Microprogramada</td><td style="border:1px solid #ddd;padding:4px;">Cableada</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Pipeline</td><td style="border:1px solid #ddd;padding:4px;">Dificil (instrucciones desiguales)</td><td style="border:1px solid #ddd;padding:4px;">Eficiente (instrucciones uniformes)</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Registros</td><td style="border:1px solid #ddd;padding:4px;">Pocos (8-16)</td><td style="border:1px solid #ddd;padding:4px;">Muchos (32-128)</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Acceso mem.</td><td style="border:1px solid #ddd;padding:4px;">Cualquier instruccion</td><td style="border:1px solid #ddd;padding:4px;">Solo LOAD/STORE</td></tr><tr><td style="border:1px solid #ddd;padding:4px;">Ciclos/instr.</td><td style="border:1px solid #ddd;padding:4px;">Variable (1-20+)</td><td style="border:1px solid #ddd;padding:4px;">Idealmente 1</td></tr></table><h4>Brecha semantica</h4><p>CISC intenta cerrar la brecha entre lenguajes de alto nivel y maquina con instrucciones complejas. RISC demuestra que instrucciones simples + compilador inteligente + pipeline eficiente dan mejor rendimiento en la practica.</p><h4>Errores comunes</h4><ul style="padding-left:20px;"><li>Creer que CISC es siempre mas lento: x86 moderno es CISC externamente pero RISC internamente.</li><li>Pensar que RISC no tiene instrucciones complejas: las tiene, pero se descomponen en micro-ops.</li></ul><div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;"><b>Aplicacion en la vida real:</b> ARM (smartphones) y RISC-V (IoT, servidores) son RISC. x86 (PCs/servidores) es CISC pero con nucleo RISC interno. Apple M1/M2/M3 (ARM) demuestran la eficiencia RISC en alta performance.</div>` },
