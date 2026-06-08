@@ -2432,8 +2432,8 @@ ADD AX, BX"></textarea>
 
     <div class="content-section" id="section-plan">
       <div class="card" style="margin-bottom:12px;">
-        <h2>Plan de Estudio — 5 Semanas + Examen</h2>
-        <p style="font-size:0.85rem;color:var(--text-secondary);">Target: 3 jul 2026. Alineado al plan_estudio_03jul2026 (Diagnostico + Reconstruccion + Practica deliberada + Picada fina). Semana E = 8 dias de repaso puro, cero contenido nuevo. La semana actual aparece resaltada.</p>
+        <h2>Plan de Estudio — 4 Semanas + Mesa (revisado 8 jun)</h2>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">Target: vie 3 jul 2026. ~25 dias, las 7 unidades crudas. Prioridad por peso real: U1/U2/U5/U4 cubren el 93% de la admision; los simulacros NO se tocan (es lo que falto en AM2). Se aprende cada unidad entrando por la capa Feynman, despues el cuerpo, y cerrando con active recall. La semana actual aparece resaltada.</p>
       </div>
 
       <!-- ===== Tarjeta consulta catedra (RESUELTA) ===== -->
@@ -11113,35 +11113,30 @@ t1:   inc si          ; avanzar origen (siempre)
     // 5 semanas activas (A-E) + dia del examen. Semana E = 8 dias de repaso puro.
     // ============================================================
     const WEEKLY_PLAN = [
-      { week:1, label:'A', dates:'28 may - 3 jun', phase:'Fase 0+1: Diagnostico + U1',
-        learn:'Vie 29: Diagnostico Express (4 ej + 1 bolillera grabada + matriz de calor a ojo). Sab-Dom: U1 entera (conversiones, C2, IEEE 754, BCD, Gray, Hamming). Lun-Mie: arranque U2 (Boole + canonicas + De Morgan).',
-        practice:'Ej 1-29. Anki ~50 cards expuestas. Bolillero diario desde el lunes 1.',
-        demonstrate:'Feynman grabado al cierre de cada sesion profunda. Mie 3: mini-cierre con 5 ej al azar U1+U2, timer 90min.',
-        exercises:[1,29] },
-      { week:2, label:'B', dates:'4 - 10 jun', phase:'Fase 1: Reconstruccion profunda',
-        learn:'U2 completa (Karnaugh + combinacionales + secuenciales) + U3 memorias + U4 Maquina Elemental.',
-        practice:'Ej 30-63 + 82-89. Anki ~90 cards. Bolillero diario.',
-        demonstrate:'Feynman diario. Sab 7: mini-simulacro intercalado (5 ej de U1-U4 mezclados).',
-        exercises:[30,63] },
-      { week:3, label:'C', dates:'11 - 17 jun', phase:'Fase 1: Reconstruccion profunda',
-        learn:'U5 completa: 8088 (BIU/EU, registros, segmento:offset, 7 modos direccionamiento, MOV/ADD/CMP/Jcc/LOOP/PUSH/POP/CALL/INT).',
-        practice:'Ej 64-81. Anki ~120 cards. Probar emulador EMU8086 1 sesion. Bolillero diario.',
-        demonstrate:'Feynman 8088. Sab 14: mini-simulacro intercalado (3 temas mezclados). Dom 14 arranca Fase 2.',
-        exercises:[64,81] },
-      { week:4, label:'D', dates:'18 - 24 jun', phase:'Fase 2: Practica deliberada (inicio)',
-        learn:'U6 (CISC/RISC, pipeline, cache, DMA) + U7 (E/S, polling/interrupcion/DMA, UART). Solo oral, sin ejercicios.',
-        practice:'Interleaving puro de toda la materia. Anki 139 cards (todas). Bolillero diario.',
-        demonstrate:'SIMULACRO COMPLETO #1 Lun 22 (6 ej, timer 2h, sin apuntes, vestido como al examen). #2 Jue 25. Hito: 24 jun TODO visto + practicado al menos 1 vez.',
+      { week:1, label:'1', dates:'8 - 14 jun', phase:'Aprender U1 + U2 (55% de la admision, y estan crudas)',
+        learn:'Lun 8: U1 p1 (numeracion, C1/C2, aritmetica + overflow). Mie 10: U1 p2 (IEEE 754, BCD, Gray/Johnson, ASCII, paridad, Hamming, confiabilidad/encriptacion). Vie 12: U2 p1 (Boole, teoremas, De Morgan, canonicas, Karnaugh). Sab 13: U2 p2 (compuertas, MSI MUX/decod/sumador/ALU, biestables). Entrar SIEMPRE por la capa Feynman, despues el cuerpo.',
+        practice:'Active recall escrito al cierre de cada unidad (cerrar el material y escribir de memoria). Sab 13: primeros ejercicios de admision U1/U2 intercalados. Anki U1/U2 diario.',
+        demonstrate:'Dom 14: Feynman grabado de U1 y U2 + correccion + Anki. Avisale a Claude al terminar cada unidad para que te tome el active recall y genere Anki de lo que falle.',
+        exercises:[1,45] },
+      { week:2, label:'2', dates:'15 - 21 jun', phase:'Aprender U3 + U4 + U5',
+        learn:'Lun 15: U3 Memorias (corta). Mie 17: U4 p1 (von Neumann, registros, ciclo). Vie 19: U4 p2 (microoperaciones, UC, ALU). Sab 20: U5 Assembler 8088 completa (BIU/EU, segmentacion, 8 modos, set, interrupciones).',
+        practice:'Active recall al cierre. Ejercicios de admision U3/U4/U5 intercalados con U1/U2 (interleaving). Anki diario (todas las vencidas).',
+        demonstrate:'Dom 21: Feynman U3/U4/U5 + 1er MINI-SIMULACRO de admision (3-4 ejercicios intercalados U1-U5, con timer).',
+        exercises:[46,89] },
+      { week:3, label:'3', dates:'22 - 28 jun', phase:'U6 + U7 (solo para exponer) + 1er SIMULACRO COMPLETO',
+        learn:'Lun 22: U6 (RISC/CISC, pipeline, hazards, cache, DMA, Ryzen). Mie 24: U7 (E/S programada/interrupciones/DMA, 82C55, buses). Vie 26: bolillero - armar exposicion de 2-3 bolillas + Feynman.',
+        practice:'Bolillero diario. Interleaving de toda la materia. Anki las 139.',
+        demonstrate:'Sab 27: SIMULACRO COMPLETO #1 (admision + oral), timer, sin apuntes, iPad nuevo, celu en otra habitacion, box breathing antes. Dom 28: correccion EN FRIO (conceptual / proceso / atencion).',
         exercises:[1,89] },
-      { week:5, label:'E', dates:'25 jun - 2 jul', phase:'Fase 3: Picada fina (REPASO PURO - 8 dias)',
-        learn:'CERO contenido nuevo. Solo flashcards + bolillero + repaso de errores recurrentes + matriz de calor rojo->ambar->verde.',
-        practice:'SIMULACRO #3 Sab 27. #4 Lun 29. #5 Mie 1 jul (ultimo). Bolillero 2x/dia.',
-        demonstrate:'Bolillero final grabado mie 1. Mapa mental 1 hoja jue 2. Jue 2 tarde libre, dormir 22h.',
+      { week:4, label:'4', dates:'29 jun - 2 jul', phase:'Consolidacion (llegar fresco, no quemado)',
+        learn:'CERO contenido nuevo. Solo repaso de errores recurrentes + Feynman de las 9 bolillas.',
+        practice:'Lun 29: SIMULACRO COMPLETO #2 (atacando los puntos flojos del #1). Mar/Mie: correccion + repaso de errores. Bolillero.',
+        demonstrate:'Jue 2: repaso ligero, mapa mental de la materia en 1 hoja, box breathing 2x, dormir 8h, no tocar material despues de las 21h.',
         exercises:[1,89] },
-      { week:6, label:'EXAMEN', dates:'Vie 3 jul', phase:'Dia E (viernes)',
+      { week:5, label:'MESA', dates:'Vie 3 jul', phase:'Dia de la mesa (rendis REGULAR, aprobas con 6)',
         learn:'NADA NUEVO. 5 ciclos de box breathing antes de entrar.',
         practice:'Llegada 30 min antes. Kit: DNI, libreta, biromes, calculadora si aplica, agua.',
-        demonstrate:'EXAMEN. Aprobas con 6+.',
+        demonstrate:'MESA: admision (1 ejercicio de los 89) + oral (sacas 2 bolillas, elegis 1). Empezar por lo seguro para construir confianza.',
         exercises:[1,89] }
     ];
 
@@ -11149,10 +11144,10 @@ t1:   inc si          ; avanzar origen (siempre)
     // WEEKLY PLAN RENDERING
     // ============================================================
     function getCurrentWeek() {
-      const startDate = new Date(2026, 4, 28); // May 28, 2026 (arranque Semana A)
+      const startDate = new Date(2026, 5, 8); // Jun 8, 2026 (arranque Semana 1 del plan revisado)
       const now = new Date();
       const diff = Math.floor((now - startDate) / (7 * 86400000)) + 1;
-      return Math.min(6, Math.max(1, diff));
+      return Math.min(WEEKLY_PLAN.length, Math.max(1, diff));
     }
 
     function renderWeekTimeline() {
@@ -11160,7 +11155,7 @@ t1:   inc si          ; avanzar origen (siempre)
       if (!container) return;
       const currentWeek = getCurrentWeek();
       let html = '';
-      for (let w = 1; w <= 6; w++) {
+      for (let w = 1; w <= WEEKLY_PLAN.length; w++) {
         const cls = w < currentWeek ? 'past' : w === currentWeek ? 'current' : 'future';
         const label = WEEKLY_PLAN[w-1] ? WEEKLY_PLAN[w-1].label : ('S' + w);
         html += '<div class="week-timeline-item ' + cls + '">' + label + '</div>';
