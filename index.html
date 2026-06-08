@@ -4512,6 +4512,20 @@ impar:INC SI
       {
         unit: 1, name: 'Unidad 1 &mdash; Representacion de datos y codigos', color: 'var(--u1)',
         cards: [
+          { title: 'Por que binario: confiabilidad y costo', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> antes de aprender a contar en binario conviene entender <b>por que la maquina elige justo dos simbolos</b>. No es capricho: dos estados es la eleccion que da el mejor equilibrio entre <b>confiabilidad</b> (que no se confunda 0 con 1 aunque haya ruido) y <b>costo</b> (cuanto cuesta el hardware). Este es el "por que" que arranca toda la unidad.</p>
+    <h4>Confiabilidad: por que dos estados y no diez</h4>
+    <p style="font-size:0.92rem;">Una senal electrica nunca es perfecta: tiene ruido, derivas de tension, temperatura. Si usaramos 10 niveles de tension (uno por digito decimal), los umbrales que separan un nivel del siguiente quedarian <b>muy juntos</b> y un poco de ruido haria confundir un digito con el vecino. Con <b>solo dos niveles</b> (hay tension / no hay) el margen entre ellos es <b>el maximo posible</b>: el circuito puede equivocarse bastante en el valor exacto y aun asi distinguir sin error si es 0 o 1. Menos simbolos = mas robustez.</p>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Definicion - confiabilidad:</b> la capacidad del sistema de representar y transmitir informacion sin errores pese al ruido. Cuantos menos simbolos haya que distinguir, mayor el margen de ruido y mayor la confiabilidad. El binario es el caso extremo (2 simbolos) y por eso el mas confiable.
+    </div>
+    <h4>Costo: cual es la base "mas barata"</h4>
+    <p style="font-size:0.92rem;">Representar un numero cuesta hardware: hace falta un dispositivo por cifra, y cada dispositivo debe poder tomar tantos estados como la base. El apunte modela el costo como proporcional a <b>la base por la cantidad de cifras</b>: Costo &asymp; k &middot; b &middot; (n+1), con b = base y n = cifras necesarias. Hay una tension: una base alta usa <b>menos cifras</b> pero cada dispositivo es <b>mas caro</b> (mas estados); una base baja usa dispositivos baratos pero <b>muchas cifras</b>.</p>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>El resultado matematico:</b> si se minimiza ese costo (derivando respecto de la base e igualando a cero), la <b>base optima teorica es e &asymp; 2,718</b>. Como no hay base fraccionaria practica, los enteros mas cercanos son <b>2 y 3</b>. Entre esos, el <b>2 (binario)</b> gana por la confiabilidad de arriba: dos estados son los mas faciles de fabricar y distinguir (un transistor que conduce o no conduce).
+    </div>
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
+    <b>En una frase:</b> la maquina usa binario porque entre todas las bases es la que mejor combina <b>maxima confiabilidad</b> (margen de ruido enorme con solo dos niveles) y <b>bajo costo</b> (la base optima del costo cae cerca de 2-3, y el 2 es el mas barato y robusto de implementar).
+    </div>` },
           { title: 'Sistemas de numeracion y conversiones', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> una computadora por dentro solo entiende <b>dos estados</b> (hay tension o no hay), asi que escribe TODO con dos simbolos: 0 y 1. Un "sistema de numeracion" es solo el alfabeto de digitos que usamos para escribir cantidades. El que usamos las personas tiene 10 simbolos (decimal); la maquina usa 2 (binario). Y como el binario es larguisimo de leer, los humanos lo agrupamos en <b>hexadecimal</b> (16 simbolos) para que sea corto. Convertir es solo pasar la misma cantidad de un alfabeto a otro.</p>
     <h4>La regla unica: valor posicional</h4>
     <p style="font-size:0.92rem;">En cualquier base B, cada posicion vale una potencia de B. El digito de mas a la derecha vale B<sup>0</sup>=1, el siguiente B<sup>1</sup>, el siguiente B<sup>2</sup>, y asi. Para la parte fraccionaria (despues de la coma) las potencias son negativas: B<sup>-1</sup>, B<sup>-2</sup>...</p>
@@ -4618,7 +4632,7 @@ impar:INC SI
     </table>
     <p style="font-size:0.92rem;"><b>Doble precision:</b> 64 bits = 1 signo + <b>11</b> exponente (Exceso 1023) + <b>52</b> mantisa.</p>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.93rem;">
-    <b>El truco del bit implicito (1 oculto):</b> al normalizar en binario, el numero queda siempre como <b>1.algo &times; 2<sup>e</sup></b>, y ese 1 entero siempre esta. Como siempre es 1, <b>no se guarda</b>: se da por supuesto. Asi la mantisa de 23 bits rinde como 24. El valor reconstruido es:<br><br>
+    <b>El truco del bit implicito (1 oculto):</b> al normalizar en binario, el numero queda siempre como <b>1.algo &times; 2<sup>e</sup></b>, y ese 1 entero siempre esta. Como siempre es 1, <b>no se guarda</b>: se da por supuesto. Asi la mantisa de 23 bits rinde como 24. <span style="font-size:0.85rem;color:#666;">(Ojo: algunos apuntes, como Perez, normalizan la mantisa como 0,1xxx &mdash; entre 1/2 y 1; IEEE 754 normaliza como 1,xxx y oculta ese 1. Misma idea, distinto convenio del bit implicito.)</span> El valor reconstruido es:<br><br>
     <b>N = (&minus;1)<sup>S</sup> &times; 1.M &times; 2<sup>(E&minus;127)</sup></b>
     </div>
     <h4>Por que el exponente va en Exceso (sesgado)</h4>
@@ -4708,7 +4722,7 @@ impar:INC SI
     Gray = <b>1110</b>.
     </div>
     <h4>Codigo Johnson</h4>
-    <p style="font-size:0.92rem;">Otro codigo continuo y ciclico. Se genera como un anillo: se va llenando de unos por un lado y vaciando por el otro. Con 5 bits da 10 combinaciones (sirve para contar decadas). Tipico en contadores en anillo torcido (Johnson counter), donde tambien cambia un solo bit por paso y es facil de armar con biestables (U3).</p>
+    <p style="font-size:0.92rem;">Otro codigo continuo y ciclico. Se genera como un anillo: se va llenando de unos por un lado y vaciando por el otro. Un Johnson de n bits da <b>2n</b> combinaciones distintas (por eso con 5 bits cuenta una decada: 2&times;5 = 10). Tipico en contadores en anillo torcido (Johnson counter), donde tambien cambia un solo bit por paso y es facil de armar con biestables (U3).</p>
     <table style="border-collapse:collapse;width:auto;margin:10px 0;font-size:0.82rem;">
     <tr><td style="border:1px solid #ddd;padding:4px;">00000</td><td style="border:1px solid #ddd;padding:4px;">00001</td><td style="border:1px solid #ddd;padding:4px;">00011</td><td style="border:1px solid #ddd;padding:4px;">00111</td><td style="border:1px solid #ddd;padding:4px;">01111</td><td style="border:1px solid #ddd;padding:4px;">11111</td><td style="border:1px solid #ddd;padding:4px;">11110</td><td style="border:1px solid #ddd;padding:4px;">11100</td><td style="border:1px solid #ddd;padding:4px;">11000</td><td style="border:1px solid #ddd;padding:4px;">10000</td></tr>
     </table>
@@ -4772,7 +4786,7 @@ impar:INC SI
     </div>
     <h4>Otros esquemas de deteccion (panorama)</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
-    <li><b>LRC (paridad longitudinal):</b> paridad calculada por columnas sobre un bloque de varios bytes.</li>
+    <li><b>LRC (verificacion de redundancia longitudinal):</b> segun la catedra (Perez) se calcula como el <b>complemento a 2 de la suma hexadecimal</b> de los bytes del bloque (un checksum). Ej: 01+08+00+00+61+62 = CC &rarr; C2 de CC &rarr; LRC = 34. En su forma clasica de telecomunicaciones equivale a una <b>paridad por columnas</b> del bloque. Si el examen sigue a Perez, la respuesta esperada es la suma hex + C2.</li>
     <li><b>CRC (redundancia ciclica):</b> trata el mensaje como un polinomio y lo divide (sin acarreos) por un polinomio generador; el resto se anexa. Muy potente, usado en redes y discos. Se implementa con registros de desplazamiento y XOR (U2/U3).</li>
     <li><b>Bidimensional:</b> matriz con paridad en filas y columnas a la vez; detecta y hasta corrige segun como se arme.</li>
     </ul>
@@ -4807,6 +4821,25 @@ impar:INC SI
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> Hamming coloca p bits de paridad en posiciones potencia de 2 (con 2<sup>p</sup> &ge; n+p+1) para que el sindrome apunte exacto al bit fallado; alcanza Dm = 3 y corrige 1 error, base de la memoria ECC.
+    </div>` },
+          { title: 'Encriptacion y otros codigos (barras / QR)', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> ya vimos como representar numeros, texto y como detectar/corregir errores. Faltan dos temas del programa que cierran la unidad: como <b>ocultar</b> informacion para que solo la lea quien debe (encriptacion) y un par de <b>codigos de aplicacion</b> que ves todos los dias (barras y QR).</p>
+    <h4>Encriptacion o cifrado (1.22)</h4>
+    <p style="font-size:0.92rem;">Cifrar es transformar un <b>texto plano</b> (legible) en un <b>texto cifrado</b> (ilegible para un tercero) usando un algoritmo y una <b>clave</b>. La idea de seguridad moderna: el <b>algoritmo puede ser publico</b>; lo que se mantiene en secreto es la <b>clave</b>. Sin la clave correcta no se puede recuperar el texto original.</p>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Las dos tecnicas basicas (Perez):</b><br>
+    <b>1) Sustitucion:</b> cada simbolo se reemplaza por otro segun la clave (las letras cambian, pero quedan en su lugar).<br>
+    <b>2) Permutacion (transposicion):</b> los simbolos son los mismos pero se les <b>cambia el orden</b> segun la clave.
+    </div>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Ejemplo de sustitucion (modulo 27):</b> numeramos las 27 letras (A=0, B=1, ... Z=26) y sumamos la clave modulo 27. Con clave = 3: A(0)+3=3=D; B(1)+3=4=E; ... Z(26)+3=29 mod 27=2=C. Asi "ABC" cifra a "DEF". Para descifrar se resta la clave (modulo 27). Es el clasico cifrado Cesar.
+    </div>
+    <h4>Otros codigos utilizados (1.23)</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Codigo de barras (1D):</b> codifica datos en barras y espacios de distinto ancho que un lector optico interpreta; es <b>unidimensional</b> (se lee en una sola direccion). Tipico de productos comerciales.</li>
+    <li><b>Codigo QR (2D):</b> un "codigo de barras bidimensional" cuadrado, hecho de modulos blancos y negros, que almacena <b>mucha</b> mas informacion (texto, URLs) y se lee en dos dimensiones. Trae su propia correccion de errores (por eso funciona aunque este algo deteriorado).</li>
+    </ul>
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
+    <b>En una frase:</b> encriptar es ocultar el mensaje con un algoritmo (publico) + una clave (secreta), por sustitucion (cambiar simbolos) o permutacion (cambiar el orden); y los codigos de barras (1D) y QR (2D) son codigos de aplicacion que llevan datos a un lector optico.
     </div>` },
           { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el apunte de la catedra (Perez) te alcanza para aprobar, pero dos libros de la bibliografia oficial profundizan justo los puntos finos de esta unidad. Aca esta destilado <b>que suma cada uno</b>, en simple y atribuido, para que sepas a donde ir si un tema no termino de cerrar.</p>
     <div style="border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;background:#f7f6ff;border-radius:6px;font-size:0.92rem;">
@@ -4941,9 +4974,9 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">11</td><td style="border:1px solid #ddd;padding:5px;">0</td><td style="border:1px solid #ddd;padding:5px;">0</td><td style="border:1px solid #ddd;padding:5px;">1</td><td style="border:1px solid #ddd;padding:5px;">1</td></tr>
     <tr><td style="border:1px solid #ddd;padding:5px;background:#f5f5f5;">10</td><td style="border:1px solid #ddd;padding:5px;">1</td><td style="border:1px solid #ddd;padding:5px;">1</td><td style="border:1px solid #ddd;padding:5px;">1</td><td style="border:1px solid #ddd;padding:5px;">1</td></tr>
     </table>
-    <b>Grupo 1:</b> las dos filas ab=00 y ab=10 completas (8 unos: minterms 0,1,2,3,8,9,10,11). Con wraparound son adyacentes (arriba toca abajo). Lo unico comun a las 8 casillas es <b>c = 0</b> &rarr; aporta el termino <b>c'</b>.<br>
-    <b>Grupo 2:</b> las dos columnas cd=11 y cd=10 completas (8 unos: 2,3,6,7,10,11,14,15). Lo comun es <b>c = 1</b> &rarr; aporta <b>c</b>.<br>
-    Resultado: <b>F = c' + c = ...</b> (en este caso particular cubre todo) &rarr; mirando bien, los grupos dejan <b>F = c' + c</b>, que en el libro de catedra se reduce al patron <b>F = c + b'</b> segun el agrupamiento elegido. Lo clave del metodo: cada grupo de 8 borra 3 variables y deja un solo literal.
+    <b>Grupo 1:</b> las dos filas ab=00 y ab=10 completas (8 unos: minterms 0,1,2,3,8,9,10,11). Con wraparound son adyacentes (arriba toca abajo). En esas 8 casillas <b>a</b>, <b>c</b> y <b>d</b> toman todos sus valores; lo unico que NO cambia es <b>b = 0</b> &rarr; el grupo aporta <b>b'</b>.<br>
+    <b>Grupo 2:</b> las dos columnas cd=11 y cd=10 completas (8 unos: 2,3,6,7,10,11,14,15). Ahi varian a, b y d; lo unico comun es <b>c = 1</b> &rarr; aporta <b>c</b>.<br>
+    Resultado: <b>F = b' + c</b>. Es la forma minima <b>unica</b>: esos dos bloques de 8 son los unicos implicantes primos posibles y ambos son <b>esenciales</b> (no hay agrupamiento alternativo que de otra cosa). Lo clave del metodo: cada grupo de 8 borra 3 variables y deja un solo literal; aca quedaron solo dos literales (b' y c).
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> Karnaugh ordena los 1 en una grilla Gray y los agrupa en bloques potencia de 2 lo mas grandes posible (con wraparound y solape permitidos); cada bloque borra las variables que cambian y deja la funcion minima lista para construir con menos compuertas.
@@ -5189,7 +5222,8 @@ impar:INC SI
     <p style="font-size:0.92rem;">Las celdas no estan en fila: estan en una <b>matriz (filas x columnas)</b>. La direccion entra a un <b>decodificador</b> que enciende una fila/columna y selecciona la celda. Hay dos formas de organizar esto:</p>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     <b>Organizacion 2D:</b> un <b>unico decodificador</b> con todas las lineas de direccion enciende directamente una palabra completa (una fila de la matriz). Simple, pero el decodificador se vuelve enorme cuando hay muchas palabras (2^m salidas).<br><br>
-    <b>Organizacion 3D (o 2,5D):</b> se parte la direccion en <b>dos mitades</b>: unos bits eligen <b>fila</b> y otros eligen <b>columna</b>; la celda es la <b>interseccion</b>. Asi se usan <b>dos decodificadores chicos</b> en vez de uno gigante, que es mucho mas eficiente en chips de gran capacidad.
+    <b>Organizacion 3D (por coincidencia):</b> se parte la direccion en <b>dos mitades</b>: unos bits eligen <b>fila</b> y otros eligen <b>columna</b>; la celda es la <b>interseccion</b>. Asi se usan <b>dos decodificadores chicos</b> en vez de uno gigante, que es mucho mas eficiente en chips de gran capacidad.<br>
+    <b>Organizacion 2,5D:</b> NO es lo mismo que la 3D &mdash; es una <b>variante</b> que reemplaza <b>uno</b> de los dos decodificadores por el conjunto <b>multiplexor + demultiplexor</b>, para reducir aun mas las conexiones (Mandado). En resumen: 2D = un decodificador; 3D = dos decodificadores; 2,5D = un decodificador + (mux/demux).
     </div>
     <h4>El truco de la DRAM real: direcciones multiplexadas (RAS / CAS)</h4>
     <p style="font-size:0.92rem;">Para ahorrar pines, los chips DRAM reciben la direccion <b>en dos tandas por los mismos terminales</b>: primero la <b>direccion de fila</b> validada por la senal <b>RAS</b> (Row Address Strobe), y despues la <b>direccion de columna</b> validada por <b>CAS</b> (Column Address Strobe). Cada una se guarda en un registro interno. El <b>refresco</b> de toda la memoria se logra leyendo cada fila periodicamente (toda lectura/escritura ya refresca su fila). Versiones rapidas: <b>FPM</b> (modo pagina: si seguis en la misma fila, solo cambias columna y CAS, mas veloz), <b>EDO</b> (mantiene el dato en la salida mientras CAS sube) y <b>SDRAM</b> (sincrona: el registro de columna es un contador con reloj que recorre posiciones sucesivas a toda velocidad).</p>
@@ -5217,7 +5251,7 @@ impar:INC SI
     <ul style="padding-left:20px;font-size:0.9rem;">
     <li><b>EPROM 2716:</b> 16384 bits, encapsulado de 24 pines con <b>ventana de cuarzo</b> para borrar con UV.</li>
     <li><b>EEPROM 28C64:</b> 64K = <b>8K x 8</b> (8192 palabras de 8 bits), borrado electrico, con escritura por <b>pagina de hasta 64 bytes</b> y tiempo de escritura ~10 ms.</li>
-    <li><b>Flash SST38VF6401:</b> 4M x 16, CMOS, escribe/borra con una sola fuente de 2.7-3.6 V.</li>
+    <li><b>Flash (familia SST 4M x 16):</b> CMOS, escribe/borra con una sola fuente de 2.7-3.6 V, borrado por bloques. (Confirma el numero de parte exacto contra el datasheet que use la catedra.)</li>
     </ul>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> todas son <b>no volatiles</b> y de lectura; se ordenan por facilidad de regrabado: <b>ROM</b> (fabrica) &rarr; <b>PROM</b> (usuario 1 vez, fusible) &rarr; <b>EPROM</b> (borra UV, todo) &rarr; <b>EEPROM</b> (borra electrico, byte a byte) &rarr; <b>Flash</b> (borra electrico, por bloques).
@@ -5336,18 +5370,21 @@ impar:INC SI
         unit: 4, name: 'Unidad 4 — Maquina Elemental', color: 'var(--u4)',
         cards: [
           { title: 'Arquitectura von Neumann', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> la <b>arquitectura von Neumann</b> es la receta con la que se construyen casi todas las computadoras desde 1945 hasta hoy. Su gran idea, llamada <b>programa almacenado</b>, es guardar <b>las instrucciones del programa en la misma memoria que los datos</b>, codificadas como numeros. Antes, para cambiar el programa habia que recablear la maquina a mano; con von Neumann basta con cargar otros numeros en memoria.</p>
-    <h4>Las 5 partes (los cinco componentes clasicos)</h4>
+    <h4>Las 4 unidades funcionales (modelo de la catedra)</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
     <li><b>CPU (Unidad Central de Proceso):</b> el cerebro. Adentro tiene la <b>ALU</b> (hace cuentas y logica), la <b>UC / Unidad de Control</b> (da las ordenes) y los <b>registros</b> (memoria internisima y rapida).</li>
     <li><b>Memoria (UM):</b> guarda programa Y datos juntos. Principalmente RAM de lectura/escritura; una parte puede ser ROM.</li>
     <li><b>Entrada/Salida (UE/S):</b> conecta con el mundo (teclado, monitor, perifericos) mediante interfaces y controladores.</li>
     <li><b>Buses (UB):</b> los cables que transportan la informacion entre las partes.</li>
     </ul>
+    <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:10px 14px;margin:8px 0;border-radius:6px;font-size:0.9rem;">
+    <b>Ojo con el conteo:</b> el apunte de la catedra (Perez) divide la Maquina Elemental en estas <b>4 unidades</b> (CPU, UM, UE/S, UB). Patterson, en cambio, habla de <b>cinco componentes clasicos</b> que son OTROS y <b>no incluyen los buses</b>: entrada, salida, memoria, camino de datos (datapath) y control. No mezcles las dos listas: si en el oral decis "cinco partes", enumera las de Patterson; si enumeras CPU/UM/UE-S/UB, son cuatro.
+    </div>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.93rem;">
     <b>Definicion clave - programa almacenado:</b> instrucciones y datos se guardan en memoria como numeros, en el mismo espacio. La CPU los <b>busca y ejecuta secuencialmente</b>, uno tras otro, hasta terminar. Como las instrucciones son numeros, un programa puede tratar a otro como dato (cargarlo, moverlo, modificarlo).
     </div>
     <h4>De donde viene: ENIAC &rarr; EDVAC &rarr; EDSAC</h4>
-    <p style="font-size:0.92rem;">El <b>ENIAC</b> (1946) se programaba <b>cableando a mano</b>: conectar cables y llaves para cada problema, un trabajo arduo. John von Neumann, en su reporte de 1945, propuso guardar el programa en memoria. La <b>EDVAC</b> (disenada por el mismo von Neumann) fue la primera pensada con esta tecnologia, pero se termino recien en 1949. Asi que la <b>primera computadora de programa almacenado que funciono fue la EDSAC</b> (Cambridge, Maurice Wilkes, 1948). Estas maquinas resultaron mas rapidas, mas chicas y mas eficientes que el ENIAC.</p>
+    <p style="font-size:0.92rem;">El <b>ENIAC</b> (1946) se programaba <b>cableando a mano</b>: conectar cables y llaves para cada problema, un trabajo arduo. John von Neumann, en su reporte de 1945, propuso guardar el programa en memoria. La <b>EDVAC</b> (disenada por el mismo von Neumann) fue la primera pensada con esta tecnologia, pero se termino recien en 1949. Asi que la <b>primera computadora de programa almacenado que funciono fue la EDSAC</b> (Cambridge, Maurice Wilkes, que ejecuto su primer programa el 6 de mayo de <b>1949</b>). Estas maquinas resultaron mas rapidas, mas chicas y mas eficientes que el ENIAC. <span style="font-size:0.85rem;color:#666;">(Nota: Stallings atribuye el concepto de programa almacenado a von Neumann; la primera publicacion fue la propuesta del EDVAC en 1945, y el prototipo que el construyo fue el IAS, terminado en 1952.)</span></p>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     <b>El "cuello de botella von Neumann":</b> como instrucciones y datos comparten <b>una sola memoria y un solo bus</b>, la CPU no puede traer al mismo tiempo una instruccion y un dato; tiene que turnarse. Eso limita la velocidad. La alternativa es la <b>arquitectura Harvard</b>: memorias y buses separados para instrucciones y para datos (mas rapida). Los procesadores modernos mezclan las dos: Harvard adentro (en las caches L1 de instrucciones y de datos) y von Neumann afuera (en la RAM principal).
     </div>
@@ -5372,7 +5409,7 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>MAR</b> (Memory Address Reg.)</td><td style="border:1px solid #ddd;padding:6px;">12</td><td style="border:1px solid #ddd;padding:6px;">Direccion de memoria a la que se va a acceder</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>MBR</b> (Memory Buffer Reg.)</td><td style="border:1px solid #ddd;padding:6px;">16</td><td style="border:1px solid #ddd;padding:6px;">Buffer: todo lo que se lee o escribe en memoria pasa por aca</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Z e Y</b> (entradas ALU)</td><td style="border:1px solid #ddd;padding:6px;">16</td><td style="border:1px solid #ddd;padding:6px;">Operandos de entrada a la ALU; el programador NO los ve</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px;"><b>1</b> (constante uno)</td><td style="border:1px solid #ddd;padding:6px;">1</td><td style="border:1px solid #ddd;padding:6px;">Genera un "+1" para incrementar el PC</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>1</b> (constante, no es registro de trabajo)</td><td style="border:1px solid #ddd;padding:6px;">1</td><td style="border:1px solid #ddd;padding:6px;">Fuente fija que genera un "+1" (entra a Y para incrementar el PC en CP2); no lo cuentes como un registro mas de la CPU</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>SR</b> (Switch Reg. / llaves)</td><td style="border:1px solid #ddd;padding:6px;">16</td><td style="border:1px solid #ddd;padding:6px;">Refleja las 16 llaves de la consola; el operador carga datos a mano</td></tr>
     </table>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
@@ -5424,7 +5461,7 @@ impar:INC SI
     <h4>El secuenciador (el motor del tiempo)</h4>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     Un oscilador (<b>reloj de 8 MHz</b>) se divide en <b>8 pulsos</b> separados 125 ns: es el <b>ciclo de memoria</b> (CP1 a CP8). Un contador cuenta los pulsos y un decodificador los reparte en lineas distintas. Al llegar a CP9 el contador se borra y arranca otro ciclo. El secuenciador tiene biestables de estado:<br><br>
-    <b>RUN</b> (Set-Reset): la maquina anda. Se pone en 1 con START; se pone en 0 con STOP, con la instruccion HLT o con un <b>overflow aritmetico</b>.<br>
+    <b>RUN</b> (Set-Reset): la maquina anda. Se pone en 1 con START; se pone en 0 con STOP, con la instruccion HLT o con un <b>overflow aritmetico</b>, pero <b>siempre que ESTADO=0 (Busqueda)</b>: STOP/HLT/OV no cortan a mitad de un ciclo de ejecucion, el biestable RUN se sincroniza en la fase de Busqueda.<br>
     <b>ESTADO / STATE</b> (biestable D): define si el ciclo es de <b>Busqueda (0)</b> o <b>Ejecucion (1)</b>.<br>
     <b>TRA</b> (Set-Reset): se pone en 1 al iniciar una transferencia de E/S; vuelve a 0 con la senal R (Ready) del periferico.<br>
     Mas un biestable para los pulsadores EXA/DEP (que disparan un solo ciclo cuando la maquina esta parada).
@@ -5490,7 +5527,7 @@ impar:INC SI
     <ul style="padding-left:20px;font-size:0.92rem;">
     <li><b>Load PC:</b> los 12 bits bajos del SR &rarr; PC.</li>
     <li><b>Saltos (JMP, JMA, SRJ):</b> los 12 bits bajos del IR &rarr; PC.</li>
-    <li><b>SRJ (salto a subrutina):</b> ademas copia los 12 bits del PC &rarr; ACC (guarda la direccion de retorno).</li>
+    <li><b>SRJ (salto a subrutina):</b> ademas copia el PC a los <b>12 bits bajos</b> del ACC y pone en <b>0 los 4 bits altos</b> del ACC (guarda la direccion de retorno; como no hay RET, la subrutina usa ese valor para auto-modificar un JMP final).</li>
     <li><b>Busqueda de instruccion:</b> PC &rarr; MAR.</li>
     <li><b>Busqueda de operando:</b> los 12 bits bajos del IR &rarr; MAR.</li>
     </ul>
@@ -5525,7 +5562,7 @@ impar:INC SI
     <b>Por dentro (combinacional):</b> 16 compuertas AND, 16 XOR, 16 IOR (OR), 16 NOT, un <b>sumador de 16 bits con deteccion de rebasamiento (OV) sin acarreo de salida</b>, y compuertas AND/OR que arman el multiplexor de salida (elige que resultado pasa). No hay registros internos de calculo: entra por Z/Y, sale por el bus.
     </div>
     <h4>La senal OV (overflow) - importante</h4>
-    <p style="font-size:0.92rem;">La ALU genera <b>OV</b> cuando la suma aritmetica se sale del rango representable (mayor que 2<sup>15</sup>-1 o menor que -2<sup>15</sup>, con 16 bits en complemento a 2). En la Blue, un <b>OV detiene la maquina</b> (pone RUN=0), igual que la instruccion HLT. Es el control de desborde con signo.</p>
+    <p style="font-size:0.92rem;">La ALU genera <b>OV</b> cuando la suma aritmetica se sale del rango representable (mayor que 2<sup>15</sup>-1 o menor que -2<sup>15</sup>, con 16 bits en complemento a 2). En la Blue, un <b>OV detiene la maquina</b> (pone RUN=0), igual que la instruccion HLT &mdash; pero el paro efectivo se sincroniza cuando ESTADO=0 (Busqueda), no corta a mitad de la ejecucion. Es el control de desborde con signo.</p>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>Cuestion de tiempos:</b> la suma (ADD) tarda mas que las operaciones logicas, porque el sumador con sus acarreos necesita mas hardware. Se asume <b>ADD = 200 ns</b> y el resto = <b>80 ns</b>. Por eso, cuando se suma, la UC debe <b>esperar un pulso de reloj extra</b> (UC cableada) o <b>una microinstruccion mas</b> (microprogramada) a que el resultado se estabilice. Eso explica los pulsos "de espera" CP2-CP3 en el incremento del PC.
     </div>
@@ -5575,7 +5612,7 @@ impar:INC SI
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el 8088 trabaja en paralelo: la <b>BIU</b> trae instrucciones/datos y llena la cola de 4 bytes mientras la <b>EU</b> ejecuta; ese solapamiento fetch+ejecucion es el germen del <b>pipeline</b> que se ve a fondo en la U6.
     </div>` },
-          { title: 'Registros del 8088', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> los registros son las "manos" del procesador: memoria internisima y rapidisima donde se hacen las cuentas. El 8088 tiene <b>14 registros de 16 bits</b>, ordenados en cuatro grupos: de proposito general, de puntero e indice, de segmento, y dos especiales (IP y FLAGS). Casi todos tienen, ademas, un <b>uso preferido</b>.</p>
+          { title: 'Registros del 8088', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> los registros son las "manos" del procesador: memoria internisima y rapidisima donde se hacen las cuentas. El 8088 tiene <b>14 registros de 16 bits</b>, ordenados en cuatro grupos: de proposito general, de puntero e indice, de segmento, y dos especiales (IP y FLAGS). Casi todos tienen, ademas, un <b>uso preferido</b>. <span style="font-size:0.85rem;color:#666;">(El apunte de Perez los agrupa en <b>3</b> categorias &mdash; generales (incluye AX/BX/CX/DX y SP/BP/SI/DI), segmento, y control/estado (IP y FLAGS); reconoce esa formulacion si la ves en el Moodle.)</span></p>
     <h4>1) De proposito general (la EU los usa para datos y cuentas)</h4>
     <p style="font-size:0.92rem;">Son AX, BX, CX, DX. Cada uno es de 16 bits y se parte en <b>byte alto + byte bajo</b> manejables por separado: AX = AH + AL, BX = BH + BL, CX = CH + CL, DX = DH + DL.</p>
     <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:0.85rem;">
@@ -5643,13 +5680,15 @@ impar:INC SI
     <li><b>Por registro:</b> el operando es un registro. Ej: <b>MOV AX, BX</b>. Es el mas rapido: no se genera ninguna direccion de 20 bits, todo pasa adentro de la EU.</li>
     </ul>
     <h4>Operando EN memoria (aca se calcula un offset)</h4>
+    <p style="font-size:0.9rem;"><b>Ojo con la nomenclatura de la catedra:</b> Perez cuenta <b>8 modos</b> = los 2 de arriba (inmediato, registro) + estos <b>6 de memoria</b>, con estos nombres exactos (es la respuesta que esperan en el Moodle). "Basado" e "Indexado" son modos <b>distintos</b>, no uno solo.</p>
     <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:0.84rem;">
-    <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Modo</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Como se calcula el offset</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Ejemplo</th></tr>
+    <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Modo (nombre Perez)</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Como se calcula el offset</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Ejemplo</th></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Directo</b></td><td style="border:1px solid #ddd;padding:6px;">La direccion va escrita en la instruccion (constante / etiqueta)</td><td style="border:1px solid #ddd;padding:6px;">MOV CX, COUNT &nbsp;/&nbsp; MOV AX, [1234H]</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Indirecto por registro</b></td><td style="border:1px solid #ddd;padding:6px;">El offset esta dentro de un registro (BX, BP, SI o DI)</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, [SI]</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Indirecto + desplazamiento</b></td><td style="border:1px solid #ddd;padding:6px;">registro (BX/BP/SI/DI) + constante</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, COUNT[DI]</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Base + indice</b></td><td style="border:1px solid #ddd;padding:6px;">registro base (BX o BP) + registro indice (SI o DI)</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, [BX][SI]</td></tr>
-    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Base + indice + desplaz.</b></td><td style="border:1px solid #ddd;padding:6px;">base + indice + constante (el mas completo)</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, COUNT[BX][DI]</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Basado</b></td><td style="border:1px solid #ddd;padding:6px;">registro <b>base</b> (BX o BP) +/- desplazamiento</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, [BP+3]</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Indexado</b></td><td style="border:1px solid #ddd;padding:6px;">registro <b>indice</b> (SI o DI) +/- desplazamiento</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, [SI+3] &nbsp;/&nbsp; MOV AX, COUNT[DI]</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Basado indexado</b></td><td style="border:1px solid #ddd;padding:6px;">registro base (BX o BP) + registro indice (SI o DI)</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, [BX][SI]</td></tr>
+    <tr><td style="border:1px solid #ddd;padding:6px;"><b>Basado indexado con desplazamiento</b></td><td style="border:1px solid #ddd;padding:6px;">base + indice + constante (el mas completo)</td><td style="border:1px solid #ddd;padding:6px;">MOV AX, COUNT[BX][DI]</td></tr>
     </table>
     <h4>Ejemplo resuelto (modo mas complejo, base + indice + desplazamiento)</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
@@ -5681,7 +5720,7 @@ impar:INC SI
     <p style="font-size:0.92rem;"><b>SHL/SAL</b> y <b>SHR/SAR</b> (desplazan izq./der., logico o aritmetico) y <b>ROL/ROR/RCL/RCR</b> (rotan, las RCx pasando por el carry).</p>
     <h4>4) Control de flujo (saltos, bucles, subrutinas)</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
-    <li><b>JMP</b> incondicional: <b>short</b> (&plusmn;127 bytes), <b>near</b> (mismo segmento, offset 16 bits), <b>far</b> (cambia CS:IP entero).</li>
+    <li><b>JMP</b> incondicional: <b>short</b> (desplazamiento de 1 byte con signo: <b>-128 a +127</b> bytes), <b>near</b> (mismo segmento, offset 16 bits), <b>far</b> (cambia CS:IP entero).</li>
     <li><b>Saltos condicionales (Jcc)</b>, se usan justo despues de CMP A,B: <b>JE/JZ</b> (igual), <b>JNE/JNZ</b> (distinto), <b>JA/JB</b> (mayor/menor SIN signo), <b>JG/JL</b> (mayor/menor CON signo), <b>JC/JNC</b> (segun carry), <b>JCXZ</b> (si CX=0).</li>
     <li><b>LOOP:</b> decrementa CX y salta si CX &ne; 0 (equivale a DEC CX; JNZ). Ideal para bucles con cuenta conocida. Variantes LOOPE/LOOPNE.</li>
     <li><b>CALL / RET:</b> llamada y retorno de subrutina (ver detalle de pila en la caja de abajo).</li>
@@ -5915,19 +5954,20 @@ impar:INC SI
     <p style="font-size:0.92rem;">El <b>speedup ideal</b> de un pipeline de <b>N etapas es N</b>: con 5 etapas, idealmente 5 veces mas rapido. Pero en la practica es menor por dos razones: (1) el <b>llenado y vaciado</b> del pipeline al principio y al final, y (2) los <b>hazards</b> (riesgos), sobre todo los <b>saltos</b> &mdash; tema de la ficha siguiente.</p>
     <h4>El gran enemigo del pipeline: el salto</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
-    En el ejemplo de Perez, cuando aparece una instruccion de <b>salto</b> el pipeline no puede buscar la siguiente, porque <b>hasta no ejecutar el salto no se sabe cual sigue</b>. Es el mismo problema de la cola del 8088 (U5) que habia que vaciar en un salto. Y no es menor: estadisticamente <b>las instrucciones de salto son el 30% del programa</b>, asi que el factor 5 ideal se cae bastante.<br><br>
-    Hay tres tipos de saltos: <b>incondicionales, condicionales e iterativos</b>. Con <b>prediccion de la direccion del salto</b> (proxima ficha) la penalizacion se reduce de ~30% a <b>~10%</b>.
+    En el ejemplo de Perez, cuando aparece una instruccion de <b>salto</b> el pipeline no puede buscar la siguiente, porque <b>hasta no ejecutar el salto no se sabe cual sigue</b>. Es el mismo problema de la cola del 8088 (U5) que habia que vaciar en un salto. Y no es menor: los saltos son <b>una fraccion grande del codigo</b> (el apunte de Perez la cifra en ~30%; la bibliografia tipica mide 15&ndash;25%), asi que el factor 5 ideal se cae bastante.<br><br>
+    Hay tres tipos de saltos: <b>incondicionales, condicionales e iterativos</b>. Sin prediccion, cada salto cuesta vaciar el pipeline; con <b>prediccion de la direccion del salto</b> (proxima ficha) esa <b>penalizacion efectiva</b> baja a <b>~10%</b>. (Ojo: el % de instrucciones que son saltos y el % de penalizacion de rendimiento son magnitudes distintas, no las confundas.)
     </div>
-    <p style="font-size:0.92rem;"><b>Velocidad de proceso con pipeline + prediccion (formula de Perez):</b> Vp(pipeline) = (Vp / 5) &middot; 0,9 &middot; k, donde el 5 son las unidades funcionales (etapas), el 0,9 es el 90% que queda tras descontar el ~10% de penalizacion por saltos, y k es un factor que depende del tiempo de acceso a memoria y del reloj.</p>
+    <p style="font-size:0.92rem;"><b>Cuanto acelera (idea correcta):</b> el pipeline <b>multiplica</b> el rendimiento por la cantidad de etapas N, descontando las penalizaciones: speedup &asymp; N / (1 + penalizaciones). Con N=5 y ~10% de penalizacion por saltos queda <b>Vp(pipeline) &asymp; Vp_serie &middot; 5 &middot; 0,9 &asymp; 4,5x</b> (gana, no pierde). <span style="font-size:0.85rem;color:#666;">Nota: el apunte de Perez expresa esto con un factor k que absorbe el tiempo de acceso a memoria y el reloj; verifica la forma algebraica exacta en el apunte antes de escribirla en el oral &mdash; la idea firme es que el pipeline <b>multiplica</b> por N, no divide.</span></p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
-    <b>En una frase:</b> el pipeline parte la ejecucion en etapas (IF-ID-EX-MEM-WB) y solapa varias instrucciones a la vez, apuntando a terminar <b>1 instruccion por ciclo</b>; el speedup ideal es N (cantidad de etapas) pero los saltos (~30% del codigo) lo bajan, y por eso se inventa la prediccion de saltos.
+    <b>En una frase:</b> el pipeline parte la ejecucion en etapas (IF-ID-EX-MEM-WB) y solapa varias instrucciones a la vez, apuntando a terminar <b>1 instruccion por ciclo</b>; el speedup ideal es N (cantidad de etapas) pero los saltos (fraccion grande del codigo) lo bajan, y por eso se inventa la prediccion de saltos.
     </div>` },
           { title: 'Hazards del pipeline y soluciones', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> los <b>hazards</b> (riesgos) son las situaciones que <b>arruinan</b> el solapamiento del pipeline: momentos en que una instruccion <b>no puede avanzar</b> a su etapa porque algo no esta listo. Si no se resuelven, dan resultados mal o obligan a frenar el pipeline (meter <b>burbujas</b>). Hay tres familias: <b>estructurales, de datos y de control</b>. Cada una tiene su truco para esquivarla.</p>
     <h4>1) Hazard estructural (chocan por un recurso)</h4>
     <p style="font-size:0.92rem;">Dos instrucciones necesitan <b>el mismo recurso fisico</b> en el mismo ciclo y solo hay uno (ej. un unico puerto a memoria que IF y MEM quieren usar a la vez). <b>Solucion:</b> duplicar el recurso &mdash; tipicamente <b>caches separadas de instrucciones y datos</b> (arquitectura Harvard interna), o mas puertos. Por eso los RISC traen cache de instrucciones aparte de la de datos.</p>
     <h4>2) Hazard de datos (una instruccion necesita un resultado que la anterior todavia no escribio)</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
-    <b>Ejemplo:</b> ADD R1, R2, R3 (R1 = R2 + R3) seguida de SUB R4, <b>R1</b>, R5. El SUB quiere leer R1 en su etapa ID, pero el ADD todavia no lo escribio (recien lo hace en WB, varios ciclos despues). Si no se hace nada, el SUB lee un R1 <b>viejo</b>.
+    <b>Ejemplo:</b> ADD R1, R2, R3 (R1 = R2 + R3) seguida de SUB R4, <b>R1</b>, R5. El SUB quiere leer R1 en su etapa ID, pero el ADD todavia no lo escribio (recien lo hace en WB, varios ciclos despues). Si no se hace nada, el SUB lee un R1 <b>viejo</b>.<br><br>
+    <b>Importante para el oral:</b> este caso <b>ALU&rarr;ALU se resuelve enteramente con forwarding, SIN ninguna burbuja</b> (el resultado del ADD ya esta listo al final de EX y se adelanta a la EX del SUB). El unico que <b>si obliga a frenar</b> (1 burbuja) es el caso <b>load-use</b> (un LOAD seguido de la instruccion que usa ese dato), porque el dato recien llega en MEM. No digas que este ADD/SUB necesita stall.
     </div>
     <p style="font-size:0.92rem;"><b>Soluciones:</b></p>
     <ul style="padding-left:20px;font-size:0.92rem;">
@@ -6032,7 +6072,7 @@ impar:INC SI
     </div>
     <h4>Intel Pentium 4 (CISC, microarquitectura NetBurst) &mdash; ejemplo del campus</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
-    <li><b>Hyper Pipelined Technology:</b> duplica la profundidad del pipeline respecto del P6 (Pentium III): la cadena de prediccion/recuperacion de saltos pasa de <b>10 a 20 etapas</b>. Mas etapas = mas frecuencia de reloj (llego a 1,5&ndash;3,8 GHz), pero la penalizacion por <b>prediccion de salto fallida</b> es mas cara (hay que vaciar mas etapas).</li>
+    <li><b>Hyper Pipelined Technology:</b> duplica la profundidad del pipeline respecto del P6 (Pentium III): la cadena de prediccion/recuperacion de saltos pasa de <b>10 a 20 etapas</b> (Stallings lo da como <b>"al menos 20"</b> &mdash; un piso, no un numero fijo; el Prescott posterior llego a 31). Mas etapas = mas frecuencia de reloj (llego a 1,5&ndash;3,8 GHz), pero la penalizacion por <b>prediccion de salto fallida</b> es mas cara (hay que vaciar mas etapas).</li>
     <li><b>Advanced Dynamic Execution:</b> motor <b>fuera de orden (out-of-order)</b> y especulativo, muy profundo; podia tener <b>126 instrucciones "en vuelo"</b>. Incluye prediccion de saltos avanzada (un branch target buffer de 4 KB) que reduce ~33% los fallos de prediccion frente al P6.</li>
     <li><b>Execution Trace Cache (cache L1 de instrucciones):</b> en vez de guardar instrucciones x86 crudas, guarda hasta <b>12K micro-ops ya decodificadas</b> en orden de ejecucion &mdash; saca el decodificador del lazo critico.</li>
     <li><b>Advanced Transfer Cache (L2):</b> 256 o 512 KB, on-die, <b>8-way set-associative</b> (correspondencia asociativa por conjuntos de la ficha de cache), bus de 256 bits.</li>
@@ -6085,7 +6125,7 @@ impar:INC SI
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     &bull; <b>Pared de la frecuencia y del calor:</b> subir GHz dejo de rendir (el P4 Prescott no podia pasar de ~3,8 GHz por temperatura). La salida fue <b>mas nucleos, no mas GHz</b> &rarr; multicore.<br>
     &bull; <b>Convergencia RISC/CISC:</b> casi todo es hibrido; afuera CISC (x86) o RISC (ARM), adentro nucleos RISC con pipeline superescalar.<br>
-    &bull; <b>Arquitecturas abiertas:</b> SPARC fue RISC abierto; hoy el caso fuerte es <b>RISC-V (RISC V5)</b>, una ISA RISC libre y gratuita que cualquiera puede implementar sin licencia &mdash; lo opuesto al modelo cerrado de Intel.<br>
+    &bull; <b>Arquitecturas abiertas:</b> SPARC fue RISC abierto; hoy el caso fuerte es <b>RISC-V</b> (se lee "risc-five"; la V es el numero romano 5, por la quinta generacion de los disenos RISC de Berkeley &mdash; el programa de la catedra lo escribe "RISC V5" pero el nombre correcto es RISC-V), una ISA RISC libre y gratuita que cualquiera puede implementar sin licencia &mdash; lo opuesto al modelo cerrado de Intel.<br>
     &bull; <b>ARM</b> (RISC) domina moviles y, cada vez mas, notebooks y servidores por su eficiencia energetica.
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
@@ -6194,7 +6234,7 @@ impar:INC SI
     <li><b>Prioridades + anidamiento:</b> una interrupcion de prioridad mas alta puede interrumpir a la rutina de una mas baja (interrupciones anidadas). Requiere guardar contextos en pila (LIFO).</li>
     </ul>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
-    <b>Hardware tipico:</b> el 8088 tiene una sola linea INTR; para manejar varios dispositivos con prioridades se le agrega un <b>controlador de interrupciones 82C59A</b> externo, al que se conectan los dispositivos. El 82C55A puede generar las interrupciones.
+    <b>Hardware tipico:</b> el 8088 tiene una sola linea INTR; para manejar varios dispositivos con prioridades se le agrega un <b>controlador de interrupciones 82C59A</b> externo (un 82C59A maneja 8 dispositivos, en cascada hasta 64), al que se conectan los dispositivos. Ojo no confundir los chips: el <b>82C55A</b> (interfaz de E/S paralela) puede <b>pedir</b> interrupcion activando una linea INTR de su grupo C; quien las <b>gestiona y prioriza</b> es el <b>82C59A</b>. <span style="font-size:0.85rem;color:#666;">(El apunte de Perez tiene una errata y lo llama "8258"; el nombre real Intel es 8259 / 82C59A.)</span>
     </div>
     <h4>Su limite (que motiva el DMA)</h4>
     <p style="font-size:0.92rem;">Es mas eficiente que el polling, pero <b>cada dato sigue pasando por la CPU</b> y cada uno cuesta una interrupcion (guardar/restaurar contexto = overhead). Para transferir <b>miles de bytes</b> seguidos, esto vuelve a ser caro. Ahi entra el DMA (ficha siguiente).</p>
@@ -6266,7 +6306,7 @@ impar:INC SI
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     <b>Un bus</b> es un conjunto de lineas compartidas que transportan datos, direcciones y control (recordar U1/Perez: el bus como "unidad en si misma" de la maquina von Neumann; Patterson lo dibuja como un haz de varias senales).<br><br>
     <b>PCI</b> (Peripheral Component Interconnect): bus interno de alto ancho de banda, <b>independiente del procesador</b>, para conectar tarjetas de video, red, disco. Soporta hasta 64 lineas de datos; tiene lineas de datos/direccion multiplexadas, de control, de <b>arbitraje</b> (cada maestro tiene su par propio) y de <b>interrupcion</b>. Pensado para ajustarse barato a las E/S de alta velocidad.<br><br>
-    <b>USB</b> (Universal Serial Bus): bus serie externo, <b>plug and play</b> (lo conectas y se reconoce solo) y <b>multipunto</b> (hasta 127 dispositivos). Ademas de datos, <b>alimenta</b> el periferico por el mismo cable (max 5 m). Velocidades: 1.5 Mbit/s (baja), 12 Mbit/s (1.1), 480 Mbit/s (2.0), 4.8 Gbit/s (3.0). Reemplazo a los viejos puertos serie/paralelo y PS/2.
+    <b>USB</b> (Universal Serial Bus): bus serie externo, <b>plug and play</b> (lo conectas y se reconoce solo) y <b>multipunto</b> (hasta 127 dispositivos). Ademas de datos, <b>alimenta</b> el periferico por el mismo cable (max 5 m). Velocidades: 1.5 Mbit/s (baja), 12 Mbit/s (1.1), 480 Mbit/s (2.0), <b>5 Gbit/s nominal</b> (3.0 SuperSpeed; &asymp;4,8 efectivos tras la codificacion 8b/10b). Reemplazo a los viejos puertos serie/paralelo y PS/2.
     </div>
     <p style="font-size:0.92rem;"><b>Otras interfaces externas (Stallings):</b> <b>FireWire</b> (bus serie de alta velocidad para E/S de gran capacidad) e <b>InfiniBand</b> (para servidores/centros de datos, con adaptadores de canal). Otros puertos vistos por la catedra: Ethernet (RJ-45), HDMI (video/audio), Bluetooth, Wi-Fi.</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
