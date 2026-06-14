@@ -2510,7 +2510,30 @@ ADD AX, BX"></textarea>
     <div class="content-section" id="section-plan">
       <div class="card" style="margin-bottom:12px;">
         <h2>Plan de Estudio — 4 Semanas + Mesa (revisado 8 jun)</h2>
-        <p style="font-size:0.85rem;color:var(--text-secondary);">Target: vie 3 jul 2026. ~25 dias, las 7 unidades crudas. Prioridad por peso real: U1/U2/U5/U4 cubren el 93% de la admision; los simulacros NO se tocan (es lo que falto en AM2). Se aprende cada unidad entrando por la capa Feynman, despues el cuerpo, y cerrando con active recall. La semana actual aparece resaltada.</p>
+        <p style="font-size:0.85rem;color:var(--text-secondary);">La <strong>Recta Final</strong> (debajo) es lo accionable: que hacer cada uno de los dias que quedan. Esta vista por semanas es el macro: prioridad por peso real &mdash; U1/U2/U5/U4 cubren el 93% de la admision; los simulacros NO se tocan (es lo que falto en AM2). Se aprende cada unidad entrando por la capa Feynman, despues el cuerpo, y cerrando con active recall. La semana actual aparece resaltada.</p>
+      </div>
+
+      <!-- ===== RECTA FINAL: calendario 19 dias a la mesa (agregado 14 jun) ===== -->
+      <div class="card" style="margin-bottom:14px;border:2px solid var(--accent-secondary);">
+        <h2 style="margin-top:0;">Recta Final &mdash; <span id="rfDias">19</span> dias a la mesa</h2>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:10px;">
+          Calendario dia por dia al vie 3 jul. <strong>Es tu intento 1 de 3</strong> (mesas 3 jul, 31 jul, 28 ago) y la regularizacion NO vence: si hoy no sale, no se pierde nada. Te alcanza con un <strong>6</strong>. El dia de hoy aparece resaltado.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+          <div style="flex:1;min-width:240px;background:rgba(233,69,96,0.08);border-left:3px solid var(--accent-secondary);border-radius:5px;padding:8px 12px;font-size:0.8rem;">
+            <strong>1. ADMISION (el filtro):</strong> 1 ejercicio al azar de los 89 de gabinete. Si no lo pasas, no hay oral. Se asegura PRACTICANDO &mdash; Banco 89 en orden de probabilidad (U2 33%, U1 22%, U5 20%, U4 18%, U3 7%).
+          </div>
+          <div style="flex:1;min-width:240px;background:rgba(74,111,216,0.08);border-left:3px solid #4a6fd8;border-radius:5px;padding:8px 12px;font-size:0.8rem;">
+            <strong>2. ORAL:</strong> sacas 2 bolillas, elegis 1, expones. Se asegura EXPLICANDO en voz alta (Feynman). U6/U7 son oral-only (pipeline, cache, DMA, E/S) pero estan en 4 de 9 bolillas: no se saltean.
+          </div>
+        </div>
+        <div style="background:rgba(46,184,114,0.10);border-radius:5px;padding:8px 12px;margin-bottom:12px;font-size:0.82rem;">
+          <strong>Regla de oro de estos 19 dias:</strong> cada sesion ARRANCA resolviendo o explicando de memoria, y RECIEN AHI revelas o lees. Hace, no leas &mdash; la teoria sin practica es lo que costo AM2.
+        </div>
+        <div id="rectaFinal"></div>
+        <p style="font-size:0.76rem;color:var(--text-secondary);margin:12px 0 0;font-style:italic;">
+          El dia previo (2 jul) no se carga material nuevo: repaso ligero y dormir bien. A la mesa lleva la carpeta de TPs (respaldo visado, costo cero). Llegas, respiras, y rendis el simulacro numero N &mdash; ya lo hiciste varias veces.
+        </p>
       </div>
 
       <!-- ===== Tarjeta consulta catedra (RESUELTA) ===== -->
@@ -11385,6 +11408,73 @@ t1:   inc si          ; avanzar origen (siempre)
       return Math.min(WEEKLY_PLAN.length, Math.max(1, diff));
     }
 
+    // ============================================================
+    // RECTA FINAL: calendario dia por dia a la mesa (agregado 14 jun)
+    // ============================================================
+    var RF_SECLABEL = {banco:'Banco 89', parciales:'Parciales', simuladores:'Simuladores', bolillero:'Bolillero', teoria:'Teoria', recall:'Active Recall', flashcards:'Flashcards'};
+    var RF_FASE = {
+      admision:{t:'ADMISION', c:'var(--accent-secondary)'},
+      rojo:{t:'TEMA ROJO', c:'#e07b2d'},
+      oral:{t:'ORAL', c:'#4a6fd8'},
+      bolillero:{t:'BOLILLERO', c:'#4a6fd8'},
+      simulacro:{t:'SIMULACRO', c:'#2eb872'},
+      repaso:{t:'REPASO', c:'#6b7280'},
+      ligero:{t:'LIGERO', c:'#6b7280'},
+      mesa:{t:'MESA', c:'var(--accent-primary)'}
+    };
+    var RECTA_FINAL = [
+      {d:'2026-06-14', l:'Dom 14/06', fin:true,  f:'admision',  foco:'U2 Boole + combinacionales (la mas probable, 33%). Resolve 5-6 ejercicios de memoria y despues corregi.', s:['banco']},
+      {d:'2026-06-15', l:'Lun 15/06', fin:false, f:'admision',  foco:'U1 numeracion + conversiones + complemento a 2 (la mitad facil del banco).', s:['banco']},
+      {d:'2026-06-16', l:'Mar 16/06', fin:false, f:'rojo',      foco:'U1 rojo: punto flotante IEEE754 + codigos (Hamming, BCD, exceso). Aca va el tiempo extra.', s:['banco','teoria']},
+      {d:'2026-06-17', l:'Mie 17/06', fin:false, f:'admision',  foco:'U2 parte 2: Karnaugh (minimizacion) + secuenciales (biestables, contadores).', s:['banco']},
+      {d:'2026-06-18', l:'Jue 18/06', fin:false, f:'admision',  foco:'U5 8088: modos de direccionamiento. Segunda mas probable en admision (20%).', s:['banco']},
+      {d:'2026-06-19', l:'Vie 19/06', fin:false, f:'admision',  foco:'U4 Maquina Blue: bus, unidad de control, ciclo de instruccion.', s:['banco']},
+      {d:'2026-06-20', l:'Sab 20/06', fin:true,  f:'simulacro', foco:'U3 memorias (rapido, baja prob) + MINI-SIMULACRO admision: 5 ejercicios al azar, cronometrados.', s:['banco','simuladores']},
+      {d:'2026-06-21', l:'Dom 21/06', fin:true,  f:'repaso',    foco:'Corregi el mini-simulacro y reforza lo que fallo. Primera lectura de U6/U7 (oral-only).', s:['banco','teoria']},
+      {d:'2026-06-22', l:'Lun 22/06', fin:false, f:'oral',      foco:'U6 oral: pipeline, RISC/CISC, cache, DMA. Explicalo en voz alta como si rindieras.', s:['teoria','parciales']},
+      {d:'2026-06-23', l:'Mar 23/06', fin:false, f:'oral',      foco:'U7 oral: E/S, buses, transmision. En voz alta, sin leer.', s:['teoria','parciales']},
+      {d:'2026-06-24', l:'Mie 24/06', fin:false, f:'rojo',      foco:'U1 profundo: punto flotante + Hamming otra vez (caen en admision Y en oral).', s:['banco','parciales']},
+      {d:'2026-06-25', l:'Jue 25/06', fin:false, f:'oral',      foco:'U5 + U4 exponer. U5 esta en 5 de 9 bolillas: es la mas frecuente del oral.', s:['parciales','bolillero']},
+      {d:'2026-06-26', l:'Vie 26/06', fin:false, f:'oral',      foco:'U2 + U3 exponer: Boole/secuenciales + memorias.', s:['parciales','bolillero']},
+      {d:'2026-06-27', l:'Sab 27/06', fin:true,  f:'simulacro', foco:'SIMULACRO COMPLETO: 1 ej de admision + saca 2 bolillas, elegi 1 y expone en voz alta (grabate). Cronometrado.', s:['simuladores','bolillero']},
+      {d:'2026-06-28', l:'Dom 28/06', fin:true,  f:'repaso',    foco:'Repaso de lo peor del simulacro + barrido de las preguntas con badge salio 2x/3x.', s:['parciales']},
+      {d:'2026-06-29', l:'Lun 29/06', fin:false, f:'bolillero', foco:'Pasada por las 9 bolillas: 2 min por bolilla diciendo en voz alta que expondrias. Reforza la que menos te gusta.', s:['bolillero']},
+      {d:'2026-06-30', l:'Mar 30/06', fin:false, f:'repaso',    foco:'Profundiza tu punto mas debil + 5 ejercicios de admision al azar mas.', s:['banco','parciales']},
+      {d:'2026-07-01', l:'Mie 01/07', fin:false, f:'simulacro', foco:'SIMULACRO FINAL completo (admision + oral). Corregi y ajuste fino.', s:['simuladores']},
+      {d:'2026-07-02', l:'Jue 02/07', fin:false, f:'ligero',    foco:'Repaso LIGERO: solo salio 2x/3x + tus 3 puntos debiles + lee tranquilo la bolilla que mas te preocupa. NADA nuevo. Dormi bien.', s:['parciales']},
+      {d:'2026-07-03', l:'Vie 03/07', fin:false, f:'mesa',      foco:'MESA. Llega temprano, respira. Es el simulacro numero N, ya lo hiciste. Aprobas con 6.', s:[]}
+    ];
+    function renderRectaFinal() {
+      var cont = document.getElementById('rectaFinal');
+      if (!cont) return;
+      var rfd = document.getElementById('rfDias');
+      if (rfd) rfd.textContent = daysUntilExam();
+      var now = new Date();
+      var today = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+      cont.innerHTML = RECTA_FINAL.map(function(r){
+        var fa = RF_FASE[r.f] || {t:r.f, c:'#6b7280'};
+        var isToday = (r.d === today);
+        var isPast = (r.d < today);
+        var bg = isToday ? 'rgba(233,69,96,0.10)' : (r.fin ? 'rgba(0,0,0,0.025)' : 'transparent');
+        var bd = isToday ? '2px solid var(--accent-secondary)' : '1px solid rgba(0,0,0,0.07)';
+        var op = isPast ? 'opacity:0.5;' : '';
+        var links = (r.s||[]).map(function(sec){
+          return '<button onclick="navigateTo(\'' + sec + '\')" style="padding:2px 9px;border:1px solid ' + fa.c + ';background:transparent;color:' + fa.c + ';border-radius:10px;cursor:pointer;font-size:0.7rem;font-weight:600;">' + (RF_SECLABEL[sec] || sec) + '</button>';
+        }).join(' ');
+        var todayTag = isToday ? '<span style="margin-left:6px;padding:1px 8px;border-radius:10px;background:var(--accent-secondary);color:#fff;font-size:0.66rem;font-weight:700;">HOY</span>' : '';
+        return '<div style="' + op + 'border:' + bd + ';border-radius:8px;background:' + bg + ';padding:10px 13px;margin-bottom:7px;">' +
+          '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:5px;">' +
+          '<span style="font-weight:700;font-size:0.84rem;min-width:78px;">' + r.l + '</span>' +
+          '<span style="padding:1px 9px;border-radius:10px;background:' + fa.c + ';color:#fff;font-size:0.66rem;font-weight:700;letter-spacing:0.3px;">' + fa.t + '</span>' +
+          (r.fin ? '<span style="font-size:0.68rem;color:var(--text-secondary);">fin de semana</span>' : '') +
+          todayTag +
+          '</div>' +
+          '<div style="font-size:0.86rem;line-height:1.45;' + (links ? 'margin-bottom:7px;' : '') + '">' + r.foco + '</div>' +
+          (links ? '<div style="display:flex;flex-wrap:wrap;gap:5px;">' + links + '</div>' : '') +
+          '</div>';
+      }).join('');
+    }
+
     function renderWeekTimeline() {
       const container = document.getElementById('weekTimeline');
       if (!container) return;
@@ -12443,7 +12533,7 @@ HLT`
         case 'banco': renderBanco(); break;
         case 'parciales': renderParciales(); break;
         case 'recall': renderRecall(); break;
-        case 'plan': renderWeeklyPlan(); updatePomDisplay(); updatePomStats(); break;
+        case 'plan': renderRectaFinal(); renderWeeklyPlan(); updatePomDisplay(); updatePomStats(); break;
         case 'estado': renderEstado(); break;
       }
     }
