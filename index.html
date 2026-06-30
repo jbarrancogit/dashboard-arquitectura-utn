@@ -6500,6 +6500,22 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:5px;"><b>I2</b></td><td style="border:1px solid #ddd;padding:5px;"></td><td style="border:1px solid #ddd;padding:5px;">IF</td><td style="border:1px solid #ddd;padding:5px;">ID</td><td style="border:1px solid #ddd;padding:5px;">EX</td><td style="border:1px solid #ddd;padding:5px;">MEM</td><td style="border:1px solid #ddd;padding:5px;">WB</td><td style="border:1px solid #ddd;padding:5px;"></td></tr>
     <tr><td style="border:1px solid #ddd;padding:5px;"><b>I3</b></td><td style="border:1px solid #ddd;padding:5px;"></td><td style="border:1px solid #ddd;padding:5px;"></td><td style="border:1px solid #ddd;padding:5px;">IF</td><td style="border:1px solid #ddd;padding:5px;">ID</td><td style="border:1px solid #ddd;padding:5px;">EX</td><td style="border:1px solid #ddd;padding:5px;">MEM</td><td style="border:1px solid #ddd;padding:5px;">WB</td></tr>
     </table>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 430 200" width="100%" style="max-width:430px;font-family:inherit;" role="img" aria-label="Diagrama temporal del pipeline de 5 etapas">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Pipeline de 5 etapas (instrucciones x ciclos)</text>
+    <g font-size="8" fill="#7f8c8d" text-anchor="middle"><text x="78" y="32">1</text><text x="118" y="32">2</text><text x="158" y="32">3</text><text x="198" y="32">4</text><text x="238" y="32">5</text><text x="278" y="32">6</text><text x="318" y="32">7</text><text x="358" y="32">8</text><text x="398" y="32">9</text></g>
+    <g font-size="8.5" fill="#2c3e50" text-anchor="end"><text x="36" y="56">I1</text><text x="36" y="84">I2</text><text x="36" y="112">I3</text><text x="36" y="140">I4</text><text x="36" y="168">I5</text></g>
+    <g font-size="8" fill="#fff" text-anchor="middle">
+    <rect x="60" y="40" width="36" height="24" rx="2" fill="#0f3460"/><text x="78" y="56">IF</text><rect x="100" y="40" width="36" height="24" rx="2" fill="#2e6da4"/><text x="118" y="56">ID</text><rect x="140" y="40" width="36" height="24" rx="2" fill="#1aa085"/><text x="158" y="56">EX</text><rect x="180" y="40" width="36" height="24" rx="2" fill="#e67e22"/><text x="198" y="56">MEM</text><rect x="220" y="40" width="36" height="24" rx="2" fill="#e94560"/><text x="238" y="56">WB</text>
+    <rect x="100" y="68" width="36" height="24" rx="2" fill="#0f3460"/><text x="118" y="84">IF</text><rect x="140" y="68" width="36" height="24" rx="2" fill="#2e6da4"/><text x="158" y="84">ID</text><rect x="180" y="68" width="36" height="24" rx="2" fill="#1aa085"/><text x="198" y="84">EX</text><rect x="220" y="68" width="36" height="24" rx="2" fill="#e67e22"/><text x="238" y="84">MEM</text><rect x="260" y="68" width="36" height="24" rx="2" fill="#e94560"/><text x="278" y="84">WB</text>
+    <rect x="140" y="96" width="36" height="24" rx="2" fill="#0f3460"/><text x="158" y="112">IF</text><rect x="180" y="96" width="36" height="24" rx="2" fill="#2e6da4"/><text x="198" y="112">ID</text><rect x="220" y="96" width="36" height="24" rx="2" fill="#1aa085"/><text x="238" y="112">EX</text><rect x="260" y="96" width="36" height="24" rx="2" fill="#e67e22"/><text x="278" y="112">MEM</text><rect x="300" y="96" width="36" height="24" rx="2" fill="#e94560"/><text x="318" y="112">WB</text>
+    <rect x="180" y="124" width="36" height="24" rx="2" fill="#0f3460"/><text x="198" y="140">IF</text><rect x="220" y="124" width="36" height="24" rx="2" fill="#2e6da4"/><text x="238" y="140">ID</text><rect x="260" y="124" width="36" height="24" rx="2" fill="#1aa085"/><text x="278" y="140">EX</text><rect x="300" y="124" width="36" height="24" rx="2" fill="#e67e22"/><text x="318" y="140">MEM</text><rect x="340" y="124" width="36" height="24" rx="2" fill="#e94560"/><text x="358" y="140">WB</text>
+    <rect x="220" y="152" width="36" height="24" rx="2" fill="#0f3460"/><text x="238" y="168">IF</text><rect x="260" y="152" width="36" height="24" rx="2" fill="#2e6da4"/><text x="278" y="168">ID</text><rect x="300" y="152" width="36" height="24" rx="2" fill="#1aa085"/><text x="318" y="168">EX</text><rect x="340" y="152" width="36" height="24" rx="2" fill="#e67e22"/><text x="358" y="168">MEM</text><rect x="380" y="152" width="36" height="24" rx="2" fill="#e94560"/><text x="398" y="168">WB</text>
+    </g>
+    <text x="215" y="192" font-size="8.5" fill="#2c3e50" text-anchor="middle">Regimen permanente: 1 instruccion termina por ciclo (no porque cada una sea mas rapida)</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Las 5 etapas (IF, ID, EX, MEM, WB) se solapan: con el cauce lleno se completa una instruccion por ciclo &mdash; <i>adaptado de Patterson y Hennessy (COD)</i></div>
+    </div>
     <h4>Cuanto se gana (speedup) y por que nunca es perfecto</h4>
     <p style="font-size:0.92rem;">El <b>speedup ideal</b> de un pipeline de <b>N etapas es N</b>: con 5 etapas, idealmente 5 veces mas rapido. Pero en la practica es menor por dos razones: (1) el <b>llenado y vaciado</b> del pipeline al principio y al final, y (2) los <b>hazards</b> (riesgos), sobre todo los <b>saltos</b> &mdash; tema de la ficha siguiente.</p>
     <h4>El gran enemigo del pipeline: el salto</h4>
@@ -6555,6 +6571,20 @@ impar:INC SI
     &bull; <b>Localidad espacial:</b> si usaste una direccion, probablemente uses las de al lado pronto (ej. recorrer un vector, instrucciones consecutivas).<br><br>
     Por eso la cache no trae el dato suelto: trae el <b>bloque</b> (o <b>linea</b>) que lo rodea, apostando a la localidad espacial. Regla de oro: un programa pasa el <b>90% del tiempo en el 10% del codigo</b>.
     </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 380 245" width="100%" style="max-width:380px;font-family:inherit;" role="img" aria-label="Piramide de jerarquia de memoria">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Jerarquia de memoria</text>
+    <polygon points="172,35 208,35 228,80 152,80" fill="#0f3460"/><text x="190" y="62" font-size="9" fill="#fff" text-anchor="middle">Registros</text>
+    <polygon points="152,80 228,80 258,128 122,128" fill="#2e6da4"/><text x="190" y="108" font-size="9" fill="#fff" text-anchor="middle">Cache L1 / L2 / L3</text>
+    <polygon points="122,128 258,128 292,176 88,176" fill="#3498db"/><text x="190" y="156" font-size="9" fill="#fff" text-anchor="middle">RAM (memoria principal)</text>
+    <polygon points="88,176 292,176 328,224 52,224" fill="#1abc9c"/><text x="190" y="204" font-size="9" fill="#fff" text-anchor="middle">Disco / SSD (almacenamiento)</text>
+    <line x1="30" y1="220" x2="30" y2="45" stroke="#e94560" stroke-width="1.5"/><polygon points="30,40 26,50 34,50" fill="#e94560"/>
+    <text x="24" y="140" font-size="8.5" fill="#e94560" text-anchor="middle" transform="rotate(-90 24 140)">+ rapido &middot; + caro/bit</text>
+    <line x1="352" y1="50" x2="352" y2="225" stroke="#0f3460" stroke-width="1.5"/><polygon points="352,230 348,220 356,220" fill="#0f3460"/>
+    <text x="358" y="140" font-size="8.5" fill="#0f3460" text-anchor="middle" transform="rotate(-90 358 140)">+ capacidad &middot; + lento</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Arriba lo mas rapido, caro y chico (registros); abajo lo mas grande, barato y lento (disco). La cache existe para acercar los datos calientes a la CPU &mdash; <i>adaptado de Patterson y Hennessy (COD)</i></div>
+    </div>
     <h4>Hit, miss y hit ratio</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
     <li><b>Hit (acierto):</b> el dato pedido <b>esta</b> en la cache &rarr; acceso rapido.</li>
@@ -6570,6 +6600,29 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Offset (desplazamiento)</b></td><td style="border:1px solid #ddd;padding:6px;">Dice que byte/palabra dentro del bloque se quiere</td></tr>
     </table>
     <p style="font-size:0.92rem;">Esto se apoya directo en las <b>memorias asociativas</b> que viste en la U3: comparar el tag de todas las lineas a la vez es buscar "por contenido", no por direccion.</p>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 215" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Division de la direccion para la cache">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Como se divide la direccion (cache directa)</text>
+    <text x="30" y="36" font-size="9" fill="#7f8c8d">Direccion de memoria:</text>
+    <rect x="30" y="42" width="150" height="26" fill="#0f3460"/><text x="105" y="59" font-size="10" fill="#fff" text-anchor="middle">TAG</text>
+    <rect x="180" y="42" width="120" height="26" fill="#1abc9c"/><text x="240" y="59" font-size="10" fill="#fff" text-anchor="middle">INDICE</text>
+    <rect x="300" y="42" width="80" height="26" fill="#e67e22"/><text x="340" y="59" font-size="10" fill="#fff" text-anchor="middle">OFFSET</text>
+    <text x="105" y="80" font-size="7.5" fill="#7f8c8d" text-anchor="middle">que bloque</text><text x="240" y="80" font-size="7.5" fill="#7f8c8d" text-anchor="middle">que linea</text><text x="340" y="80" font-size="7.5" fill="#7f8c8d" text-anchor="middle">byte dentro</text>
+    <text x="30" y="106" font-size="9" fill="#0f3460" font-weight="bold">Cache:</text>
+    <g font-size="8" text-anchor="middle">
+    <rect x="60" y="112" width="24" height="18" fill="#eef1f7" stroke="#0f3460"/><text x="72" y="125" fill="#2c3e50">V</text><rect x="84" y="112" width="70" height="18" fill="#eef1f7" stroke="#0f3460"/><text x="119" y="125" fill="#2c3e50">Tag guard.</text><rect x="154" y="112" width="90" height="18" fill="#eef1f7" stroke="#0f3460"/><text x="199" y="125" fill="#2c3e50">Datos (bloque)</text>
+    <rect x="60" y="130" width="24" height="18" fill="#fff" stroke="#0f3460"/><rect x="84" y="130" width="70" height="18" fill="#fff" stroke="#0f3460"/><rect x="154" y="130" width="90" height="18" fill="#fff" stroke="#0f3460"/>
+    <rect x="60" y="148" width="24" height="18" fill="#e9456022" stroke="#e94560" stroke-width="1.5"/><rect x="84" y="148" width="70" height="18" fill="#e9456022" stroke="#e94560" stroke-width="1.5"/><rect x="154" y="148" width="90" height="18" fill="#e9456022" stroke="#e94560" stroke-width="1.5"/>
+    <rect x="60" y="166" width="24" height="18" fill="#fff" stroke="#0f3460"/><rect x="84" y="166" width="70" height="18" fill="#fff" stroke="#0f3460"/><rect x="154" y="166" width="90" height="18" fill="#fff" stroke="#0f3460"/>
+    </g>
+    <line x1="240" y1="68" x2="240" y2="157" stroke="#1abc9c" stroke-dasharray="3 2"/><line x1="240" y1="157" x2="246" y2="157" stroke="#1abc9c"/><polygon points="246,157 240,154 240,160" fill="#1abc9c"/>
+    <rect x="300" y="120" width="40" height="30" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="320" y="139" font-size="11" fill="#0f3460" text-anchor="middle" font-weight="bold">=?</text>
+    <line x1="105" y1="68" x2="105" y2="100" stroke="#0f3460"/><path d="M105,100 H320 V120" fill="none" stroke="#0f3460"/>
+    <line x1="154" y1="157" x2="300" y2="135" stroke="#0f3460"/>
+    <text x="320" y="166" font-size="8" fill="#e94560" text-anchor="middle">igual = HIT</text><text x="320" y="178" font-size="8" fill="#7f8c8d" text-anchor="middle">distinto = MISS</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El indice elige la linea, el tag se compara con el guardado (igual = acierto) y el offset selecciona el byte dentro del bloque &mdash; <i>adaptado de Stallings / Hennessy</i></div>
+    </div>
     <h4>Las tres funciones de correspondencia (mapeo)</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
     <li><b>Directa:</b> cada bloque de RAM tiene <b>una unica</b> linea posible en cache (linea = bloque modulo cantidad de lineas). Simple y barata, pero si el programa alterna dos bloques que caen en la misma linea, se pelean y se intercambian todo el tiempo (fenomeno de <b>thrashing / vapuleo</b>).</li>
@@ -6609,6 +6662,22 @@ impar:INC SI
     <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Sin DMA (E/S programada)</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Con DMA</th></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;">Periferico &rarr; <b>CPU</b> &rarr; Memoria (la CPU copia cada palabra)</td><td style="border:1px solid #ddd;padding:6px;">Periferico &rarr; Memoria (directo, la CPU queda libre; solo recibe la interrupcion al final)</td></tr>
     </table>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 215" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Camino de datos del DMA">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Transferencia por DMA (camino de datos)</text>
+    <rect x="30" y="28" width="110" height="44" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="85" y="54" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">CPU</text>
+    <rect x="260" y="28" width="110" height="44" rx="4" fill="#eef1f7" stroke="#e94560"/><text x="315" y="50" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">Controlador DMA</text><text x="315" y="63" font-size="7.5" fill="#7f8c8d" text-anchor="middle">dir + contador + control</text>
+    <line x1="140" y1="44" x2="260" y2="44" stroke="#0f3460"/><polygon points="260,44 252,40 252,48" fill="#0f3460"/><text x="200" y="40" font-size="8" fill="#7f8c8d" text-anchor="middle">HOLD (pido el bus)</text>
+    <line x1="260" y1="58" x2="140" y2="58" stroke="#0f3460"/><polygon points="140,58 148,54 148,62" fill="#0f3460"/><text x="200" y="70" font-size="8" fill="#7f8c8d" text-anchor="middle">HLDA (te lo cedo)</text>
+    <rect x="30" y="100" width="340" height="22" rx="3" fill="#0f3460"/><text x="200" y="115" font-size="9" fill="#fff" text-anchor="middle">Bus del sistema (direcciones + datos + control)</text>
+    <line x1="85" y1="72" x2="85" y2="100" stroke="#0f3460"/><line x1="315" y1="72" x2="315" y2="100" stroke="#0f3460"/>
+    <rect x="30" y="150" width="110" height="44" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="85" y="176" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">Memoria</text>
+    <rect x="260" y="150" width="110" height="44" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="315" y="176" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">Periferico (E/S)</text>
+    <line x1="85" y1="122" x2="85" y2="150" stroke="#e94560" stroke-width="2.5"/><line x1="315" y1="122" x2="315" y2="150" stroke="#e94560" stroke-width="2.5"/>
+    <text x="200" y="140" font-size="8.5" fill="#e94560" text-anchor="middle">datos memoria &harr; periferico SIN pasar por la CPU</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El DMA pide el bus (HOLD), la CPU lo cede (HLDA) y el controlador mueve los datos directo entre memoria y periferico, liberando a la CPU &mdash; <i>adaptado de Stallings / apunte Perez</i></div>
+    </div>
     <h4>El conflicto por el bus y sus dos modos</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     <b>El problema:</b> mientras el DMA usa el bus y la memoria, la CPU <b>no puede acceder a memoria</b>. En transferencias largas esto puede demorar inaceptablemente al programa. De ahi los dos modos de reparto del bus:<br><br>
