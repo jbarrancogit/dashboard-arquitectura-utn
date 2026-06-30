@@ -7135,6 +7135,15 @@ impar:INC SI
     </div>
     <h4>Su limite (que motiva el DMA)</h4>
     <p style="font-size:0.92rem;">Es mas eficiente que el polling, pero <b>cada dato sigue pasando por la CPU</b> y cada uno cuesta una interrupcion (guardar/restaurar contexto = overhead). Para transferir <b>miles de bytes</b> seguidos, esto vuelve a ser caro. Ahi entra el DMA (ficha siguiente).</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Identificar el dispositivo:</b> lineas de interrupcion <b>multiples</b> (una por dispositivo), <b>encuesta</b> por software (polling del status) o <b>vectorizada</b> (el modulo coloca su vector en el bus).</li>
+    <li><b>Prioridad:</b> <b>daisy chain</b> (cadena fisica: el mas cercano a la CPU gana) o un <b>controlador de interrupciones (8259)</b> que enmascara y ordena.</li>
+    <li><b>Anidamiento:</b> con la <b>pila</b> se interrumpe una rutina de servicio por otra de mayor prioridad y se vuelve siempre al punto exacto.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;como identifica y prioriza la E/S por interrupcion?&rdquo;: vectorizacion + daisy chain / PIC.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la CPU lanza la E/S y sigue trabajando; el modulo la interrumpe (le toca el timbre) cuando termina, la CPU atiende con una rutina de servicio y vuelve - se elimina la espera ociosa del polling, pero el dato todavia pasa por la CPU.
     </div>` },
@@ -7240,6 +7249,15 @@ impar:INC SI
     <b>USB</b> (Universal Serial Bus): bus serie externo, <b>plug and play</b> (lo conectas y se reconoce solo) y <b>multipunto</b> (hasta 127 dispositivos). Ademas de datos, <b>alimenta</b> el periferico por el mismo cable (max 5 m). Velocidades: 1.5 Mbit/s (baja), 12 Mbit/s (1.1), 480 Mbit/s (2.0), <b>5 Gbit/s nominal</b> (3.0 SuperSpeed; &asymp;4,8 efectivos tras la codificacion 8b/10b). Reemplazo a los viejos puertos serie/paralelo y PS/2.
     </div>
     <p style="font-size:0.92rem;"><b>Otras interfaces externas (Stallings):</b> <b>FireWire</b> (bus serie de alta velocidad para E/S de gran capacidad) e <b>InfiniBand</b> (para servidores/centros de datos, con adaptadores de canal). Otros puertos vistos por la catedra: Ethernet (RJ-45), HDMI (video/audio), Bluetooth, Wi-Fi.</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Bus sincrono vs asincrono:</b> sincrono usa un <b>reloj comun</b> (simple, rapido, distancias cortas); asincrono usa <b>handshake</b> (REQ/ACK) y tolera dispositivos de distinta velocidad.</li>
+    <li><b>Arbitraje del bus:</b> cuando varios maestros lo quieren, se decide por <b>daisy chain</b>, por encuesta o de forma <b>centralizada</b> (un arbitro).</li>
+    <li><b>PCI / PCIe:</b> bus interno de alto rendimiento; <b>PCIe</b> es punto a punto serie por &ldquo;carriles&rdquo;. <b>USB:</b> serie, plug-and-play, jerarquia con hub, alimenta el periferico, hasta 127 dispositivos.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> por buses: sincrono vs asincrono + arbitraje + PCI/USB.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> los datos viajan en serie (1 linea, larga distancia, hoy domina) o paralelo (N lineas, corta), de forma sincrona (reloj comun, eficiente) o asincrona (start/stop, UART), punto-a-punto o multipunto, sobre par trenzado/fibra/inalambrico; los buses concretos son PCI (interno) y USB (externo, plug-and-play, hasta 127 dispositivos y alimenta el periferico).
     </div>` },
