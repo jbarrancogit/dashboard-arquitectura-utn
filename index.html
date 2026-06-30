@@ -5212,6 +5212,26 @@ impar:INC SI
     6) Un grupo de 2 cancela 1 variable; uno de 4 cancela 2; uno de 8 cancela 3.
     </div>
     <p style="font-size:0.92rem;">Un <b>implicante primo</b> es un grupo que ya no se puede agrandar. Es <b>esencial</b> si cubre algun 1 que ningun otro grupo cubre: esos van si o si en la solucion final.</p>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 300 250" width="100%" style="max-width:300px;font-family:inherit;" role="img" aria-label="Mapa de Karnaugh de 4 variables">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Mapa de Karnaugh (4 variables)</text>
+    <text x="120" y="40" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">AB</text>
+    <text x="40" y="120" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">CD</text>
+    <text x="85" y="55" font-size="9" fill="#7f8c8d" text-anchor="middle">00</text><text x="135" y="55" font-size="9" fill="#7f8c8d" text-anchor="middle">01</text><text x="185" y="55" font-size="9" fill="#7f8c8d" text-anchor="middle">11</text><text x="235" y="55" font-size="9" fill="#7f8c8d" text-anchor="middle">10</text>
+    <text x="55" y="85" font-size="9" fill="#7f8c8d" text-anchor="end">00</text><text x="55" y="135" font-size="9" fill="#7f8c8d" text-anchor="end">01</text><text x="55" y="185" font-size="9" fill="#7f8c8d" text-anchor="end">11</text><text x="55" y="235" font-size="9" fill="#7f8c8d" text-anchor="end">10</text>
+    <g stroke="#0f3460" fill="none">
+    <rect x="60" y="60" width="50" height="50"/><rect x="110" y="60" width="50" height="50"/><rect x="160" y="60" width="50" height="50"/><rect x="210" y="60" width="50" height="50"/>
+    <rect x="60" y="110" width="50" height="50"/><rect x="110" y="110" width="50" height="50"/><rect x="160" y="110" width="50" height="50"/><rect x="210" y="110" width="50" height="50"/>
+    <rect x="60" y="160" width="50" height="50"/><rect x="110" y="160" width="50" height="50"/><rect x="160" y="160" width="50" height="50"/><rect x="210" y="160" width="50" height="50"/>
+    <rect x="60" y="210" width="50" height="50"/><rect x="110" y="210" width="50" height="50"/><rect x="160" y="210" width="50" height="50"/><rect x="210" y="210" width="50" height="50"/>
+    </g>
+    <rect x="156" y="106" width="108" height="108" rx="10" fill="#e9456022" stroke="#e94560" stroke-width="2.5"/>
+    <text x="185" y="90" font-size="13" fill="#2c3e50" text-anchor="middle">1</text><text x="235" y="90" font-size="13" fill="#2c3e50" text-anchor="middle">1</text>
+    <text x="185" y="140" font-size="13" fill="#e94560" text-anchor="middle" font-weight="bold">1</text><text x="235" y="140" font-size="13" fill="#e94560" text-anchor="middle" font-weight="bold">1</text>
+    <text x="185" y="190" font-size="13" fill="#e94560" text-anchor="middle" font-weight="bold">1</text><text x="235" y="190" font-size="13" fill="#e94560" text-anchor="middle" font-weight="bold">1</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Ejes en codigo Gray (cambia 1 bit por celda) para que las casillas adyacentes se agrupen; el cuadro rojo es un grupo de 4 que simplifica a un termino &mdash; <i>adaptado de Mandado / apunte Perez</i></div>
+    </div>
     <h4>Ejemplo resuelto (Karnaugh de 4 variables)</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.9rem;">
     F(a,b,c,d) = &Sigma;(0,1,2,3,6,7,8,9,10,11,14,15). Mapa (filas ab, columnas cd en Gray):
@@ -5242,6 +5262,18 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>XNOR</b></td><td style="border:1px solid #ddd;padding:6px;">XOR negado</td><td style="border:1px solid #ddd;padding:6px;">las entradas son <b>iguales</b> (detector de igualdad)</td></tr>
     </table>
     <p style="font-size:0.92rem;">En la simbologia, NAND, NOR y XNOR se dibujan como AND/OR/XOR con un <b>circulito a la salida</b>, que significa "negacion". XOR es clave: es la base del sumador (ficha 5) y del bit de paridad.</p>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 440 175" width="100%" style="max-width:440px;font-family:inherit;" role="img" aria-label="Simbolos de compuertas logicas">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Catalogo de compuertas (simbolos ANSI)</text>
+    <g transform="translate(40,55)"><line x1="-22" y1="-8" x2="0" y2="-8" stroke="#0f3460"/><line x1="-22" y1="8" x2="0" y2="8" stroke="#0f3460"/><path d="M0,-14 L18,-14 A14,14 0 0 1 18,14 L0,14 Z" fill="#eef1f7" stroke="#0f3460"/><line x1="32" y1="0" x2="52" y2="0" stroke="#0f3460"/><text x="14" y="34" font-size="10" fill="#2c3e50" text-anchor="middle" font-weight="bold">AND</text></g>
+    <g transform="translate(175,55)"><line x1="-22" y1="-8" x2="2" y2="-8" stroke="#0f3460"/><line x1="-22" y1="8" x2="2" y2="8" stroke="#0f3460"/><path d="M0,-14 Q12,0 0,14 Q26,12 40,0 Q26,-12 0,-14 Z" fill="#eef1f7" stroke="#0f3460"/><line x1="40" y1="0" x2="58" y2="0" stroke="#0f3460"/><text x="18" y="34" font-size="10" fill="#2c3e50" text-anchor="middle" font-weight="bold">OR</text></g>
+    <g transform="translate(310,55)"><line x1="-26" y1="-8" x2="-3" y2="-8" stroke="#0f3460"/><line x1="-26" y1="8" x2="-3" y2="8" stroke="#0f3460"/><path d="M-7,-14 Q5,0 -7,14" fill="none" stroke="#0f3460"/><path d="M0,-14 Q12,0 0,14 Q26,12 40,0 Q26,-12 0,-14 Z" fill="#eef1f7" stroke="#0f3460"/><line x1="40" y1="0" x2="58" y2="0" stroke="#0f3460"/><text x="18" y="34" font-size="10" fill="#2c3e50" text-anchor="middle" font-weight="bold">XOR</text></g>
+    <g transform="translate(40,130)"><line x1="-22" y1="-8" x2="0" y2="-8" stroke="#0f3460"/><line x1="-22" y1="8" x2="0" y2="8" stroke="#0f3460"/><path d="M0,-14 L18,-14 A14,14 0 0 1 18,14 L0,14 Z" fill="#eef1f7" stroke="#0f3460"/><circle cx="36" cy="0" r="3.5" fill="#fff" stroke="#0f3460"/><line x1="40" y1="0" x2="56" y2="0" stroke="#0f3460"/><text x="14" y="34" font-size="10" fill="#2c3e50" text-anchor="middle" font-weight="bold">NAND</text></g>
+    <g transform="translate(175,130)"><line x1="-22" y1="-8" x2="2" y2="-8" stroke="#0f3460"/><line x1="-22" y1="8" x2="2" y2="8" stroke="#0f3460"/><path d="M0,-14 Q12,0 0,14 Q26,12 40,0 Q26,-12 0,-14 Z" fill="#eef1f7" stroke="#0f3460"/><circle cx="44" cy="0" r="3.5" fill="#fff" stroke="#0f3460"/><line x1="48" y1="0" x2="62" y2="0" stroke="#0f3460"/><text x="18" y="34" font-size="10" fill="#2c3e50" text-anchor="middle" font-weight="bold">NOR</text></g>
+    <g transform="translate(315,130)"><line x1="-27" y1="0" x2="0" y2="0" stroke="#0f3460"/><path d="M0,-13 L26,0 L0,13 Z" fill="#eef1f7" stroke="#0f3460"/><circle cx="30" cy="0" r="3.5" fill="#fff" stroke="#0f3460"/><line x1="34" y1="0" x2="50" y2="0" stroke="#0f3460"/><text x="14" y="34" font-size="10" fill="#2c3e50" text-anchor="middle" font-weight="bold">NOT</text></g>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El circulito en la salida (NAND, NOR, NOT) = negacion; la doble curva de entrada distingue XOR de OR &mdash; <i>adaptado de Mandado</i></div>
+    </div>
     <h4>Por que NAND y NOR son universales</h4>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     Un conjunto de compuertas es <b>funcionalmente completo</b> si con el podes armar AND, OR y NOT (y con esos tres, ya tenes todo). La NAND sola alcanza para los tres, asi que con NAND construis cualquier funcion. Lo mismo la NOR. La herramienta teorica que lo garantiza es <b>De Morgan</b> (ficha 1): permite convertir productos en sumas negadas y viceversa.
@@ -5277,6 +5309,24 @@ impar:INC SI
     <b>Sumador completo (full adder):</b> suma 3 bits (A, B y Ci, el acarreo que viene del bit anterior). &nbsp; <b>S = A XOR B XOR Ci</b>, &nbsp; <b>Co = A&middot;B + Ci&middot;(A XOR B)</b>. Encadenando N full adders sumas palabras de N bits.
     </div>
     <p style="font-size:0.92rem;"><b>Acarreo serie (ripple) vs paralelo (lookahead):</b> en el ripple cada bit espera el acarreo del anterior (lento). El de <b>acarreo paralelo</b> precalcula todos los acarreos a la vez con logica extra: mucho mas rapido. Ej: <b>74HC283</b> (sumador de 4 bits con acarreo paralelo).</p>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 175" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Multiplexor y sumador completo">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Multiplexor 4:1</text>
+    <text x="225" y="16" font-size="12" font-weight="bold" fill="#0f3460">Sumador completo (full adder)</text>
+    <polygon points="70,35 110,55 110,135 70,155" fill="#eef1f7" stroke="#0f3460"/>
+    <line x1="40" y1="50" x2="70" y2="50" stroke="#0f3460"/><line x1="40" y1="75" x2="70" y2="75" stroke="#0f3460"/><line x1="40" y1="100" x2="70" y2="100" stroke="#0f3460"/><line x1="40" y1="125" x2="70" y2="125" stroke="#0f3460"/>
+    <text x="36" y="53" font-size="9" fill="#2c3e50" text-anchor="end">I0</text><text x="36" y="78" font-size="9" fill="#2c3e50" text-anchor="end">I1</text><text x="36" y="103" font-size="9" fill="#2c3e50" text-anchor="end">I2</text><text x="36" y="128" font-size="9" fill="#2c3e50" text-anchor="end">I3</text>
+    <line x1="110" y1="95" x2="140" y2="95" stroke="#e94560" stroke-width="2"/><text x="144" y="98" font-size="10" fill="#e94560" font-weight="bold">Y</text>
+    <line x1="82" y1="155" x2="82" y2="172" stroke="#0f3460"/><line x1="98" y1="155" x2="98" y2="172" stroke="#0f3460"/>
+    <text x="82" y="172" font-size="9" fill="#7f8c8d" text-anchor="middle">S0</text><text x="106" y="172" font-size="9" fill="#7f8c8d" text-anchor="middle">S1</text>
+    <rect x="265" y="50" width="80" height="75" rx="6" fill="#eef1f7" stroke="#0f3460"/><text x="305" y="92" font-size="12" fill="#0f3460" text-anchor="middle" font-weight="bold">FA</text>
+    <line x1="230" y1="65" x2="265" y2="65" stroke="#0f3460"/><line x1="230" y1="88" x2="265" y2="88" stroke="#0f3460"/><line x1="230" y1="111" x2="265" y2="111" stroke="#0f3460"/>
+    <text x="226" y="68" font-size="9" fill="#2c3e50" text-anchor="end">A</text><text x="226" y="91" font-size="9" fill="#2c3e50" text-anchor="end">B</text><text x="226" y="114" font-size="9" fill="#2c3e50" text-anchor="end">Cin</text>
+    <line x1="345" y1="75" x2="380" y2="75" stroke="#e94560" stroke-width="2"/><line x1="345" y1="100" x2="380" y2="100" stroke="#0f3460"/>
+    <text x="384" y="78" font-size="9" fill="#e94560" font-weight="bold" text-anchor="end">S</text><text x="384" y="103" font-size="9" fill="#2c3e50" text-anchor="end">Cout</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El MUX elige 1 de 4 entradas segun S1S0; el full adder suma A+B+Cin y entrega S y Cout (ladrillo del sumador paralelo) &mdash; <i>adaptado de Mandado</i></div>
+    </div>
     <h4>Comparador y Paridad</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
     <li><b>Comparador de magnitud:</b> compara dos numeros y da 3 salidas: <b>A&gt;B, A=B, A&lt;B</b>. Tiene entradas de cascada para encadenar chips y comparar palabras mas largas. Ej: <b>74HC85</b> (4 bits).</li>
@@ -5305,6 +5355,21 @@ impar:INC SI
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>Carry (CF):</b> hubo acarreo/prestamo fuera del bit mas alto. &nbsp; <b>Zero (ZF):</b> el resultado es 0. &nbsp; <b>Sign (SF):</b> el bit mas alto del resultado (signo). &nbsp; <b>Overflow (OF):</b> desbordo con signo (el resultado no entra en N bits con signo).
     </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 280 200" width="100%" style="max-width:280px;font-family:inherit;" role="img" aria-label="Diagrama en bloques de la ALU">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Unidad Aritmetico-Logica (ALU)</text>
+    <polygon points="50,40 120,40 140,68 160,40 230,40 195,160 85,160" fill="#eef1f7" stroke="#0f3460" stroke-width="1.5"/>
+    <text x="140" y="120" font-size="14" fill="#0f3460" text-anchor="middle" font-weight="bold">ALU</text>
+    <line x1="80" y1="25" x2="80" y2="40" stroke="#0f3460"/><line x1="200" y1="25" x2="200" y2="40" stroke="#0f3460"/>
+    <text x="80" y="22" font-size="10" fill="#2c3e50" text-anchor="middle">A</text><text x="200" y="22" font-size="10" fill="#2c3e50" text-anchor="middle">B</text>
+    <line x1="30" y1="80" x2="62" y2="80" stroke="#0f3460"/><text x="26" y="83" font-size="9" fill="#2c3e50" text-anchor="end">Sel F</text>
+    <line x1="250" y1="95" x2="218" y2="95" stroke="#0f3460"/><text x="254" y="98" font-size="9" fill="#2c3e50">Cin</text>
+    <line x1="140" y1="160" x2="140" y2="180" stroke="#e94560" stroke-width="2"/><text x="140" y="194" font-size="10" fill="#e94560" text-anchor="middle" font-weight="bold">Resultado</text>
+    <line x1="195" y1="150" x2="240" y2="150" stroke="#0f3460"/><text x="244" y="153" font-size="9" fill="#2c3e50">Flags</text>
+    <text x="244" y="166" font-size="8" fill="#7f8c8d">Z C S V</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Dos operandos (A, B), una seleccion de funcion (Sel F) y Cin; entrega el resultado y las banderas Z (cero), C (carry), S (signo) y V (overflow) &mdash; <i>adaptado de Stallings, cap. 9</i></div>
+    </div>
     <h4>Ejemplo resuelto (ALU de 4 bits restando 5 - 5)</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     Operacion: A - B con A = 0101 (5), B = 0101 (5). La ALU hace A + (complemento a 2 de B).<br>
@@ -5331,6 +5396,31 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>T</b> (Toggle)</td><td style="border:1px solid #ddd;padding:6px;">T</td><td style="border:1px solid #ddd;padding:6px;">T=0 mantiene; T=1 invierte Q. Base de contadores</td></tr>
     </table>
     <p style="font-size:0.92rem;">El <b>JK es el mas completo</b>: ajustando sus entradas se comporta como cualquiera de los otros (J=K=0 mantiene, J=K=1 togglea como T, conectando J=D y K=D' actua como D). Por eso en los TP se pide "obtener un D, T o SR a partir de un JK".</p>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 420 150" width="100%" style="max-width:420px;font-family:inherit;" role="img" aria-label="Simbolos de biestables SR JK D T">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Los cuatro biestables (flip-flops) sincronos</text>
+    <g font-size="9" fill="#2c3e50">
+    <rect x="20" y="35" width="60" height="80" fill="#eef1f7" stroke="#0f3460"/><text x="50" y="30" text-anchor="middle" font-weight="bold" fill="#0f3460">SR</text>
+    <text x="24" y="55">S</text><text x="24" y="105">R</text><line x1="8" y1="51" x2="20" y2="51" stroke="#0f3460"/><line x1="8" y1="101" x2="20" y2="101" stroke="#0f3460"/>
+    <path d="M20,92 l8,-6 l-8,-6" fill="none" stroke="#0f3460"/><line x1="8" y1="86" x2="20" y2="86" stroke="#0f3460"/>
+    <text x="74" y="55" text-anchor="end">Q</text><line x1="80" y1="51" x2="92" y2="51" stroke="#0f3460"/>
+    <rect x="120" y="35" width="60" height="80" fill="#eef1f7" stroke="#0f3460"/><text x="150" y="30" text-anchor="middle" font-weight="bold" fill="#0f3460">JK</text>
+    <text x="124" y="55">J</text><text x="124" y="105">K</text><line x1="108" y1="51" x2="120" y2="51" stroke="#0f3460"/><line x1="108" y1="101" x2="120" y2="101" stroke="#0f3460"/>
+    <path d="M120,92 l8,-6 l-8,-6" fill="none" stroke="#0f3460"/><line x1="108" y1="86" x2="120" y2="86" stroke="#0f3460"/>
+    <text x="174" y="55" text-anchor="end">Q</text><line x1="180" y1="51" x2="192" y2="51" stroke="#0f3460"/>
+    <rect x="220" y="35" width="60" height="80" fill="#eef1f7" stroke="#0f3460"/><text x="250" y="30" text-anchor="middle" font-weight="bold" fill="#0f3460">D</text>
+    <text x="224" y="55">D</text><line x1="208" y1="51" x2="220" y2="51" stroke="#0f3460"/>
+    <path d="M220,92 l8,-6 l-8,-6" fill="none" stroke="#0f3460"/><line x1="208" y1="86" x2="220" y2="86" stroke="#0f3460"/>
+    <text x="274" y="55" text-anchor="end">Q</text><line x1="280" y1="51" x2="292" y2="51" stroke="#0f3460"/>
+    <rect x="320" y="35" width="60" height="80" fill="#eef1f7" stroke="#0f3460"/><text x="350" y="30" text-anchor="middle" font-weight="bold" fill="#0f3460">T</text>
+    <text x="324" y="55">T</text><line x1="308" y1="51" x2="320" y2="51" stroke="#0f3460"/>
+    <path d="M320,92 l8,-6 l-8,-6" fill="none" stroke="#0f3460"/><line x1="308" y1="86" x2="320" y2="86" stroke="#0f3460"/>
+    <text x="374" y="55" text-anchor="end">Q</text><line x1="380" y1="51" x2="392" y2="51" stroke="#0f3460"/>
+    </g>
+    <text x="10" y="135" font-size="9" fill="#7f8c8d">El triangulo en la entrada inferior = reloj por flanco (CLK). SR: set/reset; JK: sin estado prohibido; D: copia D; T: conmuta (toggle).</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Simbolos de los biestables SR, JK, D y T disparados por flanco de reloj &mdash; <i>adaptado de Mandado</i></div>
+    </div>
     <h4>Ejemplo resuelto (tablas de verdad JK y D)</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.9rem;">
     <table style="border-collapse:collapse;margin:6px 0;font-size:0.82rem;text-align:center;">
