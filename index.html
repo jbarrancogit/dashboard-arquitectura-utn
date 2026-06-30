@@ -5527,6 +5527,26 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Volatilidad</b></td><td style="border:1px solid #ddd;padding:6px;">Si pierde el contenido al cortar la alimentacion (volatil) o no (no volatil).</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Lectura destructiva (DRO)</b></td><td style="border:1px solid #ddd;padding:6px;">Si al leer se pierde el dato (hay que restaurarlo). Tambien existe la escritura destructiva.</td></tr>
     </table>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 390 230" width="100%" style="max-width:390px;font-family:inherit;" role="img" aria-label="Clasificacion de memorias semiconductoras">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Clasificacion de memorias semiconductoras</text>
+    <g font-size="9" text-anchor="middle">
+    <rect x="150" y="28" width="90" height="26" rx="4" fill="#0f3460"/><text x="195" y="45" fill="#fff">Memorias</text>
+    <rect x="55" y="78" width="120" height="30" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="115" y="92" fill="#2c3e50" font-weight="bold">RAM</text><text x="115" y="103" font-size="7.5" fill="#7f8c8d">lect/escr &middot; volatil</text>
+    <rect x="215" y="78" width="120" height="30" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="275" y="92" fill="#2c3e50" font-weight="bold">ROM</text><text x="275" y="103" font-size="7.5" fill="#7f8c8d">solo lectura &middot; no volatil</text>
+    <g stroke="#0f3460" fill="none"><line x1="195" y1="54" x2="195" y2="66"/><line x1="115" y1="66" x2="275" y2="66"/><line x1="115" y1="66" x2="115" y2="78"/><line x1="275" y1="66" x2="275" y2="78"/></g>
+    <rect x="40" y="135" width="60" height="24" rx="3" fill="#dfe6f2" stroke="#0f3460"/><text x="70" y="151" fill="#2c3e50">SRAM</text>
+    <rect x="108" y="135" width="60" height="24" rx="3" fill="#dfe6f2" stroke="#0f3460"/><text x="138" y="151" fill="#2c3e50">DRAM</text>
+    <g stroke="#0f3460" fill="none"><line x1="115" y1="108" x2="115" y2="123"/><line x1="70" y1="123" x2="138" y2="123"/><line x1="70" y1="123" x2="70" y2="135"/><line x1="138" y1="123" x2="138" y2="135"/></g>
+    <rect x="200" y="135" width="40" height="24" rx="3" fill="#dfe6f2" stroke="#0f3460"/><text x="220" y="151" font-size="8" fill="#2c3e50">PROM</text>
+    <rect x="244" y="135" width="44" height="24" rx="3" fill="#dfe6f2" stroke="#0f3460"/><text x="266" y="151" font-size="8" fill="#2c3e50">EPROM</text>
+    <rect x="200" y="170" width="44" height="24" rx="3" fill="#dfe6f2" stroke="#0f3460"/><text x="222" y="186" font-size="7.5" fill="#2c3e50">EEPROM</text>
+    <rect x="248" y="170" width="40" height="24" rx="3" fill="#dfe6f2" stroke="#0f3460"/><text x="268" y="186" font-size="8" fill="#2c3e50">Flash</text>
+    <g stroke="#0f3460" fill="none"><line x1="275" y1="108" x2="275" y2="123"/><line x1="220" y1="123" x2="266" y2="123"/><line x1="220" y1="123" x2="220" y2="135"/><line x1="266" y1="123" x2="266" y2="135"/><line x1="222" y1="159" x2="222" y2="170"/><line x1="268" y1="159" x2="268" y2="170"/></g>
+    </g>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Dos grandes familias: RAM (volatil, SRAM/DRAM) y ROM (no volatil, de PROM a Flash, cada vez mas regrabable) &mdash; <i>adaptado del apunte Perez</i></div>
+    </div>
     <h4>El arbol completo de la clasificacion (memorizalo)</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>ACTIVAS (de lectura/escritura, se borran y reescriben):</b><br>
@@ -5545,6 +5565,27 @@ impar:INC SI
     <p style="font-size:0.92rem;">Cada celda de SRAM es un pequeno <b>biestable</b> (candado / latch), tipicamente 6 transistores en CMOS. Mientras haya alimentacion, el biestable se mantiene solo, no hay que tocar nada. La <b>lectura no es destructiva</b>. Por eso es <b>rapida y simple de manejar</b> (no necesita reloj de refresco), pero <b>cara y poco densa</b> (muchos transistores por bit, entran pocos bits por chip).</p>
     <h4>DRAM: el bit es la carga de un capacitor</h4>
     <p style="font-size:0.92rem;">Cada celda de DRAM es <b>1 transistor + 1 capacitor</b>. Capacitor cargado = 1, descargado = 0. Como entra solo 1 transistor por bit, es <b>muy densa y barata</b> (mucha capacidad por chip). El problema: el capacitor <b>se descarga solo</b> con el tiempo, asi que el dato se borraria. Para evitarlo hay que <b>refrescar</b>: releer y reescribir cada fila periodicamente. Ademas la <b>lectura es destructiva</b> (al leer descargas el capacitor), asi que cada lectura va seguida de una restauracion. Por eso la DRAM es la <b>memoria principal</b> de la PC y la SRAM se reserva para <b>caches</b> rapidas (esto se conecta directo con la U6).</p>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 200" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Celda SRAM frente a celda DRAM">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">La celda de 1 bit: SRAM vs DRAM</text>
+    <text x="100" y="36" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">SRAM (biestable)</text>
+    <line x1="20" y1="50" x2="180" y2="50" stroke="#e94560"/><text x="20" y="46" font-size="8" fill="#e94560">linea de palabra (WL)</text>
+    <polygon points="60,70 90,82 60,94" fill="#eef1f7" stroke="#0f3460"/><polygon points="120,70 90,82 120,94" fill="#eef1f7" stroke="#0f3460"/>
+    <path d="M60,82 C 40,70 40,94 60,82" fill="none" stroke="#0f3460"/><path d="M120,82 C 140,70 140,94 120,82" fill="none" stroke="#0f3460"/>
+    <line x1="40" y1="120" x2="40" y2="50" stroke="#0f3460"/><line x1="140" y1="120" x2="140" y2="50" stroke="#0f3460"/>
+    <text x="40" y="135" font-size="8" fill="#7f8c8d" text-anchor="middle">bit</text><text x="140" y="135" font-size="8" fill="#7f8c8d" text-anchor="middle">bit'</text>
+    <text x="100" y="160" font-size="8.5" fill="#2c3e50" text-anchor="middle">2 inversores cruzados + 2 accesos</text><text x="100" y="174" font-size="8.5" fill="#2c3e50" text-anchor="middle">= 6 transistores. Rapida, sin refresco.</text>
+    <line x1="205" y1="30" x2="205" y2="185" stroke="#dde3ec"/>
+    <text x="305" y="36" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">DRAM (1T + 1C)</text>
+    <line x1="230" y1="50" x2="380" y2="50" stroke="#e94560"/><text x="230" y="46" font-size="8" fill="#e94560">linea de palabra (WL)</text>
+    <rect x="290" y="62" width="22" height="22" fill="#eef1f7" stroke="#0f3460"/><text x="301" y="77" font-size="9" fill="#0f3460" text-anchor="middle">T</text>
+    <line x1="301" y1="50" x2="301" y2="62" stroke="#0f3460"/>
+    <line x1="301" y1="84" x2="301" y2="100" stroke="#0f3460"/><line x1="290" y1="100" x2="312" y2="100" stroke="#0f3460"/><line x1="293" y1="106" x2="309" y2="106" stroke="#0f3460"/><line x1="301" y1="106" x2="301" y2="116" stroke="#0f3460"/><path d="M296,116 h10 l-5,7 z" fill="#0f3460"/>
+    <line x1="290" y1="73" x2="250" y2="73" stroke="#0f3460"/><text x="248" y="76" font-size="8" fill="#7f8c8d" text-anchor="end">bit</text>
+    <text x="305" y="160" font-size="8.5" fill="#2c3e50" text-anchor="middle">1 transistor + 1 capacitor.</text><text x="305" y="174" font-size="8.5" fill="#2c3e50" text-anchor="middle">Densa y barata, pero PIERDE carga: refresco.</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> SRAM guarda el bit en un biestable (rapida, cara); DRAM lo guarda como carga en un capacitor (densa, barata, necesita refresco) &mdash; <i>adaptado del apunte Perez / Stallings</i></div>
+    </div>
     <h4>Tabla comparativa (la del examen)</h4>
     <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:0.85rem;">
     <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Aspecto</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">SRAM (estatica)</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">DRAM (dinamica)</th></tr>
@@ -5562,6 +5603,23 @@ impar:INC SI
     <b>Organizacion 2D:</b> un <b>unico decodificador</b> con todas las lineas de direccion enciende directamente una palabra completa (una fila de la matriz). Simple, pero el decodificador se vuelve enorme cuando hay muchas palabras (2^m salidas).<br><br>
     <b>Organizacion 3D (por coincidencia):</b> se parte la direccion en <b>dos mitades</b>: unos bits eligen <b>fila</b> y otros eligen <b>columna</b>; la celda es la <b>interseccion</b>. Asi se usan <b>dos decodificadores chicos</b> en vez de uno gigante, que es mucho mas eficiente en chips de gran capacidad.<br>
     <b>Organizacion 2,5D:</b> NO es lo mismo que la 3D &mdash; es una <b>variante</b> que reemplaza <b>uno</b> de los dos decodificadores por el conjunto <b>multiplexor + demultiplexor</b>, para reducir aun mas las conexiones (Mandado). En resumen: 2D = un decodificador; 3D = dos decodificadores; 2,5D = un decodificador + (mux/demux).
+    </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 360 240" width="100%" style="max-width:360px;font-family:inherit;" role="img" aria-label="Organizacion matricial 2D de la memoria">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Organizacion matricial (2D): fila x columna</text>
+    <rect x="20" y="34" width="120" height="18" fill="#0f3460"/><text x="80" y="47" font-size="8.5" fill="#fff" text-anchor="middle">Direccion</text>
+    <line x1="50" y1="52" x2="50" y2="70" stroke="#0f3460"/><text x="35" y="66" font-size="7.5" fill="#7f8c8d">fila</text>
+    <line x1="110" y1="52" x2="110" y2="200" stroke="#0f3460"/><text x="116" y="66" font-size="7.5" fill="#7f8c8d">col.</text>
+    <rect x="20" y="70" width="50" height="120" fill="#eef1f7" stroke="#0f3460"/><text x="45" y="126" font-size="8.5" fill="#2c3e50" text-anchor="middle" transform="rotate(-90 45 126)">Decod. fila</text>
+    <g stroke="#0f3460" fill="none"><rect x="90" y="70" width="120" height="120"/>
+    <line x1="90" y1="100" x2="210" y2="100"/><line x1="90" y1="130" x2="210" y2="130"/><line x1="90" y1="160" x2="210" y2="160"/>
+    <line x1="120" y1="70" x2="120" y2="190"/><line x1="150" y1="70" x2="150" y2="190"/><line x1="180" y1="70" x2="180" y2="190"/></g>
+    <rect x="120" y="100" width="30" height="30" fill="#e9456033" stroke="#e94560" stroke-width="2"/>
+    <text x="220" y="118" font-size="8.5" fill="#e94560">celda</text><text x="220" y="130" font-size="8.5" fill="#e94560">seleccionada</text>
+    <rect x="90" y="200" width="120" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="150" y="214" font-size="8.5" fill="#2c3e50" text-anchor="middle">Decodificador de columna</text>
+    <line x1="150" y1="220" x2="150" y2="234" stroke="#e94560"/><text x="156" y="232" font-size="8" fill="#2c3e50">dato I/O</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> La direccion se parte en fila y columna; cada decodificador activa una linea y su cruce selecciona una unica celda. Asi crece la capacidad sin disparar los pines &mdash; <i>adaptado del apunte Perez</i></div>
     </div>
     <h4>El truco de la DRAM real: direcciones multiplexadas (RAS / CAS)</h4>
     <p style="font-size:0.92rem;">Para ahorrar pines, los chips DRAM reciben la direccion <b>en dos tandas por los mismos terminales</b>: primero la <b>direccion de fila</b> validada por la senal <b>RAS</b> (Row Address Strobe), y despues la <b>direccion de columna</b> validada por <b>CAS</b> (Column Address Strobe). Cada una se guarda en un registro interno. El <b>refresco</b> de toda la memoria se logra leyendo cada fila periodicamente (toda lectura/escritura ya refresca su fila). Versiones rapidas: <b>FPM</b> (modo pagina: si seguis en la misma fila, solo cambias columna y CAS, mas veloz), <b>EDO</b> (mantiene el dato en la salida mientras CAS sube) y <b>SDRAM</b> (sincrona: el registro de columna es un contador con reloj que recorre posiciones sucesivas a toda velocidad).</p>
@@ -5614,6 +5672,27 @@ impar:INC SI
     <p style="font-size:0.92rem;">Para tener mas palabras pones chips <b>uno arriba del otro</b> en el mapa: comparten las lineas de datos (un solo bus), pero <b>solo uno trabaja por vez</b>. Eso lo decide un <b>decodificador</b> conectado a los bits de direccion de mas peso, que enciende el <b>CS</b> (Chip Select) del chip que toca. Los bits de menor peso van a todos los chips (direccionamiento interno); los de mayor peso eligen el chip.</p>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>Ejemplo:</b> chips de <b>1K x 8</b> y quiero <b>4K x 8</b>. &rarr; necesito <b>4 chips</b>. Cada chip usa A9..A0 (sus 1K internas), y los bits <b>A11, A10</b> entran a un decodificador 2 a 4 que activa el CS de uno de los 4 chips. Total: 12 lineas de direccion (10 internas + 2 de seleccion).
+    </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 220" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Extension de palabra y de capacidad">
+    <text x="10" y="16" font-size="11" font-weight="bold" fill="#0f3460">Extension de LONGITUD de palabra</text>
+    <text x="220" y="16" font-size="11" font-weight="bold" fill="#0f3460">Extension de CANTIDAD (capacidad)</text>
+    <line x1="20" y1="30" x2="180" y2="30" stroke="#0f3460"/><text x="100" y="27" font-size="8" fill="#7f8c8d" text-anchor="middle">misma direccion a los dos</text>
+    <rect x="30" y="40" width="55" height="50" fill="#eef1f7" stroke="#0f3460"/><text x="57" y="62" font-size="8.5" fill="#2c3e50" text-anchor="middle">Chip A</text><text x="57" y="76" font-size="8" fill="#7f8c8d" text-anchor="middle">4 bits</text>
+    <rect x="110" y="40" width="55" height="50" fill="#eef1f7" stroke="#0f3460"/><text x="137" y="62" font-size="8.5" fill="#2c3e50" text-anchor="middle">Chip B</text><text x="137" y="76" font-size="8" fill="#7f8c8d" text-anchor="middle">4 bits</text>
+    <line x1="57" y1="30" x2="57" y2="40" stroke="#0f3460"/><line x1="137" y1="30" x2="137" y2="40" stroke="#0f3460"/>
+    <line x1="57" y1="90" x2="57" y2="105" stroke="#e94560"/><line x1="137" y1="90" x2="137" y2="105" stroke="#e94560"/><line x1="57" y1="105" x2="137" y2="105" stroke="#e94560"/>
+    <text x="97" y="124" font-size="8.5" fill="#e94560" text-anchor="middle">dato de 8 bits (se concatenan)</text>
+    <line x1="230" y1="34" x2="230" y2="120" stroke="#0f3460"/><text x="236" y="42" font-size="8" fill="#7f8c8d">bit alto de</text><text x="236" y="52" font-size="8" fill="#7f8c8d">direccion</text>
+    <polygon points="225,58 235,58 230,70" fill="#0f3460"/><rect x="210" y="70" width="40" height="20" fill="#dfe6f2" stroke="#0f3460"/><text x="230" y="84" font-size="8" fill="#2c3e50" text-anchor="middle">decod</text>
+    <rect x="280" y="40" width="90" height="34" fill="#eef1f7" stroke="#0f3460"/><text x="325" y="61" font-size="8.5" fill="#2c3e50" text-anchor="middle">Chip 0 (CS0)</text>
+    <rect x="280" y="84" width="90" height="34" fill="#eef1f7" stroke="#0f3460"/><text x="325" y="105" font-size="8.5" fill="#2c3e50" text-anchor="middle">Chip 1 (CS1)</text>
+    <line x1="250" y1="74" x2="280" y2="57" stroke="#0f3460"/><line x1="250" y1="86" x2="280" y2="101" stroke="#0f3460"/>
+    <text x="305" y="138" font-size="8.5" fill="#e94560" text-anchor="middle">el decod. elige que chip responde</text>
+    <text x="200" y="170" font-size="9" fill="#2c3e50" text-anchor="middle">Formula maestra:  numero de chips = Entero[ N' / N ] x h</text>
+    <text x="200" y="186" font-size="8" fill="#7f8c8d" text-anchor="middle">N' = palabras pedidas, N = palabras por chip, h = chips para completar el ancho de palabra</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Para mas bits por palabra se ponen chips en paralelo (misma direccion); para mas direcciones se apilan y un decodificador habilita el correcto via CS &mdash; <i>adaptado del apunte Perez</i></div>
     </div>
     <h4>La formula maestra: numero de chips = Entero[N' / N] x h</h4>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
