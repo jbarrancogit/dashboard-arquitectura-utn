@@ -6669,6 +6669,15 @@ impar:INC SI
     <li><b>Transferencia de datos CPU&harr;memoria:</b> en RISC, mover datos cuesta dos pulsos, asi que LOAD/STORE se usan <b>lo menos posible</b>; tener muchos registros reduce esos accesos. En CISC cualquier instruccion puede pedir un dato de memoria.</li>
     <li><b>Salto a subrutinas e interrupciones:</b> como las llamadas a procedimientos generan mucho trafico a memoria (pasar parametros, salvar registros), RISC usa el <b>banco de registros con traslape/ventanas</b> (ficha de procesadores, ejemplo SPARC) para pasar parametros sin tocar memoria.</li>
     </ul>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings y Patterson &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>La filosofia RISC (Patterson, RISC-I):</b> pocas instrucciones simples de <b>igual longitud</b>, solo <b>load/store</b> tocan memoria, <b>muchos registros</b> y control cableado &rarr; el pipeline fluye a ~1 instruccion por ciclo.</li>
+    <li><b>Ventanas de registros (SPARC):</b> bancos de registros que <b>rotan en cada llamada</b> &rarr; pasar parametros sin tocar memoria (acelera CALL/RET).</li>
+    <li><b>La metrica que decide:</b> tiempo = <b>instrucciones &times; CPI &times; ciclo</b>. CISC baja las instrucciones pero sube el CPI; RISC sube las instrucciones pero baja CPI y ciclo &rarr; suele ganar.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;por que RISC si hace mas instrucciones?&rdquo;: CPI bajo + pipeline limpio.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> <b>CISC</b> = muchas instrucciones potentes, formato variable, microprogramada, hardware complejo (el 8088/x86 de la U5); <b>RISC</b> = pocas instrucciones simples de formato fijo, load/store, muchos registros, sin microcodigo, pensada para que el <b>pipeline</b> vuele a 1 instruccion por ciclo.
     </div>` },
@@ -6716,6 +6725,15 @@ impar:INC SI
     <b>Vp(pipeline) = (Vp / 5) &middot; 0,9 &middot; k</b>
     </div>
     <p style="font-size:0.92rem;">donde <b>5</b> = cantidad de Unidades Funcionales de la UC (las etapas), <b>0,9</b> = el 90% que queda tras bajar la penalizacion por saltos del 30% a ~10% con la prediccion, y <b>k</b> = factor que depende del <b>tiempo de acceso a memoria y el reloj</b> de la maquina (es el que carga la ganancia real). <b>La prueba concreta de que acelera</b> la da el propio Perez en la Maquina Elemental: ejecutar todas las instrucciones <b>con pipeline = 119 pulsos</b> contra <b>160 pulsos sin pipeline</b> &rarr; una mejora de la velocidad de procesamiento de <b>~35%</b>.</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Patterson y Hennessy, COD &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Throughput vs latencia:</b> el pipeline <b>no</b> acelera una instruccion (su latencia hasta puede subir); acelera el <b>conjunto</b> (throughput): en regimen, una termina por ciclo.</li>
+    <li><b>Speedup ideal:</b> con N etapas balanceadas el speedup tiende a <b>N</b> (acelera ~N veces vs no segmentado); en la practica lo bajan los hazards y el llenado/vaciado del cauce.</li>
+    <li><b>Pipelines mas profundos (superpipelining):</b> mas etapas suben la frecuencia pero <b>agravan la penalizacion del salto</b> (el Pentium 4 llego a 20 etapas).</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;cuanto acelera el pipeline?&rdquo;: ~N (etapas) en el ideal; es throughput, no latencia.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el pipeline parte la ejecucion en etapas (IF-ID-EX-MEM-WB) y solapa varias instrucciones a la vez, apuntando a terminar <b>1 instruccion por ciclo</b>; el speedup ideal es N (cantidad de etapas) pero los saltos (~30% del codigo segun Perez) lo bajan, y por eso se inventa la prediccion de saltos.
     </div>` },
@@ -6893,6 +6911,15 @@ impar:INC SI
     &bull; <b>Rafaga / burst:</b> el DMA toma el bus por <b>bloques grandes seguidos</b>, transfiere todo de un tiron. Es mas rapido para la transferencia, pero <b>bloquea a la CPU</b> mientras dura.
     </div>
     <p style="font-size:0.92rem;">Como ves, el DMA es otra forma de <b>paralelismo</b>, en la misma linea que la BIU/EU del 8088 (U5): repartir el trabajo entre unidades que actuan a la vez para que el bus y la CPU no esten parados.</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Tres modos de usar el bus:</b> <b>rafaga</b> (burst: toma el bus y transfiere todo el bloque de una; rapido pero congela la CPU), <b>robo de ciclo</b> (cycle stealing: intercala un dato por vez, la CPU casi no se entera) y <b>transparente</b> (solo cuando la CPU no usa el bus, sin frenarla).</li>
+    <li><b>Configuraciones:</b> bus unico compartido (simple, lento), bus DMA-E/S dedicado, o <b>canal / procesador de E/S</b> (con su propio procesador).</li>
+    <li><b>Protocolo:</b> la CPU lo arranca (direccion + cantidad + sentido), le cede el bus (<b>HOLD / HLDA</b>) y recibe una <b>interrupcion de fin</b>.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> los modos del DMA: rafaga vs robo de ciclo vs transparente.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el DMA es un controlador-procesador auxiliar (con sus registros de direccion, cantidad y datos) que mueve bloques entre periferico y memoria <b>sin pasar por la CPU</b>; la CPU lo arranca, le cede el bus y recibe una <b>interrupcion</b> al final; comparte el bus por <b>robo de ciclo</b> (intercalado) o por <b>rafaga</b> (de a bloques).
     </div>` },
@@ -6939,6 +6966,16 @@ impar:INC SI
     </ul>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>Como cierra el hilo de la unidad:</b> cuando subir los GHz topo con el <b>muro del calor</b> (P4 Prescott), la industria dejo de crecer "a lo alto" (frecuencia) y empezo a crecer "a lo ancho" (mas nucleos). Intel Core y AMD Ryzen son las dos respuestas a eso; Ryzen ademas resuelve el <b>costo de fabricar muchos nucleos</b> partiendo el chip en chiplets. <span style="font-size:0.85rem;color:#666;">(Nota: los libros de la catedra son previos a Ryzen; esto es conocimiento estandar de arquitectura actual, util si te toca el ejemplo 6.16 en el oral.)</span>
+    </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Hennessy y Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Superescalar:</b> varios pipelines en paralelo &rarr; emite <b>mas de una instruccion por ciclo</b> (CPI &lt; 1). Distinto de <b>superpipelining</b> (mas etapas, no mas vias).</li>
+    <li><b>Ejecucion fuera de orden (OoO):</b> ejecuta cuando los datos estan listos, <b>no</b> en orden de programa; usa <b>renombrado de registros</b> para romper falsas dependencias y reordena el resultado al final.</li>
+    <li><b>Especulacion:</b> ejecuta mas alla del salto segun la prediccion y descarta si erro.</li>
+    <li><b>SMT / Hyper-Threading:</b> un nucleo simula varios logicos para <b>llenar los huecos</b> del pipeline con otro hilo.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> que hace moderno a un procesador: superescalar + fuera de orden + especulacion + SMT.</span>
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el <b>Pentium 4</b> (CISC/NetBurst) exprime un nucleo con pipeline de 20 etapas, ejecucion fuera de orden, trace cache y Hyper-Threading; el <b>SPARC</b> (RISC escalable) brilla con sus <b>ventanas de registros</b> load/store; cuando subir GHz topa con el calor se pasa a <b>multicore/multithreading</b> (UltraSPARC IV CMT, Pentium D dual-core); y el <b>AMD Ryzen (Zen)</b> lleva eso al extremo con <b>SMT + chiplets</b> (CCD de nucleos + IOD de E/S unidos por Infinity Fabric) para escalar nucleos barato.
