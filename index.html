@@ -6353,6 +6353,15 @@ impar:INC SI
     <li><b>ES</b> &rarr; datos extra / destino en cadenas.</li>
     </ul>
     <p style="font-size:0.92rem;">Si los 4 no se superponen, hay hasta 4 &times; 64 KB = <b>256 KB</b> accesibles en un momento dado sin recargar segmentos. Para programas chicos (&le; 64 KB) se fijan los segmentos al inicio y se juega solo con offsets. Dato de arranque: tras el <b>reset</b> todos los registros valen 0000H salvo CS = FFFFH, asi que el 8088 empieza a ejecutar en CS:IP = FFFF:0000 = <b>FFFF0H</b> (ahi va la ROM de inicio).</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Por que segmentos:</b> dividir el programa en <b>modulos logicos</b> (codigo, datos, pila) que se pueden <b>reubicar y proteger por separado</b> &rarr; modularidad y relocalizacion sin tocar el programa.</li>
+    <li><b>Segmentacion vs paginacion:</b> segmentos = <b>tamano variable</b>, vista del programador (logico); paginas = <b>tamano fijo</b>, vista del SO (fisico, evita fragmentacion). El x86 moderno <b>combina ambas</b>.</li>
+    <li><b>Modo real vs protegido:</b> el 8088 es <b>modo real</b> (segmento&times;16+offset, sin proteccion); del 286 en adelante el <b>modo protegido</b> usa el &ldquo;segmento&rdquo; como <b>selector</b> a una tabla de descriptores con base, limite y permisos.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;segmento vs pagina?&rdquo;: variable/logico vs fijo/fisico.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> con registros de 16 bits pero bus de 20, el 8088 arma cada direccion fisica como <b>segmento &times; 16 + offset</b>; eso da 1 MB total, organizado en zonas de 64 KB (codigo, datos, pila, extra).
     </div>` },
@@ -6431,6 +6440,15 @@ impar:INC SI
     <b>CALL near</b> empuja IP en la pila y salta; <b>RET near</b> saca IP y vuelve. <b>CALL far</b> empuja CS e IP; <b>RET far</b> saca ambos.<br>
     Ej: antes de un CALL, IP = 100H y SP = 100H. Tras <b>CALL 1000H</b>: se empuja el IP de retorno (SP pasa a 0FEH) e IP toma 1000H. Cuando la subrutina haga RET, se saca ese IP de [SS:0FEH], SP vuelve a 100H y la ejecucion continua donde habia quedado. Por usar la <b>pila LIFO</b> es que las subrutinas pueden <b>anidarse</b>.
     </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Formato de instruccion:</b> opcode + operandos; <b>longitud fija</b> (RISC: facil de decodificar y segmentar) vs <b>variable</b> (CISC/x86: compacta pero compleja de decodificar).</li>
+    <li><b>Ortogonalidad:</b> que cualquier operacion pueda usar cualquier modo de direccionamiento y cualquier registro &rarr; un set <b>regular</b>, mas facil de programar y de compilar.</li>
+    <li><b>Numero de direcciones:</b> instrucciones de 3, 2, 1 (acumulador) o 0 direcciones (pila); el 8088 es de <b>2 operandos</b>.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> por el diseno del set: formato fijo/variable + ortogonalidad + numero de operandos.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el set se ordena en familias (transferencia, aritmetica/logica, bits, control de flujo, cadenas, interrupciones y control); las estrella de examen son <b>MOV, ADD/SUB, CMP+Jcc, LOOP y CALL/RET</b>, y el detalle critico es que la pila guarda la direccion de retorno.
     </div>` },
@@ -6473,6 +6491,15 @@ impar:INC SI
     Para una INT n, el procesador va a buscar el vector a la direccion <b>n &times; 4</b>. Ej: INT 0 (division por cero) lee su CS:IP de la direccion 0; INT 21H lo lee de 21H &times; 4 = 84H.
     </div>
     <p style="font-size:0.92rem;">La senal <b>/INTA</b> (Interrupt Acknowledge) es como el 8088 le avisa al exterior que acepto el pedido y va a leer el numero de interrupcion que el dispositivo coloca en el bus.</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings e Intel &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Tipos:</b> hardware (enmascarables <b>INTR</b> / no enmascarables <b>NMI</b>), software (<b>INT n</b>) y excepciones internas (division por cero, etc.).</li>
+    <li><b>Identificar quien pidio:</b> lineas multiples, <b>encuesta</b> (polling por software) o <b>vectorizada</b> (el dispositivo pone su numero en el bus &rarr; tabla de vectores). El 8088 usa vectorizada.</li>
+    <li><b>Prioridad:</b> si varios piden a la vez se resuelve por <b>daisy chain</b> (cadena de margarita: gana el mas cercano) o con un controlador <b>8259 PIC</b> que prioriza, enmascara y permite anidar.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;como sabe quien interrumpio y a quien atiende primero?&rdquo;: vectorizacion + daisy chain / 8259.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> ante un pedido el 8088 apila <b>FLAGS, CS e IP</b>, baja IF, busca el CS:IP de la rutina en el <b>vector n &times; 4</b> (tabla de 256 vectores en los primeros 1 KB) y vuelve con <b>IRET</b>; las hay enmascarables (INTR), no enmascarables (NMI), por software (INT n) e internas.
     </div>` },
