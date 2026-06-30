@@ -6819,6 +6819,18 @@ impar:INC SI
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     <b>Ejemplo concreto (Perez/Stallings):</b> la interfaz programable <b>Intel 82C55A</b>, pensada para el 8088/8086. Tiene 24 lineas de E/S en tres puertos de 8 bits (A, B, C), 8 lineas de datos bidireccionales (D0-D7) hacia el bus y 2 lineas de direccion (A0-A1) para elegir uno de los 3 puertos o el registro de control. Sirve, por ejemplo, para manejar un teclado + pantalla.
     </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 200" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Estructura de un modulo de E/S">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Estructura interna de un modulo de E/S</text>
+    <rect x="20" y="40" width="22" height="130" fill="#0f3460"/><text x="31" y="105" font-size="8.5" fill="#fff" text-anchor="middle" transform="rotate(-90 31 105)">Bus del sistema</text>
+    <rect x="100" y="40" width="170" height="130" rx="4" fill="#f3f6fb" stroke="#0f3460"/><text x="185" y="56" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">Modulo de E/S</text>
+    <g font-size="8.5" fill="#2c3e50" text-anchor="middle"><rect x="112" y="64" width="146" height="22" fill="#eef1f7" stroke="#0f3460"/><text x="185" y="79">Registro de datos</text><rect x="112" y="90" width="146" height="22" fill="#eef1f7" stroke="#0f3460"/><text x="185" y="105">Registro de estado</text><rect x="112" y="116" width="146" height="22" fill="#eef1f7" stroke="#0f3460"/><text x="185" y="131">Registro de control</text><rect x="112" y="142" width="146" height="22" fill="#dfe6f2" stroke="#0f3460"/><text x="185" y="157">Logica de E/S</text></g>
+    <line x1="42" y1="105" x2="100" y2="105" stroke="#0f3460"/><polygon points="100,105 92,101 92,109" fill="#0f3460"/><polygon points="42,105 50,101 50,109" fill="#0f3460"/>
+    <rect x="320" y="80" width="70" height="60" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="355" y="106" font-size="9" fill="#2c3e50" text-anchor="middle">Periferico</text><text x="355" y="120" font-size="7.5" fill="#7f8c8d" text-anchor="middle">disco, teclado...</text>
+    <line x1="270" y1="110" x2="320" y2="110" stroke="#0f3460"/><polygon points="320,110 312,106 312,114" fill="#0f3460"/><polygon points="270,110 278,106 278,114" fill="#0f3460"/>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El modulo adapta el periferico al bus: registros de datos, estado y control mas la logica que dialoga con la CPU de un lado y con el dispositivo del otro &mdash; <i>adaptado de Stallings</i></div>
+    </div>
     <h4>Como se ve "desde arriba": canal vs controlador</h4>
     <p style="font-size:0.92rem;">Segun cuanto trabajo le saquen a la CPU, el modulo se clasifica en:</p>
     <ul style="padding-left:20px;font-size:0.92rem;">
@@ -6895,6 +6907,25 @@ impar:INC SI
     <b>Ojo, esto NO es una interrupcion:</b> la CPU no guarda contexto ni salta a ninguna rutina; solo <b>espera un ciclo de bus</b>. El efecto es que la CPU corre un poco mas lento, pero para un bloque grande el DMA es mucho mas eficiente que las otras dos tecnicas. (Perez lo aclara: asi se puede seguir ejecutando el programa, aunque sea lentamente, durante la transferencia.)
     </div>
     <p style="font-size:0.92rem;">La otra modalidad es el <b>modo rafaga (burst):</b> el DMA toma el bus y lo retiene durante <b>todo el bloque</b> de una vez (mas rapido para el bloque, pero la CPU queda parada mientras tanto).</p>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 200" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Comparacion de las tres tecnicas de E/S">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Las tres tecnicas de E/S</text>
+    <g text-anchor="middle">
+    <rect x="20" y="28" width="115" height="30" rx="4" fill="#e94560"/><text x="77" y="47" font-size="9.5" fill="#fff" font-weight="bold">Programada (polling)</text>
+    <rect x="143" y="28" width="115" height="30" rx="4" fill="#e67e22"/><text x="200" y="47" font-size="9.5" fill="#fff" font-weight="bold">Por interrupciones</text>
+    <rect x="266" y="28" width="115" height="30" rx="4" fill="#1abc9c"/><text x="323" y="47" font-size="9.5" fill="#fff" font-weight="bold">Por DMA</text>
+    </g>
+    <g font-size="8.5" fill="#2c3e50">
+    <text x="14" y="80" fill="#7f8c8d">Quien mueve el dato:</text>
+    <text x="77" y="98" text-anchor="middle">CPU</text><text x="200" y="98" text-anchor="middle">CPU (en la ISR)</text><text x="323" y="98" text-anchor="middle">Controlador DMA</text>
+    <text x="14" y="124" fill="#7f8c8d">La CPU mientras tanto:</text>
+    <text x="77" y="142" text-anchor="middle" fill="#e94560">espera/pregunta</text><text x="200" y="142" text-anchor="middle">hace otra cosa</text><text x="323" y="142" text-anchor="middle" fill="#1abc9c">libre del todo</text>
+    <text x="14" y="168" fill="#7f8c8d">Costo por dato:</text>
+    <text x="77" y="186" text-anchor="middle">alto (desperdicia CPU)</text><text x="200" y="186" text-anchor="middle">medio</text><text x="323" y="186" text-anchor="middle">bajo (ideal bloques)</text>
+    </g>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> De polling (la CPU pregunta y espera) a interrupciones (el modulo avisa) a DMA (un controlador mueve bloques sin la CPU): cada salto libera mas a la CPU &mdash; <i>adaptado de Stallings</i></div>
+    </div>
     <h4>Canal y procesador de E/S (extension del DMA)</h4>
     <p style="font-size:0.92rem;">El <b>canal de E/S</b> es un DMA con esteroides: puede <b>ejecutar instrucciones de E/S</b> (su propio "programa de canal" en memoria) y solo interrumpe a la CPU cuando termina la secuencia completa. El <b>procesador de E/S</b> agrega ademas su propia memoria local: es practicamente una computadora dedicada a E/S. Tipicos de mainframes; descargan casi todo el trabajo de E/S de la CPU principal.</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
@@ -6910,6 +6941,21 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Ventaja</b></td><td style="border:1px solid #ddd;padding:6px;">Se puede usar TODO el repertorio de instrucciones de memoria sobre los puertos (programacion mas flexible y eficiente).</td><td style="border:1px solid #ddd;padding:6px;">No gasta espacio del mapa de memoria; la memoria queda toda disponible.</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Desventaja</b></td><td style="border:1px solid #ddd;padding:6px;">Gasta parte del valioso espacio de direcciones de memoria.</td><td style="border:1px solid #ddd;padding:6px;">Pocas instrucciones de E/S (solo IN/OUT): menos flexible.</td></tr>
     </table>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 215" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="E/S mapeada en memoria frente a aislada">
+    <text x="10" y="16" font-size="11" font-weight="bold" fill="#0f3460">Mapeada en memoria</text>
+    <text x="230" y="16" font-size="11" font-weight="bold" fill="#0f3460">Aislada (puertos)</text>
+    <rect x="40" y="28" width="90" height="130" fill="#eef1f7" stroke="#0f3460"/>
+    <rect x="40" y="118" width="90" height="40" fill="#1abc9c"/><text x="85" y="142" font-size="8.5" fill="#fff" text-anchor="middle">puertos E/S</text>
+    <text x="85" y="74" font-size="8.5" fill="#2c3e50" text-anchor="middle">memoria</text>
+    <text x="85" y="178" font-size="8" fill="#7f8c8d" text-anchor="middle">UN solo espacio</text><text x="85" y="190" font-size="8" fill="#7f8c8d" text-anchor="middle">mismas LOAD/STORE</text><text x="85" y="202" font-size="8" fill="#7f8c8d" text-anchor="middle">resta direcciones a la RAM</text>
+    <rect x="230" y="28" width="70" height="130" fill="#eef1f7" stroke="#0f3460"/><text x="265" y="96" font-size="8.5" fill="#2c3e50" text-anchor="middle">memoria</text>
+    <rect x="315" y="28" width="55" height="130" fill="#1abc9c"/><text x="342" y="92" font-size="8.5" fill="#fff" text-anchor="middle" transform="rotate(-90 342 92)">espacio E/S</text>
+    <text x="300" y="178" font-size="8" fill="#7f8c8d" text-anchor="middle">DOS espacios separados</text><text x="300" y="190" font-size="8" fill="#7f8c8d" text-anchor="middle">instrucciones IN / OUT</text><text x="300" y="202" font-size="8" fill="#7f8c8d" text-anchor="middle">linea de control M/IO</text>
+    <line x1="180" y1="30" x2="180" y2="205" stroke="#dde3ec"/>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Mapeada: los puertos viven en el mismo mapa que la RAM (mismas instrucciones, pero le quitan direcciones). Aislada: espacio propio de E/S con IN/OUT y una linea M/IO &mdash; <i>adaptado de Stallings</i></div>
+    </div>
     <h4>Ejemplo del 8088 (cose el hilo con la U5)</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     El <b>8088 usa E/S aislada</b>: tiene instrucciones <b>IN</b> (leer puerto) y <b>OUT</b> (escribir puerto), separadas de las de memoria. El numero de puerto va directo (8 bits) o en <b>DX</b> (16 bits, hasta 65536 puertos), y el dato entra/sale por el acumulador <b>AL/AX</b> (por eso en la U5 AX figuraba con "E/S por puerto" como uso especial). Una linea del bus avisa si el ciclo es de memoria o de E/S.
