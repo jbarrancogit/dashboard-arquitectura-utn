@@ -5708,6 +5708,16 @@ impar:INC SI
     </div>
     <h4>El truco de la DRAM real: direcciones multiplexadas (RAS / CAS)</h4>
     <p style="font-size:0.92rem;">Para ahorrar pines, los chips DRAM reciben la direccion <b>en dos tandas por los mismos terminales</b>: primero la <b>direccion de fila</b> validada por la senal <b>RAS</b> (Row Address Strobe), y despues la <b>direccion de columna</b> validada por <b>CAS</b> (Column Address Strobe). Cada una se guarda en un registro interno. El <b>refresco</b> de toda la memoria se logra leyendo cada fila periodicamente (toda lectura/escritura ya refresca su fila). Versiones rapidas: <b>FPM</b> (modo pagina: si seguis en la misma fila, solo cambias columna y CAS, mas veloz), <b>EDO</b> (mantiene el dato en la salida mientras CAS sube) y <b>SDRAM</b> (sincrona: el registro de columna es un contador con reloj que recorre posiciones sucesivas a toda velocidad).</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings y Mandado &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Direcciones multiplexadas (RAS/CAS):</b> la DRAM parte la direccion en <b>fila</b> (RAS, Row Address Strobe) y <b>columna</b> (CAS) por los <b>mismos pines</b>, en dos tiempos &rarr; usa la mitad de los pines.</li>
+    <li><b>Refresco:</b> el capacitor pierde carga, asi que hay que <b>releer/reescribir cada fila</b> periodicamente (RAS-only o CAS-before-RAS). La SRAM no lo necesita.</li>
+    <li><b>Lectura destructiva:</b> leer una celda DRAM la <b>descarga</b>; el circuito la reescribe enseguida.</li>
+    <li><b>Evolucion:</b> <b>SDRAM</b> (sincronica con reloj) &rarr; <b>DDR</b> (transfiere en los dos flancos) suben el ancho de banda.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;por que la DRAM necesita refresco y RAS/CAS?&rdquo;: capacitor que se descarga + ahorro de pines.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> SRAM = biestable, rapida, cara, sin refresco (caches); DRAM = capacitor, densa, barata, <b>con refresco y lectura destructiva</b> (memoria principal); ambas volatiles, ambas organizadas en matriz 2D (un decodificador) o 3D (fila + columna).
     </div>` },
@@ -5734,6 +5744,16 @@ impar:INC SI
     <li><b>EEPROM 28C64:</b> 64K = <b>8K x 8</b> (8192 palabras de 8 bits), borrado electrico, con escritura por <b>pagina de hasta 64 bytes</b> y tiempo de escritura ~10 ms.</li>
     <li><b>Flash SST38VF6401:</b> 4M x 16, CMOS Super-Flash, escribe/borra con una sola fuente de 2.7-3.6 V, borrado por bloques. (El apunte "Memorias - Conceptos" de la catedra usa este part-number.)</li>
     </ul>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Compuerta flotante:</b> EPROM, EEPROM y Flash guardan el bit como <b>carga atrapada en una compuerta flotante</b> aislada; esa carga cambia el umbral del transistor (conduce o no). Sin alimentacion la carga queda &rarr; no volatil.</li>
+    <li><b>Como borran:</b> EPROM con <b>luz UV</b> (toda la pastilla), EEPROM <b>electrico byte a byte</b>, Flash <b>electrico por bloques</b> (mas rapido y denso).</li>
+    <li><b>NOR vs NAND Flash:</b> NOR = acceso aleatorio rapido (codigo, BIOS); NAND = mas densa y barata, acceso por paginas (pendrives, SSD).</li>
+    <li><b>Desgaste (wear leveling):</b> cada celda aguanta un numero finito de borrados; el controlador <b>reparte el uso</b> para que no se gaste siempre la misma.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;como guarda un bit la Flash?&rdquo;: compuerta flotante + borrado por bloques.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> todas son <b>no volatiles</b> y de lectura; se ordenan por facilidad de regrabado: <b>ROM</b> (fabrica) &rarr; <b>PROM</b> (usuario 1 vez, fusible) &rarr; <b>EPROM</b> (borra UV, todo) &rarr; <b>EEPROM</b> (borra electrico, byte a byte) &rarr; <b>Flash</b> (borra electrico, por bloques).
     </div>` },
@@ -5844,6 +5864,15 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>LIFO</b></td><td style="border:1px solid #ddd;padding:6px;">Ultimo en entrar, primero en salir (pila)</td><td style="border:1px solid #ddd;padding:6px;">Tope de la pila</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>CAM</b></td><td style="border:1px solid #ddd;padding:6px;">Devuelve si el dato esta y/o su asociado</td><td style="border:1px solid #ddd;padding:6px;">Contenido (no direccion)</td></tr>
     </table>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings y Hennessy &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>CAM (memoria asociativa):</b> en vez de dar una direccion y leer el dato, das el <b>dato (clave)</b> y devuelve <b>donde esta</b>; compara todas las celdas <b>en paralelo</b>. Rapidisima, pero cara (mucho hardware por celda).</li>
+    <li><b>Donde aparece de verdad:</b> en la <b>cache totalmente asociativa</b> y en la <b>TLB</b> (traduccion de direcciones): el bloque puede ir a cualquier lado y se busca por tag en paralelo.</li>
+    <li><b>Trade-off:</b> mas asociatividad = menos fallos de conflicto pero mas costo y consumo (engancha con las <b>3 C</b> de la cache en U6).</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;como busca una cache asociativa?&rdquo;: comparacion por contenido en paralelo (CAM).</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> <b>FIFO</b> = cola (sale en el orden que entro, lectura destructiva, buffer entre velocidades), <b>LIFO</b> = pila (sale al reves, stack de CALL/RET), <b>CAM</b> = se busca por contenido en paralelo (germen de la cache).
     </div>` },
