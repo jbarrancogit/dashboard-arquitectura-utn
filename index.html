@@ -5933,6 +5933,15 @@ impar:INC SI
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     <b>El "cuello de botella von Neumann":</b> como instrucciones y datos comparten <b>una sola memoria y un solo bus</b>, la CPU no puede traer al mismo tiempo una instruccion y un dato; tiene que turnarse. Eso limita la velocidad. La alternativa es la <b>arquitectura Harvard</b>: memorias y buses separados para instrucciones y para datos (mas rapida). Los procesadores modernos mezclan las dos: Harvard adentro (en las caches L1 de instrucciones y de datos) y von Neumann afuera (en la RAM principal).
     </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings y Patterson &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>von Neumann vs Harvard:</b> Harvard tiene memorias e instrucciones <b>separadas</b> (buses distintos para codigo y datos) &rarr; trae instruccion y dato <b>a la vez</b>; von Neumann las <b>unifica</b> en una sola memoria y un solo bus.</li>
+    <li><b>El cuello de botella de von Neumann:</b> como instrucciones y datos comparten el bus, la CPU <b>no puede traer ambos a la vez</b> &rarr; limita el rendimiento. Es la razon de las <b>caches separadas L1-I / L1-D</b>.</li>
+    <li><b>Hoy:</b> las CPU son <b>&ldquo;Harvard modificada&rdquo;</b> en la cache (L1 de instrucciones y L1 de datos separadas) sobre una memoria principal von Neumann.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;von Neumann vs Harvard?&rdquo;: memoria unificada vs separada + el cuello de botella.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> von Neumann = <b>CPU + memoria + E/S + buses</b> con <b>programa almacenado</b> (instrucciones y datos juntos en memoria como numeros); es la base que la <b>Maquina Elemental</b> implementa con hardware concreto y que llega hasta el 8088 de la U5.
     </div>` },
@@ -6031,6 +6040,15 @@ impar:INC SI
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>Como pasa de Busqueda a Ejecucion solo:</b> al llegar al pulso CP9 (mas corto, fuera del ciclo de memoria) se sincroniza el biestable ESTADO. Si la instruccion es de un ciclo, ESTADO toma 0 (sigue en Busqueda); si es de dos, toma 1 (pasa a Ejecucion). Asi la maquina alterna automaticamente.
     </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>El ciclo real tiene mas subciclos:</b> ademas de <b>captacion</b> y <b>ejecucion</b>, un ciclo <b>INDIRECTO</b> (si el operando es indirecto, ir a buscar la direccion efectiva) y un ciclo de <b>INTERRUPCION</b> (al final, si hay un pedido pendiente, guardar el contexto y saltar).</li>
+    <li><b>Diagrama de estados:</b> la UC es una maquina de estados que recorre captacion &rarr; (indirecto) &rarr; ejecucion &rarr; (interrupcion) &rarr; captacion.</li>
+    <li><b>Microoperaciones:</b> cada subciclo se descompone en <b>transferencias registro-registro</b> elementales sincronizadas por el reloj (en la Blue, los 8 pulsos CP1-CP8).</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;que pasa entre una instruccion y la siguiente?&rdquo;: el ciclo de interrupcion.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> fetch-decode-execute = traer (PC&rarr;MAR, leer, MBR&rarr;IR, PC++), decodificar el opcode y ejecutar; en la Blue son 8 pulsos por ciclo de memoria, una Busqueda siempre y una Ejecucion solo si la instruccion (LDA/STA/ADD/AND/IOR/XOR o E/S) lo necesita.
     </div>` },
@@ -6058,6 +6076,15 @@ impar:INC SI
     O sea: <b>CARGAR MAR = (EXA+DEP)&middot;CP1&middot;parada + Busqueda&middot;CP1 + Ejecucion&middot;(esas instrucciones)&middot;CP1</b>. Una compuerta para cada senal, repetido para las ~20 ordenes.
     </div>
     <p style="font-size:0.92rem;"><b>Por que sincrona y no asincrona:</b> en una maquina asincrona cada orden tarda lo que tarda su hardware (mas rapida), pero la UC necesitaria hardware extra para detectar cuando termino cada accion. La sincrona ata todo al reloj: mas simple, aunque ninguna tarea pueda durar menos que un pulso. Por simplicidad, se elige sincrona.</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Patterson &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>La UC cableada es una Maquina de Estados Finitos (FSM):</b> sus <b>entradas</b> son el opcode + las banderas + el contador de pasos; sus <b>salidas</b> son las senales de control. Es logica combinacional pura (a veces con una pequena ROM de estados).</li>
+    <li><b>Como se disena:</b> se arma la tabla <b>estado/entrada &rarr; senales</b> y se sintetiza con compuertas; por eso &ldquo;cableada&rdquo;: el algoritmo de control queda <b>fijo en el hardware</b>.</li>
+    <li><b>Trade-off (vs micro):</b> rapidisima porque no busca microinstrucciones en ROM, pero cambiarla obliga a <b>rediseniar el circuito</b> &rarr; ideal para RISC (control simple y regular).</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;como se implementa la UC cableada?&rdquo;: una FSM (opcode + paso &rarr; senales) en logica combinacional.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la UC cableada = <b>decodificador + secuenciador + logica de compuertas</b>; genera cada senal de control con una ecuacion booleana fija de (opcode, pulso, estado); es rapida pero cambiarla obliga a rehacer el circuito.
     </div>` },
