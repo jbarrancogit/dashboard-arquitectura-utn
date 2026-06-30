@@ -4678,6 +4678,30 @@ impar:INC SI
       {
         unit: 1, name: 'Unidad 1 &mdash; Representacion de datos y codigos', color: 'var(--u1)',
         cards: [
+          { title: 'Hilo conductor: el mapa de toda la materia', detail: `<p style="font-size:0.95rem;"><b>Para que sirve esta tarjeta:</b> en un oral, <b>conectar temas</b> es lo que mas suma puntos. Aca esta el mapa de como se encadena TODA la materia: cada unidad reusa lo de las anteriores. Tenelo a mano para las repreguntas tipo &ldquo;relacione X con Y&rdquo;.</p>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 700 120" width="100%" style="max-width:700px;font-family:inherit;" role="img" aria-label="Recorrido de las 7 unidades">
+    <g font-size="8" fill="#7f8c8d" text-anchor="middle"><text x="99" y="26">num / C2</text><text x="197" y="26">biestable</text><text x="295" y="26">MAR/MBR</text><text x="393" y="26">control+set</text><text x="491" y="26">prefetch/ISA</text><text x="589" y="26">DMA/buses</text></g>
+    <g><rect x="10" y="34" width="80" height="44" rx="5" fill="#0f3460"/><rect x="108" y="34" width="80" height="44" rx="5" fill="#0f3460"/><rect x="206" y="34" width="80" height="44" rx="5" fill="#0f3460"/><rect x="304" y="34" width="80" height="44" rx="5" fill="#0f3460"/><rect x="402" y="34" width="80" height="44" rx="5" fill="#0f3460"/><rect x="500" y="34" width="80" height="44" rx="5" fill="#0f3460"/><rect x="598" y="34" width="80" height="44" rx="5" fill="#0f3460"/></g>
+    <g fill="#fff" text-anchor="middle"><text x="50" y="54" font-size="12" font-weight="bold">U1</text><text x="148" y="54" font-size="12" font-weight="bold">U2</text><text x="246" y="54" font-size="12" font-weight="bold">U3</text><text x="344" y="54" font-size="12" font-weight="bold">U4</text><text x="442" y="54" font-size="12" font-weight="bold">U5</text><text x="540" y="54" font-size="12" font-weight="bold">U6</text><text x="638" y="54" font-size="12" font-weight="bold">U7</text></g>
+    <g fill="#cdd7e5" text-anchor="middle" font-size="7"><text x="50" y="70">datos/codigos</text><text x="148" y="70">logica digital</text><text x="246" y="70">memorias</text><text x="344" y="70">Maq.Elem.</text><text x="442" y="70">8088</text><text x="540" y="70">avanzadas</text><text x="638" y="70">E/S</text></g>
+    <g stroke="#e94560" stroke-width="1.5"><line x1="90" y1="56" x2="108" y2="56"/><line x1="188" y1="56" x2="206" y2="56"/><line x1="286" y1="56" x2="304" y2="56"/><line x1="384" y1="56" x2="402" y2="56"/><line x1="482" y1="56" x2="500" y2="56"/><line x1="580" y1="56" x2="598" y2="56"/></g>
+    <g fill="#e94560"><polygon points="108,56 101,52 101,60"/><polygon points="206,56 199,52 199,60"/><polygon points="304,56 297,52 297,60"/><polygon points="402,56 395,52 395,60"/><polygon points="500,56 493,52 493,60"/><polygon points="598,56 591,52 591,60"/></g>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El recorrido U1&rarr;U7: cada flecha es lo que una unidad le pasa a la siguiente.</div>
+    </div>
+    <h4>Los hilos conductores (lo que se encadena)</h4>
+    <ol style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Aritmetica:</b> binario y C2 (U1) &rarr; ALU suma/resta (U2) &rarr; ALU de la Maquina Elemental (U4) &rarr; aritmetica del 8088 (U5).</li>
+    <li><b>Memoria de 1 bit:</b> biestable (U2) &rarr; celda SRAM (U3) &rarr; registros (U4/U5) &rarr; cache SRAM (U6).</li>
+    <li><b>Logica y circuitos:</b> Boole y compuertas (U2) &rarr; combinacionales MUX/decod (U2) &rarr; bus y control (U4) &rarr; modulo de E/S (U7).</li>
+    <li><b>Control y lenguaje:</b> UC cableada/microprogramada (U4) &rarr; set de instrucciones (U5) &rarr; RISC/CISC y pipeline (U6).</li>
+    <li><b>Codigos y errores:</b> paridad y Hamming (U1) &rarr; memoria ECC (U3) &rarr; CRC en los buses (U7).</li>
+    <li><b>Jerarquia y velocidad:</b> memorias y localidad (U3) &rarr; cache + pipeline (U6).</li>
+    <li><b>Interrupciones:</b> sistema elemental de interrupciones (U5) &rarr; E/S por interrupciones y DMA (U7).</li>
+    </ol>
+    <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
+    <b>En una frase:</b> la materia es una sola historia &mdash; de como se <b>representa</b> un bit (U1) a como se <b>opera</b> (U2), se <b>guarda</b> (U3), se <b>ejecuta</b> (U4-U5) y se <b>acelera y comunica</b> (U6-U7); en el oral, mostrar ese hilo vale oro.</div>` },
           { title: 'Por que binario: confiabilidad y costo', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> antes de aprender a contar en binario conviene entender <b>por que la maquina elige justo dos simbolos</b>. No es capricho: dos estados es la eleccion que da el mejor equilibrio entre <b>confiabilidad</b> (que no se confunda 0 con 1 aunque haya ruido) y <b>costo</b> (cuanto cuesta el hardware). Este es el "por que" que arranca toda la unidad.</p>
     <h4>Confiabilidad: por que dos estados y no diez</h4>
     <p style="font-size:0.92rem;">Una senal electrica nunca es perfecta: tiene ruido, derivas de tension, temperatura. Si usaramos 10 niveles de tension (uno por digito decimal), los umbrales que separan un nivel del siguiente quedarian <b>muy juntos</b> y un poco de ruido haria confundir un digito con el vecino. Con <b>solo dos niveles</b> (hay tension / no hay) el margen entre ellos es <b>el maximo posible</b>: el circuito puede equivocarse bastante en el valor exacto y aun asi distinguir sin error si es 0 o 1. Menos simbolos = mas robustez.</p>
@@ -5136,6 +5160,27 @@ impar:INC SI
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> encriptar es ocultar el mensaje con un algoritmo (publico) + una clave (secreta), por sustitucion (cambiar simbolos) o permutacion (cambiar el orden); y los codigos de barras (1D) y QR (2D) son codigos de aplicacion que llevan datos a un lector optico.
     </div>` },
+          { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
+    <h4>Guion de exposicion (60-90 s)</h4>
+    <div style="background:#f4f7fb;border-left:4px solid #0f3460;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Abri:</b> &ldquo;Toda la informacion en la maquina son bits; esta unidad es como representamos numeros (con y sin signo, enteros y reales) y como detectamos y corregimos errores.&rdquo;<br>
+    <b>Dibuja:</b> la rueda de complemento a 2, o el formato IEEE 754.<br>
+    <b>Desarrolla en orden:</b> 1) numeracion y conversion entre bases; 2) numeros con signo &rarr; C2 (por que gana); 3) reales &rarr; IEEE 754; 4) codigos (BCD, Gray, ASCII); 5) deteccion/correccion &rarr; paridad, distancia minima, Hamming.<br>
+    <b>Cerra:</b> &ldquo;El C2 prepara la ALU de U2 y Hamming la memoria ECC de U3.&rdquo;
+    </div>
+    <h4>No confundir</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Carry (CF)</b> = acarreo sin signo &nbsp;vs&nbsp; <b>Overflow (OF)</b> = fuera de rango con signo.</li>
+    <li><b>C1</b> (invertir) vs <b>C2</b> (invertir + 1): el C2 tiene <b>un solo cero</b>.</li>
+    <li><b>BCD no es binario puro:</b> codifica cada digito por separado.</li>
+    <li><b>Detectar</b> (Dm &ge; d+1) vs <b>corregir</b> (Dm &ge; 2c+1).</li>
+    </ul>
+    <h4>Repreguntas frecuentes</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>P:</b> Por que C2 y no signo-magnitud? &nbsp;<b>R:</b> un solo cero y restar con el mismo sumador.<br>
+    <b>P:</b> Como sabe Hamming <i>donde</i> esta el error? &nbsp;<b>R:</b> el sindrome leido en binario = la posicion.<br>
+    <b>P:</b> Por que el exponente va sesgado (Exceso)? &nbsp;<b>R:</b> para comparar los flotantes como enteros sin signo.
+    </div>` },
           { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el apunte de la catedra (Perez) te alcanza para aprobar, pero dos libros de la bibliografia oficial profundizan justo los puntos finos de esta unidad. Aca esta destilado <b>que suma cada uno</b>, en simple y atribuido, para que sepas a donde ir si un tema no termino de cerrar.</p>
     <div style="border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;background:#f7f6ff;border-radius:6px;font-size:0.92rem;">
     <b>Que agregan los libros de la catedra (mas alla del apunte):</b>
@@ -5550,6 +5595,27 @@ impar:INC SI
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> registros (de desplazamiento SISO/SIPO/PISO/PIPO) y contadores (asincronos o sincronos, de cierto modulo) son grupos de biestables que almacenan, mueven y cuentan palabras de bits; son el puente directo entre la memoria de 1 bit y las memorias electronicas y la CPU de la U3.
     </div>` },
+          { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
+    <h4>Guion de exposicion (60-90 s)</h4>
+    <div style="background:#f4f7fb;border-left:4px solid #0f3460;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Abri:</b> &ldquo;El idioma del hardware: con 0/1 y AND/OR/NOT se disena cualquier circuito; esta unidad va de las funciones logicas a los bloques combinacionales y secuenciales.&rdquo;<br>
+    <b>Dibuja:</b> un mapa de Karnaugh agrupado, la ALU, o un biestable.<br>
+    <b>Desarrolla en orden:</b> 1) Boole + teoremas (De Morgan, dualidad); 2) formas canonicas &rarr; Karnaugh (minimizar); 3) compuertas + universalidad NAND/NOR; 4) combinacionales (MUX, decod, sumador) &rarr; ALU; 5) secuenciales: biestables &rarr; registros y contadores.<br>
+    <b>Cerra:</b> &ldquo;El biestable es la memoria de 1 bit que lleva a U3; la ALU, a la Maquina Elemental de U4.&rdquo;
+    </div>
+    <h4>No confundir</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Combinacional</b> (sin memoria) vs <b>secuencial</b> (con memoria y reloj).</li>
+    <li><b>Latch</b> (por nivel) vs <b>flip-flop</b> (por flanco).</li>
+    <li><b>Minterm / SdP</b> (filas que dan 1) vs <b>Maxterm / PdS</b> (filas que dan 0).</li>
+    <li><b>MUX</b> (elige 1 de N entradas) vs <b>decodificador</b> (activa 1 de 2<sup>n</sup> salidas).</li>
+    </ul>
+    <h4>Repreguntas frecuentes</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>P:</b> Por que NAND es universal? &nbsp;<b>R:</b> por De Morgan arma AND, OR y NOT.<br>
+    <b>P:</b> Que es un implicante primo esencial? &nbsp;<b>R:</b> el grupo maximo que es el unico que cubre cierto 1.<br>
+    <b>P:</b> Por que disparo por flanco y no por nivel? &nbsp;<b>R:</b> el maestro-esclavo evita las carreras.
+    </div>` },
           { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el apunte de catedra (Perez) alcanza para aprobar U2, pero tres libros de la bibliografia agregan profundidad util: uno explica el <b>hardware real</b> de los biestables y la universalidad NAND/NOR, y dos ubican la <b>ALU y la logica</b> dentro de la computadora completa. Aca va lo que suma cada uno, en simple.</p>
     <div style="border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;background:#f7f7ff;border-radius:6px;font-size:0.92rem;">
     <b>Que agregan los libros de la catedra (mas alla del apunte):</b>
@@ -5875,6 +5941,27 @@ impar:INC SI
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> <b>FIFO</b> = cola (sale en el orden que entro, lectura destructiva, buffer entre velocidades), <b>LIFO</b> = pila (sale al reves, stack de CALL/RET), <b>CAM</b> = se busca por contenido en paralelo (germen de la cache).
+    </div>` },
+          { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
+    <h4>Guion de exposicion (60-90 s)</h4>
+    <div style="background:#f4f7fb;border-left:4px solid #0f3460;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Abri:</b> &ldquo;Como se guarda y direcciona la informacion en chips: tipos de memoria, su organizacion interna y los parametros que la describen.&rdquo;<br>
+    <b>Dibuja:</b> la matriz 2D (decodificadores de fila/columna), o las celdas SRAM y DRAM.<br>
+    <b>Desarrolla en orden:</b> 1) clasificacion (RAM/ROM, tipo de acceso) + parametros (tL, tE, tC, capacidad); 2) SRAM vs DRAM (biestable vs capacitor, refresco); 3) ROM &rarr; Flash; 4) organizacion 2D/3D + RAS/CAS; 5) extension de palabra y capacidad.<br>
+    <b>Cerra:</b> &ldquo;La SRAM es la celda de la cache (U6) y el MAR/MBR conecta con la Maquina Elemental (U4).&rdquo;
+    </div>
+    <h4>No confundir</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>SRAM</b> (biestable, rapida, sin refresco) vs <b>DRAM</b> (capacitor, densa, con refresco).</li>
+    <li><b>EPROM</b> (UV, toda) vs <b>EEPROM</b> (electrico, byte a byte) vs <b>Flash</b> (electrico, por bloques).</li>
+    <li><b>Extension de palabra</b> (mas bits, chips en paralelo) vs <b>capacidad</b> (mas palabras, apilar + decodificador).</li>
+    <li><b>Volatil</b> (RAM) vs <b>no volatil</b> (ROM/Flash).</li>
+    </ul>
+    <h4>Repreguntas frecuentes</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>P:</b> Por que la DRAM necesita refresco? &nbsp;<b>R:</b> el capacitor pierde carga con el tiempo.<br>
+    <b>P:</b> Que es lectura destructiva? &nbsp;<b>R:</b> leer la celda DRAM la descarga; el circuito la reescribe enseguida.<br>
+    <b>P:</b> Como se calcula el numero de chips? &nbsp;<b>R:</b> Entero[N'/N] &times; (n'/n).
     </div>` },
           { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el apunte de la catedra alcanza para aprobar, pero dos libros agregan el <b>por que</b> y el <b>para que</b> de las memorias. Aca esta lo justo de cada uno, atribuido, en castellano simple, sin repetir lo ya dicho.</p>
     <div style="border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;background:#f7f7ff;border-radius:6px;font-size:0.92rem;">
@@ -6202,6 +6289,27 @@ impar:INC SI
     <p style="font-size:0.92rem;"><b>Flags en general:</b> una ALU tipica produce, ademas del resultado, banderas de estado: <b>Z</b> (resultado cero), <b>C</b> (carry/acarreo), <b>S</b> (signo, MSB=1, negativo) y <b>O</b> (overflow con signo). La Blue, por minima, expone basicamente el <b>OV</b> y usa el bit de signo del ACC (lo lee la instruccion JMA, que salta si el acumulador es negativo). En el 8088 (U5) este conjunto de flags se ampla a CF/ZF/SF/OF/PF/AF.</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la ALU de la Blue es combinacional, opera ADD/AND/IOR/XOR sobre Z e Y (y NOT/RAL sobre Z), siempre calcula y la UC solo elige la salida; genera OV (que detiene la maquina) y la suma es la operacion mas lenta.
+    </div>` },
+          { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
+    <h4>Guion de exposicion (60-90 s)</h4>
+    <div style="background:#f4f7fb;border-left:4px solid #0f3460;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Abri:</b> &ldquo;La primera computadora completa de la materia: junta U1-U3 en una von Neumann minima (la Blue) y muestra como ejecuta un programa.&rdquo;<br>
+    <b>Dibuja:</b> el camino de datos de la Maquina Elemental (registros + bus comun), o el ciclo fetch-decode-execute.<br>
+    <b>Desarrolla en orden:</b> 1) von Neumann (4 unidades, programa almacenado); 2) registros de la ME (ACC, IR, PC, MAR, MBR); 3) ciclo de maquina (busqueda/ejecucion, microoperaciones); 4) UC cableada vs microprogramada; 5) bus comun + tercer estado.<br>
+    <b>Cerra:</b> &ldquo;La ME evoluciona a la MEI y al 8088 de U5; el control y el set llevan a RISC/CISC de U6.&rdquo;
+    </div>
+    <h4>No confundir</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>UC cableada</b> (rapida, rigida, FSM) vs <b>microprogramada</b> (lenta, flexible, ROM).</li>
+    <li><b>MAR</b> (lleva la direccion) vs <b>MBR</b> (lleva el dato).</li>
+    <li><b>Ciclo de busqueda</b> (siempre) vs <b>ciclo de ejecucion</b> (solo si la instruccion lo necesita).</li>
+    <li><b>Bus comun:</b> solo un registro <b>envia</b> a la vez (tercer estado); varios pueden recibir.</li>
+    </ul>
+    <h4>Repreguntas frecuentes</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>P:</b> Que es el programa almacenado? &nbsp;<b>R:</b> instrucciones y datos juntos en memoria, como numeros.<br>
+    <b>P:</b> Como comparten el bus los registros? &nbsp;<b>R:</b> tercer estado (alta impedancia), uno envia por vez.<br>
+    <b>P:</b> Cableada vs microprogramada? &nbsp;<b>R:</b> velocidad vs flexibilidad (RISC vs CISC).
     </div>` },
           { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el apunte de Perez alcanza para aprobar, pero dos libros de la catedra explican lo mismo con otro angulo y nombres que aparecen en examen. Aca va lo que <b>agregan</b>, atribuido a cada uno.</p>
     <div style="border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;background:#f8f9fa;border-radius:6px;font-size:0.92rem;">
@@ -6590,6 +6698,27 @@ impar:INC SI
     <b>En una frase:</b> el 8088 no es magia: es la <b>maquina elemental + MEI + estructura convencional</b> llevadas a silicio, donde cada pieza (indices, LOOP, pila, interrupciones, segmentacion, BIU/EU) resuelve un problema que el programa fue planteando unidad por unidad.
     </div>` },
         ,
+          { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
+    <h4>Guion de exposicion (60-90 s)</h4>
+    <div style="background:#f4f7fb;border-left:4px solid #0f3460;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Abri:</b> &ldquo;Un procesador comercial real: su arquitectura interna, sus registros, como direcciona la memoria y su lenguaje (assembler).&rdquo;<br>
+    <b>Dibuja:</b> el esquema BIU/EU, el calculo segmento&times;16+offset, o el mapa de registros.<br>
+    <b>Desarrolla en orden:</b> 1) BIU/EU (paralelismo, cola de prefetch); 2) registros (AX-DX, segmentos, FLAGS); 3) segmentacion (seg&times;16+offset = 1 MB); 4) modos de direccionamiento; 5) set de instrucciones + interrupciones.<br>
+    <b>Cerra:</b> &ldquo;El solapamiento BIU/EU es el germen del pipeline de U6; las interrupciones llevan a la E/S de U7.&rdquo;
+    </div>
+    <h4>No confundir</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Segmento y offset</b> (logico) vs <b>direccion fisica</b> (20 bits).</li>
+    <li><b>BIU</b> (trae datos/instrucciones, segmentos) vs <b>EU</b> (ejecuta, ALU).</li>
+    <li>Direccion fisica = <b>seg &times; 16 + offset</b> (no seg + offset).</li>
+    <li><b>INTR</b> (enmascarable) vs <b>NMI</b> (no enmascarable).</li>
+    </ul>
+    <h4>Repreguntas frecuentes</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>P:</b> Por que segmentacion? &nbsp;<b>R:</b> con registros de 16 bits direcciona 20; ademas modulariza (codigo/datos/pila).<br>
+    <b>P:</b> Que hace la cola de prefetch? &nbsp;<b>R:</b> la BIU trae instrucciones por adelantado mientras la EU ejecuta.<br>
+    <b>P:</b> Que apila una interrupcion? &nbsp;<b>R:</b> FLAGS, CS e IP (vuelve con IRET).
+    </div>` },
           { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>Que agregan los libros de la catedra (mas alla del apunte):</b> el apunte de U5 te ensena a programar el 8088 (registros, modos, instrucciones). Los libros de la catedra te dan el <i>por que</i> de cada decision de diseno: por que existen tantos modos de direccionamiento, por que el 8086 usa segmentos, que gana y que pierde cada eleccion. Aca esta destilado lo util de cada uno, atribuido.</p>
 
     <div style="background:#f5f4ff;border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
@@ -7016,6 +7145,27 @@ impar:INC SI
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> las maquinas <b>hibridas</b> hablan CISC por fuera (compatibilidad x86) pero ejecutan RISC por dentro (micro-ops + pipeline superescalar); la historia va de <b>valvula &rarr; transistor &rarr; CI &rarr; microprocesador</b> y la tendencia hoy es <b>multicore</b> (porque el calor frena los GHz) y <b>arquitecturas abiertas</b> como RISC-V.
     </div>` },
+          { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
+    <h4>Guion de exposicion (60-90 s)</h4>
+    <div style="background:#f4f7fb;border-left:4px solid #0f3460;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Abri:</b> &ldquo;Como se hace rapida una computadora moderna: paralelismo (pipeline), memoria veloz (cache) y dos filosofias de diseno (RISC/CISC).&rdquo;<br>
+    <b>Dibuja:</b> el diagrama temporal del pipeline, la piramide de jerarquia, o el split tag/indice/offset.<br>
+    <b>Desarrolla en orden:</b> 1) CISC vs RISC; 2) pipeline + speedup; 3) hazards + soluciones; 4) cache (localidad, mapeo, escritura); 5) DMA; 6) procesadores modernos (superescalar, multicore).<br>
+    <b>Cerra:</b> &ldquo;Todo se apoya en U2 (ALU/registros), U3 (memorias/localidad) y U4-U5 (control y set).&rdquo;
+    </div>
+    <h4>No confundir</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Pipeline</b> (paralelismo temporal, mismas etapas) vs <b>superescalar</b> (varias vias en paralelo).</li>
+    <li><b>Latencia</b> (una instruccion) vs <b>throughput</b> (el conjunto): el pipeline mejora el throughput.</li>
+    <li><b>Write-through</b> (a la vez en cache y RAM) vs <b>write-back</b> (al desalojar, bit dirty).</li>
+    <li><b>Hazard de datos</b> (se arregla con forwarding) vs <b>de control</b> (el salto).</li>
+    </ul>
+    <h4>Repreguntas frecuentes</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>P:</b> Cuanto acelera el pipeline? &nbsp;<b>R:</b> ~N etapas en el ideal; es throughput, no latencia.<br>
+    <b>P:</b> Por que funciona la cache? &nbsp;<b>R:</b> por la localidad temporal y espacial.<br>
+    <b>P:</b> Por que RISC si hace mas instrucciones? &nbsp;<b>R:</b> CPI bajo + pipeline limpio (tiempo = instr &times; CPI &times; ciclo).
+    </div>` },
           { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el apunte de Perez te da la columna vertebral en espaniol (pipeline, cache, DMA, RISC vs CISC). Los libros grandes de la catedra agregan el <b>detalle fino</b>: Patterson explica el pipeline de 5 etapas y como se arreglan los hazards; Hennessy formaliza la localidad y la jerarquia de memoria; Stallings desarrolla a fondo RISC vs CISC y las politicas de cache. Aca va lo extra de cada uno, atribuido.</p>
     <div style="border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;background:#f5f4ff;border-radius:6px;font-size:0.92rem;">
     <b>Que agregan los libros de la catedra (mas alla del apunte):</b>
@@ -7260,6 +7410,27 @@ impar:INC SI
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> los datos viajan en serie (1 linea, larga distancia, hoy domina) o paralelo (N lineas, corta), de forma sincrona (reloj comun, eficiente) o asincrona (start/stop, UART), punto-a-punto o multipunto, sobre par trenzado/fibra/inalambrico; los buses concretos son PCI (interno) y USB (externo, plug-and-play, hasta 127 dispositivos y alimenta el periferico).
+    </div>` },
+          { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
+    <h4>Guion de exposicion (60-90 s)</h4>
+    <div style="background:#f4f7fb;border-left:4px solid #0f3460;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>Abri:</b> &ldquo;Como la CPU habla con el mundo exterior: el modulo de E/S y las tres tecnicas para transferir datos.&rdquo;<br>
+    <b>Dibuja:</b> el modulo de E/S (registros), la comparacion de las 3 tecnicas, o mapeada vs aislada.<br>
+    <b>Desarrolla en orden:</b> 1) modulo de E/S (5 funciones, por que no conectar directo); 2) E/S programada (polling); 3) por interrupciones; 4) por DMA; 5) mapeada vs aislada; 6) interfaces y buses (serie/paralelo, PCI/USB).<br>
+    <b>Cerra:</b> &ldquo;Las interrupciones vienen de U5 y el DMA de U6; aca cierra la arquitectura completa.&rdquo;
+    </div>
+    <h4>No confundir</h4>
+    <ul style="padding-left:20px;font-size:0.92rem;">
+    <li><b>Mapeada en memoria</b> (mismas instrucciones, gasta espacio) vs <b>aislada</b> (IN/OUT, linea M/IO).</li>
+    <li><b>Polling</b> (CPU espera) vs <b>interrupcion</b> (CPU avisada) vs <b>DMA</b> (controlador, sin CPU).</li>
+    <li>En <b>interrupciones</b> el dato pasa por la CPU; en <b>DMA</b> no.</li>
+    <li><b>Serie</b> (1 linea, larga distancia) vs <b>paralelo</b> (N lineas, corta).</li>
+    </ul>
+    <h4>Repreguntas frecuentes</h4>
+    <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
+    <b>P:</b> Por que no conectar el periferico directo al bus? &nbsp;<b>R:</b> velocidades y formatos distintos; el modulo adapta.<br>
+    <b>P:</b> Cuando conviene DMA? &nbsp;<b>R:</b> para bloques grandes (libera la CPU).<br>
+    <b>P:</b> Como identifica la CPU quien interrumpio? &nbsp;<b>R:</b> vectorizada / daisy chain / 8259.
     </div>` },
           { title: 'Ampliacion bibliografica', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el apunte de la catedra (libro Perez) ya cubre el 100% del programa de la U7 (modulo de E/S, las tres tecnicas, interfaces, buses y casos de estudio). Lo que sigue es lo que <b>agregan los libros de la catedra mas alla del apunte</b>, util para profundizar o responder repreguntas en el oral.</p>
     <div style="border-left:4px solid #5b4ee0;padding:12px 16px;margin:12px 0;background:#f7f7ff;border-radius:6px;font-size:0.92rem;">
