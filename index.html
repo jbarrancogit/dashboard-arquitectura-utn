@@ -4774,6 +4774,15 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;">&minus;0</td><td style="border:1px solid #ddd;padding:6px;">100</td><td style="border:1px solid #ddd;padding:6px;">111</td><td style="border:1px solid #ddd;padding:6px;">(no existe)</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;">&minus;3</td><td style="border:1px solid #ddd;padding:6px;">111</td><td style="border:1px solid #ddd;padding:6px;">100</td><td style="border:1px solid #ddd;padding:6px;">101</td></tr>
     </table>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings, cap. 9 &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Extension de signo (lo que Perez casi no toca):</b> para llevar un numero en C2 a mas bits se <b>replica el bit de signo</b> a la izquierda (positivos rellenan con 0, negativos con 1); el valor no cambia. Imprescindible al operar datos de distinta longitud.</li>
+    <li><b>C2 = el estandar real:</b> todos los procesadores lo usan porque un <b>unico sumador</b> hace suma y resta y hay un <b>solo cero</b>; signo-magnitud y C1 quedaron en desuso.</li>
+    <li><b>Rango asimetrico:</b> con n bits va de &minus;2<sup>n-1</sup> a +2<sup>n-1</sup>&minus;1: el negativo extremo (&minus;128 en 8 bits) <b>no tiene opuesto representable</b>.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;como llevo un dato a mas bits sin cambiarlo?&rdquo;: extension de signo.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> C1 = invertir bits; C2 = invertir y sumar 1; el C2 gana porque tiene un solo cero y deja restar usando el mismo sumador, asunto que se aprovecha en la ALU de la U2.
     </div>` },
@@ -4805,6 +4814,15 @@ impar:INC SI
     = <b>1001</b>. Pero 1001 en C2 = &minus;7, no +9. Sume dos positivos y "salio" negativo: <b>OVERFLOW</b>. El bit de signo quedo en 1 por error.
     </div>
     <p style="font-size:0.92rem;"><b>No confundir overflow con carry:</b> el <b>carry</b> (CF) es el acarreo que se va por arriba (importa en aritmetica <b>sin signo</b>); el <b>overflow</b> (OF) es el resultado fuera de rango <b>con signo</b>. El procesador 8088 levanta ambas banderas por separado (CF y OF, ver U5).</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings, cap. 9 &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Multiplicacion sin signo:</b> el metodo base es <b>sumar y desplazar</b> (shift-and-add), igual que la multiplicacion a mano pero en binario.</li>
+    <li><b>Multiplicacion de Booth:</b> el algoritmo estandar para multiplicar <b>en C2 sin separar el signo</b>; recodifica el multiplicador y suma/resta el multiplicando desplazado. Es el que implementan las ALU reales.</li>
+    <li><b>Division (restoring / non-restoring):</b> resta-desplaza el divisor y restaura si el resto queda negativo; saca cociente y resto bit a bit.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;como multiplica el hardware con signo?&rdquo;: algoritmo de Booth.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> en binario se suma con acarreo y se resta sumando el C2; el <b>overflow</b> avisa que el resultado no entro en los bits disponibles (dos del mismo signo que dan el signo contrario), y se detecta porque difieren el acarreo de entrada y de salida del bit de signo.
     </div>` },
@@ -5034,6 +5052,16 @@ impar:INC SI
     <li><b>CRC (redundancia ciclica):</b> trata el mensaje como un polinomio y lo divide (sin acarreos) por un polinomio generador; el resto se anexa. Muy potente, usado en redes y discos. Se implementa con registros de desplazamiento y XOR (U2/U3).</li>
     <li><b>Bidimensional:</b> matriz con paridad en filas y columnas a la vez; detecta y hasta corrige segun como se arme.</li>
     </ul>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings y Mandado &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>CRC = division polinomica:</b> el mensaje se trata como un polinomio y se <b>divide en modulo 2</b> (sin acarreos, con XOR) por un <b>polinomio generador</b>; el resto (FCS) se anexa al dato. En recepcion, resto <b>0 = sin error</b>.</li>
+    <li><b>Por que es fuerte:</b> detecta <b>todos los errores en rafaga</b> de hasta el grado del generador y la mayoria de los multiples; por eso se usa en redes y discos.</li>
+    <li><b>Hardware:</b> se calcula con un <b>registro de desplazamiento realimentado con XOR</b> (LFSR) &mdash; conecta directo con U2/U3.</li>
+    <li><b>LRC (Perez):</b> checksum = C2 de la suma hex de los bytes; en su forma clasica equivale a una <b>paridad por columnas</b> del bloque.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;algo mas robusto que la paridad?&rdquo;: CRC con polinomio generador.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> agregando redundancia subis la <b>distancia minima</b> del codigo; con Dm &ge; d+1 detectas d errores y con Dm &ge; 2c+1 los corriges; el bit de paridad (Dm = 2) es lo mas barato y solo detecta 1 error.
     </div>` },
