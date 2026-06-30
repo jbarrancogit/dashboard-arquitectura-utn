@@ -5721,6 +5721,20 @@ impar:INC SI
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.93rem;">
     <b>Definicion clave - programa almacenado:</b> instrucciones y datos se guardan en memoria como numeros, en el mismo espacio. La CPU los <b>busca y ejecuta secuencialmente</b>, uno tras otro, hasta terminar. Como las instrucciones son numeros, un programa puede tratar a otro como dato (cargarlo, moverlo, modificarlo).
     </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 380 215" width="100%" style="max-width:380px;font-family:inherit;" role="img" aria-label="Modelo de von Neumann">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Modelo de von Neumann (4 unidades)</text>
+    <rect x="115" y="28" width="150" height="66" rx="4" fill="#f3f6fb" stroke="#0f3460"/><text x="190" y="42" font-size="9" fill="#0f3460" text-anchor="middle" font-weight="bold">CPU</text>
+    <rect x="128" y="48" width="55" height="38" fill="#eef1f7" stroke="#0f3460"/><text x="155" y="71" font-size="9" fill="#2c3e50" text-anchor="middle">UC</text>
+    <rect x="197" y="48" width="55" height="38" fill="#eef1f7" stroke="#0f3460"/><text x="224" y="71" font-size="9" fill="#2c3e50" text-anchor="middle">ALU</text>
+    <rect x="40" y="110" width="300" height="20" rx="3" fill="#0f3460"/><text x="190" y="124" font-size="9" fill="#fff" text-anchor="middle">Bus comun (direcciones / datos / control)</text>
+    <line x1="190" y1="94" x2="190" y2="110" stroke="#0f3460"/>
+    <rect x="30" y="155" width="90" height="40" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="75" y="179" font-size="9" fill="#2c3e50" text-anchor="middle">Entrada</text><line x1="75" y1="130" x2="75" y2="155" stroke="#0f3460"/>
+    <rect x="145" y="155" width="90" height="40" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="190" y="174" font-size="9" fill="#2c3e50" text-anchor="middle">Memoria</text><text x="190" y="187" font-size="8" fill="#7f8c8d" text-anchor="middle">datos + programa</text><line x1="190" y1="130" x2="190" y2="155" stroke="#0f3460"/>
+    <rect x="260" y="155" width="90" height="40" rx="4" fill="#eef1f7" stroke="#0f3460"/><text x="305" y="179" font-size="9" fill="#2c3e50" text-anchor="middle">Salida</text><line x1="305" y1="130" x2="305" y2="155" stroke="#0f3460"/>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Programa y datos comparten la misma memoria, y todo se comunica por un bus comun: el rasgo central de von Neumann &mdash; <i>adaptado del apunte Perez</i></div>
+    </div>
     <h4>De donde viene: ENIAC &rarr; EDVAC &rarr; EDSAC</h4>
     <p style="font-size:0.92rem;">El <b>ENIAC</b> (1946) se programaba <b>cableando a mano</b>: conectar cables y llaves para cada problema, un trabajo arduo. John von Neumann, en su reporte de 1945, propuso guardar el programa en memoria. La <b>EDVAC</b> (disenada por von Neumann en <b>1947</b>) fue la primera pensada con esta tecnologia, pero se termino de construir recien en 1949. Asi que la <b>primera computadora de programa almacenado que funciono fue la EDSAC</b> (construida en la Universidad de Cambridge por Maurice Wilkes en <b>1948</b>). Estas maquinas resultaron mas rapidas, mas chicas y mas eficientes que el ENIAC. <span style="font-size:0.85rem;color:#666;">(Fechas: estas son las del <b>apunte de la catedra</b> &mdash; EDVAC diseno 1947, EDSAC 1948 &mdash; que es lo que toma Perez, asi que son las que conviene decir en la mesa. La bibliografia general da fechas algo distintas: el First Draft del EDVAC es de 1945 y la EDSAC ejecuto su primer programa el 6 de mayo de 1949. Ademas el apunte comparte el merito del programa almacenado con Mauchly y Eckert, no solo con von Neumann.)</span></p>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
@@ -5738,6 +5752,30 @@ impar:INC SI
     <li><b>Bus:</b> <b>comun y multiplexado de 16 bits</b> (lleva datos, instrucciones o direcciones en distintos momentos).</li>
     <li><b>E/S:</b> hasta 128 perifericos (bus de datos E/S de 8 bits + bus de seleccion de periferico de 6 bits).</li>
     </ul>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 400 250" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Camino de datos de la Maquina Elemental">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Camino de datos de la Maquina Elemental (Blue)</text>
+    <g font-size="9" text-anchor="middle">
+    <rect x="30" y="34" width="64" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="62" y="52" fill="#2c3e50">PC (12)</text>
+    <rect x="120" y="34" width="64" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="152" y="52" fill="#2c3e50">IR (16)</text>
+    <rect x="210" y="34" width="70" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="245" y="52" fill="#2c3e50">MAR (12)</text>
+    <rect x="306" y="34" width="64" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="338" y="52" fill="#2c3e50">SR (16)</text>
+    </g>
+    <rect x="20" y="110" width="360" height="20" rx="3" fill="#0f3460"/><text x="200" y="124" font-size="9" fill="#fff" text-anchor="middle">BUS COMUN (multiplexado)</text>
+    <g stroke="#0f3460"><line x1="62" y1="62" x2="62" y2="110"/><line x1="152" y1="62" x2="152" y2="110"/><line x1="245" y1="62" x2="245" y2="110"/><line x1="338" y1="62" x2="338" y2="110"/></g>
+    <g font-size="9" text-anchor="middle">
+    <rect x="30" y="150" width="64" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="62" y="168" fill="#2c3e50">ACC (16)</text>
+    <rect x="120" y="150" width="64" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="152" y="168" fill="#2c3e50">MBR (16)</text>
+    <rect x="250" y="146" width="120" height="40" fill="#dfe6f2" stroke="#0f3460"/><text x="310" y="163" fill="#2c3e50">Memoria</text><text x="310" y="176" font-size="8" fill="#7f8c8d">4096 x 16</text>
+    </g>
+    <g stroke="#0f3460"><line x1="62" y1="130" x2="62" y2="150"/><line x1="152" y1="130" x2="152" y2="150"/><line x1="310" y1="130" x2="310" y2="146"/></g>
+    <line x1="245" y1="130" x2="245" y2="166" stroke="#e94560" stroke-dasharray="3 2"/><text x="200" y="200" font-size="8" fill="#e94560">MAR direcciona la memoria</text>
+    <polygon points="40,210 84,210 74,238 50,238" fill="#eef1f7" stroke="#0f3460"/><text x="62" y="228" font-size="9" fill="#0f3460" text-anchor="middle">ALU</text>
+    <text x="30" y="208" font-size="8" fill="#7f8c8d">Z</text><text x="86" y="208" font-size="8" fill="#7f8c8d">Y</text>
+    <line x1="62" y1="210" x2="62" y2="178" stroke="#0f3460"/><text x="96" y="226" font-size="8" fill="#7f8c8d">resultado &rarr; ACC</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Todos los registros cuelgan de un bus comun; MAR direcciona la memoria, MBR es el buffer, y la ALU opera Z e Y dejando el resultado en ACC &mdash; <i>adaptado del apunte Perez (Maquina Elemental)</i></div>
+    </div>
     <h4>Los registros (las "manos" y "memoria de bolsillo" de la CPU)</h4>
     <table style="border-collapse:collapse;width:100%;margin:10px 0;font-size:0.85rem;">
     <tr><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Registro</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Bits</th><th style="border:1px solid #ddd;padding:6px;background:#f5f5f5;">Para que sirve</th></tr>
@@ -5774,6 +5812,20 @@ impar:INC SI
     <b>CP5:</b> el dato leido de memoria &rarr; MBR.<br>
     <b>CP6:</b> MBR &rarr; IR. <b>Aca termina la Busqueda</b> (la instruccion ya esta en el IR para decodificar).<br>
     <b>CP7-CP8:</b> sobran. Si la instruccion NO necesita ir a memoria por un dato, se ejecuta aca mismo.
+    </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 380 180" width="100%" style="max-width:380px;font-family:inherit;" role="img" aria-label="Ciclo de instruccion fetch decode execute">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Ciclo de instruccion (se repite por siempre)</text>
+    <rect x="20" y="50" width="95" height="50" rx="6" fill="#eef1f7" stroke="#0f3460"/><text x="67" y="72" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">FETCH</text><text x="67" y="88" font-size="8" fill="#7f8c8d" text-anchor="middle">busca (PC&rarr;MAR)</text>
+    <rect x="142" y="50" width="95" height="50" rx="6" fill="#eef1f7" stroke="#0f3460"/><text x="189" y="72" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">DECODE</text><text x="189" y="88" font-size="8" fill="#7f8c8d" text-anchor="middle">decodifica IR</text>
+    <rect x="264" y="50" width="95" height="50" rx="6" fill="#eef1f7" stroke="#0f3460"/><text x="311" y="72" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">EXECUTE</text><text x="311" y="88" font-size="8" fill="#7f8c8d" text-anchor="middle">ejecuta</text>
+    <line x1="115" y1="75" x2="142" y2="75" stroke="#0f3460"/><polygon points="142,75 134,71 134,79" fill="#0f3460"/>
+    <line x1="237" y1="75" x2="264" y2="75" stroke="#0f3460"/><polygon points="264,75 256,71 256,79" fill="#0f3460"/>
+    <path d="M311,100 V130 H67 V100" fill="none" stroke="#e94560" stroke-width="1.5"/><polygon points="67,100 63,108 71,108" fill="#e94560"/>
+    <text x="190" y="126" font-size="8" fill="#e94560" text-anchor="middle">vuelve a empezar (PC ya apunta a la siguiente)</text>
+    <text x="190" y="156" font-size="9" fill="#2c3e50" text-anchor="middle">Cada ciclo de la Blue = 1 ciclo de memoria = 8 pulsos de reloj (CP1&ndash;CP8)</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El bucle eterno de la CPU: buscar, decodificar y ejecutar; en la Blue se parte en Ciclo de Busqueda y Ciclo de Ejecucion &mdash; <i>adaptado del apunte Perez</i></div>
     </div>
     <h4>Instrucciones de UN ciclo vs DOS ciclos</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
@@ -5850,6 +5902,20 @@ impar:INC SI
     <p style="font-size:0.92rem;">Si se analizan las ordenes de la UC, la <b>gran mayoria son transferencias entre registros</b> (en total ~20 senales de "enviar al bus" / "cargar desde el bus"; solo 4 ordenes no transfieren: LEER, ESCRIBIR, TRA=0 y TRA=1). Conectar cada par de registros con su propio cable (<b>punto a punto</b>) seria carisimo en cables. El <b>bus comun</b> resuelve todo con un solo camino, a costa de turnarse: es <b>multiplexado</b>, lleva un dato (16 bits), una instruccion (16 bits) o una direccion (12 bits) en momentos distintos.</p>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>Tres buses por funcion (clasificacion general):</b> aunque la Blue multiplexa el camino, conceptualmente la informacion es de tres tipos: <b>bus de datos</b> (operandos e instrucciones, bidireccional), <b>bus de direcciones</b> (a que celda se accede, va desde la CPU) y <b>bus de control</b> (las senales: LEER, ESCRIBIR, reloj, TRA, etc.). En la Blue, datos/direcciones comparten el bus comun y las senales de control van por un bus de control aparte.
+    </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 360 180" width="100%" style="max-width:360px;font-family:inherit;" role="img" aria-label="Buffer de tercer estado y bus compartido">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Buffer de tercer estado (tri-state) en el bus</text>
+    <text x="20" y="52" font-size="9" fill="#2c3e50">A</text><line x1="28" y1="48" x2="55" y2="48" stroke="#0f3460"/>
+    <polygon points="55,34 55,62 85,48" fill="#eef1f7" stroke="#0f3460"/><line x1="70" y1="28" x2="70" y2="40" stroke="#0f3460"/><text x="70" y="25" font-size="8" fill="#7f8c8d" text-anchor="middle">EN1</text>
+    <line x1="85" y1="48" x2="170" y2="48" stroke="#0f3460"/><line x1="170" y1="30" x2="170" y2="150" stroke="#0f3460" stroke-width="3"/><text x="178" y="42" font-size="9" fill="#0f3460">BUS</text>
+    <text x="20" y="116" font-size="9" fill="#2c3e50">B</text><line x1="28" y1="112" x2="55" y2="112" stroke="#0f3460"/>
+    <polygon points="55,98 55,126 85,112" fill="#eef1f7" stroke="#0f3460"/><line x1="70" y1="92" x2="70" y2="104" stroke="#0f3460"/><text x="70" y="89" font-size="8" fill="#7f8c8d" text-anchor="middle">EN2</text>
+    <line x1="85" y1="112" x2="170" y2="112" stroke="#0f3460"/>
+    <g font-size="9" fill="#2c3e50"><text x="210" y="60">EN = 1 &rarr; Y = A (conecta)</text><text x="210" y="80">EN = 0 &rarr; Y = alta Z</text><text x="210" y="96" font-size="8" fill="#7f8c8d">(desconectado del bus)</text></g>
+    <text x="190" y="170" font-size="9" fill="#e94560" text-anchor="middle">Regla de oro: solo UN buffer habilitado a la vez sobre el bus</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El tercer estado (alta impedancia) permite que muchos registros compartan el mismo bus sin chocar: la UC habilita uno por vez &mdash; <i>adaptado del apunte Perez</i></div>
     </div>
     <h4>El tercer estado (tri-state): la clave de compartir el bus</h4>
     <p style="font-size:0.92rem;">Una salida digital normal solo puede valer <b>0</b> o <b>1</b>. Pero si muchos registros estan pegados al mismo cable, los que NO estan hablando no pueden imponer ni 0 ni 1, porque chocarian con el que si habla. La solucion es una salida con un <b>tercer estado: alta impedancia (Z)</b>, que es como <b>"desconectado"</b>: el registro suelta el cable y deja que otro lo maneje.</p>
