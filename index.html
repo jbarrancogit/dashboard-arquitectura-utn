@@ -5941,6 +5941,18 @@ impar:INC SI
     <b>BIU (Bus Interface Unit / Unidad de Interfaz con el Bus):</b> habla con el mundo exterior. Genera las direcciones fisicas de 20 bits (tiene un <b>sumador dedicado</b> y los registros de segmento CS, DS, SS, ES y el IP), lee y escribe memoria y E/S, y mantiene llena la <b>cola</b>.<br><br>
     <b>EU (Execution Unit / Unidad de Ejecucion):</b> hace el trabajo de calculo. Tiene la <b>ALU de 16 bits</b>, los registros de proposito general (AX, BX, CX, DX), los punteros e indices (SP, BP, SI, DI), el registro de <b>FLAGS</b> y el sistema de control. <b>No toca el bus externo</b>: cuando necesita un dato le pide a la BIU.
     </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 380 240" width="100%" style="max-width:380px;font-family:inherit;" role="img" aria-label="Arquitectura interna del 8088">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Arquitectura interna del 8088: EU + BIU</text>
+    <rect x="18" y="30" width="160" height="155" rx="4" fill="#f3f6fb" stroke="#0f3460"/><text x="98" y="46" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">EU &mdash; Unidad de Ejecucion</text>
+    <g font-size="9" fill="#2c3e50" text-anchor="middle"><rect x="33" y="55" width="130" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="98" y="73">ALU</text><rect x="33" y="92" width="130" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="98" y="110">Registros AX BX CX DX</text><rect x="33" y="129" width="130" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="98" y="147">FLAGS</text></g>
+    <rect x="202" y="30" width="160" height="155" rx="4" fill="#f3f6fb" stroke="#0f3460"/><text x="282" y="46" font-size="10" fill="#0f3460" text-anchor="middle" font-weight="bold">BIU &mdash; Interfaz de Bus</text>
+    <g font-size="9" fill="#2c3e50" text-anchor="middle"><rect x="217" y="55" width="130" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="282" y="73">Segmentos CS DS SS ES</text><rect x="217" y="92" width="130" height="28" fill="#eef1f7" stroke="#0f3460"/><text x="282" y="110">IP (puntero de instr.)</text><rect x="217" y="129" width="130" height="28" fill="#eef1f7" stroke="#e94560"/><text x="282" y="147">Cola prefetch (6 bytes)</text></g>
+    <line x1="178" y1="106" x2="202" y2="106" stroke="#0f3460" stroke-width="1.5"/><polygon points="202,106 195,102 195,110" fill="#0f3460"/>
+    <line x1="282" y1="185" x2="282" y2="205" stroke="#0f3460"/><rect x="120" y="205" width="240" height="22" rx="3" fill="#0f3460"/><text x="240" y="220" font-size="9" fill="#fff" text-anchor="middle">Bus del sistema (datos + direcciones 20 bits)</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> La EU ejecuta mientras la BIU trae instrucciones por adelantado a la cola: ese solapamiento es el paralelismo interno del 8088 &mdash; <i>adaptado de Stallings / apunte Perez</i></div>
+    </div>
     <h4>La cola de instrucciones (prefetch queue)</h4>
     <p style="font-size:0.92rem;">Es una pequena memoria interna FIFO de <b>4 bytes en el 8088</b> (6 bytes en el 8086). Cuando el bus esta libre, la BIU se adelanta y va copiando los proximos bytes de programa a la cola. Asi, cuando la EU pide la proxima instruccion, ya esta adentro y no hay que esperar un ciclo de lectura externo. Esto <b>solapa el fetch con la ejecucion</b>: se busca la siguiente instruccion mientras se ejecuta la actual.</p>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
@@ -5974,6 +5986,29 @@ impar:INC SI
     <li><b>IP (Instruction Pointer):</b> offset de la proxima instruccion dentro de CS. La direccion fisica de lo que se ejecuta es siempre <b>CS:IP</b>. El programador no lo modifica directamente: lo cambian los saltos, CALL, RET e interrupciones.</li>
     <li><b>FLAGS:</b> registro de banderas (se detalla abajo).</li>
     </ul>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 360 250" width="100%" style="max-width:360px;font-family:inherit;" role="img" aria-label="Mapa de registros del 8088">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Registros del 8088 (16 bits)</text>
+    <text x="20" y="38" font-size="9" fill="#7f8c8d">Proposito general (parte alta | baja)</text>
+    <g font-size="9" fill="#fff" text-anchor="middle">
+    <rect x="20" y="44" width="75" height="20" fill="#0f3460"/><rect x="95" y="44" width="75" height="20" fill="#3a5a86"/><text x="57" y="58">AH</text><text x="132" y="58">AL</text><text x="178" y="58" fill="#2c3e50" text-anchor="start">AX</text>
+    <rect x="20" y="68" width="75" height="20" fill="#0f3460"/><rect x="95" y="68" width="75" height="20" fill="#3a5a86"/><text x="57" y="82">BH</text><text x="132" y="82">BL</text><text x="178" y="82" fill="#2c3e50" text-anchor="start">BX</text>
+    <rect x="20" y="92" width="75" height="20" fill="#0f3460"/><rect x="95" y="92" width="75" height="20" fill="#3a5a86"/><text x="57" y="106">CH</text><text x="132" y="106">CL</text><text x="178" y="106" fill="#2c3e50" text-anchor="start">CX</text>
+    <rect x="20" y="116" width="75" height="20" fill="#0f3460"/><rect x="95" y="116" width="75" height="20" fill="#3a5a86"/><text x="57" y="130">DH</text><text x="132" y="130">DL</text><text x="178" y="130" fill="#2c3e50" text-anchor="start">DX</text>
+    </g>
+    <text x="215" y="38" font-size="9" fill="#7f8c8d">Punteros / indices y segmentos</text>
+    <g font-size="9" fill="#fff" text-anchor="middle">
+    <rect x="215" y="44" width="60" height="20" fill="#1abc9c"/><text x="245" y="58">SP</text><rect x="215" y="68" width="60" height="20" fill="#1abc9c"/><text x="245" y="82">BP</text><rect x="215" y="92" width="60" height="20" fill="#1abc9c"/><text x="245" y="106">SI</text><rect x="215" y="116" width="60" height="20" fill="#1abc9c"/><text x="245" y="130">DI</text>
+    <rect x="285" y="44" width="60" height="20" fill="#9b59b6"/><text x="315" y="58">CS</text><rect x="285" y="68" width="60" height="20" fill="#9b59b6"/><text x="315" y="82">DS</text><rect x="285" y="92" width="60" height="20" fill="#9b59b6"/><text x="315" y="106">SS</text><rect x="285" y="116" width="60" height="20" fill="#9b59b6"/><text x="315" y="130">ES</text>
+    </g>
+    <rect x="20" y="150" width="150" height="20" fill="#e67e22"/><text x="95" y="164" font-size="9" fill="#fff" text-anchor="middle">IP (puntero de instruccion)</text>
+    <text x="20" y="192" font-size="9" fill="#7f8c8d">FLAGS (banderas)</text>
+    <g font-size="8" fill="#fff" text-anchor="middle">
+    <rect x="20" y="198" width="30" height="20" fill="#e94560"/><text x="35" y="212">OF</text><rect x="50" y="198" width="30" height="20" fill="#0f3460"/><text x="65" y="212">DF</text><rect x="80" y="198" width="30" height="20" fill="#0f3460"/><text x="95" y="212">IF</text><rect x="110" y="198" width="30" height="20" fill="#0f3460"/><text x="125" y="212">TF</text><rect x="140" y="198" width="30" height="20" fill="#e94560"/><text x="155" y="212">SF</text><rect x="170" y="198" width="30" height="20" fill="#e94560"/><text x="185" y="212">ZF</text><rect x="200" y="198" width="30" height="20" fill="#e94560"/><text x="215" y="212">AF</text><rect x="230" y="198" width="30" height="20" fill="#e94560"/><text x="245" y="212">PF</text><rect x="260" y="198" width="30" height="20" fill="#e94560"/><text x="275" y="212">CF</text>
+    </g>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Generales (AX-DX, accesibles por mitades H/L), punteros/indices, registros de segmento, IP y FLAGS (en rojo las de estado; en azul las de control) &mdash; <i>adaptado del apunte Perez / Intel</i></div>
+    </div>
     <h4>El registro de FLAGS (16 bits, 9 banderas utiles)</h4>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>De estado</b> (las pone la ALU segun el resultado): <b>CF</b> Carry (arrastre/prestamo del bit mas alto), <b>ZF</b> Zero (resultado = 0), <b>SF</b> Sign (bit de signo, refleja el MSB), <b>OF</b> Overflow (desborde con signo), <b>PF</b> Parity (numero par de unos), <b>AF</b> Auxiliary Carry (arrastre del nibble bajo, para ajuste decimal).<br><br>
@@ -5988,6 +6023,21 @@ impar:INC SI
     La BIU toma el <b>registro de segmento</b> (16 bits), lo <b>desplaza 4 bits a la izquierda</b> (que es lo mismo que multiplicar por 16, o sea agregarle un 0 en hexadecimal a la derecha) y le <b>suma el offset</b> de 16 bits. El resultado son los 20 bits de la direccion fisica.<br><br>
     <b>Direccion fisica = (Segmento &times; 16) + Offset</b><br>
     El segmento siempre apunta a un comienzo de 16 bytes (se le llama "parrafo"); el offset dice cuanto avanzas dentro de ese segmento.
+    </div>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 420 175" width="100%" style="max-width:420px;font-family:inherit;" role="img" aria-label="Calculo de direccion fisica por segmentacion">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Direccion fisica = Segmento x 16 + Offset</text>
+    <rect x="40" y="38" width="160" height="26" fill="#9b59b6" stroke="#0f3460"/><text x="120" y="55" font-size="10" fill="#fff" text-anchor="middle">Segmento (16 bits)</text>
+    <rect x="200" y="38" width="40" height="26" fill="#cdb4db" stroke="#0f3460"/><text x="220" y="55" font-size="10" fill="#2c3e50" text-anchor="middle">0000</text>
+    <text x="250" y="55" font-size="9" fill="#7f8c8d">&larr; corrido 4 bits (x16)</text>
+    <rect x="80" y="74" width="160" height="26" fill="#1abc9c" stroke="#0f3460"/><text x="160" y="91" font-size="10" fill="#fff" text-anchor="middle">Offset (16 bits)</text>
+    <text x="60" y="91" font-size="13" fill="#2c3e50">+</text>
+    <line x1="40" y1="108" x2="240" y2="108" stroke="#0f3460"/>
+    <rect x="40" y="114" width="200" height="28" fill="#e94560" stroke="#0f3460"/><text x="140" y="132" font-size="10" fill="#fff" text-anchor="middle">Direccion fisica (20 bits)</text>
+    <text x="270" y="120" font-size="9" fill="#2c3e50">20 bits =</text><text x="270" y="134" font-size="9" fill="#2c3e50">1 MB direccionable</text>
+    <text x="40" y="162" font-size="9" fill="#7f8c8d">Ej: CS=1000h, IP=2000h &rarr; 1000h x 16 + 2000h = 10000h + 2000h = 12000h</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> El segmento se corre 4 bits (x16) y se le suma el offset; dos registros de 16 bits generan una direccion de 20 bits (1 MB) &mdash; <i>adaptado del apunte Perez</i></div>
     </div>
     <h4>Ejemplo resuelto 1 (el clasico de examen)</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
@@ -6094,6 +6144,23 @@ impar:INC SI
     <li><b>Software:</b> la instruccion <b>INT n</b> (n de 0 a 255) genera la interrupcion numero n. Asi se piden los servicios del DOS/BIOS (ej. INT 21H).</li>
     <li><b>Internas (excepciones):</b> las genera el propio procesador, como la <b>division por cero</b> (INT 0) o el modo paso a paso por TF (INT 1).</li>
     </ul>
+    <div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+    <svg viewBox="0 0 360 230" width="100%" style="max-width:360px;font-family:inherit;" role="img" aria-label="Tabla de vectores de interrupcion del 8088">
+    <text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Tabla de vectores de interrupcion (IVT)</text>
+    <text x="70" y="36" font-size="9" fill="#7f8c8d" text-anchor="end">Direccion</text><text x="150" y="36" font-size="9" fill="#7f8c8d" text-anchor="middle">IP (2 bytes)</text><text x="270" y="36" font-size="9" fill="#7f8c8d" text-anchor="middle">CS (2 bytes)</text>
+    <g font-size="9">
+    <text x="70" y="56" fill="#2c3e50" text-anchor="end">00000h</text><rect x="90" y="44" width="120" height="18" fill="#eef1f7" stroke="#0f3460"/><rect x="210" y="44" width="120" height="18" fill="#dfe6f2" stroke="#0f3460"/><text x="345" y="57" fill="#e94560" text-anchor="end" font-weight="bold">Tipo 0</text>
+    <text x="70" y="78" fill="#2c3e50" text-anchor="end">00004h</text><rect x="90" y="66" width="120" height="18" fill="#eef1f7" stroke="#0f3460"/><rect x="210" y="66" width="120" height="18" fill="#dfe6f2" stroke="#0f3460"/><text x="345" y="79" fill="#2c3e50" text-anchor="end">Tipo 1</text>
+    <text x="70" y="100" fill="#2c3e50" text-anchor="end">00008h</text><rect x="90" y="88" width="120" height="18" fill="#eef1f7" stroke="#0f3460"/><rect x="210" y="88" width="120" height="18" fill="#dfe6f2" stroke="#0f3460"/><text x="345" y="101" fill="#2c3e50" text-anchor="end">Tipo 2</text>
+    <text x="70" y="122" fill="#2c3e50" text-anchor="end">0000Ch</text><rect x="90" y="110" width="120" height="18" fill="#eef1f7" stroke="#0f3460"/><rect x="210" y="110" width="120" height="18" fill="#dfe6f2" stroke="#0f3460"/><text x="345" y="123" fill="#2c3e50" text-anchor="end">Tipo 3</text>
+    <text x="150" y="146" fill="#7f8c8d" text-anchor="middle">. . .</text><text x="270" y="146" fill="#7f8c8d" text-anchor="middle">. . .</text>
+    <text x="70" y="170" fill="#2c3e50" text-anchor="end">003FCh</text><rect x="90" y="158" width="120" height="18" fill="#eef1f7" stroke="#0f3460"/><rect x="210" y="158" width="120" height="18" fill="#dfe6f2" stroke="#0f3460"/><text x="345" y="171" fill="#2c3e50" text-anchor="end">Tipo 255</text>
+    </g>
+    <text x="10" y="198" font-size="9" fill="#2c3e50">Direccion del vector = Tipo x 4. Cada entrada = 4 bytes (IP + CS = nuevo</text>
+    <text x="10" y="212" font-size="9" fill="#2c3e50">CS:IP del manejador). 256 tipos x 4 = 1 KB, fijos en 00000h&ndash;003FFh.</text>
+    </svg>
+    <div style="font-size:0.8rem;color:#7f8c8d;margin-top:6px;text-align:center;"><b>Figura.</b> Los 256 vectores ocupan el primer KB de memoria; cada uno guarda el CS:IP de su rutina de servicio &mdash; <i>adaptado del apunte Perez / Intel</i></div>
+    </div>
     <h4>La tabla de vectores de interrupcion</h4>
     <div style="background:#fff8e1;border-left:4px solid #ffc107;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     Esta en los <b>primeros 1024 bytes</b> de memoria (direcciones 00000H a 003FFH). Hay <b>256 vectores</b>, uno por cada numero de interrupcion. Cada vector ocupa <b>4 bytes</b>: 2 para el nuevo IP y 2 para el nuevo CS de la rutina.<br>
