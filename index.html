@@ -5345,6 +5345,15 @@ impar:INC SI
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.91rem;">
     <b>Por que importa en la practica:</b> fabricar un solo tipo de compuerta (NAND) abarata e simplifica: menos modelos distintos de chip en inventario, y la NAND es muy compacta en tecnologia CMOS. Chips tipicos de catedra: 74HC00 (NAND de 2 entradas), 74HC30 (NAND de 8 entradas), 74HC02 (NOR), 74HC86 (XOR).
     </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Mandado &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Familias logicas reales:</b> <b>TTL</b> (bipolar, rapida, mas consumo) y <b>CMOS</b> (MOS, consumo bajisimo, hoy domina); cada una fija los <b>niveles de tension</b> para el 0 y el 1 y el <b>margen de ruido</b>.</li>
+    <li><b>Fan-out:</b> cuantas entradas puede atacar una salida sin degradar el nivel; <b>fan-in</b>: numero de entradas de la compuerta.</li>
+    <li><b>Retardo de propagacion:</b> tiempo entre que cambia la entrada y responde la salida; la suma de retardos por el camino mas largo <b>fija la velocidad maxima</b> del circuito (clave para el pipeline de U6).</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> por la tecnologia: TTL vs CMOS + fan-out + retardo de propagacion.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> cada compuerta hace una operacion booleana, y como NAND (o NOR) sola permite armar AND, OR y NOT gracias a De Morgan, con un unico tipo de compuerta se construye cualquier sistema digital de la materia.
     </div>` },
@@ -5394,6 +5403,15 @@ impar:INC SI
     S = A XOR B XOR Ci = (1 XOR 1) XOR 1 = 0 XOR 1 = <b>1</b>.<br>
     Co = A&middot;B + Ci&middot;(A XOR B) = (1&middot;1) + 1&middot;(0) = 1 + 0 = <b>1</b>.<br>
     Resultado: suma 1, acarreo 1, o sea 1+1+1 = 11 en binario = 3 decimal. Correcto.
+    </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings y Mandado &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Sumador con acarreo anticipado (carry-lookahead):</b> el sumador <b>ripple</b> es lento porque el acarreo se propaga bit a bit; el CLA calcula <b>todos los acarreos en paralelo</b> con la logica de <b>generar (G=A&middot;B)</b> y <b>propagar (P=A+B)</b>. Asi suman las ALU rapidas.</li>
+    <li><b>MUX como generador universal:</b> un multiplexor de n selectores implementa <b>cualquier funcion de n variables</b> conectando 0/1 a sus entradas de datos (las entradas son la tabla de verdad).</li>
+    <li><b>Decodificador + OR</b> arma cualquier suma de productos directo desde la tabla.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;por que el ripple es lento y como se arregla?&rdquo;: carry-lookahead (generar / propagar).</span>
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> los combinacionales (MUX/DEMUX, codif/decod, sumadores, comparadores, paridad) son circuitos sin memoria armados con compuertas que operan los bits de la U1 al instante; el full adder, encadenado, es el corazon aritmetico que lleva derecho a la ALU.
