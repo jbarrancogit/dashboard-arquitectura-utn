@@ -4860,6 +4860,16 @@ impar:INC SI
     <b>Rango vs precision (el compromiso):</b> mas bits al <b>exponente</b> = mayor <b>rango</b> (numeros mas grandes y mas chicos); mas bits a la <b>mantisa</b> = mayor <b>precision</b> (mas cifras significativas, menos error de redondeo). Por eso simple alcanza para mucho, pero la ciencia usa doble.
     </div>
     <p style="font-size:0.92rem;"><b>Sumar/restar en flotante:</b> primero hay que <b>igualar los exponentes</b> (correr la mantisa del menor), recien ahi sumar/restar las mantisas, y al final <b>renormalizar</b>. Multiplicar/dividir es mas directo: se multiplican/dividen mantisas y se suman/restan exponentes.</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings, cap. 9 &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Suma/resta paso a paso:</b> (1) igualar exponentes desplazando la mantisa del menor; (2) sumar/restar mantisas; (3) <b>renormalizar</b>; (4) <b>redondear</b>. Si los exponentes difieren mucho, el sumando chico se <b>absorbe</b> (se pierde).</li>
+    <li><b>Cuatro modos de redondeo IEEE:</b> al mas cercano con desempate <b>al par</b> (el default, evita sesgo), hacia +&infin;, hacia &minus;&infin; y hacia 0 (truncar).</li>
+    <li><b>Bits de guarda (guard, round, sticky):</b> bits extra que el hardware conserva <i>durante</i> la operacion para redondear bien y no acumular error.</li>
+    <li><b>Exponente fuera de rango:</b> se pasa &rarr; <b>&plusmn;&infin;</b>; no llega &rarr; <b>subnormales</b> (precision que cae de a poco) o 0.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;como opera una suma la FPU?&rdquo;: los 4 pasos + redondeo al par.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> IEEE 754 guarda un real como signo + exponente sesgado (Exceso 127/1023) + mantisa normalizada con un 1 implicito, logrando enorme rango y buena precision; ese formato es el que despues opera la unidad de punto flotante del procesador.
     </div>` },
@@ -5067,6 +5077,15 @@ impar:INC SI
     Palabra transmitida (posiciones 1 a 7) = p1 p2 b3 p4 b5 b6 b7 = <b>0 1 1 0 0 1 1</b>.<br><br>
     <b>Prueba de correccion:</b> supongamos que llega con la posicion 5 dada vuelta &rarr; 0110<b>1</b>11. Recalculo: el sindrome (p4 p2 p1) da el numero <b>101 = 5</b> &rarr; el bit 5 esta mal; lo invierto y recupero el dato. Magia, sin pedir retransmision.
     </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Mandado y Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Por que el sindrome ES la posicion (Mandado):</b> cada paridad p<sub>i</sub> cubre las posiciones cuyo numero, en binario, tiene un 1 en el bit i. Si se corrompe la posicion k, fallan exactamente los chequeos de los 1 de k &rarr; el sindrome leido <b>da k</b>. Es construccion, no casualidad.</li>
+    <li><b>SEC-DED (Stallings):</b> con un bit de paridad global extra, Hamming pasa a <b>corregir 1 / detectar 2</b> (Dm = 4). Es lo que usa la memoria ECC real.</li>
+    <li><b>Memoria ECC (Stallings):</b> sobre una palabra de K bits agrega ~log<sub>2</sub>K bits y corrige errores de 1 bit <i>al vuelo</i> (soft errors por radiacion). Cierra el circulo teoria&harr;hardware.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;por que detecta DONDE esta el error?&rdquo;: por la cobertura segun los bits del numero de posicion.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> Hamming coloca p bits de paridad en posiciones potencia de 2 (con 2<sup>p</sup> &ge; n+p+1) para que el sindrome apunte exacto al bit fallado; alcanza Dm = 3 y corrige 1 error, base de la memoria ECC.
     </div>` },
@@ -5245,6 +5264,16 @@ impar:INC SI
     <b>Grupo 1:</b> las dos filas ab=00 y ab=10 completas (8 unos: minterms 0,1,2,3,8,9,10,11). Con wraparound son adyacentes (arriba toca abajo). En esas 8 casillas <b>a</b>, <b>c</b> y <b>d</b> toman todos sus valores; lo unico que NO cambia es <b>b = 0</b> &rarr; el grupo aporta <b>b'</b>.<br>
     <b>Grupo 2:</b> las dos columnas cd=11 y cd=10 completas (8 unos: 2,3,6,7,10,11,14,15). Ahi varian a, b y d; lo unico comun es <b>c = 1</b> &rarr; aporta <b>c</b>.<br>
     Resultado: <b>F = b' + c</b>. Es la forma minima <b>unica</b>: esos dos bloques de 8 son los unicos implicantes primos posibles y ambos son <b>esenciales</b> (no hay agrupamiento alternativo que de otra cosa). Lo clave del metodo: cada grupo de 8 borra 3 variables y deja un solo literal; aca quedaron solo dos literales (b' y c).
+    </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings y Mandado &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Vocabulario formal (lo que pregunta el examinador):</b> <b>implicante</b> = grupo valido (potencia de 2); <b>implicante primo</b> = el grupo mas grande posible (no se puede agrandar); <b>primo esencial</b> = el unico que cubre cierto 1.</li>
+    <li><b>Procedimiento optimo:</b> primero tomas todos los <b>primos esenciales</b> (son obligatorios) y recien despues cubris los 1 que quedan con el minimo de primos.</li>
+    <li><b>Quine-McCluskey (Stallings):</b> el metodo tabular que automatiza Karnaugh cuando hay mas de 4-5 variables (donde el mapa visual ya no alcanza); es el algoritmo detras de las herramientas.</li>
+    <li><b>Azares (hazards) estaticos:</b> dos grupos adyacentes que no se solapan pueden producir un glitch; se evita con un <b>grupo redundante</b>.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> como minimizas: nombra los <b>primos esenciales</b> al agrupar.</span>
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> Karnaugh ordena los 1 en una grilla Gray y los agrupa en bloques potencia de 2 lo mas grandes posible (con wraparound y solape permitidos); cada bloque borra las variables que cambian y deja la funcion minima lista para construir con menos compuertas.
@@ -5431,6 +5460,16 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:5px;">1</td><td style="border:1px solid #ddd;padding:5px;">1</td><td style="border:1px solid #ddd;padding:5px;">Q'</td><td style="border:1px solid #ddd;padding:5px;">toggle</td></tr>
     </table>
     Biestable D: con D=1 &rarr; Q*=1; con D=0 &rarr; Q*=0 (Q* = D, siempre). El SR realizado con dos NAND (o dos NOR) cruzadas es la celula basica de la que salen todos.
+    </div>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Mandado &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>El problema de la transparencia:</b> un latch (por nivel) deja <i>pasar</i> la entrada mientras el reloj esta activo; en un lazo realimentado eso causa <b>carreras</b> (el dato da varias vueltas en un mismo semiciclo).</li>
+    <li><b>Maestro-esclavo (Mandado):</b> dos latches en cascada con relojes opuestos; el maestro captura en un semiciclo y el esclavo entrega en el otro &rarr; la salida cambia <b>una sola vez por ciclo</b>. Asi nace el disparo <b>por flanco</b>.</li>
+    <li><b>Setup y hold:</b> la entrada debe estar estable un tiempo <i>antes</i> (setup) y <i>despues</i> (hold) del flanco; si no, <b>metaestabilidad</b>. De ahi sale la frecuencia maxima de reloj.</li>
+    <li><b>Entradas asincronas (preset/clear):</b> fuerzan el estado sin esperar el reloj (inicializacion).</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;por que por flanco y no por nivel?&rdquo;: maestro-esclavo + carreras.</span>
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el biestable es una memoria de 1 bit con dos estados estables; SR es la celula base (con caso prohibido), JK lo arregla agregando toggle, D copia la entrada y T invierte; sincronizados por reloj, son la pieza que convierte un circuito sin memoria en uno secuencial, y el escalon directo hacia los registros, contadores y memorias de la U3.
@@ -5973,6 +6012,15 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>Cantidad de instrucciones</b></td><td style="border:1px solid #ddd;padding:6px;">Pocas</td><td style="border:1px solid #ddd;padding:6px;">Muchas (facil agregar)</td></tr>
     </table>
     <p style="font-size:0.92rem;"><b>Hilo a futuro:</b> el microcodigo es la marca de las CPU <b>CISC</b> (como el 8088 de la U5, que tiene su propia micro-ROM); las <b>RISC</b> nacen justamente de eliminar el microcodigo para correr todo por hardware rapido (U6).</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings y Patterson &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Wilkes (1951):</b> ideo el control microprogramado: en vez de logica cableada, una <b>memoria de control</b> (ROM) guarda microinstrucciones, y cada instruccion-maquina dispara su microrrutina.</li>
+    <li><b>Horizontal vs vertical:</b> microinstruccion <b>horizontal</b> = muchos bits, casi uno por senal (rapida, ROM ancha, poca codificacion); <b>vertical</b> = campos codificados que un decodificador expande (ROM angosta, mas lenta). Trade-off ancho vs velocidad.</li>
+    <li><b>Comparacion de examen:</b> <b>cableada</b> = rapida pero rigida y dificil de modificar (ideal RISC, pocas instrucciones); <b>microprogramada</b> = mas lenta pero flexible y facil de extender/corregir (ideal CISC; el 8088 es microprogramado).</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> el origen: nombra a <b>Wilkes</b> y el eje &ldquo;velocidad (cableada/RISC) vs flexibilidad (micro/CISC)&rdquo;.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la UC microprogramada guarda el control como microinstrucciones (en la Blue, 45 bits, campos Accion/Test/Envie/Reciba/Falso/Exito) en una ROM-firmware; cada macroinstruccion corre su microprograma; es mas lenta pero flexible.
     </div>` },
@@ -6233,6 +6281,17 @@ impar:INC SI
     <b>Reglas que cierran el tema:</b> solo <b>BX, BP, SI, DI</b> sirven para apuntar a memoria (no AX, CX, DX). La base es siempre BX o BP; el indice siempre SI o DI. Si usas BP, el segmento por defecto es <b>SS</b>; con el resto, <b>DS</b>. Cuanto mas componentes tiene el calculo, mas tarda: en el 8088 esas sumas estan en microcodigo (CROM), por eso los modos complejos son mas lentos (recien el 80186 los cablea).
     </div>
     <p style="font-size:0.92rem;"><b>Hilo con la MEI:</b> estos modos son la version "comercial" de lo que la Maquina Elemental Indexada agrego de manera basica (directo, indirecto, indexado con RIF/RID); aca SI/DI cumplen el rol de los registros indice, y BX/BP el del registro base.</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>El trade-off central (Stallings):</b> cada modo equilibra <b>rango</b> de direcciones vs <b>bits</b> en la instruccion vs <b>flexibilidad</b>. No hay un modo "mejor": cada uno resuelve un caso.</li>
+    <li><b>Inmediato:</b> constante en la propia instruccion (rapidisimo, sin tocar memoria) pero valor fijo y acotado por el campo.</li>
+    <li><b>Indirecto / registro indirecto:</b> habilita <b>punteros</b> &mdash; la direccion se calcula en ejecucion &rarr; estructuras dinamicas y recursion.</li>
+    <li><b>Base + indice + desplazamiento:</b> calza justo con <b>arrays y structs</b> (base = inicio, indice = elemento, desplazamiento = campo); un solo modo recorre un vector.</li>
+    <li><b>Hilo con U6:</b> el 8088 ofrece muchos modos (CISC); RISC los recorta a load/store + pocos modos para que el <b>pipeline</b> no se complique.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> &ldquo;para que tantos modos?&rdquo;: cada uno mapea una estructura de datos del lenguaje.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> hay modos donde el dato esta en la instruccion (inmediato) o en un registro, y modos donde esta en memoria, cuyo <b>offset</b> se arma sumando base (BX/BP) + indice (SI/DI) + desplazamiento; ese offset siempre se combina con un segmento para dar los 20 bits.
     </div>` },
@@ -6560,6 +6619,16 @@ impar:INC SI
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>De datos</b></td><td style="border:1px solid #ddd;padding:6px;">Dependencia: usa un resultado aun no escrito</td><td style="border:1px solid #ddd;padding:6px;">Forwarding; stall/burbuja; reordenar (compilador)</td></tr>
     <tr><td style="border:1px solid #ddd;padding:6px;"><b>De control</b></td><td style="border:1px solid #ddd;padding:6px;">Salto: no se sabe la proxima instruccion</td><td style="border:1px solid #ddd;padding:6px;">Prediccion (estatica/dinamica), especulacion, delay slot</td></tr>
     </table>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Patterson y Hennessy, COD &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Forwarding (cortocircuito):</b> en vez de esperar al WB, se <b>adelanta</b> el resultado desde la salida de EX/MEM directo a la entrada de la ALU de la instruccion siguiente. Elimina casi todos los hazards de datos sin burbujas.</li>
+    <li><b>El caso que el forwarding NO salva (load-use):</b> un LOAD entrega el dato recien en MEM; si la instruccion que sigue lo usa, hay que meter <b>1 burbuja</b> si o si (o el compilador reordena).</li>
+    <li><b>Hazard de control &mdash; delay slot:</b> la arquitectura ejecuta <i>siempre</i> la instruccion que sigue al salto (el &ldquo;hueco de retardo&rdquo;); el compilador la rellena con trabajo util.</li>
+    <li><b>Prediccion de saltos:</b> estatica (siempre tomado / no) vs dinamica (tabla de historia, BHT); baja la penalizacion del salto.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b> como se resuelven: &ldquo;datos &rarr; forwarding; load-use &rarr; 1 burbuja; control &rarr; delay slot o prediccion&rdquo;.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> los hazards son lo que rompe el pipeline &mdash; <b>estructurales</b> (chocan por un recurso, se duplica), <b>de datos</b> (dependencia, se arregla con forwarding o burbuja) y <b>de control</b> (saltos, se atacan con prediccion, especulacion y delay slot); resolverlos bien es lo que hace que RISC consiga su ~1 instruccion por ciclo.
     </div>` },
@@ -6636,6 +6705,16 @@ impar:INC SI
     </div>
     <h4>Cache multinivel (L1, L2, L3)</h4>
     <p style="font-size:0.92rem;">Los procesadores modernos apilan varios niveles, mas cerca/lejos del core: <b>L1</b> el mas chico y rapido (~32 KB, dentro del core, a veces separada en L1-I y L1-D), <b>L2</b> mayor (~256 KB a 1 MB, por core), <b>L3</b> el mas grande (varios MB, compartida entre cores). Cada nivel es mas lento pero mas grande &mdash; es una <b>jerarquia de memoria</b>.</p>
+    <div style="border-left:4px solid #0f3460;background:#f4f7fb;padding:12px 16px;margin:12px 0;border-radius:6px;font-size:0.92rem;">
+    <b style="color:#0f3460;">Profundizacion &mdash; bibliografia avanzada</b> <span style="font-size:0.82rem;color:#7f8c8d;">(Hennessy y Stallings &middot; municion para repreguntas)</span>
+    <ul style="padding-left:20px;margin:8px 0;">
+    <li><b>Localidad formalizada (Hennessy):</b> <b>temporal</b> (lo usado hace poco se reusa) y <b>espacial</b> (lo cercano se usa); por eso se traen <b>bloques</b>, no bytes. Es el cimiento de toda la jerarquia.</li>
+    <li><b>Las 3 C de los fallos (Hennessy):</b> <b>compulsivos</b> (primer acceso, inevitables), <b>de capacidad</b> (no entra el working set) y <b>de conflicto</b> (colision en el mapeo). Vocabulario de oro para el oral.</li>
+    <li><b>Write-through vs write-back (Stallings):</b> <b>through</b> escribe a la vez en cache y RAM (simple, coherente, mas trafico); <b>back</b> escribe solo en cache y marca <b>dirty</b>, baja a RAM al desalojar (rapido, menos trafico, necesita bit sucio).</li>
+    <li><b>Reemplazo:</b> <b>LRU</b> (menos usado recientemente), FIFO o aleatorio; LRU rinde mejor pero es caro en alta asociatividad.</li>
+    </ul>
+    <span style="color:#0f3460;"><b>Si te repreguntan</b>: &ldquo;al escribir &rarr; through vs back + dirty; tipos de fallo &rarr; las 3 C&rdquo;.</span>
+    </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la cache es SRAM rapida entre CPU y RAM que aprovecha la <b>localidad</b> (temporal y espacial) para servir casi todo desde ahi (hit); la direccion se parte en <b>tag/indice/offset</b>, el mapeo puede ser <b>directo, asociativo o asociativo por conjuntos</b>, la escritura <b>write-through o write-back</b>, y se organiza en niveles <b>L1/L2/L3</b>.
     </div>` },
