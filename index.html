@@ -2478,7 +2478,7 @@ ADD AX, BX"></textarea>
         <h3 style="margin-top:0;">Protocolo del dia del examen</h3>
 
         <div style="margin-bottom:10px;">
-          <strong>Noche previa (jue 2 jul):</strong>
+          <strong>Noche previa (jue 30 jul):</strong>
           <ul style="margin:4px 0 0 0;padding-left:20px;font-size:0.9rem;">
             <li>21:00 stop total. Preparar DNI, libreta UTN, biromes (3: azul/negra/repuesto), calculadora, agua.</li>
             <li>Cena con carbohidrato lento (arroz, fideos, pan integral). Sin alcohol.</li>
@@ -2487,7 +2487,7 @@ ADD AX, BX"></textarea>
         </div>
 
         <div style="margin-bottom:10px;">
-          <strong>Manana (vie 3 jul):</strong>
+          <strong>Manana (vie 31 jul):</strong>
           <ul style="margin:4px 0 0 0;padding-left:20px;font-size:0.9rem;">
             <li>Despertar 2h antes del examen.</li>
             <li>Desayuno proteina + carbohidrato lento. Cafe moderado. Sin azucar pico.</li>
@@ -2535,15 +2535,15 @@ ADD AX, BX"></textarea>
 
     <div class="content-section" id="section-plan">
       <div class="card" style="margin-bottom:12px;">
-        <h2>Plan de Estudio — 4 Semanas + Mesa (revisado 8 jun)</h2>
+        <h2>Plan de Estudio — 25 dias: 3 semanas de contenido + repaso + Mesa (revisado 6 jul)</h2>
         <p style="font-size:0.85rem;color:var(--text-secondary);">La <strong>Recta Final</strong> (debajo) es lo accionable: que hacer cada uno de los dias que quedan. Esta vista por semanas es el macro: prioridad por peso real &mdash; U1/U2/U5/U4 cubren el 93% de la admision; los simulacros NO se tocan (es lo que falto en AM2). Se aprende cada unidad entrando por la capa Feynman, despues el cuerpo, y cerrando con active recall. La semana actual aparece resaltada.</p>
       </div>
 
-      <!-- ===== RECTA FINAL: calendario 19 dias a la mesa (agregado 14 jun) ===== -->
+      <!-- ===== RECTA FINAL: calendario 25 dias a la mesa (reescrito 6 jul) ===== -->
       <div class="card" style="margin-bottom:14px;border:2px solid var(--accent-secondary);">
-        <h2 style="margin-top:0;">Recta Final &mdash; <span id="rfDias">19</span> dias a la mesa</h2>
+        <h2 style="margin-top:0;">Recta Final &mdash; <span id="rfDias">25</span> dias a la mesa</h2>
         <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:10px;">
-          Calendario dia por dia al vie 3 jul. <strong>Es tu intento 1 de 3</strong> (mesas 3 jul, 31 jul, 28 ago) y la regularizacion NO vence: si hoy no sale, no se pierde nada. Te alcanza con un <strong>6</strong>. El dia de hoy aparece resaltado.
+          Calendario dia por dia al vie 31 jul: <strong>3 semanas de contenido (6&ndash;26 jul) + los ultimos 5 dias de repaso puro (27&ndash;31 jul)</strong>. La regularizacion NO vence y te quedan varias mesas por delante (31 jul, 28 ago, ...): si no sale, no se pierde nada. Te alcanza con un <strong>6</strong>. El dia de hoy aparece resaltado.
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
           <div style="flex:1;min-width:240px;background:rgba(233,69,96,0.08);border-left:3px solid var(--accent-secondary);border-radius:5px;padding:8px 12px;font-size:0.8rem;">
@@ -2554,11 +2554,11 @@ ADD AX, BX"></textarea>
           </div>
         </div>
         <div style="background:rgba(46,184,114,0.10);border-radius:5px;padding:8px 12px;margin-bottom:12px;font-size:0.82rem;">
-          <strong>Regla de oro de estos 19 dias:</strong> cada sesion ARRANCA resolviendo o explicando de memoria, y RECIEN AHI revelas o lees. Hace, no leas &mdash; la teoria sin practica es lo que costo AM2.
+          <strong>Regla de oro de estos 25 dias:</strong> cada sesion ARRANCA resolviendo o explicando de memoria, y RECIEN AHI revelas o lees. Hace, no leas &mdash; la teoria sin practica es lo que costo AM2. Riesgo #1: preparar en vez de estudiar. La teoria ya esta congelada; el contenido arranca HOY.
         </div>
         <div id="rectaFinal"></div>
         <p style="font-size:0.76rem;color:var(--text-secondary);margin:12px 0 0;font-style:italic;">
-          El dia previo (2 jul) no se carga material nuevo: repaso ligero y dormir bien. A la mesa lleva la carpeta de TPs (respaldo visado, costo cero). Llegas, respiras, y rendis el simulacro numero N &mdash; ya lo hiciste varias veces.
+          Los ultimos 5 dias (27&ndash;31 jul) son repaso puro, sin material nuevo. El dia previo (jue 30 jul) cierra con el simulacro final; despues, repaso ligero y dormir bien. A la mesa lleva la carpeta de TPs (respaldo visado, costo cero). Llegas, respiras, y rendis el simulacro numero N &mdash; ya lo hiciste varias veces.
         </p>
       </div>
 
@@ -2778,7 +2778,7 @@ ADD AX, BX"></textarea>
     const STORAGE_KEY_V3 = 'arq_comp_dashboard_v3';
     const STORAGE_KEY_V2 = 'arq_comp_dashboard_v2';
     const STORAGE_KEY_V1 = 'arq_comp_dashboard';
-    const EXAM_DATE = new Date(2026, 6, 3); // July 3, 2026 (3a mesa)
+    const EXAM_DATE = new Date(2026, 6, 31); // July 31, 2026 (mesa fin de julio)
 
     function getDefaultData() {
       return {
@@ -12274,21 +12274,20 @@ const BANCO89 = {"1":{"u":1,"t":"Conversion a decimal (bin, hex, octal)","enun":
     function estadoFaseActual() {
       const today = new Date();
       const phases = [
-        { from: new Date(2026, 4, 28), to: new Date(2026, 5, 3),  label: 'Semana A — Diagnostico + U1' },
-        { from: new Date(2026, 5, 4),  to: new Date(2026, 5, 10), label: 'Semana B — U2 + U3 + U4' },
-        { from: new Date(2026, 5, 11), to: new Date(2026, 5, 17), label: 'Semana C — U5 8088' },
-        { from: new Date(2026, 5, 18), to: new Date(2026, 5, 24), label: 'Semana D — U6+U7 + Sim #1+#2' },
-        { from: new Date(2026, 5, 25), to: new Date(2026, 6, 2),  label: 'Semana E — Repaso puro + Sim #3-5' },
-        { from: new Date(2026, 6, 3),  to: new Date(2026, 6, 3),  label: 'Dia del examen' }
+        { from: new Date(2026, 6, 6),  to: new Date(2026, 6, 12), label: 'Semana 1 — U1 + U2' },
+        { from: new Date(2026, 6, 13), to: new Date(2026, 6, 19), label: 'Semana 2 — U5 + U4 + U3 + Sim #1' },
+        { from: new Date(2026, 6, 20), to: new Date(2026, 6, 26), label: 'Semana 3 — U6 + U7 + integracion + Sim #2/#3' },
+        { from: new Date(2026, 6, 27), to: new Date(2026, 6, 30), label: 'Semana 4 — Repaso puro + Sim #4/#5' },
+        { from: new Date(2026, 6, 31), to: new Date(2026, 6, 31), label: 'Dia de la mesa' }
       ];
       for (const p of phases) if (today >= p.from && today <= p.to) return p.label;
-      if (today < phases[0].from) return 'Setup (pre-Semana A)';
+      if (today < phases[0].from) return 'Setup (pre-Semana 1)';
       return 'Post-examen';
     }
 
     function estadoBloqueantesText() {
       // RESUELTO: consulta con jefe de catedra (jun 2026). Sin bloqueantes administrativos.
-      return 'Sin bloqueantes. Consulta con jefe de catedra resuelta: rendis como REGULAR (regularizacion no vence, via centro de estudiantes); carpeta de TPs y monografia NO son requisito (opcionales como defensa visada). Solo queda inscribirse a la mesa del 3 jul.';
+      return 'Sin bloqueantes. Consulta con jefe de catedra resuelta: rendis como REGULAR (regularizacion no vence, via centro de estudiantes); carpeta de TPs y monografia NO son requisito (opcionales como defensa visada). Solo queda inscribirse a la mesa del 31 jul.';
     }
 
     function renderEstadoSnapshot() {
@@ -12297,10 +12296,10 @@ const BANCO89 = {"1":{"u":1,"t":"Conversion a decimal (bin, hex, octal)","enun":
       const dias = daysUntilExam();
       const fase = estadoFaseActual();
       cont.innerHTML =
-        '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Examen</div><div style="font-weight:600;">3 jul 2026 (vie)</div></div>' +
+        '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Examen</div><div style="font-weight:600;">31 jul 2026 (vie)</div></div>' +
         '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Dias restantes</div><div style="font-weight:600;font-size:1.4rem;color:var(--accent-primary,#ee5a6f);">' + dias + '</div></div>' +
         '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Fase actual</div><div style="font-weight:600;">' + fase + '</div></div>' +
-        '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Chances restantes</div><div style="font-weight:600;">4 (jul 3 / jul 31 / ago 28 / sep)</div></div>';
+        '<div><div style="font-size:0.75rem;color:var(--text-secondary);text-transform:uppercase;">Chances restantes</div><div style="font-weight:600;">4 (jul 31 / ago 28 / sep / ...)</div></div>';
       const blocker = document.getElementById('estadoBloqueantes');
       if (blocker) blocker.innerHTML = '<strong>Bloqueantes:</strong> ' + estadoBloqueantesText();
     }
@@ -12505,34 +12504,34 @@ const BANCO89 = {"1":{"u":1,"t":"Conversion a decimal (bin, hex, octal)","enun":
     }
 
     // ============================================================
-    // WEEKLY PLAN DATA — Reescrito 2026-05-27, alineado a plan_estudio_03jul2026
-    // 5 semanas activas (A-E) + dia del examen. Semana E = 8 dias de repaso puro.
+    // WEEKLY PLAN DATA — Reescrito 2026-07-06 (plan final de 25 dias a la mesa del 31 jul)
+    // 4 semanas activas (1-4) + dia de la mesa. Semana 4 = repaso puro (ultimos 5 dias).
     // ============================================================
     const WEEKLY_PLAN = [
-      { week:1, label:'1', dates:'8 - 14 jun', phase:'Aprender U1 + U2 (55% de la admision, y estan crudas)',
-        learn:'Lun 8: U1 p1 (numeracion, C1/C2, aritmetica + overflow). Mie 10: U1 p2 (IEEE 754, BCD, Gray/Johnson, ASCII, paridad, Hamming, confiabilidad/encriptacion). Vie 12: U2 p1 (Boole, teoremas, De Morgan, canonicas, Karnaugh). Sab 13: U2 p2 (compuertas, MSI MUX/decod/sumador/ALU, biestables). Entrar SIEMPRE por la capa Feynman, despues el cuerpo.',
-        practice:'Active recall escrito al cierre de cada unidad (cerrar el material y escribir de memoria). Sab 13: primeros ejercicios de admision U1/U2 intercalados. Anki U1/U2 diario.',
-        demonstrate:'Dom 14: Feynman grabado de U1 y U2 + correccion + Anki. Avisale a Claude al terminar cada unidad para que te tome el active recall y genere Anki de lo que falle.',
+      { week:1, label:'1', dates:'6 - 12 jul', phase:'Aprender U1 + U2 (55% de la admision, y estan crudas)',
+        learn:'Lun 6: U1 p1 (numeracion, C1/C2, aritmetica + overflow). Mie 8: U1 p2 (IEEE 754, BCD, Gray/Johnson, ASCII, paridad, Hamming). Vie 10: U2 p1 (Boole, teoremas, De Morgan, canonicas, Karnaugh). Sab 11: U2 p2 (compuertas, MSI MUX/decod/sumador/ALU, biestables). Entrar SIEMPRE por la capa Feynman, despues el cuerpo.',
+        practice:'Active recall escrito al cierre de cada unidad. Sab 11: primeros ejercicios de admision U1/U2 intercalados. Mar 7 y Jue 9 (gym): Anki en el celu. Anki U1/U2 diario.',
+        demonstrate:'Feynman grabado de U1 (mie) y U2 (sab). Dom 12: consolidacion U1+U2. Avisale a Claude al cerrar cada unidad para que te tome el active recall y genere Anki de lo que falle.',
         exercises:[1,45] },
-      { week:2, label:'2', dates:'15 - 21 jun', phase:'Aprender U3 + U4 + U5',
-        learn:'Lun 15: U3 Memorias (corta). Mie 17: U4 p1 (von Neumann, registros, ciclo). Vie 19: U4 p2 (microoperaciones, UC, ALU). Sab 20: U5 Assembler 8088 completa (BIU/EU, segmentacion, 8 modos, set, interrupciones).',
-        practice:'Active recall al cierre. Ejercicios de admision U3/U4/U5 intercalados con U1/U2 (interleaving). Anki diario (todas las vencidas).',
-        demonstrate:'Dom 21: Feynman U3/U4/U5 + 1er MINI-SIMULACRO de admision (3-4 ejercicios intercalados U1-U5, con timer).',
+      { week:2, label:'2', dates:'13 - 19 jul', phase:'Aprender U5 + U4 + U3',
+        learn:'Lun 13: U5 p1 (registros 8088, BIU/EU, 8 modos de direccionamiento). Mie 15: U5 p2 (set de instrucciones, programacion, interrupciones). Vie 17: U4 (Maquina Elemental, von Neumann, datapath, ciclo de instruccion). Sab 18: U3 Memorias (jerarquia, SRAM/DRAM, RAS-CAS, cache).',
+        practice:'Active recall al cierre. Ejercicios de admision U5/U4/U3 intercalados con U1/U2 (interleaving). Mar 14 y Jue 16 (gym): Anki en el celu. Anki diario (todas las vencidas).',
+        demonstrate:'Feynman U5 (mie), U4 (vie), U3 (sab). Dom 19: consolidacion + SIMULACRO #1 (admision + oral, con timer).',
         exercises:[46,89] },
-      { week:3, label:'3', dates:'22 - 28 jun', phase:'U6 + U7 (solo para exponer) + 1er SIMULACRO COMPLETO',
-        learn:'Lun 22: U6 (RISC/CISC, pipeline, hazards, cache, DMA, Ryzen). Mie 24: U7 (E/S programada/interrupciones/DMA, 82C55, buses). Vie 26: bolillero - armar exposicion de 2-3 bolillas + Feynman.',
-        practice:'Bolillero diario. Interleaving de toda la materia. Anki las 139.',
-        demonstrate:'Sab 27: SIMULACRO COMPLETO #1 (admision + oral), timer, sin apuntes, iPad nuevo, celu en otra habitacion, box breathing antes. Dom 28: correccion EN FRIO (conceptual / proceso / atencion).',
+      { week:3, label:'3', dates:'20 - 26 jul', phase:'U6 + U7 (para exponer) + integracion + simulacros',
+        learn:'Lun 20: U6 (pipeline, hazards, superescalar/OoO, RISC/CISC, jerarquia de cache). Mie 22: U7 (E/S programada/interrupciones/DMA, 8259, buses PCI/USB). Vie 24 y Sab 25: integracion, hilo conductor U1->U7 y guiones orales.',
+        practice:'Bolillero diario. Interleaving de toda la materia. Mar 21 y Jue 23 (gym): Anki en el celu. Anki las 139.',
+        demonstrate:'Vie 24: SIMULACRO #2 (completo, grabado). Sab 25: reparar puntos debiles + SIMULACRO #3. Dom 26: integracion (hilo conductor + guiones) = CIERRE DE CONTENIDO.',
         exercises:[1,89] },
-      { week:4, label:'4', dates:'29 jun - 2 jul', phase:'Consolidacion (llegar fresco, no quemado)',
-        learn:'CERO contenido nuevo. Solo repaso de errores recurrentes + Feynman de las 9 bolillas.',
-        practice:'Lun 29: SIMULACRO COMPLETO #2 (atacando los puntos flojos del #1). Mar/Mie: correccion + repaso de errores. Bolillero.',
-        demonstrate:'Jue 2: repaso ligero, mapa mental de la materia en 1 hoja, box breathing 2x, dormir 8h, no tocar material despues de las 21h.',
+      { week:4, label:'4', dates:'27 - 30 jul', phase:'REPASO PURO (llegar fresco, no quemado). CERO contenido nuevo',
+        learn:'Nada nuevo. Solo repaso de errores recurrentes, En una frase, hilo conductor y guiones de las bolillas.',
+        practice:'Lun 27: repaso U1+U2 + bolillero + guiones. Mie 29: repaso U3+U6+U7 + bolillero. Bolillero diario.',
+        demonstrate:'Mar 28: SIMULACRO #4 (atacando lo flojo). Jue 30: SIMULACRO #5 (ensayo final) + errores recurrentes. No tocar material despues de las 21h, dormir 8h.',
         exercises:[1,89] },
-      { week:5, label:'MESA', dates:'Vie 3 jul', phase:'Dia de la mesa (rendis REGULAR, aprobas con 6)',
-        learn:'NADA NUEVO. 5 ciclos de box breathing antes de entrar.',
-        practice:'Llegada 30 min antes. Kit: DNI, libreta, biromes, calculadora si aplica, agua.',
-        demonstrate:'MESA: admision (1 ejercicio de los 89) + oral (sacas 2 bolillas, elegis 1). Empezar por lo seguro para construir confianza.',
+      { week:5, label:'MESA', dates:'Vie 31 jul', phase:'Dia de la mesa (rendis REGULAR, aprobas con 6)',
+        learn:'NADA NUEVO. Repaso liviano de manana: En una frase + hilo conductor + guiones. 5 ciclos de box breathing antes de entrar.',
+        practice:'Llegada 30 min antes. Kit: DNI, libreta, biromes, calculadora si aplica, agua. Carpeta de TPs como respaldo.',
+        demonstrate:'MESA: admision (1 ejercicio de los 89) + oral (sacas 2 bolillas, elegis 1). Empezar por lo seguro. Es el simulacro numero N, ya lo hiciste.',
         exercises:[1,89] }
     ];
 
@@ -12540,7 +12539,7 @@ const BANCO89 = {"1":{"u":1,"t":"Conversion a decimal (bin, hex, octal)","enun":
     // WEEKLY PLAN RENDERING
     // ============================================================
     function getCurrentWeek() {
-      const startDate = new Date(2026, 5, 8); // Jun 8, 2026 (arranque Semana 1 del plan revisado)
+      const startDate = new Date(2026, 6, 6); // Jul 6, 2026 (arranque Semana 1 del plan final de 25 dias)
       const now = new Date();
       const diff = Math.floor((now - startDate) / (7 * 86400000)) + 1;
       return Math.min(WEEKLY_PLAN.length, Math.max(1, diff));
@@ -12561,26 +12560,36 @@ const BANCO89 = {"1":{"u":1,"t":"Conversion a decimal (bin, hex, octal)","enun":
       mesa:{t:'MESA', c:'var(--accent-primary)'}
     };
     var RECTA_FINAL = [
-      {d:'2026-06-14', l:'Dom 14/06', fin:true,  f:'admision',  foco:'U2 Boole + combinacionales (la mas probable, 33%). Resolve 5-6 ejercicios de memoria y despues corregi.', s:['banco']},
-      {d:'2026-06-15', l:'Lun 15/06', fin:false, f:'admision',  foco:'U1 numeracion + conversiones + complemento a 2 (la mitad facil del banco).', s:['banco']},
-      {d:'2026-06-16', l:'Mar 16/06', fin:false, f:'rojo',      foco:'U1 rojo: punto flotante IEEE754 + codigos (Hamming, BCD, exceso). Aca va el tiempo extra.', s:['banco','teoria']},
-      {d:'2026-06-17', l:'Mie 17/06', fin:false, f:'admision',  foco:'U2 parte 2: Karnaugh (minimizacion) + secuenciales (biestables, contadores).', s:['banco']},
-      {d:'2026-06-18', l:'Jue 18/06', fin:false, f:'admision',  foco:'U5 8088: modos de direccionamiento. Segunda mas probable en admision (20%).', s:['banco']},
-      {d:'2026-06-19', l:'Vie 19/06', fin:false, f:'admision',  foco:'U4 Maquina Blue: bus, unidad de control, ciclo de instruccion.', s:['banco']},
-      {d:'2026-06-20', l:'Sab 20/06', fin:true,  f:'simulacro', foco:'U3 memorias (rapido, baja prob) + MINI-SIMULACRO admision: 5 ejercicios al azar, cronometrados.', s:['banco','simuladores']},
-      {d:'2026-06-21', l:'Dom 21/06', fin:true,  f:'repaso',    foco:'Corregi el mini-simulacro y reforza lo que fallo. Primera lectura de U6/U7 (oral-only).', s:['banco','teoria']},
-      {d:'2026-06-22', l:'Lun 22/06', fin:false, f:'oral',      foco:'U6 oral: pipeline, RISC/CISC, cache, DMA. Explicalo en voz alta como si rindieras.', s:['teoria','parciales']},
-      {d:'2026-06-23', l:'Mar 23/06', fin:false, f:'oral',      foco:'U7 oral: E/S, buses, transmision. En voz alta, sin leer.', s:['teoria','parciales']},
-      {d:'2026-06-24', l:'Mie 24/06', fin:false, f:'rojo',      foco:'U1 profundo: punto flotante + Hamming otra vez (caen en admision Y en oral).', s:['banco','parciales']},
-      {d:'2026-06-25', l:'Jue 25/06', fin:false, f:'oral',      foco:'U5 + U4 exponer. U5 esta en 5 de 9 bolillas: es la mas frecuente del oral.', s:['parciales','bolillero']},
-      {d:'2026-06-26', l:'Vie 26/06', fin:false, f:'oral',      foco:'U2 + U3 exponer: Boole/secuenciales + memorias.', s:['parciales','bolillero']},
-      {d:'2026-06-27', l:'Sab 27/06', fin:true,  f:'simulacro', foco:'SIMULACRO COMPLETO: 1 ej de admision + saca 2 bolillas, elegi 1 y expone en voz alta (grabate). Cronometrado.', s:['simuladores','bolillero']},
-      {d:'2026-06-28', l:'Dom 28/06', fin:true,  f:'repaso',    foco:'Repaso de lo peor del simulacro + barrido de las preguntas con badge salio 2x/3x.', s:['parciales']},
-      {d:'2026-06-29', l:'Lun 29/06', fin:false, f:'bolillero', foco:'Pasada por las 9 bolillas: 2 min por bolilla diciendo en voz alta que expondrias. Reforza la que menos te gusta.', s:['bolillero']},
-      {d:'2026-06-30', l:'Mar 30/06', fin:false, f:'repaso',    foco:'Profundiza tu punto mas debil + 5 ejercicios de admision al azar mas.', s:['banco','parciales']},
-      {d:'2026-07-01', l:'Mie 01/07', fin:false, f:'simulacro', foco:'SIMULACRO FINAL completo (admision + oral). Corregi y ajuste fino.', s:['simuladores']},
-      {d:'2026-07-02', l:'Jue 02/07', fin:false, f:'ligero',    foco:'Repaso LIGERO: solo salio 2x/3x + tus 3 puntos debiles + lee tranquilo la bolilla que mas te preocupa. NADA nuevo. Dormi bien.', s:['parciales']},
-      {d:'2026-07-03', l:'Vie 03/07', fin:false, f:'mesa',      foco:'MESA. Llega temprano, respira. Es el simulacro numero N, ya lo hiciste. Aprobas con 6.', s:[]}
+      // ---- Semana 1: U1 + U2 (el 55% del peso) ----
+      {d:'2026-07-06', l:'Lun 06/07', fin:false, f:'admision',  foco:'U1 p1: numeracion, C1/C2, aritmetica + overflow. Entra por Feynman, despues el cuerpo, y cierra escribiendo de memoria.', s:['teoria','banco']},
+      {d:'2026-07-07', l:'Mar 07/07', fin:false, f:'ligero',    foco:'Gym + Anki U1 en el celu. Repaso liviano de lo de ayer.', s:['flashcards']},
+      {d:'2026-07-08', l:'Mie 08/07', fin:false, f:'rojo',      foco:'U1 p2: IEEE 754, BCD, Gray/Johnson, ASCII, paridad, Hamming. Feynman U1 grabado al cierre.', s:['teoria','banco']},
+      {d:'2026-07-09', l:'Jue 09/07', fin:false, f:'bolillero', foco:'Gym + Anki U1. Bolillero: 2 min por bolilla de U1 en voz alta.', s:['flashcards','bolillero']},
+      {d:'2026-07-10', l:'Vie 10/07', fin:false, f:'admision',  foco:'U2 p1: Boole, teoremas, De Morgan, canonicas, Karnaugh. La unidad de mayor peso (33%).', s:['teoria','banco']},
+      {d:'2026-07-11', l:'Sab 11/07', fin:true,  f:'admision',  foco:'U2 p2: compuertas, MSI (MUX/decod/sumador/ALU), biestables + primeros ejercicios de admision U1/U2. Feynman U2.', s:['teoria','banco']},
+      {d:'2026-07-12', l:'Dom 12/07', fin:true,  f:'repaso',    foco:'Consolidacion U1+U2: active recall escrito + Anki de lo que falle. Cierra la semana mas pesada.', s:['banco','flashcards']},
+      // ---- Semana 2: U5 + U4 + U3 ----
+      {d:'2026-07-13', l:'Lun 13/07', fin:false, f:'admision',  foco:'U5 p1: registros 8088, BIU/EU, los 8 modos de direccionamiento. Segunda en peso de admision (20%).', s:['teoria','banco']},
+      {d:'2026-07-14', l:'Mar 14/07', fin:false, f:'ligero',    foco:'Gym + Anki U5 en el celu. Repaso liviano de modos de direccionamiento.', s:['flashcards']},
+      {d:'2026-07-15', l:'Mie 15/07', fin:false, f:'admision',  foco:'U5 p2: set de instrucciones, programacion, interrupciones. Feynman U5. Usa el emulador 8086 online.', s:['teoria','simuladores']},
+      {d:'2026-07-16', l:'Jue 16/07', fin:false, f:'bolillero', foco:'Gym + Anki. Bolillero: bolillas con U5.', s:['flashcards','bolillero']},
+      {d:'2026-07-17', l:'Vie 17/07', fin:false, f:'admision',  foco:'U4 Maquina Elemental: von Neumann, datapath, unidad de control, ciclo de instruccion. Feynman U4.', s:['teoria','banco']},
+      {d:'2026-07-18', l:'Sab 18/07', fin:true,  f:'admision',  foco:'U3 Memorias: jerarquia, SRAM/DRAM, RAS-CAS/refresco, cache. Feynman U3.', s:['teoria','banco']},
+      {d:'2026-07-19', l:'Dom 19/07', fin:true,  f:'simulacro', foco:'Consolidacion + SIMULACRO #1: 1 ej de admision + saca 2 bolillas, elegi 1 y expone en voz alta. Cronometrado, grabate.', s:['simuladores','bolillero']},
+      // ---- Semana 3: U6 + U7 + integracion ----
+      {d:'2026-07-20', l:'Lun 20/07', fin:false, f:'oral',      foco:'U6 (oral): pipeline, hazards, superescalar/OoO, RISC/CISC, jerarquia de cache. Explicalo en voz alta.', s:['teoria','parciales']},
+      {d:'2026-07-21', l:'Mar 21/07', fin:false, f:'ligero',    foco:'Gym + Anki en el celu. Repaso liviano de U6.', s:['flashcards']},
+      {d:'2026-07-22', l:'Mie 22/07', fin:false, f:'oral',      foco:'U7 (oral): E/S programada/interrupciones/DMA, 8259, buses PCI/USB. Feynman U6/U7 en voz alta.', s:['teoria','parciales']},
+      {d:'2026-07-23', l:'Jue 23/07', fin:false, f:'bolillero', foco:'Gym + Anki. Bolillero: pasada por las 9 bolillas, 2 min cada una.', s:['flashcards','bolillero']},
+      {d:'2026-07-24', l:'Vie 24/07', fin:false, f:'simulacro', foco:'SIMULACRO #2 (completo, grabado) + repaso del hilo conductor U1->U7 (repreguntas de relacion).', s:['simuladores','bolillero']},
+      {d:'2026-07-25', l:'Sab 25/07', fin:true,  f:'simulacro', foco:'Reparar puntos debiles del simulacro + SIMULACRO #3. Barrido de las preguntas que salieron 2x/3x.', s:['simuladores','parciales']},
+      {d:'2026-07-26', l:'Dom 26/07', fin:true,  f:'repaso',    foco:'Integracion: hilo conductor + guiones orales de las 9 bolillas. CIERRE DE CONTENIDO: de aca en mas solo se repasa.', s:['bolillero','parciales']},
+      // ---- Semana 4: repaso puro (ultimos 5 dias) ----
+      {d:'2026-07-27', l:'Lun 27/07', fin:false, f:'repaso',    foco:'Repaso U1+U2 + bolillero + guiones orales. Nada nuevo.', s:['banco','bolillero']},
+      {d:'2026-07-28', l:'Mar 28/07', fin:false, f:'simulacro', foco:'Repaso U5+U4 + SIMULACRO #4 (atacando lo mas flojo). Corregi en frio.', s:['simuladores','banco']},
+      {d:'2026-07-29', l:'Mie 29/07', fin:false, f:'repaso',    foco:'Repaso U3+U6+U7 + bolillero. Reforza la bolilla que menos te gusta.', s:['parciales','bolillero']},
+      {d:'2026-07-30', l:'Jue 30/07', fin:false, f:'simulacro', foco:'SIMULACRO #5 (ensayo final) + barrido de errores recurrentes + guiones. Nada nuevo despues de las 21h, dormi 8h.', s:['simuladores','parciales']},
+      {d:'2026-07-31', l:'Vie 31/07', fin:false, f:'mesa',      foco:'MESA. Llega temprano, respira. Repaso liviano: En una frase + hilo conductor. Es el simulacro numero N, ya lo hiciste. Aprobas con 6.', s:[]}
     ];
     function renderRectaFinal() {
       var cont = document.getElementById('rectaFinal');
@@ -13568,7 +13577,7 @@ HLT`
         'details{border:1px solid #d4d9e0;border-radius:6px;margin:7px 0;padding:2px 10px;break-inside:avoid;page-break-inside:avoid;}'+
         'ul{margin:2px 0 8px;padding-left:18px;} li{margin:2px 0;} button{display:none!important;}'+
         '</style>';
-      var head='<div class="doc-head"><div><div class="inst">UTN FRM &middot; Arquitectura de Computadoras &middot; Catedra Perez</div><div class="tit">Plan de Exposicion Oral</div></div><div class="inst">Mesa 3 jul 2026</div></div>';
+      var head='<div class="doc-head"><div><div class="inst">UTN FRM &middot; Arquitectura de Computadoras &middot; Catedra Perez</div><div class="tit">Plan de Exposicion Oral</div></div><div class="inst">Mesa 31 jul 2026</div></div>';
       var w=window.open('','_blank');
       w.document.write('<html><head><title>Plan de Exposicion Oral</title>'+css+'</head><body>'+head+body+'</body></html>');
       w.document.close();
