@@ -1237,6 +1237,7 @@
           <a class="nav-item" data-section="bolillero"><span>Bolillero</span></a>
           <a class="nav-item" data-section="examen"><span>Modo Examen</span></a>
           <a class="nav-item" data-section="examenes"><span>Examenes Probables</span></a>
+          <a class="nav-item" data-section="examenes2"><span>Examenes Probables v2</span></a>
           <a class="nav-item" data-section="simuladores"><span>Simuladores</span></a>
           <a class="nav-item" data-section="oral"><span>Practica Oral</span></a>
         </div>
@@ -2141,6 +2142,13 @@ Puerto 01 = 054000
 </div>
 
     </div>
+    <!--EXPO2_SECTION_START-->
+    <!-- ==================== EXAMENES PROBABLES v2 (data-driven) ==================== -->
+    <div class="content-section" id="section-examenes2">
+      <div id="expo2Root"></div>
+    </div>
+<!--EXPO2_SECTION_END-->
+
     <!-- ==================== SIMULADORES ==================== -->
     <div class="content-section" id="section-simuladores">
       <div class="card">
@@ -13766,6 +13774,279 @@ HLT`
       else { oralIdx = 0; oralShowQuestion(); }
     }
 
+    /*EXPO2_JS_START*/
+    // ============================================================
+    // EXAMENES PROBABLES v2 -- motor data-driven (grounded en bancos reales)
+    // Admision: BANCO89 (share por unidad = peso real de admision).
+    // Oral: BOLILLERO_OFICIAL (2 de 9 bolillas, cada una 3 unidades) -> combinatoria.
+    // Peso teorico por unidad: EXAM2016.teo (numeracion moderna) + PARCIALES89.
+    // Todo se recalcula en vivo desde las estructuras ya presentes en la pagina.
+    // ============================================================
+    var _expo2N = 8;      // cantidad de examenes (5..10)
+    var _expo2Alt = 0;    // 0 = par de bolillas de mayor peso; 1 = alternativo
+
+    function _e2Combo(n, r){ if(r<0||r>n) return 0; var num=1,den=1; for(var i=0;i<r;i++){ num*=(n-i); den*=(i+1);} return num/den; }
+
+    function _e2AdmDist(){ var c={}, tot=0; for(var k in BANCO89){ var u=BANCO89[k].u; c[u]=(c[u]||0)+1; tot++; } return {counts:c, total:tot}; }
+    function _e2UnitBolCount(u){ var n=0; for(var i=0;i<BOLILLERO_OFICIAL.length;i++){ if(BOLILLERO_OFICIAL[i].units.indexOf(u)>=0) n++; } return n; }
+    function _e2UnitDrawProb(u){ var k=_e2UnitBolCount(u); var t=_e2Combo(9,2); return t? (1 - _e2Combo(9-k,2)/t) : 0; }
+    function _e2TheoryTeo(u){ try { return (EXAM2016 && EXAM2016.teo && EXAM2016.teo[String(u)]) ? EXAM2016.teo[String(u)].length : 0; } catch(e){ return 0; } }
+    function _e2TheoryParc(u){
+      // PARCIALES89 usa numeracion 2016 vieja: U1..U3 igual; U4 y U5 = Blue (-> U4 moderna);
+      // U6 = 8088 (-> U5 moderna); U7 = integrador (-> U6+U7). Mapeo a unidad moderna:
+      try {
+        function n(k){ return (PARCIALES89[k] && PARCIALES89[k].qs) ? PARCIALES89[k].qs.length : 0; }
+        if(u===1) return n('1');
+        if(u===2) return n('2');
+        if(u===3) return n('3');
+        if(u===4) return n('4') + n('5');
+        if(u===5) return n('6');
+        if(u===6 || u===7) return Math.round(n('7')/2);
+        return 0;
+      } catch(e){ return 0; }
+    }
+    function _e2BolWeight(b){ var s=0; for(var i=0;i<b.units.length;i++) s+=_e2TheoryTeo(b.units[i]); return s; }
+
+    // Clusters tematicos por unidad (para explicar QUE tema es el mas frecuente en la admision).
+    // Cada ejercicio se asigna al primer cluster cuyo keyword sea substring del titulo (min).
+    // El ultimo cluster de cada unidad es catch-all ('').
+    var _E2_CLUSTERS = {
+      1: [ ['Punto flotante IEEE&nbsp;754', ['flotante']],
+           ['Complemento a 1 y a 2', ['complemento']],
+           ['Codigos (BCD, Gray, Hamming, paridad)', ['gray','johnson','bcd','hamming','biquinario','2-entre','aiken','ponderad','paridad','codigo','exc']],
+           ['Conversion y rango entre bases', ['']] ],
+      2: [ ['Minimizacion por Karnaugh', ['karnaugh','minimiz']],
+           ['Formas canonicas (SOP / POS, Boole, De&nbsp;Morgan)', ['canonic','sop','pos','sdp','pds','morgan','boole','dualidad','igualdad','expresiones']],
+           ['Secuenciales (biestables, contadores, registros)', ['biestable','contador','registro','desplazamiento']],
+           ['Circuitos combinacionales (MUX, decod., comparador)', ['']] ],
+      3: [ ['Direccionamiento y capacidad de memoria', ['direccionamiento','bits','capacidad','64k','n1','n2']],
+           ['Expansion y bancos de memoria', ['']] ],
+      4: [ ['Bus comun y tercer estado', ['bus','tercer estado']],
+           ['UC cableada (secuenciador CP1..CP8)', ['uc cableada','cp1']],
+           ['Ciclo de ejecucion (SUB / DEC / RET / subrutinas)', ['ejecucion','sub ','dec ','ret','subrutina','jsr']],
+           ['Programas y traza en la Maquina Blue', ['']] ],
+      5: [ ['Direccion fisica y segmentacion (8088)', ['direccion fisica','segmento','solapamiento','cs e ip']],
+           ['Programas 8088 (bucles, filtros, tablas)', ['for','filtrar','contar','trasladar','tabla','multiplicacion','pares','indexacion','bloque']],
+           ['Operaciones aritmeticas / logicas (8088)', ['']] ]
+    };
+
+    function _e2ClusterExercises(u){
+      // devuelve [{name, keys:[ids ordenados]}] por cluster, en el orden definido
+      var defs = _E2_CLUSTERS[u] || [['Ejercicios de la unidad', ['']]];
+      var buckets = defs.map(function(d){ return {name:d[0], keys:[]}; });
+      var ids = [];
+      for(var k in BANCO89){ if(BANCO89[k].u===u) ids.push(k); }
+      ids.sort(function(a,b){ return parseInt(a,10)-parseInt(b,10); });
+      ids.forEach(function(k){
+        var t = (BANCO89[k].t||'').toLowerCase();
+        for(var i=0;i<defs.length;i++){
+          var kws = defs[i][1]; var hit=false;
+          for(var j=0;j<kws.length;j++){ if(kws[j]==='' || t.indexOf(kws[j])>=0){ hit=true; break; } }
+          if(hit){ buckets[i].keys.push(k); break; }
+        }
+      });
+      return buckets;
+    }
+    // clusters de una unidad ordenados por frecuencia (desc); empates: orden de definicion
+    function _e2RankedClusters(u){
+      var b = _e2ClusterExercises(u).filter(function(x){ return x.keys.length>0; });
+      return b.slice().sort(function(a,c){ return c.keys.length - a.keys.length; });
+    }
+
+    function _e2Alloc(N){
+      // >=1 examen por cada unidad de admision; extras a las unidades de mayor share.
+      var adm=_e2AdmDist();
+      var units=Object.keys(adm.counts).map(Number).sort(function(a,b){return a-b;});
+      var byShare=units.slice().sort(function(a,b){ return adm.counts[b]-adm.counts[a]; });
+      var alloc={}; units.forEach(function(u){ alloc[u]=0; });
+      var base=Math.min(N, units.length);
+      for(var i=0;i<base;i++) alloc[byShare[i]]=1;
+      var rem=N-base;
+      for(var r=0;r<rem;r++) alloc[byShare[r % byShare.length]]++;
+      // construir lista de papers (unit, clusterRank), ordenada por share desc, luego rank
+      var papers=[];
+      units.forEach(function(u){ for(var c=0;c<alloc[u];c++) papers.push({unit:u, rank:c}); });
+      papers.sort(function(a,b){
+        if(adm.counts[b.unit]!==adm.counts[a.unit]) return adm.counts[b.unit]-adm.counts[a.unit];
+        if(a.unit!==b.unit) return a.unit-b.unit;
+        return a.rank-b.rank;
+      });
+      return {papers:papers, adm:adm};
+    }
+
+    function _e2PickBolPair(u, offset){
+      // primaria: bolilla que CONTIENE la unidad de admision, ordenadas por peso teorico.
+      //   offset (= rank del examen + alternativo) recorre las bolillas de esa unidad,
+      //   asi dos examenes de la misma unidad muestran pares distintos (determinista).
+      // secundaria: bolilla de mayor peso global distinta de la primaria.
+      var withU=[], all=[];
+      for(var i=0;i<BOLILLERO_OFICIAL.length;i++){
+        var b=BOLILLERO_OFICIAL[i]; var w=_e2BolWeight(b);
+        all.push({b:b, w:w});
+        if(b.units.indexOf(u)>=0) withU.push({b:b, w:w});
+      }
+      withU.sort(function(x,y){ return y.w-x.w || x.b.id-y.b.id; });
+      all.sort(function(x,y){ return y.w-x.w || x.b.id-y.b.id; });
+      var pi = withU.length ? (Math.max(0, offset||0) % withU.length) : 0;
+      var primary = withU[pi].b;
+      var secondary=null;
+      for(var s=0;s<all.length;s++){ if(all[s].b.id!==primary.id){ secondary=all[s].b; break; } }
+      return [primary, secondary];
+    }
+
+    function _e2Esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function _e2ProbBadge(share){
+      if(share>=0.25) return '<span class="exam-prob-badge exam-prob-alta">Probabilidad ALTA</span>';
+      if(share>=0.15) return '<span class="exam-prob-badge exam-prob-media">Probabilidad MEDIA</span>';
+      return '<span class="exam-prob-badge" style="background:#f0f0f3;color:#7a7a86;">Probabilidad BAJA</span>';
+    }
+    function _e2UColor(u){ return 'var(--u'+u+', var(--accent-primary))'; }
+    function _e2Pct(x){ return (x*100).toFixed(1)+'%'; }
+
+    function _e2UnitChip(u){
+      var p=_e2UnitDrawProb(u), teo=_e2TheoryTeo(u), parc=_e2TheoryParc(u);
+      return '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0 2px;">'
+        + '<span style="font-weight:700;color:'+_e2UColor(u)+';">U'+u+' &middot; '+_e2Esc(UNIT_NAMES[u]||('Unidad '+u))+'</span>'
+        + '<span style="font-size:0.72rem;background:rgba(15,52,96,0.08);border-radius:10px;padding:2px 8px;">en '+_e2UnitBolCount(u)+'/9 bolillas &rarr; P(sorteo) '+_e2Pct(p)+'</span>'
+        + '<span style="font-size:0.72rem;background:rgba(233,69,96,0.10);border-radius:10px;padding:2px 8px;">'+(teo+parc)+' preguntas en bancos</span>'
+        + '</div>';
+    }
+
+    function _e2BolBox(b, u, isRec){
+      var recTag = isRec
+        ? '<span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;background:#e8f5e9;color:#2e7d32;border-radius:10px;padding:2px 8px;margin-left:6px;">expone esta</span>'
+        : '<span style="font-size:0.68rem;color:var(--text-secondary);margin-left:6px;">consultas breves</span>';
+      var units = b.units.map(function(x){
+        var topics=(UNIT_TOPICS[x]||[]).slice(0,3).map(function(t){ return '<li>'+_e2Esc(t)+'</li>'; }).join('');
+        return _e2UnitChip(x) + (isRec ? '<ul style="margin:2px 0 8px 18px;font-size:0.78rem;line-height:1.5;color:var(--text-primary);">'+topics+'</ul>' : '');
+      }).join('');
+      return '<div class="exam-oral-box" style="'+(isRec?'border:1px solid rgba(46,125,50,0.35);':'')+'">'
+        + '<h4 style="display:flex;align-items:center;flex-wrap:wrap;">Bolilla '+b.id+' &mdash; U'+b.units.join(', U')+recTag+'</h4>'
+        + units + '</div>';
+    }
+
+    function _e2PaperHTML(paper, adm, idx){
+      var u=paper.unit;
+      var share=adm.counts[u]/adm.total;
+      var ranked=_e2RankedClusters(u);
+      var cluster = ranked[Math.min(paper.rank, ranked.length-1)] || {name:'Ejercicios de la unidad', keys:[]};
+      var totU = adm.counts[u];
+      var exKey = cluster.keys[0] || Object.keys(BANCO89).filter(function(k){return BANCO89[k].u===u;})[0];
+      var ex = BANCO89[exKey] || {t:'', enun:'', sol:''};
+      var pair=_e2PickBolPair(u, paper.rank + _expo2Alt);
+      var wA=_e2BolWeight(pair[0]), wB=pair[1]?_e2BolWeight(pair[1]):-1;
+      var recId = (wA>=wB) ? pair[0].id : pair[1].id;
+      var detId='e2sol'+idx;
+      var html='';
+      html += '<div class="exam-card">';
+      html +=   '<div class="exam-header">';
+      html +=     '<h3><span class="exam-num">Examen Probable v2 &middot; #'+(idx+1)+'</span>'+_e2Esc(UNIT_NAMES[u]||('Unidad '+u))+' &middot; '+cluster.name+'</h3>';
+      html +=     _e2ProbBadge(share);
+      html +=   '</div>';
+      html +=   '<div class="exam-body">';
+      // --- Admision ---
+      html +=     '<div class="exam-section">';
+      html +=       '<div class="exam-section-title">Ejercicio de admision (1 de 89, al azar)</div>';
+      html +=       '<div style="display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px;">';
+      html +=         '<span style="font-size:0.72rem;font-weight:700;background:'+_e2UColor(u)+';color:#fff;border-radius:10px;padding:2px 9px;">Admision U'+u+': '+_e2Pct(share)+' &middot; '+totU+'/'+adm.total+' ejercicios</span>';
+      html +=         '<span style="font-size:0.72rem;background:rgba(0,0,0,0.05);border-radius:10px;padding:2px 9px;">Tema mas frecuente: '+cluster.name+' ('+cluster.keys.length+'/'+totU+' de la unidad)</span>';
+      html +=       '</div>';
+      html +=       '<div class="exam-desc"><strong>Ejercicio '+exKey+'</strong> &mdash; '+_e2Esc(ex.t)+'</div>';
+      html +=       '<div style="border:1px solid rgba(0,0,0,0.08);border-radius:8px;padding:10px 14px;margin-top:8px;background:rgba(15,52,96,0.02);font-size:0.86rem;line-height:1.55;">'+(ex.enun||'')+'</div>';
+      html +=       '<details style="margin-top:8px;"><summary>Ver solucion completa del ejercicio de admision</summary><div class="solution-content" id="'+detId+'">'+(ex.sol||'')+'</div></details>';
+      html +=     '</div>';
+      // --- Oral ---
+      html +=     '<div class="exam-section" style="margin-top:16px;">';
+      html +=       '<div class="exam-section-title">Oral &mdash; sorteo de 2 bolillas de 9, elegis 1</div>';
+      html +=       '<p style="font-size:0.78rem;color:var(--text-secondary);margin:0 0 8px;">Cada bolilla combina 3 unidades. Salen 2 (1 de 36 pares posibles, equiprobables) y expones la de mayor dominio. Mostramos el par de <b>mayor peso teorico</b> que incluye tu unidad de admision.</p>';
+      html +=       '<div class="exam-oral-grid">';
+      html +=         _e2BolBox(pair[0], u, pair[0].id===recId);
+      html +=         (pair[1] ? _e2BolBox(pair[1], u, pair[1].id===recId) : '');
+      html +=       '</div>';
+      html +=     '</div>';
+      // --- Por que ---
+      html +=     '<div class="exam-tip"><strong>Por que es probable:</strong> la admision la domina el share real de la unidad en los 89 ejercicios (U'+u+' = '+_e2Pct(share)+'). El oral es sorteo uniforme, pero U'+u+' reaparece en '+_e2UnitBolCount(u)+'/9 bolillas (P '+_e2Pct(_e2UnitDrawProb(u))+'), asi que preparar esta unidad cubre admision Y oral.</div>';
+      html +=   '</div>';
+      html += '</div>';
+      return html;
+    }
+
+    function _e2MethodologyHTML(){
+      var adm=_e2AdmDist();
+      var units=Object.keys(adm.counts).map(Number).sort(function(a,b){return a-b;});
+      var maxShare=0; units.forEach(function(u){ maxShare=Math.max(maxShare, adm.counts[u]/adm.total); });
+      var bars=units.map(function(u){
+        var sh=adm.counts[u]/adm.total; var w=(sh/maxShare*100).toFixed(0);
+        return '<div style="display:flex;align-items:center;gap:8px;margin:4px 0;font-size:0.78rem;">'
+          + '<span style="width:150px;flex:0 0 150px;color:'+_e2UColor(u)+';font-weight:700;">U'+u+' '+_e2Esc((UNIT_NAMES[u]||'').split(' ').slice(0,3).join(' '))+'</span>'
+          + '<span style="flex:1;background:rgba(0,0,0,0.05);border-radius:6px;overflow:hidden;height:16px;"><span style="display:block;height:100%;width:'+w+'%;background:'+_e2UColor(u)+';"></span></span>'
+          + '<span style="width:120px;flex:0 0 120px;text-align:right;">'+_e2Pct(sh)+' &middot; '+adm.counts[u]+'/'+adm.total+'</span>'
+          + '</div>';
+      }).join('');
+      // tabla de oral (todas las unidades 1..7)
+      var rows='';
+      for(var u=1;u<=7;u++){
+        rows += '<tr>'
+          + '<td style="padding:6px 8px;font-weight:700;color:'+_e2UColor(u)+';">U'+u+'</td>'
+          + '<td style="padding:6px 8px;">'+_e2Esc(UNIT_NAMES[u]||'')+'</td>'
+          + '<td style="padding:6px 8px;text-align:center;">'+_e2UnitBolCount(u)+'/9</td>'
+          + '<td style="padding:6px 8px;text-align:center;">'+_e2Pct(_e2UnitDrawProb(u))+'</td>'
+          + '<td style="padding:6px 8px;text-align:center;">'+_e2TheoryTeo(u)+'</td>'
+          + '<td style="padding:6px 8px;text-align:center;">'+_e2TheoryParc(u)+'</td>'
+          + '</tr>';
+      }
+      return '<div class="card" style="margin-bottom:20px;">'
+        + '<h3 style="color:var(--accent-primary);margin-bottom:6px;">Como se calcula (transparencia)</h3>'
+        + '<p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.55;margin-bottom:12px;">Todo sale de los 3 bancos reales que ya viven en el dashboard, recalculado en vivo. Nada esta hardcodeado.</p>'
+        + '<div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin-bottom:6px;">Peso de admision por unidad (share en BANCO89)</div>'
+        + bars
+        + '<div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);margin:16px 0 6px;">Cobertura del oral (bolillero oficial 9x3 + peso teorico)</div>'
+        + '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.8rem;min-width:520px;">'
+        + '<thead><tr style="border-bottom:2px solid rgba(0,0,0,0.1);text-align:left;">'
+        + '<th style="padding:6px 8px;">U</th><th style="padding:6px 8px;">Unidad</th>'
+        + '<th style="padding:6px 8px;text-align:center;">Bolillas</th>'
+        + '<th style="padding:6px 8px;text-align:center;">P(en sorteo)</th>'
+        + '<th style="padding:6px 8px;text-align:center;">Teo 2016</th>'
+        + '<th style="padding:6px 8px;text-align:center;">Parciales</th></tr></thead>'
+        + '<tbody>'+rows+'</tbody></table></div>'
+        + '<p style="font-size:0.74rem;color:var(--text-secondary);margin-top:8px;line-height:1.5;">P(en sorteo) = 1 &minus; C(9&minus;k,2)/C(9,2), con k = cantidad de bolillas que contienen la unidad. U6 y U7 no tienen ejercicios de admision (son teoria de oral).</p>'
+        + '</div>';
+    }
+
+    function _e2Controls(){
+      var btns='';
+      for(var n=5;n<=10;n++){
+        btns += '<button onclick="setExpo2N('+n+')" class="btn btn-sm '+(n===_expo2N?'btn-primary':'btn-secondary')+'" style="min-width:38px;">'+n+'</button>';
+      }
+      return '<div class="card" style="margin-bottom:20px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;">'
+        + '<div><div style="font-weight:700;font-size:0.9rem;">Cantidad de examenes probables</div>'
+        + '<div style="font-size:0.76rem;color:var(--text-secondary);">Ordenados por peso de admision. Al menos 1 por cada unidad de admision.</div></div>'
+        + '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+btns+'</div>'
+        + '<button onclick="expo2ResortOral()" class="btn btn-sm btn-secondary">Ver par de oral alternativo</button>'
+        + '</div>';
+    }
+
+    function renderExamenes2(){
+      var root=document.getElementById('expo2Root');
+      if(!root) return;
+      var N=Math.max(5, Math.min(10, _expo2N));
+      var A=_e2Alloc(N);
+      var intro='<div class="exam-intro-card">'
+        + '<h2>Examenes Probables v2 &middot; motor data-driven</h2>'
+        + '<p>Los <b>'+N+' examenes mas probables</b>, armados en vivo desde los 3 bancos reales: los <b>89 ejercicios de admision</b> (BANCO89), el <b>bolillero oficial</b> (9 bolillas &times; 3 unidades) y los bancos de teoria (Examenes&nbsp;2016 + Parciales). Cada examen muestra POR QUE es probable: el share real de su unidad en la admision y la probabilidad de sorteo de sus bolillas.</p>'
+        + '<div class="exam-format"><strong>Formato real de la mesa:</strong><br>'
+        + '1. <strong>Admision:</strong> el profesor saca al azar 1 de los 89 ejercicios. Es un filtro: hay que resolverlo.<br>'
+        + '2. <strong>Oral:</strong> sacas 2 bolillas oficiales (de 9), elegis 1 y expones 2-3 unidades + consultas breves del resto.<br>'
+        + '<span style="color:var(--text-secondary);font-size:0.8rem;">Diferencia con la v1: aquella listaba 5 examenes fijos escritos a mano y trataba cada &quot;bolilla&quot; como 1 unidad. Esta v2 recalcula probabilidades reales y usa el bolillero oficial (3 unidades por bolilla).</span>'
+        + '</div></div>';
+      var papers=A.papers.map(function(p,i){ return _e2PaperHTML(p, A.adm, i); }).join('');
+      root.innerHTML = intro + _e2Controls() + _e2MethodologyHTML() + papers;
+      if(typeof typesetMath==='function'){ try { typesetMath(root); } catch(e){} }
+    }
+    function setExpo2N(n){ _expo2N=n; renderExamenes2(); }
+    function expo2ResortOral(){ _expo2Alt = _expo2Alt ? 0 : 1; renderExamenes2(); }
+    /*EXPO2_JS_END*/
+
     function initSimuladores() { /* nothing to prerender */ }
     function initOralMode() { renderExpoPlan(); oralSetFilter(0); }
 
@@ -13784,6 +14065,7 @@ HLT`
         case 'bolillero': renderBolilleroHistory(); break;
         case 'examen': renderQuizHistory(); break;
         case 'examenes': break; // static HTML
+        case 'examenes2': renderExamenes2(); break; /*EXPO2_CASE*/
         case 'simuladores': initSimuladores(); break;
         case 'oral': initOralMode(); break;
         case 'recursos': renderRecursos(); break;
