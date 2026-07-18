@@ -14022,7 +14022,7 @@ HLT`
         + '<div><div style="font-weight:700;font-size:0.9rem;">Cantidad de examenes probables</div>'
         + '<div style="font-size:0.76rem;color:var(--text-secondary);">Ordenados por peso de admision. Al menos 1 por cada unidad de admision.</div></div>'
         + '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+btns+'</div>'
-        + '<button onclick="expo2ResortOral()" class="btn btn-sm btn-secondary">Ver par de oral alternativo</button>'
+        + '<button onclick="expo2ResortOral()" class="btn btn-sm btn-secondary" title="Recorre las bolillas que contienen cada unidad de admision (par de oral distinto en cada examen)">Par '+(_expo2Alt+1)+' de '+_e2AltMax()+' &middot; ver otro</button>'
         + '</div>';
     }
 
@@ -14044,7 +14044,8 @@ HLT`
       if(typeof typesetMath==='function'){ try { typesetMath(root); } catch(e){} }
     }
     function setExpo2N(n){ _expo2N=n; renderExamenes2(); }
-    function expo2ResortOral(){ _expo2Alt = _expo2Alt ? 0 : 1; renderExamenes2(); }
+    function _e2AltMax(){ var m=1,i,u,c; for(u=1;u<=5;u++){ c=0; for(i=0;i<BOLILLERO_OFICIAL.length;i++){ if(BOLILLERO_OFICIAL[i].units.indexOf(u)>=0) c++; } if(c>m) m=c; } return m; }
+    function expo2ResortOral(){ var M=_e2AltMax(); _expo2Alt=(_expo2Alt+1)%M; renderExamenes2(); }
     /*EXPO2_JS_END*/
 
     function initSimuladores() { /* nothing to prerender */ }
