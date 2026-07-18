@@ -1526,7 +1526,11 @@
           </button>
           <button class="quiz-mode-btn" id="modeMoodleBtn" onclick="startQuizMode('moodle')">
             <h3>Simulacro Moodle</h3>
-            <p>Multiple choice con preguntas de todas las unidades. Tipo parcialito virtual.</p>
+            <p>Multiple choice con preguntas de todas las unidades (set curado de 40). Tipo parcialito virtual.</p>
+          </button>
+          <button class="quiz-mode-btn" id="modeBancoBtn" onclick="startQuizMode('banco')">
+            <h3>Simulacro Banco 2016 <span style="font-size:0.62rem;background:var(--success,#2eb872);color:#fff;padding:1px 7px;border-radius:10px;vertical-align:middle;letter-spacing:0.5px;">AUDITADO</span></h3>
+            <p>40 al azar del banco completo auditado (139 calificables de las 166 reales de Examenes 2016, U1 a U7). Multiple choice y Verdadero/Falso.</p>
           </button>
         </div>
       </div>
@@ -8310,7 +8314,9 @@ impar:INC SI
       quizMode = mode;
       document.getElementById('modeAdmBtn').classList.toggle('active', mode==='admission');
       document.getElementById('modeMoodleBtn').classList.toggle('active', mode==='moodle');
+      var _bb=document.getElementById('modeBancoBtn'); if(_bb) _bb.classList.toggle('active', mode==='banco');
       if (mode === 'admission') startAdmission();
+      else if (mode === 'banco') startMoodleBanco();
       else startMoodle();
     }
     function startAdmission() {
@@ -8344,6 +8350,40 @@ impar:INC SI
         html += `<div class="quiz-question" id="mq-${i}"><h4>${i+1}. [U${q.unit}] ${q.q}</h4>${q.opts.map((o,oi)=>`<div class="quiz-option" onclick="selectMoodleAnswer(${i},${oi})" id="mo-${i}-${oi}">${o}</div>`).join('')}</div>`;
       });
       html += `<div style="text-align:center;margin:20px 0;"><button class="btn btn-primary" onclick="submitMoodle()">Entregar Examen</button><button class="btn btn-secondary" style="margin-left:8px;" onclick="cancelQuiz()">Cancelar</button></div>`;
+      document.getElementById('quizArea').innerHTML = html;
+      startQuizTimer();
+    }
+    // Adaptador: convierte EXAM2016.teo (166) al formato del simulacro {unit,q,opts,correct}.
+    // Incluye MCQ (respuesta = una opcion, o esa opcion seguida de ' (' explicativo) y V/F.
+    // Excluye emparejar y multi-respuesta para NO calificar mal.
+    function _bancoMoodlePool() {
+      var out = [], T = EXAM2016.teo;
+      for (var u in T) { T[u].forEach(function(q) {
+        var o = q.o || [], a = (q.a==null?'':String(q.a)).trim(), al = a.toLowerCase();
+        if (o.length === 0) {
+          if (q.t==='vf' || a==='V' || a==='F') out.push({unit:u, q:q.q, opts:['a) Verdadero','b) Falso'], correct:(a==='V')?0:1});
+          return; // emparejar / respuesta-texto: no calificable como multiple choice
+        }
+        var idx=-1, hits=0;
+        for (var i=0;i<o.length;i++){ var ol=String(o[i]).trim().toLowerCase();
+          if (ol && (al===ol || al.indexOf(ol+' (')===0)){ idx=i; hits++; } }
+        if (hits!==1) return; // multi-respuesta o sin match limpio: se excluye
+        out.push({unit:u, q:q.q, opts:o.map(function(op,i){return String.fromCharCode(97+i)+') '+op;}), correct:idx});
+      }); }
+      return out;
+    }
+    function startMoodleBanco() {
+      var pool = _bancoMoodlePool();
+      for (var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
+      moodleQuestions = pool.slice(0, Math.min(40, pool.length));
+      moodleAnswers = new Array(moodleQuestions.length).fill(-1);
+      moodleSubmitted = false;
+      quizSeconds = 120*60;
+      var html = '<div class="card"><h3>Simulacro Banco 2016 - '+moodleQuestions.length+' preguntas (al azar de '+pool.length+' auditadas)</h3><div class="quiz-timer" id="quizTimerDisplay">120:00</div></div>';
+      moodleQuestions.forEach(function(q,i){
+        html += '<div class="quiz-question" id="mq-'+i+'"><h4>'+(i+1)+'. [U'+q.unit+'] '+q.q+'</h4>'+q.opts.map(function(o,oi){return '<div class="quiz-option" onclick="selectMoodleAnswer('+i+','+oi+')" id="mo-'+i+'-'+oi+'">'+o+'</div>';}).join('')+'</div>';
+      });
+      html += '<div style="text-align:center;margin:20px 0;"><button class="btn btn-primary" onclick="submitMoodle()">Entregar Examen</button><button class="btn btn-secondary" style="margin-left:8px;" onclick="cancelQuiz()">Cancelar</button></div>';
       document.getElementById('quizArea').innerHTML = html;
       startQuizTimer();
     }
