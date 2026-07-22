@@ -1240,6 +1240,7 @@
           <a class="nav-item" data-section="examenes2"><span>Examenes Probables v2</span></a>
           <a class="nav-item" data-section="simuladores"><span>Simuladores</span></a>
           <a class="nav-item" data-section="oral"><span>Practica Oral</span></a>
+          <a class="nav-item" data-section="plan10"><span>Recta Final 10D</span></a>
         </div>
       </div>
       <a class="nav-item" data-section="recursos"><span>Recursos</span></a>
@@ -2335,6 +2336,10 @@ ADD AX, BX"></textarea>
           <button class="btn" style="background:var(--success);color:white;" onclick="oralRate('si')">Lo supe bien</button>
         </div>
       </div>
+    </div>
+
+    <div class="content-section" id="section-plan10">
+      <div id="plan10Inner"></div>
     </div>
 
     <div class="content-section" id="section-recursos">
@@ -14092,6 +14097,182 @@ HLT`
     function initOralMode() { renderExpoPlan(); oralSetFilter(0); }
 
     // ============================================================
+    // RECTA FINAL 10 DIAS (plan de examen)  /*PLAN10_START*/
+    // ============================================================
+    var PLAN10_EXAM = { y:2026, m:6, d:31 }; // 31 jul 2026 (m: 0-indexed)
+    var PLAN10_LEVERS = [
+      'Output-first: primero hablás/escribís de memoria, DESPUÉS abrís el dashboard a parchar los huecos. La lucha por recordar ES el estudio.',
+      'Grabate en voz alta con cronómetro: el oral es una actuación, no un recuerdo silencioso. Un audio de 4 min por unidad.',
+      'El Banco 2016 (166 preguntas) es tu tribunal: estudiá la cadena de repreguntas ("¿por qué?", "relacioná X con Y"), no el tema suelto.',
+      'Interleaving: 2-3 unidades por sesión, nunca maratón de una sola. Mezclar fuerza el recuerdo.',
+      'Prioridad por frecuencia en el bolillero: U5 primero (83% de aparecer), luego U2/U3/U6/U7 (72%), al final U1/U4 (58%).'
+    ];
+    var PLAN10_DAYS = [
+      { d:22, dow:'Mié', icon:'🔬', color:'#5b8def', title:'Diagnóstico', hours:'2-3h',
+        goal:'Hoy no estudiás contenido: solo medís dónde estás parado.',
+        tasks:[
+          'Simulador de Admisión cronometrado (1 corrida) — anotá tu %',
+          'Simulacro Banco 2016 completo — anotá tu % por unidad',
+          'Escribí tu mapa de debilidades: las 3 unidades más flojas'
+        ]},
+      { d:23, dow:'Jue', icon:'🔧', color:'#ff9800', title:'Admisión I', hours:'2-4h',
+        goal:'Mecánica que debe salir sin pensar. Cronómetro siempre.',
+        tasks:[
+          'U1: conversión de bases, C1/C2, BCD/Gray — cronometrado',
+          'U2: Boole + mapas de Karnaugh + combinacionales',
+          'Re-test de admisión al cierre y compará con el diagnóstico'
+        ]},
+      { d:24, dow:'Vie', icon:'🔧', color:'#ff9800', title:'Admisión II + arranca oral', hours:'3-4h',
+        goal:'Cerrás el portón y decís tu primera unidad en voz alta.',
+        tasks:[
+          'U3 (memorias) + U4 (pulsos de reloj, fetch-execute) + U5 práctico',
+          'Meta: Simulador de Admisión ≥ 80%',
+          '🎤 Primer audio de 4 min: U5 de memoria, sin notas'
+        ]},
+      { d:25, dow:'Sáb', icon:'🎤', color:'#ee5a6f', title:'Oral U5 + U2', hours:'3-4h',
+        goal:'U5 es tu unidad reina: 83% de que te toque. Empezá por ahí.',
+        tasks:[
+          'U5: volcá en hoja de memoria → parchá con el dashboard → grabá 4 min',
+          'U2: mismo ciclo (volcá → parchá → grabá)',
+          'Cazá 5 repreguntas de U5 en el Banco 2016'
+        ]},
+      { d:26, dow:'Dom', icon:'🎤', color:'#ee5a6f', title:'Oral U3 + U6', hours:'3-4h',
+        goal:'Producir, no releer. Este finde tenés más tiempo: usalo.',
+        tasks:[
+          'U3: volcá → parchá → audio 4 min',
+          'U6: volcá → parchá → audio 4 min',
+          'Mini re-test de admisión para no perder la mano'
+        ]},
+      { d:27, dow:'Lun', icon:'🎤', color:'#ee5a6f', title:'Oral U7 + U1', hours:'2-3h',
+        goal:'Dos unidades más al banco de audios.',
+        tasks:[
+          'U7: volcá → parchá → audio 4 min',
+          'U1: volcá → parchá → audio 4 min',
+          '5 repreguntas de U7 en el Banco 2016'
+        ]},
+      { d:28, dow:'Mar', icon:'🎤', color:'#ee5a6f', title:'Oral U4 + tu más floja', hours:'2-3h',
+        goal:'Última unidad nueva + refuerzo de tu punto débil del diagnóstico.',
+        tasks:[
+          'U4: volcá → parchá → audio 4 min',
+          'Rehacé la unidad más floja de tu diagnóstico',
+          'Abrí la tarjeta "Hilos conductores" (relacionar temas)'
+        ]},
+      { d:29, dow:'Mié', icon:'🔗', color:'#7c5cd6', title:'Conexiones', hours:'2-3h',
+        goal:'Relacionar X con Y: acá se ganan los puntos del oral.',
+        tasks:[
+          'Hilos conductores: aritmética, memoria de 1 bit, ciclo de instrucción',
+          'Repaso espaciado de las 7 unidades',
+          'Re-Simulacro Banco 2016 — meta ≥ 85%'
+        ]},
+      { d:30, dow:'Jue', icon:'🎭', color:'#0f3460', title:'Ensayo general + taper', hours:'3h + descanso',
+        goal:'Ensayo real de mesa. Después bajás un cambio: nada nuevo.',
+        tasks:[
+          'Bolillero: sacá 2, elegí 1, exponé las 3 unidades en voz alta y grabado (2-3 tiradas)',
+          'Simulador de Admisión final — meta ≥ 85%',
+          '🌙 Cortá temprano. Dormí bien. Es parte del plan.'
+        ]},
+      { d:31, dow:'Vie', icon:'🚀', color:'#2ecc71', title:'EXAMEN', hours:'solo warm-up',
+        goal:'Warm-up liviano y a confiar en las reps. Ya hiciste el trabajo.',
+        tasks:[
+          'Una tirada de bolillero: hablala una vez',
+          'Repaso de datos duros (pulsos de reloj, fórmulas) — 15 min',
+          '🚀 A la mesa. Andá tranquilo.'
+        ]}
+    ];
+    var PLAN10_METRICS = [
+      'Admisión ≥ 80-85% cronometrado, en dos corridas seguidas',
+      'Podés grabar 3-4 min SIN NOTAS por unidad, y que sea coherente',
+      'Respondés 5 "¿por qué?" del Banco por unidad, sin mirar',
+      'En una tirada real exponés 3 unidades 10-12 min sin trabarte',
+      'Simulacro Banco 2016 ≥ 85%'
+    ];
+
+    function _p10(){ if(!data.plan10) data.plan10={}; return data.plan10; }
+    function togglePlan10(k){ var s=_p10(); s[k]=!s[k]; saveData(); renderPlan10(); }
+    function resetPlan10(){ if(!window.confirm('Reiniciar TODO el progreso del plan de 10 dias?')) return; data.plan10={}; saveDataNow(); renderPlan10(); }
+
+    function _p10Check(k, label, color){
+      var on = !!_p10()[k];
+      return '<div onclick="togglePlan10(\''+k+'\')" style="display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:6px 2px;">'+
+        '<span style="flex:0 0 20px;width:20px;height:20px;border-radius:5px;border:2px solid '+(on?color:'#c7ccd6')+';background:'+(on?color:'transparent')+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;margin-top:1px;">'+(on?'✓':'')+'</span>'+
+        '<span style="font-size:0.9rem;line-height:1.4;'+(on?'text-decoration:line-through;color:var(--text-secondary);':'')+'">'+label+'</span>'+
+        '</div>';
+    }
+
+    function renderPlan10(){
+      var el=document.getElementById('plan10Inner'); if(!el) return;
+      var s=_p10(), total=0, done=0, i, j;
+      for(i=0;i<PLAN10_DAYS.length;i++){ for(j=0;j<PLAN10_DAYS[i].tasks.length;j++){ total++; if(s[i+'_'+j]) done++; } }
+      var pct = total ? Math.round(done/total*100) : 0;
+      var now=new Date();
+      var today0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+      var exam=new Date(PLAN10_EXAM.y,PLAN10_EXAM.m,PLAN10_EXAM.d);
+      var daysLeft=Math.max(0,Math.round((exam-today0)/86400000));
+      var isJul=(now.getFullYear()===PLAN10_EXAM.y && now.getMonth()===PLAN10_EXAM.m);
+
+      var h='';
+      // ---- HEADER ----
+      h+='<div class="card" style="border-top:4px solid var(--accent-primary,#ee5a6f);">';
+      h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">';
+      h+='<div><h2 style="margin:0 0 4px;">🎯 Recta Final &mdash; 10 días a la mesa</h2>'+
+         '<p style="color:var(--text-secondary);font-size:0.85rem;margin:0;">Plan agresivo para el final oral del 31 jul. No es para leer: es para tachar. Cada día, 2-4h reales.</p></div>';
+      h+='<div style="text-align:center;background:#0f3460;color:#fff;border-radius:10px;padding:10px 16px;min-width:96px;">'+
+         '<div style="font-size:1.8rem;font-weight:800;line-height:1;">'+daysLeft+'</div>'+
+         '<div style="font-size:0.72rem;opacity:0.85;">días al examen</div></div>';
+      h+='</div>';
+      h+='<div style="margin:14px 0 4px;display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-secondary);"><span>Progreso del plan</span><span>'+done+'/'+total+' tareas ('+pct+'%)</span></div>';
+      h+='<div style="height:12px;border-radius:6px;background:#eceff4;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#ee5a6f,#f0883e);transition:width .3s;"></div></div>';
+      h+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">'+
+         '<button class="btn btn-sm btn-primary" onclick="navigateTo(\'examen\')">Modo Examen (Admisión + Banco) &rarr;</button>'+
+         '<button class="btn btn-sm" style="background:#f0f4f8;" onclick="navigateTo(\'oral\')">Práctica Oral &rarr;</button>'+
+         '<button class="btn btn-sm" style="background:#f0f4f8;" onclick="navigateTo(\'bolillero\')">Bolillero &rarr;</button>'+
+         '<button class="btn btn-sm" style="background:#f0f4f8;" onclick="navigateTo(\'examenes2\')">Exámenes Probables v2 &rarr;</button>'+
+         '</div>';
+      h+='</div>';
+
+      // ---- LEVERS ----
+      h+='<details class="card"><summary style="cursor:pointer;font-weight:700;font-size:0.95rem;">⚡ La estrategia del 1% (5 palancas)</summary>';
+      h+='<ul style="margin:10px 0 0;padding-left:20px;font-size:0.88rem;line-height:1.55;">';
+      for(i=0;i<PLAN10_LEVERS.length;i++){ h+='<li style="margin:7px 0;">'+PLAN10_LEVERS[i]+'</li>'; }
+      h+='</ul></details>';
+
+      // ---- DAY CARDS ----
+      for(i=0;i<PLAN10_DAYS.length;i++){
+        var day=PLAN10_DAYS[i];
+        var today = isJul && now.getDate()===day.d;
+        var allDone=true; for(j=0;j<day.tasks.length;j++){ if(!s[i+'_'+j]){ allDone=false; break; } }
+        h+='<div class="card" style="border-left:5px solid '+day.color+';'+(today?'box-shadow:0 0 0 2px '+day.color+';':'')+(allDone?'opacity:0.7;':'')+'">';
+        h+='<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">';
+        h+='<div style="display:flex;align-items:center;gap:10px;">'+
+           '<div style="text-align:center;background:'+day.color+';color:#fff;border-radius:8px;padding:4px 10px;min-width:52px;"><div style="font-size:1.15rem;font-weight:800;line-height:1;">'+day.d+'</div><div style="font-size:0.6rem;text-transform:uppercase;opacity:0.9;">jul '+day.dow+'</div></div>'+
+           '<div><div style="font-weight:700;font-size:1.02rem;">'+day.icon+' '+day.title+
+             (today?' <span style="background:'+day.color+';color:#fff;font-size:0.62rem;padding:2px 7px;border-radius:8px;vertical-align:middle;">HOY</span>':'')+
+             (allDone?' <span style="color:#2ecc71;">&#10003;</span>':'')+'</div>'+
+           '<div style="font-size:0.78rem;color:var(--text-secondary);">'+day.goal+'</div></div>'+
+           '</div>';
+        h+='<span style="font-size:0.72rem;color:var(--text-secondary);white-space:nowrap;">&#9201; '+day.hours+'</span>';
+        h+='</div>';
+        h+='<div style="margin-top:10px;padding-top:8px;border-top:1px solid #eef1f5;">';
+        for(j=0;j<day.tasks.length;j++){ h+=_p10Check(i+'_'+j, day.tasks[j], day.color); }
+        h+='</div></div>';
+      }
+
+      // ---- METRICS ----
+      h+='<div class="card" style="border-left:5px solid #2ecc71;">';
+      h+='<h3 style="margin:0 0 2px;">🎯 ¿Estás listo? Chequeo real (no sensaciones)</h3>';
+      h+='<p style="font-size:0.8rem;color:var(--text-secondary);margin:0 0 8px;">Cuando estas 5 estén en verde, estás listo. No antes, no después.</p>';
+      h+='<div>';
+      for(i=0;i<PLAN10_METRICS.length;i++){ h+=_p10Check('m_'+i, PLAN10_METRICS[i], '#2ecc71'); }
+      h+='</div></div>';
+
+      // ---- RESET ----
+      h+='<div style="text-align:center;margin:8px 0 24px;"><button class="btn btn-sm" style="background:#f0f4f8;color:var(--text-secondary);" onclick="resetPlan10()">Reiniciar progreso</button></div>';
+
+      el.innerHTML=h;
+    }
+    /*PLAN10_END*/
+
+    // ============================================================
     // LAZY RENDERING
     // ============================================================
     const _rendered = {};
@@ -14109,6 +14290,7 @@ HLT`
         case 'examenes2': renderExamenes2(); break; /*EXPO2_CASE*/
         case 'simuladores': initSimuladores(); break;
         case 'oral': initOralMode(); break;
+        case 'plan10': renderPlan10(); break;
         case 'recursos': renderRecursos(); break;
         case 'metodo': break; // static HTML, no rendering
         case 'tps': renderTPs(); break;
