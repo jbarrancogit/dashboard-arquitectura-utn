@@ -14463,6 +14463,45 @@ HLT`
         '</div>';
       h += '</div>';
 
+
+      // ---- CORRECCION BLUE (verificada contra Perez, pags. 169-177 y Tabla 7.1) ----
+      h += '<div class="card" style="border-left:5px solid #e94560;background:#e9456008;">';
+      h += '<h3 style="margin:0 0 4px;color:#e94560;">&#9888; Leer ANTES del Bloque 1: el repertorio de la BLUE del Banco 89 esta mal</h3>';
+      h += '<p style="font-size:0.84rem;line-height:1.55;margin:0 0 10px;">Verificado contra el libro de la catedra (Perez, <b>pags. 169-177 y Tabla 7.1</b>). Varias soluciones de U4 del banco usan un set de instrucciones inventado. En la mesa te evaluan con el del libro. <b>Usa esta tabla, no la del banco.</b></p>';
+      h += '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">';
+      h += '<div style="flex:1 1 220px;background:#fff;border-radius:8px;padding:10px 12px;"><div style="font-size:0.72rem;text-transform:uppercase;color:var(--text-secondary);">Palabra</div><div style="font-size:0.95rem;font-weight:700;">16 bits = 4 opcode + 12 direccion</div><div style="font-size:0.78rem;color:var(--text-secondary);margin-top:3px;">Memoria 4096 x 16. NO son 18 bits. En octal se escribe OO|DDDD: 2 digitos de opcode (00 a 17) y 4 de direccion (0000 a 7777).</div></div>';
+      h += '<div style="flex:1 1 220px;background:#fff;border-radius:8px;padding:10px 12px;"><div style="font-size:0.72rem;text-transform:uppercase;color:var(--text-secondary);">La ALU</div><div style="font-size:0.95rem;font-weight:700;">ADD, OR, XOR, AND, RAL, NOT</div><div style="font-size:0.78rem;color:var(--text-secondary);margin-top:3px;"><b>No resta.</b> Restar = NOT + ADD (complemento a dos). Por eso &laquo;agregue la instruccion SUB&raquo; es un ejercicio de diseno, no una instruccion que exista.</div></div>';
+      h += '</div>';
+      h += '<div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.8rem;min-width:520px;width:100%;">';
+      h += '<tr style="background:#0f3460;color:#fff;"><th style="padding:5px 8px;text-align:left;">Octal</th><th style="padding:5px 8px;text-align:left;">Mnem.</th><th style="padding:5px 8px;text-align:left;">Que hace</th></tr>';
+      var BLUE_SET = [
+        ['00','HLT','Detiene la maquina. Campo de direccion ignorado.'],
+        ['01','ADD','ACC + Mem[dir] &rarr; ACC (suma en complemento a dos).'],
+        ['02','XOR','ACC XOR Mem[dir] &rarr; ACC.'],
+        ['03','AND','ACC AND Mem[dir] &rarr; ACC.'],
+        ['04','IOR','ACC OR Mem[dir] &rarr; ACC.'],
+        ['05','NOT','Complemento a 1 del ACC. Direccion ignorada.'],
+        ['06','LDA','Mem[dir] &rarr; ACC.'],
+        ['07','STA','ACC &rarr; Mem[dir].'],
+        ['10','SRJ','Salto a subrutina: PC (12 bits) &rarr; parte baja del ACC (4 altos en cero); dir &rarr; PC.'],
+        ['11','JMA','Salto condicional: salta a dir SOLO si el bit de signo del ACC es 1 (ACC negativo).'],
+        ['12','JMP','Salto incondicional a dir.'],
+        ['13','INP','Parte alta del ACC a cero; 8 bits del periferico YY a la parte baja. Formato XXYY.'],
+        ['14','OUT','Los 8 bits mas significativos del ACC al periferico YY. Formato XXYY.'],
+        ['15','RAL','Rota el ACC 1 lugar a izquierda, ciclico (AC15 &rarr; AC0). Direccion ignorada.'],
+        ['16','CSA','Copia los 16 bits del registro de llaves (SR) al ACC.'],
+        ['17','NOP','No hace nada. Direccion ignorada.']
+      ];
+      for (i = 0; i < BLUE_SET.length; i++) {
+        h += '<tr style="background:' + (i % 2 ? '#fff' : '#f7f9fc') + ';"><td style="padding:4px 8px;font-family:monospace;font-weight:700;">' + BLUE_SET[i][0] + '</td><td style="padding:4px 8px;font-weight:700;color:#e94560;">' + BLUE_SET[i][1] + '</td><td style="padding:4px 8px;">' + BLUE_SET[i][2] + '</td></tr>';
+      }
+      h += '</table></div>';
+      h += '<div style="margin-top:12px;padding:10px 12px;border-radius:8px;background:#fff;font-size:0.82rem;line-height:1.55;">';
+      h += '<b>Lo que NO existe en la BLUE:</b> <code>JPZ</code> y <code>SUB</code>. El banco los usa como si fueran del set. El unico salto que mira el dato es <b>JMA</b>, y salta cuando el ACC es <b>negativo</b> &mdash; es la logica <b>inversa</b> a como el banco explica JPZ. Si un programa del banco usa JPZ, rehace el razonamiento con JMA invirtiendo la condicion.<br><br>';
+      h += '<b>Ejercicios de U4 con contenido no confiable:</b> 56, 59, 60, 61, 62, 63, 88 (mnemonicos y/o largo de palabra). Los enunciados sirven y el metodo tambien; lo que no sirve son las tablas y los mnemonicos de las soluciones. <b>56, 62 y 63</b> son los mas afectados.<br><br>';
+      h += '<b>Como decodificar (esto si es correcto):</b> parti el codigo octal como OO|DDDD, busca OO en esta tabla, y la direccion son los 4 digitos bajos. Ejemplo: <code>136601</code> &rarr; opcode <b>13 = INP</b>, campo 6601 &rarr; XX=66 se ignora, YY=01 es el periferico.';
+      h += '</div></div>';
+
       // ---- POR QUE FUNCIONA ----
       h += '<details class="card"><summary style="cursor:pointer;font-weight:700;font-size:0.95rem;">&#129504; Por que este metodo y no otro (la logica y la evidencia)</summary>';
       h += '<div style="font-size:0.87rem;line-height:1.6;margin-top:10px;">';
