@@ -11280,14 +11280,17 @@ o1015  JMP ----     ; retorno (parcheado)
         <div style="margin-bottom:16px;padding:12px 14px;background:rgba(74,111,216,0.06);border-left:3px solid #4a6fd8;border-radius:8px;font-size:0.92rem;line-height:1.55;">
           <strong>Conceptos clave.</strong> La <strong>Maquina Elemental Indexada (MEI)</strong> es la Blue (TP10) ampliada con <strong>registros indice</strong> y <strong>modos de direccionamiento</strong>, para facilitar la tarea del programador y el rendimiento del sistema. Se agregan tres registros de <strong>16 bits</strong>: <strong>RIF</strong> (Registro Indice Fuente), <strong>RID</strong> (Registro Indice Destino) y <strong>RB</strong> (Registro Base), mas un <strong>Sumador de Direcciones</strong> dedicado (entradas \\(W\\), \\(X\\) y \\(RB\\)) que calcula la <em>direccion efectiva</em> en tiempo de ejecucion sin usar la ALU. El <strong>formato de instruccion deja de ser fijo</strong>: las instrucciones con acceso a memoria pasan a ocupar <strong>2 palabras</strong> &mdash; \\([\\,COP(5)\\ |\\ MOD(2)\\,]\\) en la primera y el <strong>campo de direccion (16 bits)</strong> en la segunda. Con \\(5\\) bits de COP hay hasta \\(2^{5}=32\\) instrucciones; con \\(16\\) bits de direccion se direccionan \\(2^{16}=65536\\) posiciones; con \\(2\\) bits de modo, hasta \\(4\\) modos. Las instrucciones de un ciclo de la Blue que sobreviven (NOT, RAL, HLT&hellip;) siguen ocupando <strong>1 palabra</strong>. La MEI es el <strong>puente entre la Blue y el 8088</strong> (Unidad 5): introduce indexacion, indireccion, registro base e interrupciones.
         </div>
-        <div style="margin-bottom:18px;padding:10px 14px;background:rgba(46,184,114,0.07);border-left:3px solid #2eb872;border-radius:8px;font-size:0.86rem;">
-          <strong>Verificacion.</strong> Las direcciones efectivas y las trazas de los bucles (suma de bloque, movimiento/reubicacion de bloque, recorrido e inversion de vectores con RIF/RID y el contador IJP) se comprobaron con un mini-simulador en Node que modela el calculo \\(\\text{dir.\\,efectiva}=\\text{campo}+\\text{indice}+RB\\) y la semantica decrementar-y-saltar de IJP. Coincidencia total con los resultados esperados.
+        <div style="margin-bottom:12px;padding:10px 14px;background:rgba(255,193,7,0.12);border-left:3px solid #ffc107;border-radius:8px;font-size:0.86rem;line-height:1.55;">
+          <strong>Aviso: cambiaron los mnemonicos de esta pestana.</strong> La version anterior de este TP usaba el repertorio del PPT del campus (<code>RXT</code>, <code>INI</code>, <code>IJP</code>), que <em>no</em> es el del libro. Todo el TP quedo reescrito con la <strong>Tabla 8.1</strong> (Perez, <em>Cap. 8, pp. 217-220</em>): <code>RXT</code> &rarr; <strong>CRR</strong>, <code>INI</code> &rarr; <strong>INC</strong>, <code>IJP</code> &rarr; <strong>JRI</strong> (<code>SIX</code>, <code>LIX</code> y <code>ENI</code> se llaman igual en los dos). Y el cambio no es solo de nombre: <strong>JRI no decrementa</strong>, solo testea y salta, asi que todo bucle que antes cerraba con un unico <code>IJP</code> ahora cierra con el <strong>par</strong> <code>INC Reg,-1</code> + <code>JRI Reg,BUCLE</code>. En el oral: deci CRR / INC / JRI y aclara que en el apunte del campus figuran como RXT / INI / IJP.
+        </div>
+        <div style="margin-bottom:18px;padding:10px 14px;background:rgba(46,184,114,0.07);border-left:3px solid #2eb872;border-radius:8px;font-size:0.86rem;line-height:1.55;">
+          <strong>Verificacion.</strong> Las trazas de esta pestana se siguieron <strong>a mano, instruccion por instruccion, contra la Tabla 8.1</strong> (Perez, <em>pp. 217-220</em>): direccion efectiva = campo de direccion + indice (RIF si MOD=2, RID si MOD=3) + RB, y bucles cerrados con el par <code>INC</code> + <code>JRI</code>. <strong>No hay simulador detras de estos numeros</strong>, y a proposito: la verificacion anterior se habia corrido con la semantica equivocada de <code>IJP</code> (decrementar-y-saltar), que el libro no define en ninguna parte. Las direcciones de los programas van en <strong>octal</strong> y salen de los tamanos que da la propia Tabla 8.1 &mdash; <strong>2 palabras</strong>: ADD, XOR, AND, IOR, LDA, STA, SRJ, JMA, JMP, SIX, LIX, ENI, JRI; <strong>1 palabra</strong>: HLT, NOT, INP, OUT, RAL, CSA, NOP, CRR, INC, SKF, ION, IOF, RTI.
         </div>
 
         <h4 style="margin:22px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Modos de direccionamiento</h4>
         <p style="font-size:0.88rem;margin:4px 0 10px;line-height:1.55;">El <strong>modo de direccionamiento</strong> indica al procesador como calcular la <strong>direccion efectiva</strong> (real o absoluta) del operando. El operando puede estar en la <strong>memoria</strong>, en un <strong>registro</strong> de la CPU, o en la propia <strong>instruccion</strong>. En la MEI el campo modificador \\(MOD\\) (2 bits) selecciona el modo para las instrucciones que acceden a memoria; el contenido de \\(RB\\) se suma <em>siempre</em> en toda referencia a memoria (lo controla solo el administrador).</p>
         ${dataTable(['Modo (MOD)','Notacion','Direccion efectiva del operando','Ejemplo'], [
-          ['<strong>Inmediato</strong> &mdash;','<code>ENI R, V</code>','El operando \\(V\\) esta en la propia instruccion (no hay acceso a memoria de dato). No existia en la Blue.','<code>ENI RID, 1000</code> \\(\\to\\) \\(RID \\leftarrow 1000\\)'],
+          ['<strong>Inmediato</strong> &mdash;','<code>ENI mod, V</code>','El operando \\(V\\) esta en la propia instruccion (no hay acceso a memoria de dato). No existia en la Blue. En el libro el primer operando es el <strong>numero</strong> del campo modificador, que elige el destino: 0 = ACC, 1 = RB (privada), 2 = RIF, 3 = RID (Tabla 8.1, p. 219).','<code>ENI 3, 1000</code> \\(\\to\\) \\(RID \\leftarrow 1000\\)'],
           ['<strong>Por registro</strong> &mdash;','<code>NOT</code>, <code>RAL</code>, <code>CSA</code>','El operando esta en un registro de la CPU (el ACC). Heredado de la Blue.','<code>NOT</code> \\(\\to\\) \\(ACC \\leftarrow \\overline{ACC}\\)'],
           ['<strong>Directo</strong> \\(MOD=00\\)','<code>LDA 0, D</code>','\\(\\text{ef} = D\\). El campo direccion <em>es</em> la direccion del operando.','<code>LDA 0, 1000</code> \\(\\to\\) \\(ACC \\leftarrow (1000)\\)'],
           ['<strong>Indirecto</strong> \\(MOD=01\\)','<code>LDA 1, D</code>','\\(\\text{ef} = (D)\\). El campo direccion apunta a una celda que contiene la direccion del operando.','<code>LDA 1, 1000</code> con \\((1000){=}3400\\) \\(\\to\\) \\(ACC \\leftarrow (3400)\\)'],
@@ -11297,61 +11300,70 @@ o1015  JMP ----     ; retorno (parcheado)
         <p style="font-size:0.86rem;margin:10px 0 4px;line-height:1.55;">En todos los modos con referencia a memoria, el hardware calcula en realidad \\(\\text{dir. efectiva} = (\\text{campo o indireccion}) + RB\\). El <strong>acarreo del sumador de direcciones no se tiene en cuenta</strong>. El direccionamiento indirecto requiere un ciclo de memoria extra (4 ciclos de maquina); el indexado, 3 ciclos.</p>
 
         <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Nuevas instrucciones de la MEI</h4>
-        <p style="font-size:0.88rem;margin:4px 0 10px;">Junto a los modos, se agregan instrucciones para manejar registros indice e implementar contadores de bucle. \\(Reg\\) puede ser RIF, RID o (privilegiado) RB.</p>
-        ${dataTable(['Mnemonico','Accion','Semantica'], [
-          ['<strong>ENI</strong> Reg, V','Cargar registro con el entero \\(V\\) (inmediato).','\\(Reg \\leftarrow V\\)'],
-          ['<strong>INI</strong> Reg, V','Incrementar el registro en la cantidad entera \\(V\\).','\\(Reg \\leftarrow Reg + V\\)'],
-          ['<strong>INC</strong> 2, V','Incrementar el RIF en \\(V\\) (entero signado de 9 bits).','\\(RIF \\leftarrow RIF + V\\)'],
-          ['<strong>RXT</strong> R1, R2','Copiar el contenido de un registro a otro.','\\(R_1 \\leftarrow R_2\\)'],
-          ['<strong>LIX</strong> Reg, D','Cargar el registro indice desde memoria (sin modo indexado: se autoindexaria).','\\(Reg \\leftarrow (D)\\)'],
-          ['<strong>SIX</strong> Reg, D','Guardar el registro indice en memoria.','\\((D) \\leftarrow Reg\\)'],
-          ['<strong>IJP</strong> Reg, D','Contador de bucle: si \\(Reg \\ne 0\\), decrementa y salta a \\(D\\); si \\(Reg = 0\\), sigue.','\\(Reg \\ne 0:\\ Reg \\leftarrow Reg-1,\\ PC \\leftarrow D\\)']
+        <p style="font-size:0.88rem;margin:4px 0 10px;line-height:1.55;">Junto a los modos, la MEI agrega instrucciones para manejar los registros indice y armar contadores de bucle. Van con el <strong>mnemonico y la semantica exactos de la Tabla 8.1</strong> (Perez, <em>Cap. 8, pp. 217-220</em>). Atencion a la notacion del libro: el primer operando es el <strong>numero del campo modificador</strong>, no el nombre del registro &mdash; <code>ENI 3, 1000</code> se lee &ldquo;cargar el entero 1000 en el RID&rdquo;. Entre parentesis, las <strong>palabras de memoria</strong> que ocupa cada instruccion.</p>
+        ${dataTable(['COP (octal)','Mnemonico','Modif.','Accion textual segun la Tabla 8.1'], [
+          ['<strong>20</strong> (1)','<strong>CRR</strong> mod','0 / 1 / 2 / 3','Copia <strong>ACC &rarr; RIF</strong> (0), <strong>ACC &rarr; RID</strong> (1), <strong>RIF &rarr; ACC</strong> (2), <strong>RID &rarr; ACC</strong> (3). <strong>Siempre pasa por el ACC</strong>: no es un &ldquo;registro a registro&rdquo; generico.'],
+          ['<strong>21</strong> (2)','<strong>SIX</strong> mod, D','2 / 3','Guarda el <strong>RIF</strong> (2) o el <strong>RID</strong> (3) en la posicion de memoria D.'],
+          ['<strong>22</strong> (2)','<strong>LIX</strong> mod, D','2 / 3','Carga el <strong>RIF</strong> (2) o el <strong>RID</strong> (3) con el contenido de la posicion de memoria D.'],
+          ['<strong>23</strong> (2)','<strong>ENI</strong> mod, V','0 / 1 / 2 / 3','Carga el <strong>numero entero</strong> V en el <strong>ACC</strong> (0), el <strong>RB</strong> (1), el <strong>RIF</strong> (2) o el <strong>RID</strong> (3). El modo 1 es <strong>instruccion privada</strong>: solo debe usarla el administrador del sistema.'],
+          ['<strong>24</strong> (1)','<strong>INC</strong> mod, XXX','2 / 3','&ldquo;Incrementa en XXX al RIF (2) / RID (3). XXX es un numero <strong>signado de 9 bits</strong>&rdquo;. Como es signado, <code>INC 3, -1</code> <strong>decrementa</strong> el RID: este es el decremento del bucle.'],
+          ['<strong>25</strong> (2)','<strong>JRI</strong> mod, D','2 / 3','&ldquo;Si el contenido del RIF (2) / RID (3) <strong>no es cero</strong>, salta a la posicion D. Si el contenido es cero sigue en la siguiente instruccion&rdquo;. <strong>JRI NO decrementa</strong>: solo testea y salta.'],
+          ['<strong>26</strong> (1)','<strong>SKF</strong> XYY','&mdash;','Omite la siguiente instruccion si la bandera de dispositivo <strong>BDYY = 0</strong>. Es la instruccion del <em>polling</em>.'],
+          ['<strong>27 / 30 / 31</strong> (1)','<strong>ION / IOF / RTI</strong>','&mdash;','Habilita interrupciones / las inhabilita / retorno de interrupcion con rehabilitacion del sistema de interrupciones.']
         ])}
+        <div style="margin-top:10px;padding:8px 12px;background:rgba(255,193,7,0.10);border-left:3px solid #ffc107;border-radius:4px;font-size:0.84rem;line-height:1.6;">
+          <strong>Sinonimos del PPT del campus</strong> (no son los del libro): <code>RXT</code> = <strong>CRR</strong> &middot; <code>INI</code> = <strong>INC</strong> &middot; <code>IJP</code> = <strong>JRI</strong>. <code>SIX</code>, <code>LIX</code> y <code>ENI</code> se llaman igual en los dos. Para CRR e INC la equivalencia es solo de <em>nombre</em>; para <code>IJP</code> <strong>no</strong> lo es, porque el PPT le agrega un decremento que la Tabla 8.1 no le da. <strong>Manda la Tabla 8.1</strong> (pp. 217-220).
+        </div>
         <div style="margin-top:10px;padding:8px 12px;background:rgba(74,111,216,0.04);border-left:3px solid #4a6fd8;border-radius:4px;font-size:0.84rem;line-height:1.6;">
-          <strong>Idiomas tipicos de la MEI.</strong> <strong>Recorrer un vector:</strong> indice en \\(0\\), acceso con <code>LDA 2, base</code>, <code>INI RIF,1</code> al final de cada vuelta. <strong>Contar el bucle:</strong> cargar el largo en RIF/RID con <code>ENI</code> y cerrar con <code>IJP Reg, BUCLE</code> (combina decremento + test de cero + salto en una sola instruccion, reemplazando el patron <code>ADD -1 ; JMA</code> de la Blue). <strong>Reubicar codigo:</strong> el administrador carga \\(RB\\) (<code>ENI RB, base</code>, privilegiada) y todas las direcciones se corrigen solas en ejecucion; las constantes quedan inmunes porque solo se suma \\(RB\\) en <em>referencias a memoria</em>.
+          <strong>Idiomas tipicos de la MEI</strong> (Tabla 8.1, pp. 217-220). <strong>Recorrer un vector:</strong> indice en \\(0\\) con <code>ENI 2, 0</code>, acceso con <code>LDA 2, base</code> y <code>INC 2, 1</code> al final de cada vuelta. <strong>Contar el bucle &mdash; con el PAR, no con una sola instruccion:</strong> cargar el largo con <code>ENI 3, N</code> y cerrar con <code>INC 3, -1</code> <em>seguido de</em> <code>JRI 3, BUCLE</code>; <code>INC</code> pone el decremento (campo XXX signado de 9 bits) y <code>JRI</code> pone el test de cero y el salto. Ese par es el antepasado del <code>LOOP</code> del 8088, y a su vez el descendiente del <code>ADD -1 ; JMA</code> de la Blue. <strong>Operar un indice con la ALU:</strong> hay que pasarlo por el ACC &mdash; <code>CRR 2</code> lleva el RIF al ACC y <code>CRR 0</code> lo devuelve al RIF. <strong>Reubicar codigo:</strong> el administrador carga \\(RB\\) con <code>ENI 1, base</code> (privada) y todas las referencias a memoria se corrigen solas en ejecucion; las constantes quedan inmunes porque \\(RB\\) solo se suma en <em>referencias a memoria</em>.
         </div>
 
         <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver en clase</h4>
 
         ${tpExercise('tp11_e1', 'Ejercicio 1 &mdash; Resolver la direccion efectiva segun el modo',
-          `<p>Para cada instruccion, indique la <strong>direccion efectiva</strong> del operando y el resultado, dados: \\(RIF = 5000\\), \\(RID = 500\\), \\(RB = 0\\), \\((1000) = 3400\\), \\((3400) = 99\\), \\((6000) = 42\\). Instrucciones: <code>LDA 0, 1000</code> &middot; <code>LDA 1, 1000</code> &middot; <code>LDA 2, 1000</code> &middot; <code>STA 3, 2000</code> &middot; <code>ENI RID, 1000</code>.</p>`,
+          `<p>Para cada instruccion, indique la <strong>direccion efectiva</strong> del operando y el resultado, dados: \\(RIF = 5000\\), \\(RID = 500\\), \\(RB = 0\\), \\((1000) = 3400\\), \\((3400) = 99\\), \\((6000) = 42\\). Instrucciones: <code>LDA 0, 1000</code> &middot; <code>LDA 1, 1000</code> &middot; <code>LDA 2, 1000</code> &middot; <code>STA 3, 2000</code> &middot; <code>ENI 3, 1000</code> (mod 3 = RID).</p>`,
           `<p>Se aplica la regla \\(\\text{ef} = (\\text{campo o indireccion}) + RB\\) segun el modo. Aqui \\(RB=0\\), de modo que la suma de base no altera los valores.</p>
           ${dataTable(['Instruccion','Modo','Calculo de la direccion efectiva','Resultado'], [
             ['<code>LDA 0, 1000</code>','Directo','\\(\\text{ef}=1000\\)','\\(ACC \\leftarrow (1000) = 3400\\)'],
             ['<code>LDA 1, 1000</code>','Indirecto','\\(\\text{ef}=(1000)=3400\\)','\\(ACC \\leftarrow (3400) = 99\\)'],
             ['<code>LDA 2, 1000</code>','Indexado RIF','\\(\\text{ef}=1000+RIF=1000+5000=6000\\)','\\(ACC \\leftarrow (6000) = 42\\)'],
             ['<code>STA 3, 2000</code>','Indexado RID','\\(\\text{ef}=2000+RID=2000+500=2500\\)','\\((2500) \\leftarrow ACC\\)'],
-            ['<code>ENI RID, 1000</code>','Inmediato','sin acceso a memoria de dato','\\(RID \\leftarrow 1000\\)']
+            ['<code>ENI 3, 1000</code>','Inmediato','sin acceso a memoria de dato (mod 3 = RID, p. 219)','\\(RID \\leftarrow 1000\\)']
           ], 2)}
-          ${tpResult('Direcciones efectivas: 1000, 3400, 6000, 2500. El modo indirecto encadena dos accesos a memoria; el indexado suma el registro indice al campo direccion. Verificado con el simulador.')}`
+          ${tpResult('Direcciones efectivas: 1000, 3400, 6000, 2500. El modo indirecto encadena dos accesos a memoria; el indexado suma el registro indice al campo direccion. Trazado a mano contra la Tabla 8.1 (Perez, pp. 217-220).')}`
         )}
 
         ${tpExercise('tp11_e2', 'Ejercicio 2 &mdash; Sumar un bloque de numeros con registro indice',
-          `<p>Sumar sucesivamente un conjunto de numeros ubicados correlativamente desde la posicion <code>1000</code>, recorriendo el bloque con el RIF y usando IJP como contador. (En la maquina elemental Blue esto exigia auto-modificar el operando; aqui lo resuelve el direccionamiento indexado.)</p>`,
-          `<p>Se carga el largo del bloque en el RIF... no: el RIF se usa como <em>desplazamiento</em> (arranca en 0 y avanza), y el <strong>contador</strong> del bucle va en RID. La suma parcial se acumula en el ACC apoyandose en memoria.</p>
-<pre>Dir   Mnemonico       ; Comentario
-;--- suma = 0 ; RIF = 0 (desplazamiento) ; RID = N (contador) ---
-      LDA 0, cero      ; ACC <- 0
-      STA 0, suma      ; suma <- 0
-      ENI RIF, 0       ; desplazamiento inicial
-      ENI RID, N       ; contador = cantidad de numeros
-;--- BUCLE: suma += (1000 + RIF) ; RIF++ ; IJP RID ---
-BUCLE LDA 0, suma      ; ACC <- suma parcial
-      ADD 2, 1000      ; ACC <- suma + (1000 + RIF)   (indexado RIF)
-      STA 0, suma      ; suma <- nueva suma parcial
-      INI RIF, 1       ; avanza el desplazamiento
-      IJP RID, BUCLE   ; si RID!=0: RID-- y vuelve; si 0 sigue
-      HLT
-; Datos: cero=0 ; suma ; N = cantidad ; bloque en 1000..1000+N-1</pre>
-          <p style="font-size:0.88rem;"><strong>Traza</strong> con \\(N=5\\) y bloque \\((1000{\\ldots}1004) = 7,12,3,8,5\\):</p>
-          ${dataTable(['Iteracion','RIF','Dir. efectiva \\(1000{+}RIF\\)','Dato leido','Suma parcial'], [
-            ['1','0','1000','7','7'],
-            ['2','1','1001','12','19'],
-            ['3','2','1002','3','22'],
-            ['4','3','1003','8','30'],
-            ['5','4','1004','5','35']
+          `<p>Sumar sucesivamente un conjunto de numeros ubicados correlativamente desde la posicion <code>1000</code>, recorriendo el bloque con el RIF y contando las vueltas con el par <code>INC 3, -1</code> + <code>JRI 3, BUCLE</code> sobre el RID. (En la maquina elemental Blue esto exigia auto-modificar el operando; aqui lo resuelve el direccionamiento indexado.)</p>`,
+          `<p>El <strong>RIF</strong> es el <em>desplazamiento</em> (arranca en 0 y avanza) y el <strong>RID</strong> es el <em>contador</em> de vueltas (arranca en N y baja). La suma parcial se acumula en memoria porque el ACC hace falta para cada lectura. Ojo con el cierre del bucle: hacen falta <strong>dos</strong> instrucciones, <code>INC 3, -1</code> para decrementar y <code>JRI 3, BUCLE</code> para testear y saltar (Tabla 8.1, p. 219).</p>
+<pre>Dir   Etiq   Mnemonico     ; Comentario                 (direcciones en octal)
+;---- Inicializacion: suma = 0 ; RIF = 0 (desplazamiento) ; RID = N (contador)
+0500         ENI 0, 0      ; ACC &lt;- 0    (ENI mod 0 = cargar un entero en el ACC)
+0502         STA 0, suma   ; suma &lt;- 0
+0504         ENI 2, 0      ; RIF &lt;- 0    (mod 2 = RIF)  desplazamiento inicial
+0506         ENI 3, N      ; RID &lt;- N    (mod 3 = RID)  contador de vueltas
+;---- Bucle: suma += (1000+RIF) ; RIF++ ; RID-- ; volver si RID no es cero
+0510  BUCLE  LDA 0, suma   ; ACC &lt;- suma parcial
+0512         ADD 2, 1000   ; ACC &lt;- ACC + (1000+RIF)     indexado por RIF
+0514         STA 0, suma   ; suma &lt;- suma parcial nueva
+0516         INC 2, 1      ; RIF &lt;- RIF + 1              avanza el desplazamiento
+0517         INC 3, -1     ; RID &lt;- RID - 1   DECREMENTA el contador (lo hace INC,
+                           ;                  no JRI: JRI solo testea y salta)
+0520         JRI 3, BUCLE  ; si RID no es cero salta a 0510 ; si es cero sigue
+0522         HLT
+; Datos: suma (1 celda) ; N = cantidad de numeros ; bloque en 1000..1000+N-1
+; El cuerpo del bucle mide 10 palabras (0510 a 0521): LDA 2 + ADD 2 + STA 2 +
+; INC 1 + INC 1 + JRI 2. Con el IJP de una sola instruccion media 8 palabras y
+; nunca decrementaba el contador: el bucle no terminaba jamas.</pre>
+          <p style="font-size:0.88rem;"><strong>Traza</strong> con \\(N=5\\) y bloque \\((1000{\\ldots}1004) = 7,12,3,8,5\\). Se muestra el estado <em>al entrar</em> a cada vuelta y el RID <em>despues</em> del <code>INC 3, -1</code>:</p>
+          ${dataTable(['Vuelta','RIF al entrar','Dir. efectiva \\(1000{+}RIF\\)','Dato leido','Suma parcial','RID tras <code>INC 3,-1</code>','<code>JRI 3</code>'], [
+            ['1','0','1000','7','7','4','salta'],
+            ['2','1','1001','12','19','3','salta'],
+            ['3','2','1002','3','22','2','salta'],
+            ['4','3','1003','8','30','1','salta'],
+            ['5','4','1004','5','35','0','sigue a 0522 (HLT)']
           ], 4)}
-          ${tpResult('Verificado con node: suma de {7,12,3,8,5} = 35. El RIF recorre el bloque (0..4) e IJP sobre RID realiza exactamente N=5 vueltas. La direccion efectiva se calcula sola por indexado.')}`
+          ${tpResult('Trazado a mano contra la Tabla 8.1 (pp. 217-220): suma de 7+12+3+8+5 = 35 y el programa para. El RIF recorre el bloque (0..4) mientras el par INC 3,-1 + JRI 3,BUCLE cuenta exactamente N=5 vueltas. La direccion efectiva la calcula el Sumador de Direcciones por indexado. Con el IJP del PPT, que segun el libro no decrementa, el RID quedaria en N para siempre: bucle infinito.')}`
         )}
 
         ${tpExercise('tp11_e3', 'Ejercicio 3 &mdash; Mover / reubicar un bloque de datos',
@@ -11361,36 +11373,39 @@ BUCLE LDA 0, suma      ; ACC <- suma parcial
 LDA 201 ; STA 151
 LDA 202 ; STA 152
 -----   ; (L pares de instrucciones)</pre>
-          <p><strong>Version MEI (bucle iterativo):</strong> un solo cuerpo recorrido con el RIF, contado con IJP. El mismo RIF sirve de desplazamiento para origen y destino porque ambos avanzan a la par.</p>
-<pre>Dir   Mnemonico       ; Comentario
-      ENI RID, L       ; contador = longitud del bloque
-      ENI RIF, 0       ; desplazamiento inicial
-BUCLE LDA 2, 200       ; ACC <- (200 + RIF)   origen indexado
-      STA 2, 150       ; (150 + RIF) <- ACC   destino indexado
-      INI RIF, 1       ; avanza el desplazamiento
-      IJP RID, BUCLE   ; si RID!=0: RID-- y repite
-      HLT
-; Bloque origen en 200..200+L-1 ; destino 150..150+L-1</pre>
+          <p><strong>Version MEI (bucle iterativo):</strong> un solo cuerpo recorrido con el RIF y contado con el par <code>INC</code> + <code>JRI</code> sobre el RID. El mismo RIF sirve de desplazamiento para origen y destino porque los dos avanzan a la par.</p>
+<pre>Dir   Etiq   Mnemonico     ; Comentario                 (direcciones en octal)
+0500         ENI 2, 0      ; RIF &lt;- 0   desplazamiento comun a origen y destino
+0502         ENI 3, L      ; RID &lt;- L   contador = longitud del bloque
+0504  BUCLE  LDA 2, 200    ; ACC &lt;- (200 + RIF)     origen, indexado por RIF
+0506         STA 2, 150    ; (150 + RIF) &lt;- ACC     destino, el MISMO RIF
+0510         INC 2, 1      ; RIF &lt;- RIF + 1         avanza el desplazamiento
+0511         INC 3, -1     ; RID &lt;- RID - 1         decrementa el contador
+0512         JRI 3, BUCLE  ; si RID no es cero vuelve a 0504 ; si es cero sigue
+0514         HLT
+; Bloque origen en 200..200+L-1 ; destino en 150..150+L-1
+; El cuerpo del bucle mide 8 palabras (0504 a 0513) y NO depende de L.</pre>
           <p style="font-size:0.88rem;"><strong>Traza</strong> con \\(L=5\\) y origen \\((200{\\ldots}204) = 10,20,30,40,50\\):</p>
-          ${dataTable(['Iteracion','RIF','Origen \\(200{+}RIF\\)','Destino \\(150{+}RIF\\)','Dato movido'], [
-            ['1','0','200','150','10'],
-            ['2','1','201','151','20'],
-            ['3','2','202','152','30'],
-            ['4','3','203','153','40'],
-            ['5','4','204','154','50']
+          ${dataTable(['Vuelta','RIF al entrar','Origen \\(200{+}RIF\\)','Destino \\(150{+}RIF\\)','Dato movido','RID tras <code>INC 3,-1</code>','<code>JRI 3</code>'], [
+            ['1','0','200','150','10','4','salta'],
+            ['2','1','201','151','20','3','salta'],
+            ['3','2','202','152','30','2','salta'],
+            ['4','3','203','153','40','1','salta'],
+            ['5','4','204','154','50','0','sigue a 0514 (HLT)']
           ], null)}
-          ${tpResult('Verificado con node: el bloque queda copiado en 150..154 = {10,20,30,40,50}. La version MEI es de tamano constante (independiente de L); la version Blue crece con L. Cargando RB en lugar de un bucle, el administrador reubica sin tocar el codigo.')}`
+          ${tpResult('Trazado a mano contra la Tabla 8.1 (pp. 217-220): el bloque queda copiado en 150..154 = 10,20,30,40,50 y el programa para tras 5 vueltas. La version MEI es de tamano constante (8 palabras de bucle, independiente de L); la version Blue crece con L. Y si en vez del bucle el administrador carga el Registro Base con ENI 1, despl, reubica sin mover un solo dato ni tocar el codigo.')}`
         )}
 
         ${tpExercise('tp11_e4', 'Ejercicio 4 &mdash; Correccion de direcciones con el Registro Base',
-          `<p>Un usuario escribe su programa suponiendo que comienza en la direccion <code>0000</code>. El Relocating Loader lo carga a partir de la direccion <code>5000</code>. Muestre como el <strong>Registro Base</strong> corrige las referencias a memoria sin modificar las constantes. Programa: <code>0000 ENI RID, 1000</code> &middot; <code>0001 LDA 3, 1234</code>.</p>`,
-          `<p>El contenido de \\(RB\\) se suma <strong>solo</strong> cuando hay una referencia a memoria en ejecucion; los datos inmediatos (constantes) quedan inmunes. El loader privilegiado ejecuta <code>ENI RB, 5000</code>.</p>
+          `<p>Un usuario escribe su programa suponiendo que comienza en la direccion <code>0000</code>. El Relocating Loader lo carga a partir de la direccion <code>5000</code>. Muestre como el <strong>Registro Base</strong> corrige las referencias a memoria sin modificar las constantes. Programa: <code>0000 ENI 3, 1000</code> &middot; <code>0001 LDA 3, 1234</code> (transcripto tal cual de Perez, p. 214).</p>`,
+          `<p>El contenido de \\(RB\\) se suma <strong>solo</strong> cuando hay una referencia a memoria en ejecucion; los datos inmediatos (constantes) quedan inmunes. El loader privilegiado ejecuta <code>ENI 1, 5000</code>: el modo 1 de ENI es el que carga el RB y es <strong>instruccion privada</strong> (Tabla 8.1, p. 219).</p>
           ${dataTable(['Instruccion','Tipo de operando','Sin RB \\((RB{=}0)\\)','Con \\(RB = 5000\\)'], [
-            ['<code>ENI RID, 1000</code>','Constante inmediata','\\(RID \\leftarrow 1000\\)','\\(RID \\leftarrow 1000\\) (no se altera)'],
+            ['<code>ENI 3, 1000</code>','Constante inmediata','\\(RID \\leftarrow 1000\\)','\\(RID \\leftarrow 1000\\) (no se altera)'],
             ['<code>LDA 3, 1234</code>','Referencia a memoria (indexado RID)','\\(\\text{ef}=1234+RID=2234\\)','\\(\\text{ef}=1234+RID+RB=7234\\)']
           ], 3)}
           <p style="font-size:0.88rem;">Sin base, la instruccion en <code>0001</code> accede a \\(1234+1000=2234\\). Reubicado a partir de 5000, la <em>constante</em> 1000 no cambia, pero la <em>referencia</em> se desplaza en 5000: \\(1234+1000+5000 = 7234\\). El loader no tuvo que reescribir el operando.</p>
-          ${tpResult('Verificado: con RB=5000 la direccion efectiva pasa de 2234 a 7234 (+5000), mientras la constante 1000 del ENI permanece intacta. El RB automatiza la correccion de direcciones de la multiprogramacion.')}`
+          <p style="font-size:0.84rem;color:#666;margin:6px 0 4px;">Detalle de lectura: el libro numera estas dos instrucciones como <code>0000</code> y <code>0001</code> (Perez, p. 214), aunque por la Tabla 8.1 <code>ENI</code> ocupa <strong>2 palabras</strong> y la segunda deberia caer en <code>0002</code>. Se respeta la numeracion del libro porque el ejemplo es una cita textual; en los programas de esta pestana las direcciones si estan calculadas con los tamanos reales.</p>
+          ${tpResult('Trazado a mano contra el ejemplo del libro (Perez, pp. 214-215): con RB=5000 la direccion efectiva pasa de 2234 a 7234 (+5000), mientras la constante 1000 del ENI permanece intacta. El RB automatiza la correccion de direcciones de la multiprogramacion.')}`
         )}
 
         ${tpExercise('tp11_e5', 'Ejercicio 5 &mdash; Indirecto: tabla de punteros (ejemplo de practica)',
@@ -11402,52 +11417,50 @@ BUCLE LDA 2, 200       ; ACC <- (200 + RIF)   origen indexado
       HLT
 ; (2000) = 3400  (puntero) ; (3400) = 77 (dato)</pre>
           <p style="font-size:0.88rem;">Equivalente "a mano" con dos pasos directos: <code>LDA 0, 2000</code> dejaria \\(ACC=3400\\) (la direccion, no el dato); habria que usar ese valor como direccion en un segundo acceso. El modo indirecto lo hace en una sola instruccion, a costa de un ciclo de memoria adicional (4 ciclos de maquina).</p>
-          ${tpResult('Verificado con node: LDA 1,2000 deja ACC = (3400) = 77. El indirecto resuelve en un paso lo que en la Blue exigia auto-modificacion de operando.')}`
+          ${tpResult('Trazado a mano contra la Tabla 8.1 (p. 218, LDA modo 1): LDA 1, 2000 deja ACC = (3400) = 77. El indirecto resuelve en un paso lo que en la Blue exigia auto-modificacion de operando.')}`
         )}
 
         ${tpExercise('tp11_e6', 'Ejercicio 6 &mdash; Invertir un vector con RIF y RID (ejemplo de practica)',
           `<p><em>Ejemplo de practica.</em> Copiar un vector de \\(N\\) elementos desde <code>1000</code> hacia <code>2000</code> pero <strong>invertido</strong>: el primero del origen va al ultimo del destino. Use el RIF como indice ascendente del origen y el RID como indice descendente del destino.</p>`,
-          `<p>Dos indices independientes recorren en sentidos opuestos: \\(RIF\\) sube \\(0,1,2,\\ldots\\) ; \\(RID\\) baja \\(N{-}1, N{-}2, \\ldots\\). El contador del bucle se lleva por separado (aqui en una celda, decrementada con el idioma IJP sobre un tercer uso de indice o un contador en memoria).</p>
-<pre>Dir   Mnemonico       ; Comentario
-      ENI RIF, 0       ; indice origen (ascendente)
-      ENI RID, N-1     ; indice destino (descendente)
-      ENI RB, 0        ; (sin reubicacion)
-      LIX 0, cont0     ; carga contador auxiliar = N   (idea)
-BUCLE LDA 2, 1000      ; ACC <- (1000 + RIF)   origen
-      STA 3, 2000      ; (2000 + RID) <- ACC   destino invertido
-      INI RIF, 1       ; sube indice origen
-      INI RID, -1      ; baja indice destino
-      ; --- decrementar contador y repetir N veces ---
-      IJP RID2, BUCLE  ; (RID2 = contador dedicado inicializado en N)
-      HLT
+          `<p>Dos indices recorren en sentidos opuestos: el <strong>RIF sube</strong> \\(0,1,2,\\ldots\\) sobre el origen y el <strong>RID baja</strong> sobre el destino. Pero la MEI tiene solo <em>dos</em> registros indice, asi que el RID debe hacer de indice del destino <strong>y</strong> de contador del bucle a la vez. Y como <code>JRI</code> corta cuando el registro llega a <strong>cero</strong>, el RID tiene que recorrer \\(N, N{-}1, \\ldots, 1\\) y no \\(N{-}1, \\ldots, 0\\): esa unidad de corrimiento se absorbe en la <strong>constante</strong> del campo de direccion, escribiendo en <code>2000 - 1 = 1777</code> (octal) mas el RID.</p>
+<pre>Dir   Etiq   Mnemonico     ; Comentario                 (direcciones en octal)
+0500         ENI 2, 0      ; RIF &lt;- 0   indice del ORIGEN, ascendente
+0502         ENI 3, N      ; RID &lt;- N   indice del DESTINO (descendente) y contador
+0504  BUCLE  LDA 2, 1000   ; ACC &lt;- (1000 + RIF)      origen
+0506         STA 3, 1777   ; (1777 + RID) &lt;- ACC      destino invertido
+                           ; 1777 = 2000 - 1 en octal, porque el RID vale N..1
+0510         INC 2, 1      ; RIF &lt;- RIF + 1    sube el indice del origen
+0511         INC 3, -1     ; RID &lt;- RID - 1    baja el del destino Y cuenta la vuelta
+0512         JRI 3, BUCLE  ; si RID no es cero vuelve a 0504 ; si es cero sigue
+0514         HLT
 ; Origen 1000..1000+N-1 ; destino 2000..2000+N-1 ; N elementos</pre>
           <p style="font-size:0.88rem;"><strong>Traza</strong> con \\(N=4\\) y origen \\((1000{\\ldots}1003) = 1,2,3,4\\):</p>
-          ${dataTable(['Paso','RIF','RID','Lee \\(1000{+}RIF\\)','Escribe \\(2000{+}RID\\)'], [
-            ['1','0','3','1','(2003) \\(\\leftarrow 1\\)'],
-            ['2','1','2','2','(2002) \\(\\leftarrow 2\\)'],
-            ['3','2','1','3','(2001) \\(\\leftarrow 3\\)'],
-            ['4','3','0','4','(2000) \\(\\leftarrow 4\\)']
+          ${dataTable(['Vuelta','RIF','RID','Lee \\(1000{+}RIF\\)','Escribe en \\(1777{+}RID\\)','RID tras <code>INC 3,-1</code>','<code>JRI 3</code>'], [
+            ['1','0','4','1','(2003) \\(\\leftarrow 1\\)','3','salta'],
+            ['2','1','3','2','(2002) \\(\\leftarrow 2\\)','2','salta'],
+            ['3','2','2','3','(2001) \\(\\leftarrow 3\\)','1','salta'],
+            ['4','3','1','4','(2000) \\(\\leftarrow 4\\)','0','sigue a 0514 (HLT)']
           ], null)}
-          ${tpResult('Verificado con node: destino 2000..2003 = {4,3,2,1}, el vector {1,2,3,4} invertido. RIF y RID recorriendo en sentidos opuestos resuelven la inversion sin aritmetica de direcciones manual.')}`
+          ${tpResult('Trazado a mano contra la Tabla 8.1 (pp. 217-220): destino 2000..2003 = 4,3,2,1, o sea el vector 1,2,3,4 invertido, en exactamente N=4 vueltas. La version anterior de este programa inventaba un tercer registro indice RID2 que no existe en la MEI y cerraba con IJP. Con solo RIF y RID el truco es que el contador sea el propio indice del destino, y que la unidad de corrimiento viva en la constante 1777 = 2000 - 1.')}`
         )}
 
         <h4 style="margin:24px 0 12px;border-bottom:2px solid var(--accent-primary,#ee5a6f);padding-bottom:5px;">Ejercicios a resolver por el alumno</h4>
 
         ${tpExercise('tp11_a1', 'Ejercicio 1 &mdash; Producto escalar de dos vectores',
-          `<p>Dados dos vectores de \\(N\\) enteros en <code>1000</code> y <code>2000</code>, calcule su producto escalar \\(\\sum_{i} a_i \\cdot b_i\\) y deposite el resultado en <code>suma</code>. Use el RIF como indice comun y un contador IJP. (La multiplicacion \\(a_i \\cdot b_i\\) se sintetiza por sumas sucesivas, como en TP10.)</p>`,
-          `<p>Esqueleto: \\(RIF \\leftarrow 0\\), contador \\(\\leftarrow N\\); en cada vuelta leer <code>LDA 2, 1000</code> y <code>LDA 2, 2000</code> (mismo RIF), multiplicar por sumas sucesivas, acumular en <code>suma</code>, <code>INI RIF, 1</code>, cerrar con <code>IJP</code>. Verifique con un caso pequeno, p. ej. \\(a=(1,2,3)\\), \\(b=(4,5,6)\\) \\(\\to\\) \\(4+10+18 = 32\\).</p>
+          `<p>Dados dos vectores de \\(N\\) enteros en <code>1000</code> y <code>2000</code>, calcule su producto escalar \\(\\sum_{i} a_i \\cdot b_i\\) y deposite el resultado en <code>suma</code>. Use el RIF como indice comun de los dos vectores y cuente las vueltas con el par <code>INC 3, -1</code> + <code>JRI 3, BUCLE</code> sobre el RID. (La multiplicacion \\(a_i \\cdot b_i\\) se sintetiza por sumas sucesivas, como en TP10.)</p>`,
+          `<p>Esqueleto: \\(RIF \\leftarrow 0\\), contador \\(\\leftarrow N\\); en cada vuelta leer <code>LDA 2, 1000</code> y <code>LDA 2, 2000</code> (mismo RIF), multiplicar por sumas sucesivas, acumular en <code>suma</code>, avanzar con <code>INC 2, 1</code> y cerrar el bucle con <code>INC 3, -1</code> seguido de <code>JRI 3, BUCLE</code> (son <strong>dos</strong> instrucciones: JRI no decrementa, Tabla 8.1 p. 219). Verifique con un caso pequeno, p. ej. \\(a=(1,2,3)\\), \\(b=(4,5,6)\\) \\(\\to\\) \\(4+10+18 = 32\\).</p>
           ${tpResult('Pista: con un solo RIF se indexan ambos vectores porque comparten el mismo \\(i\\). El producto interno reutiliza el bucle de multiplicacion por sumas del TP10 dentro del bucle de recorrido.')}`
         )}
 
         ${tpExercise('tp11_a2', 'Ejercicio 2 &mdash; Buscar el maximo de una tabla',
           `<p>Recorra una tabla de \\(N\\) enteros desde <code>1500</code> con el RIF y deje en <code>max</code> el mayor de todos. Use <code>JMA</code> sobre la diferencia para comparar (la MEI conserva el repertorio aritmetico-logico de la Blue).</p>`,
-          `<p>Esqueleto: inicializar <code>max</code> con el primer elemento, \\(RIF \\leftarrow 1\\), contador \\(\\leftarrow N-1\\); en cada vuelta calcular \\((1500+RIF) - max\\); si es positivo, actualizar <code>max</code>; <code>INI RIF, 1</code>; <code>IJP</code>. Verifique con \\((1500{\\ldots}) = 3,9,2,9,5 \\to max=9\\).</p>
+          `<p>Esqueleto: inicializar <code>max</code> con el primer elemento, \\(RIF \\leftarrow 1\\), contador \\(\\leftarrow N-1\\); en cada vuelta calcular \\((1500+RIF) - max\\); si es positivo, actualizar <code>max</code>; <code>INC 2, 1</code>; y cerrar con el par <code>INC 3, -1</code> + <code>JRI 3, BUCLE</code> (Tabla 8.1, p. 219). Verifique con \\((1500{\\ldots}) = 3,9,2,9,5 \\to max=9\\).</p>
           ${tpResult('Pista: la comparacion \\(x > max\\) se hace como \\(x + (-max)\\) y luego JMA/analisis de signo, reutilizando el idioma de resta de la Blue, mientras el RIF se encarga del recorrido.')}`
         )}
 
         ${tpExercise('tp11_a3', 'Ejercicio 3 &mdash; Reubicar un programa con Registro Base',
           `<p>Un programa residente ocupa <code>0200..02FF</code> y debe moverse a <code>0150..</code> para compactar la memoria (desfragmentacion). (a) Escriba el bucle MEI que mueve el bloque. (b) Explique como, en cambio, el Registro Base permitiria <em>ejecutarlo</em> en su nueva ubicacion sin reescribir ninguna direccion interna.</p>`,
-          `<p>(a) Es el mismo patron del Ejercicio 3 de clase con \\(L=256\\), origen 200, destino 150. (b) El administrador carga <code>ENI RB, despl</code> (instruccion privilegiada): toda referencia a memoria se corrige sumando \\(RB\\) en ejecucion, y las constantes del programa quedan intactas.</p>
+          `<p>(a) Es el mismo patron del Ejercicio 3 de clase con \\(L=256\\), origen 200, destino 150. (b) El administrador carga <code>ENI 1, despl</code> (modo 1 de ENI = Registro Base; es la <strong>instruccion privada</strong> de la Tabla 8.1, p. 219): toda referencia a memoria se corrige sumando \\(RB\\) en ejecucion, y las constantes del programa quedan intactas.</p>
           ${tpResult('Pista: mover el bloque cambia donde estan los datos; el Registro Base cambia donde el programa cree estar, sin tocar su codigo. Multiprogramacion = varios residentes + reubicacion.')}`
         )}
 
@@ -11458,8 +11471,8 @@ BUCLE LDA 2, 1000      ; ACC <- (1000 + RIF)   origen
             <li><strong>Direccion efectiva:</strong> la direccion real del operando que el hardware calcula segun el modo: \\(\\text{ef} = (\\text{campo o indireccion} + \\text{indice}) + RB\\).</li>
             <li><strong>Los 4 modos por MOD:</strong> \\(00\\) directo (\\(\\text{ef}=D\\)), \\(01\\) indirecto (\\(\\text{ef}=(D)\\), +1 ciclo de memoria), \\(10\\) indexado RIF (\\(\\text{ef}=D+RIF\\)), \\(11\\) indexado RID (\\(\\text{ef}=D+RID\\)). Mas inmediato y por registro (operando en CPU).</li>
             <li><strong>Formato variable:</strong> COP(5) + MOD(2) en una palabra + direccion(16) en otra \\(\\Rightarrow\\) 2 palabras; las instrucciones de un ciclo de la Blue siguen en 1 palabra. \\(2^5=32\\) instrucciones, \\(2^{16}=65536\\) posiciones.</li>
-            <li><strong>Registros indice vs. base:</strong> el indice lo controla el programador (recorrer tablas/vectores, contar bucles con IJP); el RB lo controla el administrador (reubicacion, multiprogramacion) y se suma <em>siempre</em> en referencias a memoria, dejando inmunes a las constantes.</li>
-            <li><strong>IJP</strong> = decrementar-y-saltar-si-no-cero: implementa el contador de bucle iterativo en una sola instruccion (reemplaza el <code>ADD -1 ; JMA</code> de la Blue).</li>
+            <li><strong>Registros indice vs. base:</strong> el indice lo controla el programador (recorrer tablas y vectores, contar bucles con el par <code>INC</code> + <code>JRI</code>); el RB lo controla el administrador (reubicacion, multiprogramacion) y se suma <em>siempre</em> en referencias a memoria, dejando inmunes a las constantes.</li>
+            <li><strong>El bucle de la MEI se arma con DOS instrucciones:</strong> <code>INC Reg,-1</code> decrementa (el campo XXX es un entero signado de 9 bits) y <code>JRI Reg,BUCLE</code> testea y salta &mdash; <em>&ldquo;si el contenido del registro indice no es cero, salta a XXXXXX; si el contenido es cero sigue en la siguiente instruccion&rdquo;</em>. <strong>JRI no decrementa nada</strong> (Tabla 8.1, pp. 217-220). El apunte del campus lo llama <code>IJP</code> y le atribuye tambien el decremento: eso no esta en el libro. El <code>LOOP</code> del 8088 si hace las dos cosas de una; en la MEI el antepasado es el <strong>par</strong>.</li>
             <li><strong>Por que se mejora la Blue:</strong> facilitar la programacion (modificar direcciones, bucles, recorrer estructuras), permitir reubicacion y multiprogramacion, y manejar E/S por interrupciones; todo ello motiva ademas un Programa Monitor que administre memoria, E/S y CPU.</li>
           </ul>
         </div>
