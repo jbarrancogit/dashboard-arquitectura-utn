@@ -14501,6 +14501,38 @@ HLT`
       h += '<b>Como decodificar (esto si es correcto):</b> parti el codigo octal como OO|DDDD, busca OO en esta tabla, y la direccion son los 4 digitos bajos. Ejemplo: <code>136601</code> &rarr; opcode <b>13 = INP</b>, campo 6601 &rarr; XX=66 se ignora, YY=01 es el periferico.';
       h += '</div></div>';
 
+
+      // ---- TABLERO DE LA AUDITORIA (27-08) ----
+      h += '<div class="card" style="border-left:5px solid #0f3460;">';
+      h += '<h3 style="margin:0 0 4px;">&#128269; Auditoria completa del Banco 89 contra el libro</h3>';
+      h += '<p style="font-size:0.84rem;line-height:1.55;margin:0 0 10px;">Los 89 ejercicios verificados uno por uno contra Perez y las guias de TP de la catedra. <b>37 quedaron limpios, 29 tienen errores criticos.</b> Casi todos vienen de <b>solo 3 causas raiz</b>, no de 29 errores sueltos.</p>';
+      var AUD = [['U1',20,10,3],['U2',29,9,10],['U3',6,6,0],['U4',16,0,14],['U5',18,12,2]];
+      h += '<div style="overflow-x:auto;"><table style="border-collapse:collapse;font-size:0.82rem;width:100%;min-width:380px;">';
+      h += '<tr style="background:#0f3460;color:#fff;"><th style="padding:5px 8px;text-align:left;">Unidad</th><th style="padding:5px 8px;">Ejercicios</th><th style="padding:5px 8px;">Limpios</th><th style="padding:5px 8px;">Criticos</th></tr>';
+      for (i = 0; i < AUD.length; i++) {
+        var pc = Math.round(AUD[i][2] / AUD[i][1] * 100);
+        var col = pc >= 80 ? '#2ecc71' : (pc >= 50 ? '#f0883e' : '#e94560');
+        h += '<tr style="background:' + (i % 2 ? '#fff' : '#f7f9fc') + ';"><td style="padding:4px 8px;font-weight:700;">' + AUD[i][0] + '</td><td style="padding:4px 8px;text-align:center;">' + AUD[i][1] + '</td><td style="padding:4px 8px;text-align:center;color:' + col + ';font-weight:700;">' + AUD[i][2] + '</td><td style="padding:4px 8px;text-align:center;">' + AUD[i][3] + '</td></tr>';
+      }
+      h += '<tr style="background:#0f346018;font-weight:700;"><td style="padding:5px 8px;">TOTAL</td><td style="padding:5px 8px;text-align:center;">89</td><td style="padding:5px 8px;text-align:center;">37</td><td style="padding:5px 8px;text-align:center;">29</td></tr>';
+      h += '</table></div>';
+      h += '<p style="font-size:0.82rem;margin:12px 0 4px;"><b>Patron que se repitio en las 5 unidades:</b> el algebra, las simplificaciones y las explicaciones estan <b>bien</b>. Lo que falla es la <b>numeracion y las convenciones</b>. Por eso se arregla de raiz y no ejercicio por ejercicio.</p>';
+      h += '</div>';
+
+      // ---- LAS 3 CONVENCIONES DE LA CATEDRA ----
+      h += '<div class="card" style="border-left:5px solid #f0883e;background:#f0883e08;">';
+      h += '<h3 style="margin:0 0 4px;color:#f0883e;">&#9888; Las 3 convenciones donde la catedra NO usa el estandar</h3>';
+      h += '<p style="font-size:0.84rem;margin:0 0 10px;line-height:1.5;">Estas tres explican la mayoria de los 29 criticos. Son lo que se evalua en la mesa. Memorizalas.</p>';
+      h += '<div style="background:#fff;border-radius:8px;padding:11px 13px;margin-bottom:8px;font-size:0.85rem;line-height:1.55;">';
+      h += '<b>1. Punto flotante: exceso 128, sin bit implicito.</b><br>El libro (pag. 24) usa exceso 2<sup>n-1</sup>, que con 8 bits da <b>128</b>, y normaliza la mantisa entre 1/2 y 1 (<code>0,1xxx</code>), asi que <b>el primer uno SI se guarda</b>. La Guia de TP de Punto Flotante resuelve el mismo item 0,125 del EJ6 asi. En la mesa: dala primero, y aclara despues que IEEE 754 usa exceso 127 con uno implicito. <span style="color:#e94560;">Afecta EJ 6, 7, 8, 9, 10.</span></div>';
+      h += '<div style="background:#fff;border-radius:8px;padding:11px 13px;margin-bottom:8px;font-size:0.85rem;line-height:1.55;">';
+      h += '<b>2. En Karnaugh y canonicas, <code>a</code> es el bit MENOS significativo.</b><br>Tabla 3.2 (pag. 70): a=1, b=2, c=4, d=8. El orden de mayor a menor peso es <code>d c b a</code>, al reves de lo habitual. Confirmado ademas por las Tablas 4.1 y 4.2 (pags. 88-89). <span style="color:#e94560;">Espeja los indices de minterminos de casi toda U2.</span></div>';
+      h += '<div style="background:#fff;border-radius:8px;padding:11px 13px;margin-bottom:8px;font-size:0.85rem;line-height:1.55;">';
+      h += '<b>3. Los maxterminos se complementan a 2<sup>n</sup>-1.</b><br>Pag. 70: <i>se buscan los terminos canonicos que no estan en la funcion y se los complementa a 2<sup>n</sup>-1</i>. Es decir <b>&Pi;M(j) pone f=0 en el indice 2<sup>n</sup>-1-j</b>, no en j. Y dentro de M<sub>j</sub> la variable va <b>directa si su bit es 1</b> y negada si es 0 &mdash; exactamente al reves de lo que dice el banco.</div>';
+      h += '<div style="background:#fff;border-radius:8px;padding:11px 13px;font-size:0.85rem;line-height:1.55;">';
+      h += '<b>De donde salio la contaminacion:</b> <code>campus/Ejercicios Resueltos Unidad Tematica 2.pdf</code> es de <b>UTN La Plata</b>, no de FRM, y usa la convencion estandar (a = mas significativa). Manda <b>Perez + las guias de TP de FRM</b>.</div>';
+      h += '</div>';
+
       // ---- POR QUE FUNCIONA ----
       h += '<details class="card"><summary style="cursor:pointer;font-weight:700;font-size:0.95rem;">&#129504; Por que este metodo y no otro (la logica y la evidencia)</summary>';
       h += '<div style="font-size:0.87rem;line-height:1.6;margin-top:10px;">';
