@@ -4769,7 +4769,59 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     <p style="font-size:0.92rem;"><b>Por que ME es importante:</b> aca se ven juntos los temas de las unidades anteriores. Los <b>datos</b> en complemento a 2 vienen de la U1; la <b>ALU</b> y los <b>registros/biestables</b> vienen de la U2; la <b>memoria RAM/ROM</b> y el MAR/MBR vienen de la U3. La Maquina Elemental los cose en una computadora completa.</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la Blue es una von Neumann minima: memoria 4096&times;16, instrucciones de 16 bits (4 opcode + 12 direccion), bus comun multiplexado, y registros ACC, IR, PC, MAR, MBR, Z, Y y SR coordinados por un reloj.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 400 190" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Formato de datos y de instrucciones de la Blue">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Palabra de 16 bits (Figs. 7.2 y 7.3)</text>
+<text x="10" y="38" font-size="9" font-weight="bold" fill="#2c3e50">a) Dato en punto fijo</text>
+<rect x="34.0" y="46" width="21.0" height="22" fill="#fdecef" stroke="#0f3460"/>
+<rect x="55.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="76.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="97.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="118.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="139.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="160.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="181.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="202.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="223.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="244.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="265.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="286.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="307.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="328.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="349.0" y="46" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<text x="44.5" y="61" font-size="8" fill="#e94560" text-anchor="middle">BS</text>
+<text x="212.5" y="61" font-size="9" fill="#2c3e50" text-anchor="middle">Mantisa (15 bits)</text>
+<text x="44.5" y="79" font-size="8" fill="#7f8c8d" text-anchor="middle">15</text>
+<text x="359.5" y="79" font-size="8" fill="#7f8c8d" text-anchor="middle">0</text>
+<text x="10" y="112" font-size="9" font-weight="bold" fill="#2c3e50">b) Instruccion</text>
+<rect x="34.0" y="120" width="21.0" height="22" fill="#fdecef" stroke="#0f3460"/>
+<rect x="55.0" y="120" width="21.0" height="22" fill="#fdecef" stroke="#0f3460"/>
+<rect x="76.0" y="120" width="21.0" height="22" fill="#fdecef" stroke="#0f3460"/>
+<rect x="97.0" y="120" width="21.0" height="22" fill="#fdecef" stroke="#0f3460"/>
+<rect x="118.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="139.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="160.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="181.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="202.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="223.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="244.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="265.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="286.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="307.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="328.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<rect x="349.0" y="120" width="21.0" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<text x="76.0" y="135" font-size="9" fill="#e94560" text-anchor="middle">Cod. Op.</text>
+<text x="244.0" y="135" font-size="9" fill="#2c3e50" text-anchor="middle">Campo de direccion (12 bits)</text>
+<text x="44.5" y="153" font-size="8" fill="#7f8c8d" text-anchor="middle">15</text>
+<text x="107.5" y="153" font-size="8" fill="#7f8c8d" text-anchor="middle">12</text>
+<text x="128.5" y="153" font-size="8" fill="#7f8c8d" text-anchor="middle">11</text>
+<text x="359.5" y="153" font-size="8" fill="#7f8c8d" text-anchor="middle">0</text>
+<line x1="118.0" y1="120" x2="118.0" y2="142" stroke="#e94560" stroke-width="2"/>
+<text x="200" y="176" font-size="8" fill="#e94560" text-anchor="middle">4 bits de opcode =&gt; a lo sumo 16 instrucciones. 12 bits =&gt; 4096 posiciones.</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Figs. 7.2, 7.3 y 7.6 (pags. 169 y 173). La palabra es de <b>16 bits</b>: 4 de codigo de operacion + 12 de direccion. NO son 18.</div></div>
+` },
           { title: 'Ciclo de maquina (fetch-decode-execute)', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el <b>ciclo de maquina</b> (o ciclo de instruccion) es la rutina que la CPU repite eternamente: <b>traer</b> una instruccion de memoria, <b>entenderla</b> y <b>hacerla</b>. En ingles: <b>fetch (buscar) &rarr; decode (decodificar) &rarr; execute (ejecutar)</b>. En la Blue esto se parte en dos mitades: <b>Ciclo de Busqueda</b> y, si hace falta, <b>Ciclo de Ejecucion</b>. Cada ciclo dura un <b>ciclo de memoria = 8 pulsos de reloj</b> (CP1 a CP8).</p>
     <h4>Las cuatro fases conceptuales</h4>
     <ol style="padding-left:20px;font-size:0.92rem;">
@@ -4860,7 +4912,114 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la UC cableada = <b>decodificador + secuenciador + logica de compuertas</b>; genera cada senal de control con una ecuacion booleana fija de (opcode, pulso, estado); es rapida pero cambiarla obliga a rehacer el circuito.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 470 306" width="100%" style="max-width:470px;font-family:inherit;" role="img" aria-label="Unidad de Control Cableada de la Blue en bloques">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Unidad de Control Cableada (Fig. 7.9)</text>
+<rect x="74" y="32" width="76" height="118" fill="#eef1f7" stroke="#0f3460"/><text x="112" y="89" font-size="9" fill="#2c3e50" text-anchor="middle">Decodificador</text><text x="112" y="101" font-size="8" fill="#7f8c8d" text-anchor="middle">de instrucciones</text>
+<line x1="30" y1="52" x2="74" y2="52" stroke="#0f3460"/><text x="30" y="49" font-size="8" fill="#7f8c8d">IR15</text>
+<line x1="30" y1="72" x2="74" y2="72" stroke="#0f3460"/><text x="30" y="69" font-size="8" fill="#7f8c8d">IR14</text>
+<line x1="30" y1="92" x2="74" y2="92" stroke="#0f3460"/><text x="30" y="89" font-size="8" fill="#7f8c8d">IR13</text>
+<line x1="30" y1="112" x2="74" y2="112" stroke="#0f3460"/><text x="30" y="109" font-size="8" fill="#7f8c8d">IR12</text>
+<line x1="150" y1="34.0" x2="250" y2="34.0" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="41.2" x2="250" y2="41.2" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="48.4" x2="250" y2="48.4" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="55.6" x2="250" y2="55.6" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="62.8" x2="250" y2="62.8" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="70.0" x2="250" y2="70.0" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="77.2" x2="250" y2="77.2" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="84.4" x2="250" y2="84.4" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="91.6" x2="250" y2="91.6" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="98.8" x2="250" y2="98.8" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="106.0" x2="250" y2="106.0" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="113.2" x2="250" y2="113.2" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="120.4" x2="250" y2="120.4" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="127.6" x2="250" y2="127.6" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="134.8" x2="250" y2="134.8" stroke="#0f3460" stroke-width="0.7"/>
+<line x1="150" y1="142.0" x2="250" y2="142.0" stroke="#0f3460" stroke-width="0.7"/>
+<text x="200" y="28" font-size="8" fill="#7f8c8d" text-anchor="middle">las 16 instrucciones (una linea cada una)</text>
+<text x="142" y="164" font-size="7" fill="#2c3e50" text-anchor="middle">HLT ADD XOR AND IOR NOT LDA STA</text>
+<text x="142" y="176" font-size="7" fill="#2c3e50" text-anchor="middle">SRJ JMA JMP INP OUT RAL CSA NOP</text>
+<rect x="74" y="196" width="76" height="84" fill="#eef1f7" stroke="#0f3460"/><text x="112" y="238" font-size="9" fill="#2c3e50" text-anchor="middle">Secuenciador</text>
+<line x1="34" y1="204.0" x2="74" y2="204.0" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="206.0" font-size="7" fill="#7f8c8d" text-anchor="end">START</text>
+<line x1="34" y1="212.6" x2="74" y2="212.6" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="214.6" font-size="7" fill="#7f8c8d" text-anchor="end">STOP</text>
+<line x1="34" y1="221.2" x2="74" y2="221.2" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="223.2" font-size="7" fill="#7f8c8d" text-anchor="end">LPC</text>
+<line x1="34" y1="229.8" x2="74" y2="229.8" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="231.8" font-size="7" fill="#7f8c8d" text-anchor="end">EXA</text>
+<line x1="34" y1="238.4" x2="74" y2="238.4" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="240.4" font-size="7" fill="#7f8c8d" text-anchor="end">DEP</text>
+<line x1="34" y1="247.0" x2="74" y2="247.0" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="249.0" font-size="7" fill="#7f8c8d" text-anchor="end">HLT</text>
+<line x1="34" y1="255.6" x2="74" y2="255.6" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="257.6" font-size="7" fill="#7f8c8d" text-anchor="end">R</text>
+<line x1="34" y1="264.2" x2="74" y2="264.2" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="266.2" font-size="7" fill="#7f8c8d" text-anchor="end">A15</text>
+<line x1="34" y1="272.8" x2="74" y2="272.8" stroke="#0f3460" stroke-width="0.7"/><text x="32" y="274.8" font-size="7" fill="#7f8c8d" text-anchor="end">0V</text>
+<line x1="112" y1="280" x2="112" y2="296" stroke="#0f3460"/><text x="116" y="294" font-size="8" font-style="italic" fill="#7f8c8d">RELOJ</text>
+<line x1="150" y1="200.0" x2="250" y2="200.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="198.5" font-size="7" fill="#7f8c8d" text-anchor="middle">CP1</text>
+<line x1="150" y1="208.0" x2="250" y2="208.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="206.5" font-size="7" fill="#7f8c8d" text-anchor="middle">CP2</text>
+<line x1="150" y1="216.0" x2="250" y2="216.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="214.5" font-size="7" fill="#7f8c8d" text-anchor="middle">CP3</text>
+<line x1="150" y1="224.0" x2="250" y2="224.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="222.5" font-size="7" fill="#7f8c8d" text-anchor="middle">CP4</text>
+<line x1="150" y1="232.0" x2="250" y2="232.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="230.5" font-size="7" fill="#7f8c8d" text-anchor="middle">CP5</text>
+<line x1="150" y1="240.0" x2="250" y2="240.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="238.5" font-size="7" fill="#7f8c8d" text-anchor="middle">CP6</text>
+<line x1="150" y1="248.0" x2="250" y2="248.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="246.5" font-size="7" fill="#7f8c8d" text-anchor="middle">CP7</text>
+<line x1="150" y1="256.0" x2="250" y2="256.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="254.5" font-size="7" fill="#7f8c8d" text-anchor="middle">CP8</text>
+<line x1="150" y1="264.0" x2="250" y2="264.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="262.5" font-size="7" fill="#7f8c8d" text-anchor="middle">E</text>
+<line x1="150" y1="272.0" x2="250" y2="272.0" stroke="#0f3460" stroke-width="0.7"/><text x="200" y="270.5" font-size="7" fill="#7f8c8d" text-anchor="middle">B</text>
+<line x1="150" y1="288" x2="330" y2="288" stroke="#e94560"/><text x="240" y="285" font-size="7.5" fill="#e94560" text-anchor="middle">TRA</text>
+<rect x="250" y="32" width="80" height="248" fill="#eef1f7" stroke="#0f3460"/><text x="290" y="154" font-size="10" fill="#2c3e50" text-anchor="middle">Logica</text><text x="290" y="166" font-size="8" fill="#7f8c8d" text-anchor="middle">de Control</text>
+<line x1="330" y1="44" x2="372" y2="44" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="46" font-size="7" fill="#0f3460">OL</text>
+<line x1="330" y1="56" x2="372" y2="56" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="58" font-size="7" fill="#0f3460">OE</text>
+<line x1="330" y1="76" x2="372" y2="76" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="78" font-size="7" fill="#0f3460">ENVIAR PC</text>
+<line x1="330" y1="88" x2="372" y2="88" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="90" font-size="7" fill="#0f3460">ENVIAR IR</text>
+<line x1="330" y1="100" x2="372" y2="100" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="102" font-size="7" fill="#0f3460">ENVIAR MBR</text>
+<line x1="330" y1="112" x2="372" y2="112" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="114" font-size="7" fill="#0f3460">ENVIAR ACC</text>
+<line x1="330" y1="124" x2="372" y2="124" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="126" font-size="7" fill="#0f3460">ENVIAR ALU</text>
+<line x1="330" y1="136" x2="372" y2="136" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="138" font-size="7" fill="#0f3460">ENVIAR SR</text>
+<line x1="330" y1="148" x2="372" y2="148" stroke="#0f3460" stroke-width="0.7"/><text x="374" y="150" font-size="7" fill="#0f3460">ENVIAR 1</text>
+<line x1="330" y1="172" x2="372" y2="172" stroke="#e94560" stroke-width="0.7"/><text x="374" y="174" font-size="7" fill="#e94560">CARGAR ACC</text>
+<line x1="330" y1="184" x2="372" y2="184" stroke="#e94560" stroke-width="0.7"/><text x="374" y="186" font-size="7" fill="#e94560">CARGAR MAR</text>
+<line x1="330" y1="196" x2="372" y2="196" stroke="#e94560" stroke-width="0.7"/><text x="374" y="198" font-size="7" fill="#e94560">CARGAR IR</text>
+<line x1="330" y1="208" x2="372" y2="208" stroke="#e94560" stroke-width="0.7"/><text x="374" y="210" font-size="7" fill="#e94560">CARGAR PC</text>
+<line x1="330" y1="220" x2="372" y2="220" stroke="#e94560" stroke-width="0.7"/><text x="374" y="222" font-size="7" fill="#e94560">CARGAR MBR</text>
+<line x1="330" y1="232" x2="372" y2="232" stroke="#e94560" stroke-width="0.7"/><text x="374" y="234" font-size="7" fill="#e94560">CARGAR Z</text>
+<line x1="330" y1="244" x2="372" y2="244" stroke="#e94560" stroke-width="0.7"/><text x="374" y="246" font-size="7" fill="#e94560">CARGAR Y</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Fig. 7.9 (pag. 181). Tres bloques: el <b>decodificador</b> abre una linea por instruccion a partir de IR12-IR15, el <b>secuenciador</b> reparte los pulsos CP1-CP8 mas E, B y TRA, y la <b>logica de control</b> combina ambos para emitir las ordenes ENVIAR / CARGAR. Ojo: la Fig. 7.9 del libro rotula <b>JSR</b>, pero la Tabla 7.1 y el texto dicen <b>SRJ</b>.</div></div>
+
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 472 212" width="100%" style="max-width:472px;font-family:inherit;" role="img" aria-label="Diagrama en bloques del secuenciador de la Blue">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Secuenciador (Fig. 7.10)</text>
+<g transform="translate(62,0)">
+<rect x="28" y="40" width="74" height="34" fill="#eef1f7" stroke="#0f3460"/><text x="65" y="57" font-size="8" fill="#2c3e50" text-anchor="middle">Biestable RUN</text>
+<text x="24" y="52" font-size="7.5" fill="#7f8c8d" text-anchor="end">START</text>
+<text x="24" y="68" font-size="7" fill="#7f8c8d" text-anchor="end">STOP/OV/HLT</text>
+<line x1="26" y1="49" x2="28" y2="49" stroke="#0f3460"/><line x1="26" y1="65" x2="28" y2="65" stroke="#0f3460"/>
+<line x1="102" y1="57" x2="140" y2="57" stroke="#0f3460"/><text x="121" y="53" font-size="7.5" fill="#e94560" text-anchor="middle">RUN</text>
+<text x="121" y="98" font-size="7.5" fill="#7f8c8d" text-anchor="middle">reloj</text>
+<line x1="121" y1="92" x2="121" y2="66" stroke="#0f3460"/>
+<rect x="140" y="40" width="78" height="34" fill="#eef1f7" stroke="#0f3460"/><text x="179" y="55" font-size="8" fill="#2c3e50" text-anchor="middle">Contador</text><text x="179" y="67" font-size="8" fill="#7f8c8d" text-anchor="middle">binario 4 bits</text>
+<line x1="218" y1="57" x2="248" y2="57" stroke="#0f3460"/>
+<rect x="248" y="40" width="78" height="34" fill="#eef1f7" stroke="#0f3460"/><text x="287" y="57" font-size="8" fill="#2c3e50" text-anchor="middle">Decodificador</text>
+<line x1="326" y1="57" x2="352" y2="26" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="28" font-size="7.5" fill="#0f3460">CP1</text>
+<line x1="326" y1="57" x2="352" y2="36" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="38" font-size="7.5" fill="#0f3460">CP2</text>
+<line x1="326" y1="57" x2="352" y2="46" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="48" font-size="7.5" fill="#0f3460">CP3</text>
+<line x1="326" y1="57" x2="352" y2="56" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="58" font-size="7.5" fill="#0f3460">CP4</text>
+<line x1="326" y1="57" x2="352" y2="66" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="68" font-size="7.5" fill="#0f3460">CP5</text>
+<line x1="326" y1="57" x2="352" y2="76" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="78" font-size="7.5" fill="#0f3460">CP6</text>
+<line x1="326" y1="57" x2="352" y2="86" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="88" font-size="7.5" fill="#0f3460">CP7</text>
+<line x1="326" y1="57" x2="352" y2="96" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="98" font-size="7.5" fill="#0f3460">CP8</text>
+<line x1="326" y1="57" x2="352" y2="106" stroke="#0f3460" stroke-width="0.7"/><text x="356" y="108" font-size="7.5" fill="#0f3460">CP9</text>
+<rect x="28" y="118" width="74" height="32" fill="#eef1f7" stroke="#0f3460"/><text x="65" y="134" font-size="8" fill="#2c3e50" text-anchor="middle">Biestable STATE</text>
+<text x="24" y="133" font-size="7" fill="#7f8c8d" text-anchor="end">instr. de mas</text>
+<text x="24" y="142" font-size="7" fill="#7f8c8d" text-anchor="end">de un ciclo</text>
+<line x1="102" y1="128" x2="150" y2="128" stroke="#0f3460"/><text x="154" y="131" font-size="7.5" fill="#0f3460">E</text>
+<line x1="102" y1="142" x2="150" y2="142" stroke="#0f3460"/><text x="154" y="145" font-size="7.5" fill="#0f3460">B</text>
+<rect x="28" y="166" width="74" height="32" fill="#eef1f7" stroke="#0f3460"/><text x="65" y="182" font-size="8" fill="#2c3e50" text-anchor="middle">Biestable E/S</text>
+<text x="24" y="180" font-size="7" fill="#7f8c8d" text-anchor="end">INP / OUT</text>
+<text x="24" y="194" font-size="7" fill="#7f8c8d" text-anchor="end">CP7</text>
+<line x1="102" y1="182" x2="150" y2="182" stroke="#e94560"/><text x="154" y="185" font-size="7.5" fill="#e94560">TRA</text>
+<text x="200" y="180" font-size="8" fill="#2c3e50">El contador de 4 bits + el decodificador</text>
+<text x="200" y="192" font-size="8" fill="#2c3e50">son los que generan los 9 pulsos CP.</text>
+</g>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado en bloques de Perez, Fig. 7.10 (pag. 184). El biestable <b>RUN</b> habilita el reloj; el <b>contador de 4 bits</b> y el <b>decodificador</b> generan CP1..CP9; el biestable <b>STATE</b> da E y B para las instrucciones de mas de un ciclo, y el biestable <b>E/S</b> genera <b>TRA</b>.</div></div>
+` },
           { title: 'Unidad de control microprogramada', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> en vez de cablear las ordenes con compuertas, la UC <b>microprogramada</b> las <b>guarda escritas en una pequena memoria ROM</b> (la micro-ROM). Cada paso del ciclo se almacena como una <b>microinstruccion</b>: una "fila" de bits que dice exactamente que senales activar. Ejecutar una instruccion de la maquina (macroinstruccion) es, en realidad, <b>correr un mini-programa</b> de microinstrucciones. Mas lenta que la cableada, pero <b>flexible</b>: cambiar el comportamiento es reescribir la ROM, no el chip.</p>
     <h4>La "maquina interior"</h4>
     <p style="font-size:0.92rem;">Lo unico que cambia respecto de la cableada es la UC: por dentro parece otra von Neumann chiquita (por eso se la llama <b>maquina interior</b>). El contenido de la ROM (los microprogramas + la ROM) se llama <b>FIRMWARE</b> (termino entre hardware y software).</p>
@@ -4898,7 +5057,49 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la UC microprogramada guarda el control como microinstrucciones (en la Blue, 45 bits, campos Accion/Test/Envie/Reciba/Falso/Exito) en una ROM-firmware; cada macroinstruccion corre su microprograma; es mas lenta pero flexible.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 400 296" width="100%" style="max-width:400px;font-family:inherit;" role="img" aria-label="Unidad de control microprogramada: las cuatro fuentes del micro-MAR">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Unidad de Control Microprogramada (Fig. 7.15)</text>
+<rect x="24" y="30" width="336" height="34" fill="#fbfcff" stroke="#7f8c8d" stroke-dasharray="3 2"/>
+<text x="30" y="42" font-size="8" font-weight="bold" fill="#2c3e50">micro MBR</text>
+<rect x="66" y="46" width="60" height="14" fill="#eef1f7" stroke="#0f3460"/><text x="96" y="56" font-size="7" fill="#2c3e50" text-anchor="middle">SALTAR (BOOC)</text>
+<rect x="150" y="46" width="60" height="14" fill="#eef1f7" stroke="#0f3460"/><text x="180" y="56" font-size="7" fill="#2c3e50" text-anchor="middle">PRUEBA</text>
+<rect x="222" y="46" width="60" height="14" fill="#eef1f7" stroke="#0f3460"/><text x="252" y="56" font-size="7" fill="#2c3e50" text-anchor="middle">FALSO</text>
+<rect x="286" y="46" width="60" height="14" fill="#eef1f7" stroke="#0f3460"/><text x="316" y="56" font-size="7" fill="#2c3e50" text-anchor="middle">EXITO</text>
+<rect x="150" y="92" width="60" height="40" fill="#eef1f7" stroke="#0f3460"/><text x="180" y="110" font-size="9" fill="#2c3e50" text-anchor="middle">MUX</text><text x="180" y="122" font-size="8" fill="#7f8c8d" text-anchor="middle">16 canales</text>
+<line x1="180" y1="60" x2="180" y2="92" stroke="#0f3460"/><text x="184" y="78" font-size="7" fill="#7f8c8d">4</text>
+<text x="146" y="100" font-size="7" fill="#7f8c8d" text-anchor="end">Condiciones</text>
+<text x="146" y="110" font-size="7" fill="#7f8c8d" text-anchor="end">de la Maquina</text>
+<text x="146" y="122" font-size="7" fill="#7f8c8d" text-anchor="end">(1 .. 16)</text>
+<line x1="100" y1="112" x2="150" y2="112" stroke="#0f3460"/>
+<rect x="150" y="156" width="140" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<text x="220" y="166" font-size="8" fill="#e94560" text-anchor="middle">EXITO</text>
+<text x="220" y="175" font-size="6.8" fill="#7f8c8d" text-anchor="middle">si el MUX da 1</text>
+<line x1="290" y1="167" x2="320" y2="167" stroke="#0f3460" stroke-width="0.8"/>
+<rect x="150" y="186" width="140" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<text x="220" y="196" font-size="8" fill="#0f3460" text-anchor="middle">FALSO</text>
+<text x="220" y="205" font-size="6.8" fill="#7f8c8d" text-anchor="middle">si el MUX da 0</text>
+<line x1="290" y1="197" x2="320" y2="197" stroke="#0f3460" stroke-width="0.8"/>
+<rect x="150" y="216" width="140" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<text x="220" y="226" font-size="8" fill="#0f3460" text-anchor="middle">Cod. de operacion del IR</text>
+<text x="220" y="235" font-size="6.8" fill="#7f8c8d" text-anchor="middle">si bit 5 de ACCION = 1</text>
+<line x1="290" y1="227" x2="320" y2="227" stroke="#0f3460" stroke-width="0.8"/>
+<rect x="150" y="246" width="140" height="22" fill="#eef1f7" stroke="#0f3460"/>
+<text x="220" y="256" font-size="8" fill="#0f3460" text-anchor="middle">Cero</text>
+<text x="220" y="265" font-size="6.8" fill="#7f8c8d" text-anchor="middle">si MASTER RESET = 1</text>
+<line x1="290" y1="257" x2="320" y2="257" stroke="#0f3460" stroke-width="0.8"/>
+<line x1="180" y1="132" x2="180" y2="167" stroke="#0f3460"/>
+<line x1="180" y1="167" x2="150" y2="167" stroke="#0f3460"/>
+<line x1="320" y1="167" x2="320" y2="257" stroke="#0f3460"/>
+<rect x="330" y="186" width="54" height="42" fill="#dfe6f2" stroke="#0f3460"/><text x="357" y="205" font-size="8" fill="#2c3e50" text-anchor="middle">micro MAR</text><text x="357" y="217" font-size="8" fill="#7f8c8d" text-anchor="middle">8 bits (D)</text>
+<line x1="320" y1="207" x2="330" y2="207" stroke="#e94560" stroke-width="1.6"/><text x="316" y="203" font-size="7" fill="#7f8c8d" text-anchor="end">8</text>
+<text x="357" y="244" font-size="7" fill="#7f8c8d" text-anchor="middle">1 pulso de reloj</text>
+<text x="357" y="253" font-size="7" fill="#7f8c8d" text-anchor="middle">cada 125 ns</text>
+<text x="24" y="282" font-size="8" fill="#2c3e50">El micro-MAR direcciona la ROM de microprograma (256 x 45 bits).</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Fig. 7.15 (pag. 194) y el texto de la pag. 193. Lo que hay que saber decir: el <b>micro-MAR</b> (8 biestables D) puede cargarse desde <b>cuatro</b> origenes: el campo EXITO, el campo FALSO, el codigo de operacion que esta en el IR, o cero por MASTER RESET. El campo PRUEBA elige, via un MUX de 16 canales, cual condicion de la maquina se testea.</div></div>
+` },
           { title: 'Bus y tercer estado', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> un <b>bus</b> es un mazo de cables compartido por el que viajan los datos entre registros, memoria y E/S. La Blue usa un <b>BUS COMUN</b>: <b>un unico bus</b> conecta todo. Como es uno solo, hay una regla de oro: en cada instante <b>un solo registro puede ESTAR ENVIANDO</b> al bus (si dos hablan a la vez, se "pisan" y el dato se corrompe). Para coordinar eso aparece el truco del <b>tercer estado</b>.</p>
     <h4>Por que bus comun (y no punto a punto)</h4>
     <p style="font-size:0.92rem;">Si se analizan las ordenes de la UC, la <b>gran mayoria son transferencias entre registros</b> (en total ~20 senales de "enviar al bus" / "cargar desde el bus"; solo 4 ordenes no transfieren: LEER, ESCRIBIR, TRA=0 y TRA=1). Conectar cada par de registros con su propio cable (<b>punto a punto</b>) seria carisimo en cables. El <b>bus comun</b> resuelve todo con un solo camino, a costa de turnarse: es <b>multiplexado</b>, lleva un dato (16 bits), una instruccion (16 bits) o una direccion (12 bits) en momentos distintos.</p>
@@ -4957,7 +5158,61 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     <p style="font-size:0.92rem;"><b>Handshaking de E/S:</b> cuando se ejecuta INP/OUT, la UC pone <b>TRA=1</b> hacia los perifericos; solo el dispositivo seleccionado (por el bus de 6 bits) responde con <b>R (Ready)</b> al terminar, lo que pone TRA=0 y libera a la maquina. La E/S de la Blue es <b>por programa</b> y pasa siempre por el acumulador.</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el flujo de informacion son transferencias registro-a-registro por el bus (direcciones de 12 bits, datos de 16); la UC las dirige con senales de control de tipo "Enviar al bus", "Recibir del bus", LEER/ESCRIBIR y TRA.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 390 262" width="100%" style="max-width:390px;font-family:inherit;" role="img" aria-label="Diagrama de tiempos del secuenciador: pulsos CP1 a CP9">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Diagrama de tiempos del secuenciador (Fig. 7.11)</text>
+<line x1="58" y1="24" x2="58" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="84" y1="24" x2="84" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="110" y1="24" x2="110" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="136" y1="24" x2="136" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="162" y1="24" x2="162" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="188" y1="24" x2="188" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="214" y1="24" x2="214" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="240" y1="24" x2="240" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="266" y1="24" x2="266" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="292" y1="24" x2="292" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="318" y1="24" x2="318" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="344" y1="24" x2="344" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<line x1="370" y1="24" x2="370" y2="232" stroke="#d8e0ec" stroke-dasharray="2 2"/>
+<text x="10" y="34" font-size="8" font-weight="bold" fill="#2c3e50">RELOJ</text>
+<polyline points="58,32 58,24 71,24 71,32 84,32 84,24 97,24 97,32 110,32 110,24 123,24 123,32 136,32 136,24 149,24 149,32 162,32 162,24 175,24 175,32 188,32 188,24 201,24 201,32 214,32 214,24 227,24 227,32 240,32 240,24 253,24 253,32 266,32 266,24 279,24 279,32 292,32 292,24 305,24 305,32 318,32 318,24 331,24 331,32 344,32 344,24 357,24 357,32" fill="none" stroke="#7f8c8d" stroke-width="1"/>
+<text x="10" y="55" font-size="8" font-weight="bold" fill="#2c3e50">CP1</text>
+<line x1="58" y1="52" x2="370" y2="52" stroke="#e6ebf3"/>
+<polyline points="58,52 58,41 84,41 84,52" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<polyline points="318,52 318,41 344,41 344,52" fill="none" stroke="#7f8c8d" stroke-width="1.6"/>
+<text x="10" y="75" font-size="8" font-weight="bold" fill="#2c3e50">CP2</text>
+<line x1="58" y1="72" x2="370" y2="72" stroke="#e6ebf3"/>
+<polyline points="84,72 84,61 110,61 110,72" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<polyline points="344,72 344,61 370,61 370,72" fill="none" stroke="#7f8c8d" stroke-width="1.6"/>
+<text x="10" y="95" font-size="8" font-weight="bold" fill="#2c3e50">CP3</text>
+<line x1="58" y1="92" x2="370" y2="92" stroke="#e6ebf3"/>
+<polyline points="110,92 110,81 136,81 136,92" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<text x="10" y="115" font-size="8" font-weight="bold" fill="#2c3e50">CP4</text>
+<line x1="58" y1="112" x2="370" y2="112" stroke="#e6ebf3"/>
+<polyline points="136,112 136,101 162,101 162,112" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<text x="10" y="135" font-size="8" font-weight="bold" fill="#2c3e50">CP5</text>
+<line x1="58" y1="132" x2="370" y2="132" stroke="#e6ebf3"/>
+<polyline points="162,132 162,121 188,121 188,132" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<text x="10" y="155" font-size="8" font-weight="bold" fill="#2c3e50">CP6</text>
+<line x1="58" y1="152" x2="370" y2="152" stroke="#e6ebf3"/>
+<polyline points="188,152 188,141 214,141 214,152" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<text x="10" y="175" font-size="8" font-weight="bold" fill="#2c3e50">CP7</text>
+<line x1="58" y1="172" x2="370" y2="172" stroke="#e6ebf3"/>
+<polyline points="214,172 214,161 240,161 240,172" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<text x="10" y="195" font-size="8" font-weight="bold" fill="#2c3e50">CP8</text>
+<line x1="58" y1="192" x2="370" y2="192" stroke="#e6ebf3"/>
+<polyline points="240,192 240,181 266,181 266,192" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<text x="10" y="215" font-size="8" font-weight="bold" fill="#2c3e50">CP9</text>
+<line x1="58" y1="212" x2="370" y2="212" stroke="#e6ebf3"/>
+<polyline points="266,212 266,201 292,201 292,212" fill="none" stroke="#e94560" stroke-width="1.6"/>
+<line x1="58" y1="244" x2="318" y2="244" stroke="#0f3460" stroke-width="1.2"/>
+<polygon points="58,244 65,240 65,248" fill="#0f3460"/>
+<polygon points="318,244 311,240 311,248" fill="#0f3460"/>
+<text x="188" y="236" font-size="9" font-weight="bold" fill="#0f3460" text-anchor="middle">CICLO DE MEMORIA</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Fig. 7.11 (pag. 184). Los nueve pulsos <b>no se superponen</b>: cada CP dura una ranura del reloj y se activan en orden. Los nueve juntos forman <b>un ciclo de memoria</b>, y despues vuelve a empezar por CP1. Es el diagrama que hay que saber dibujar para explicar una traza de ADD.</div></div>
+` },
           { title: 'ALU de la Maquina Elemental', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> la <b>ALU (Unidad Aritmetica y Logica)</b> es la calculadora de la CPU. En la Blue trabaja sobre <b>dos registros de entrada, Z e Y</b>, y <b>siempre esta calculando</b>: en todo momento tiene listos todos los resultados posibles sobre Z e Y. La UC solo tiene que <b>cargar Z e Y</b> con los operandos y <b>elegir cual salida</b> conectar al bus.</p>
     <h4>Que operaciones hace</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
@@ -4975,7 +5230,44 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     <p style="font-size:0.92rem;"><b>Flags en general:</b> una ALU tipica produce, ademas del resultado, banderas de estado: <b>Z</b> (resultado cero), <b>C</b> (carry/acarreo), <b>S</b> (signo, MSB=1, negativo) y <b>O</b> (overflow con signo). La Blue, por minima, expone basicamente el <b>OV</b> y usa el bit de signo del ACC (lo lee la instruccion JMA, que salta si el acumulador es negativo). En el 8088 (U5) este conjunto de flags se ampla a CF/ZF/SF/OF/PF/AF.</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la ALU de la Blue es combinacional, opera ADD/AND/IOR/XOR sobre Z e Y (y NOT/RAL sobre Z), siempre calcula y la UC solo elige la salida; genera OV (que detiene la maquina) y la suma es la operacion mas lenta.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 450 234" width="100%" style="max-width:450px;font-family:inherit;" role="img" aria-label="Diagrama en bloques de la ALU de la Maquina Elemental">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">ALU de la Maquina Elemental (Fig. 7.18)</text>
+<g transform="translate(46,0)">
+<rect x="58" y="32" width="84" height="26" fill="#eef1f7" stroke="#0f3460"/><text x="100" y="43" font-size="9" fill="#2c3e50" text-anchor="middle">Registro Z</text><text x="100" y="55" font-size="8" fill="#7f8c8d" text-anchor="middle">16 bits</text>
+<rect x="196" y="32" width="84" height="26" fill="#eef1f7" stroke="#0f3460"/><text x="238" y="43" font-size="9" fill="#2c3e50" text-anchor="middle">Registro Y</text><text x="238" y="55" font-size="8" fill="#7f8c8d" text-anchor="middle">16 bits</text>
+<line x1="100" y1="58" x2="100" y2="86" stroke="#0f3460"/>
+<polygon points="100,86 96,80 104,80" fill="#0f3460"/>
+<line x1="95" y1="70" x2="105" y2="64" stroke="#0f3460"/><text x="107" y="70" font-size="7.5" fill="#7f8c8d">16</text>
+<line x1="238" y1="58" x2="238" y2="86" stroke="#0f3460"/>
+<polygon points="238,86 234,80 242,80" fill="#0f3460"/>
+<line x1="233" y1="70" x2="243" y2="64" stroke="#0f3460"/><text x="245" y="70" font-size="7.5" fill="#7f8c8d">16</text>
+<polygon points="86,86 252,86 216,150 122,150" fill="#eef1f7" stroke="#0f3460"/>
+<text x="169" y="122" font-size="14" fill="#0f3460" text-anchor="middle">ALU</text>
+<line x1="30" y1="94" x2="90" y2="94" stroke="#0f3460" stroke-width="0.8"/>
+<text x="28" y="96" font-size="7.5" fill="#7f8c8d" text-anchor="end">Enviar ADD</text>
+<line x1="30" y1="104" x2="96" y2="104" stroke="#0f3460" stroke-width="0.8"/>
+<text x="28" y="106" font-size="7.5" fill="#7f8c8d" text-anchor="end">Enviar AND</text>
+<line x1="30" y1="114" x2="101" y2="114" stroke="#0f3460" stroke-width="0.8"/>
+<text x="28" y="116" font-size="7.5" fill="#7f8c8d" text-anchor="end">Enviar XOR</text>
+<line x1="30" y1="124" x2="107" y2="124" stroke="#0f3460" stroke-width="0.8"/>
+<text x="28" y="126" font-size="7.5" fill="#7f8c8d" text-anchor="end">Enviar IOR</text>
+<line x1="30" y1="134" x2="113" y2="134" stroke="#0f3460" stroke-width="0.8"/>
+<text x="28" y="136" font-size="7.5" fill="#7f8c8d" text-anchor="end">Enviar NOT</text>
+<line x1="30" y1="144" x2="118" y2="144" stroke="#0f3460" stroke-width="0.8"/>
+<text x="28" y="146" font-size="7.5" fill="#7f8c8d" text-anchor="end">Enviar RAL</text>
+<line x1="252" y1="104" x2="300" y2="104" stroke="#e94560"/><text x="304" y="107" font-size="8" font-style="italic" fill="#e94560">Ov</text>
+<line x1="169" y1="150" x2="169" y2="180" stroke="#0f3460"/>
+<polygon points="169,180 165,174 173,174" fill="#0f3460"/>
+<line x1="164" y1="164" x2="174" y2="158" stroke="#0f3460"/><text x="176" y="164" font-size="7.5" fill="#7f8c8d">16</text>
+<text x="169" y="192" font-size="8" font-weight="bold" fill="#2c3e50" text-anchor="middle">SALIDAS (al bus)</text>
+<text x="10" y="212" font-size="7.5" fill="#7f8c8d">Adentro: 16 AND, 16 XOR, 16 IOR, 16 NOT, 1 sumador de 16 bits con</text>
+<text x="10" y="222" font-size="7.5" fill="#7f8c8d">rebasamiento (OV) sin acarreo (C2), y compuertas de seleccion de salida.</text>
+</g>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Fig. 7.18 (pag. 201). La ALU toma <b>Z</b> e <b>Y</b> (16 bits cada uno) y hace solo <b>ADD, AND, XOR, IOR, NOT y RAL</b>: <b>no resta</b>. Dato fino para el oral: sumar le lleva hasta <b>200 ns</b> y las operaciones logicas <b>80 ns</b>, y por eso la UC le concede a ADD un pulso de reloj extra (cableada) o una microinstruccion mas (microprogramada).</div></div>
+` },
           { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
     <h4>Guion de exposicion (60-90 s)</h4>
     <div style="background:#f4f7fb;border-left:4px solid #0f3460;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
