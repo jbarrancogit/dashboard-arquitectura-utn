@@ -5587,7 +5587,54 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el set se ordena en familias (transferencia, aritmetica/logica, bits, control de flujo, cadenas, interrupciones y control); las estrella de examen son <b>MOV, ADD/SUB, CMP+Jcc, LOOP y CALL/RET</b>, y el detalle critico es que la pila guarda la direccion de retorno.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 430 336" width="100%" style="max-width:430px;font-family:inherit;" role="img" aria-label="Ruta de decodificacion de una instruccion en el 8088">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">De la instruccion al microcodigo en el 8088</text>
+<rect x="14" y="34" width="92" height="30" rx="3" fill="#fdecef" stroke="#0f3460"/><text x="60" y="46" font-size="8.5" fill="#e94560" text-anchor="middle">Cola de prefetch</text><text x="60" y="57" font-size="6.8" fill="#7f8c8d" text-anchor="middle">4 bytes (BIU)</text>
+<line x1="106" y1="49" x2="132" y2="49" stroke="#0f3460"/><polygon points="132,49 126,46 126,52" fill="#0f3460"/>
+<rect x="132" y="34" width="62" height="30" rx="3" fill="#eef1f7" stroke="#0f3460"/><text x="163" y="46" font-size="8.5" fill="#2c3e50" text-anchor="middle">IR</text><text x="163" y="57" font-size="6.8" fill="#7f8c8d" text-anchor="middle">instruccion</text>
+<line x1="194" y1="49" x2="220" y2="49" stroke="#0f3460"/><polygon points="220,49 214,46 214,52" fill="#0f3460"/>
+<rect x="220" y="26" width="74" height="46" rx="3" fill="#dfe6f2" stroke="#0f3460"/><text x="257" y="49" font-size="9" fill="#0f3460" text-anchor="middle">Decodificador</text>
+<line x1="257" y1="72" x2="257" y2="108" stroke="#7f8c8d" stroke-width="0.8"/>
+<line x1="257" y1="108" x2="286" y2="108" stroke="#7f8c8d" stroke-width="0.8"/>
+<polygon points="292,108 286,105 286,111" fill="#7f8c8d"/>
+<rect x="292" y="94" width="46" height="28" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="315" y="112" font-size="9" font-weight="bold" fill="#0f3460" text-anchor="middle">M  y  N</text>
+<text x="344" y="112" font-size="7" fill="#7f8c8d">fuente y destino del operando</text>
+<line x1="257" y1="72" x2="257" y2="142" stroke="#7f8c8d" stroke-width="0.8"/>
+<line x1="257" y1="142" x2="286" y2="142" stroke="#7f8c8d" stroke-width="0.8"/>
+<polygon points="292,142 286,139 286,145" fill="#7f8c8d"/>
+<rect x="292" y="128" width="46" height="28" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="315" y="146" font-size="9" font-weight="bold" fill="#0f3460" text-anchor="middle">X</text>
+<text x="344" y="146" font-size="7" fill="#7f8c8d">que operacion hace la ALU</text>
+<line x1="257" y1="72" x2="257" y2="176" stroke="#7f8c8d" stroke-width="0.8"/>
+<line x1="257" y1="176" x2="286" y2="176" stroke="#7f8c8d" stroke-width="0.8"/>
+<polygon points="292,176 286,173 286,179" fill="#7f8c8d"/>
+<rect x="292" y="162" width="46" height="28" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="315" y="180" font-size="9" font-weight="bold" fill="#0f3460" text-anchor="middle">B</text>
+<text x="344" y="180" font-size="7" fill="#7f8c8d">si es de 8 o de 16 bits</text>
+<line x1="257" y1="72" x2="257" y2="210" stroke="#7f8c8d" stroke-width="0.8"/>
+<line x1="257" y1="210" x2="286" y2="210" stroke="#7f8c8d" stroke-width="0.8"/>
+<polygon points="292,210 286,207 286,213" fill="#7f8c8d"/>
+<rect x="292" y="196" width="46" height="28" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="315" y="214" font-size="9" font-weight="bold" fill="#e94560" text-anchor="middle">PLA</text>
+<text x="344" y="214" font-size="7" fill="#7f8c8d">direccion de comienzo del microprocedimiento</text>
+<line x1="315" y1="224" x2="315" y2="250" stroke="#0f3460"/><polygon points="315,250 319,244 311,244" fill="#0f3460"/>
+<rect x="266" y="250" width="98" height="30" rx="3" fill="#fdecef" stroke="#0f3460"/><text x="315" y="265" font-size="9" fill="#e94560" text-anchor="middle">microMAR</text>
+<text x="14" y="238" font-size="8" font-weight="bold" fill="#2c3e50">El microMAR tambien se carga desde:</text>
+<rect x="14" y="246" width="106" height="16" rx="3" fill="#eef1f7" stroke="#0f3460"/><text x="67" y="254" font-size="7.5" fill="#2c3e50" text-anchor="middle">ROM de traslacion</text>
+<text x="124" y="257" font-size="6.8" fill="#7f8c8d">saltos (5 bits)</text>
+<rect x="14" y="266" width="106" height="16" rx="3" fill="#eef1f7" stroke="#0f3460"/><text x="67" y="274" font-size="7.5" fill="#2c3e50" text-anchor="middle">Registro SR</text>
+<text x="124" y="277" font-size="6.8" fill="#7f8c8d">retorno de micro-subrutina</text>
+<line x1="252" y1="256" x2="266" y2="261" stroke="#7f8c8d" stroke-width="0.7" stroke-dasharray="3 2"/>
+<line x1="252" y1="272" x2="266" y2="268" stroke="#7f8c8d" stroke-width="0.7" stroke-dasharray="3 2"/>
+<text x="14" y="300" font-size="8" fill="#2c3e50">Cada microprocedimiento tiene como maximo <tspan font-weight="bold">16 microinstrucciones</tspan>, y se ejecuta</text>
+<text x="14" y="312" font-size="8" fill="#2c3e50"><tspan font-weight="bold">una por ciclo de reloj</tspan>. Hay microprocedimientos comunes a varias instrucciones, como el</text>
+<text x="14" y="324" font-size="8" fill="#2c3e50">calculo de direcciones: por eso el microcodigo se reutiliza y no se repite.</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Armado con Perez, pags. 247-249 y Figs. 8.14 y 8.15. La instruccion sale de la <b>cola de prefetch</b>, pasa al <b>IR</b> y el decodificador la reparte: <b>M</b> y <b>N</b> reciben fuente y destino, <b>X</b> le dice a la ALU que operacion hacer, <b>B</b> si es de 8 o 16 bits, y la <b>PLA</b> traduce el codigo de operacion en la direccion donde arranca el microprocedimiento. El libro aclara que el detalle de la UC del 8088 <b>escapa al alcance de la Guia</b> y que se puede pensar como la maquina elemental microprogramada: eso es exactamente lo que conviene decir en la mesa.</div></div>
+` },
           { title: 'Interrupciones', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> una interrupcion es un "te necesito ya" que hace que el procesador <b>pause lo que esta haciendo, atienda el pedido y despues vuelva</b> exactamente donde estaba, como si nada hubiera pasado. Sirve para que la CPU no pierda tiempo preguntando todo el rato a los perifericos ("estas listo? estas listo?") y para reaccionar a eventos que llegan en cualquier momento.</p>
     <h4>Que hace la CPU cuando llega una interrupcion</h4>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
