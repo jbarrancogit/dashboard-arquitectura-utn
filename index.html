@@ -5505,7 +5505,39 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> hay modos donde el dato esta en la instruccion (inmediato) o en un registro, y modos donde esta en memoria, cuyo <b>offset</b> se arma sumando base (BX/BP) + indice (SI/DI) + desplazamiento; ese offset siempre se combina con un segmento para dar los 20 bits.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 430 266" width="100%" style="max-width:430px;font-family:inherit;" role="img" aria-label="Los cuatro modos de direccionamiento del campo modificador de la MEI">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Modos de direccionamiento de la MEI</text>
+<rect x="14" y="30" width="26" height="44" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="27" y="58" font-size="13" font-weight="bold" fill="#e94560" text-anchor="middle">0</text>
+<rect x="46" y="30" width="368" height="44" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="54" y="45" font-size="9" font-weight="bold" fill="#0f3460">Directo</text>
+<text x="54" y="57" font-size="7.5" fill="#2c3e50">El campo de direccion ES la direccion del operando.</text>
+<text x="54" y="68" font-size="7.5" font-family="monospace" fill="#e94560">LDA 0, 1000  &rarr;  Acc = M[1000]</text>
+<rect x="14" y="82" width="26" height="44" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="27" y="110" font-size="13" font-weight="bold" fill="#e94560" text-anchor="middle">1</text>
+<rect x="46" y="82" width="368" height="44" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="54" y="97" font-size="9" font-weight="bold" fill="#0f3460">Indirecto por memoria</text>
+<text x="54" y="109" font-size="7.5" fill="#2c3e50">El campo apunta a una celda que contiene la direccion.</text>
+<text x="54" y="120" font-size="7.5" font-family="monospace" fill="#e94560">si M[1000]=3400:  LDA 1, 1000  &rarr;  Acc = M[3400]</text>
+<rect x="14" y="134" width="26" height="44" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="27" y="162" font-size="13" font-weight="bold" fill="#e94560" text-anchor="middle">2</text>
+<rect x="46" y="134" width="368" height="44" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="54" y="149" font-size="9" font-weight="bold" fill="#0f3460">Indexado por RIF</text>
+<text x="54" y="161" font-size="7.5" fill="#2c3e50">Se suma el RIF al campo de direccion.</text>
+<text x="54" y="172" font-size="7.5" font-family="monospace" fill="#e94560">si RIF=5000:  LDA 2, 1000  &rarr;  Acc = M[6000]</text>
+<rect x="14" y="186" width="26" height="44" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="27" y="214" font-size="13" font-weight="bold" fill="#e94560" text-anchor="middle">3</text>
+<rect x="46" y="186" width="368" height="44" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="54" y="201" font-size="9" font-weight="bold" fill="#0f3460">Indexado por RID</text>
+<text x="54" y="213" font-size="7.5" fill="#2c3e50">Se suma el RID al campo de direccion.</text>
+<text x="54" y="224" font-size="7.5" font-family="monospace" fill="#e94560">si RID=5000:  LDA 3, 1000  &rarr;  Acc = M[6000]</text>
+<text x="14" y="242" font-size="8" fill="#2c3e50">El <tspan font-weight="bold">campo modificador</tspan> son 2 bits, por eso hay exactamente 4 modos.</text>
+<text x="14" y="254" font-size="8" fill="#2c3e50">La suma la hace el <tspan font-weight="bold">sumador de direcciones</tspan> dedicado, no la ALU.</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Armado con Perez, pag. 213. Los cuatro valores del <b>campo modificador</b> de 2 bits. Los modos 2 y 3 son el <b>direccionamiento indexado</b>, y la suma la hace un sumador dedicado para no ocupar la ALU.</div></div>
+` },
           { title: 'Set de instrucciones del 8088', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> el repertorio del 8088 es el "vocabulario" del procesador: las ordenes que entiende. Se agrupan por familias. No hay que memorizar las 100+ instrucciones; hay que conocer <b>cada grupo, para que sirve y las instrucciones estrella</b> de cada uno (que son las que aparecen en los TP del EMU 8086 y en examen).</p>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
     <b>El libro las agrupa en SIETE categorias</b> (Perez, <i>Cap. 8, p.254</i>) &mdash; si te piden "clasifique el set de instrucciones del 8088", esta es la lista que hay que recitar: <b>1)</b> Transferencia de datos &middot; <b>2)</b> Aritmeticas &middot; <b>3)</b> Logicas &middot; <b>4)</b> De desplazamiento y rotacion &middot; <b>5)</b> De manipulacion de cadenas &middot; <b>6)</b> De control de programa &middot; <b>7)</b> De control del procesador. <span style="font-size:0.85rem;color:#555;">(Abajo estan agrupadas de a pares por comodidad de estudio, pero para la mesa son siete.)</span><br><br>
@@ -5606,7 +5638,41 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     </div>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> ante un pedido el 8088 apila <b>FLAGS, CS e IP</b>, baja IF, busca el CS:IP de la rutina en el <b>vector n &times; 4</b> (tabla de 256 vectores en los primeros 1 KB) y vuelve con <b>IRET</b>; las hay enmascarables (INTR), no enmascarables (NMI), por software (INT n) e internas.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 430 260" width="100%" style="max-width:430px;font-family:inherit;" role="img" aria-label="Secuencia de acciones de la rutina de interrupcion">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Rutina de interrupcion (Fig. 8.8)</text>
+<text x="14" y="34" font-size="8" fill="#e94560">En la posicion de memoria <tspan font-weight="bold">1</tspan> tiene que haber un salto a la rutina de interrupcion.</text>
+<rect x="40" y="42" width="360" height="38" rx="4" fill="#eef1f7" stroke="#0f3460"/>
+<circle cx="58" cy="61" r="11" fill="#0f3460"/>
+<text x="58" y="65" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+<text x="78" y="58" font-size="8.5" font-weight="bold" fill="#0f3460">SALVAR EL CONTEXTO</text>
+<text x="78" y="71" font-size="7.5" fill="#2c3e50">Guardar en memoria todos los registros menos el PC.</text>
+<line x1="220" y1="80" x2="220" y2="90" stroke="#0f3460"/>
+<polygon points="220,92 216,86 224,86" fill="#0f3460"/>
+<rect x="40" y="92" width="360" height="38" rx="4" fill="#eef1f7" stroke="#0f3460"/>
+<circle cx="58" cy="111" r="11" fill="#0f3460"/>
+<text x="58" y="115" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">2</text>
+<text x="78" y="108" font-size="8.5" font-weight="bold" fill="#0f3460">DETERMINAR QUIEN INTERRUMPIO</text>
+<text x="78" y="121" font-size="7.5" fill="#2c3e50">Por POLLING o por VECTORES DE INTERRUPCION.</text>
+<line x1="220" y1="130" x2="220" y2="140" stroke="#0f3460"/>
+<polygon points="220,142 216,136 224,136" fill="#0f3460"/>
+<rect x="40" y="142" width="360" height="38" rx="4" fill="#eef1f7" stroke="#0f3460"/>
+<circle cx="58" cy="161" r="11" fill="#0f3460"/>
+<text x="58" y="165" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">3</text>
+<text x="78" y="158" font-size="8.5" font-weight="bold" fill="#0f3460">SALTAR A LA SUBRUTINA DE ATENCION</text>
+<text x="78" y="171" font-size="7.5" fill="#2c3e50">Es propia de cada periferico; hace la transferencia de E/S.</text>
+<line x1="220" y1="180" x2="220" y2="190" stroke="#0f3460"/>
+<polygon points="220,192 216,186 224,186" fill="#0f3460"/>
+<rect x="40" y="192" width="360" height="38" rx="4" fill="#eef1f7" stroke="#0f3460"/>
+<circle cx="58" cy="211" r="11" fill="#0f3460"/>
+<text x="58" y="215" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">4</text>
+<text x="78" y="208" font-size="8.5" font-weight="bold" fill="#0f3460">RESTAURAR EL CONTEXTO</text>
+<text x="78" y="221" font-size="7.5" fill="#2c3e50">Todas las subrutinas terminan aca. Hace el proceso transparente.</text>
+<text x="14" y="248" font-size="8" fill="#2c3e50">Al volver, el programa principal sigue como si nada hubiera pasado.</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Fig. 8.8 (pags. 232-233). El paso 2 es el que conviene remarcar: determinar quien interrumpio se puede hacer por <b>polling</b> (preguntando de a uno) o por <b>vectores de interrupcion</b> (el periferico dice quien es). Salvar y restaurar el contexto es lo que hace el mecanismo transparente para el programa principal.</div></div>
+` },
           { title: 'Sistema elemental de interrupciones', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> antes de ver las interrupciones "comerciales" del 8088, la catedra las construye <b>desde cero sobre la maquina didactica</b>, para entender por que existe cada pieza. Aca cada periferico levanta una banderita cuando quiere atencion, y vamos resolviendo dos problemas: <b>quien pidio</b> y <b>como volver despues</b>. Es el puente conceptual entre la maquina elemental y el sistema real.</p>
     <h4>Por que se inventan (el problema que resuelven)</h4>
     <p style="font-size:0.92rem;">Sin interrupciones, la CPU tiene que <b>encuestar</b> (polling activo) a cada periferico una y otra vez para ver si tiene algo: pierde muchisimo tiempo esperando. Caxton Foster lo define como "agregar hardware para que, cuando un evento externo necesite atencion, el programa se suspenda solo, se atienda con una rutina especial, y se vuelva como si nada". Es la forma eficiente de manejar E/S y eventos extemporaneos.</p>
@@ -5640,7 +5706,63 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     <p style="font-size:0.92rem;"><b>Hilo:</b> la pila viene del <b>LIFO de la U3</b>; aca se ve para que sirve de verdad. Y de aca surge la necesidad de un <b>programa monitor</b> que administre memoria, E/S y CPU: el embrion del sistema operativo.</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> se agrega hardware (banderas BD, la OR que arma IRQ, el biestable SI, las instrucciones ION / IOF / RTI) y un ciclo de interrupcion que pone SI en 0, guarda el PC en la <b>posicion CERO</b> y carga el PC con <b>1</b>; en la MEI <b>quien pidio se determina solo por polling con SKF</b> (el Registro Mascara y el vectorizado el libro los describe pero <b>no los implementa</b>, pp. 236-237), y como el retorno vive en un lugar fijo <b>no se pueden anidar</b> interrupciones: eso llega recien con la <b>pila + SP</b> del 8088.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 430 244" width="100%" style="max-width:430px;font-family:inherit;" role="img" aria-label="Sistema de interrupciones con banderas de dispositivo y registro de mascara">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Banderas de dispositivo y mascara (Fig. 8.9)</text>
+<rect x="14" y="40" width="76" height="22" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="52" y="55" font-size="8" fill="#2c3e50" text-anchor="middle">Periferico 0</text> 
+<line x1="90" y1="51" x2="126" y2="51" stroke="#0f3460"/>
+<rect x="126" y="40" width="30" height="22" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="141" y="55" font-size="8" fill="#e94560" text-anchor="middle">BD0</text>
+<line x1="156" y1="51" x2="196" y2="51" stroke="#0f3460"/>
+<rect x="196" y="40" width="30" height="22" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="211" y="55" font-size="8" fill="#2c3e50" text-anchor="middle">M0</text>
+<line x1="226" y1="51" x2="262" y2="51" stroke="#0f3460"/>
+<rect x="14" y="70" width="76" height="22" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="52" y="85" font-size="8" fill="#2c3e50" text-anchor="middle">Periferico 1</text> 
+<line x1="90" y1="81" x2="126" y2="81" stroke="#0f3460"/>
+<rect x="126" y="70" width="30" height="22" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="141" y="85" font-size="8" fill="#e94560" text-anchor="middle">BD1</text>
+<line x1="156" y1="81" x2="196" y2="81" stroke="#0f3460"/>
+<rect x="196" y="70" width="30" height="22" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="211" y="85" font-size="8" fill="#2c3e50" text-anchor="middle">M1</text>
+<line x1="226" y1="81" x2="262" y2="81" stroke="#0f3460"/>
+<rect x="14" y="100" width="76" height="22" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="52" y="115" font-size="8" fill="#2c3e50" text-anchor="middle">Periferico 2</text> 
+<line x1="90" y1="111" x2="126" y2="111" stroke="#0f3460"/>
+<rect x="126" y="100" width="30" height="22" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="141" y="115" font-size="8" fill="#e94560" text-anchor="middle">BD2</text>
+<line x1="156" y1="111" x2="196" y2="111" stroke="#0f3460"/>
+<rect x="196" y="100" width="30" height="22" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="211" y="115" font-size="8" fill="#2c3e50" text-anchor="middle">M2</text>
+<line x1="226" y1="111" x2="262" y2="111" stroke="#0f3460"/>
+<rect x="14" y="130" width="76" height="22" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="52" y="145" font-size="8" fill="#2c3e50" text-anchor="middle">Periferico 3</text> 
+<line x1="90" y1="141" x2="126" y2="141" stroke="#0f3460"/>
+<rect x="126" y="130" width="30" height="22" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="141" y="145" font-size="8" fill="#e94560" text-anchor="middle">BD3</text>
+<line x1="156" y1="141" x2="196" y2="141" stroke="#0f3460"/>
+<rect x="196" y="130" width="30" height="22" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="211" y="145" font-size="8" fill="#2c3e50" text-anchor="middle">M3</text>
+<line x1="226" y1="141" x2="262" y2="141" stroke="#0f3460"/>
+<text x="141" y="34" font-size="7.5" font-weight="bold" fill="#e94560" text-anchor="middle">Banderas</text>
+<text x="211" y="34" font-size="7.5" font-weight="bold" fill="#2c3e50" text-anchor="middle">Mascara</text>
+<rect x="196" y="164" width="30" height="14" fill="none" stroke="#7f8c8d" stroke-dasharray="3 2"/>
+<text x="211" y="174" font-size="6.5" fill="#7f8c8d" text-anchor="middle">RM</text>
+<polygon points="262,40 300,86 300,116 262,162" fill="#eef1f7" stroke="#0f3460"/>
+<text x="278" y="105" font-size="8" fill="#0f3460" text-anchor="middle">OR</text>
+<line x1="300" y1="101" x2="336" y2="101" stroke="#e94560" stroke-width="1.6"/>
+<rect x="336" y="86" width="78" height="30" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="375" y="99" font-size="8" fill="#e94560" text-anchor="middle">Solicitud de</text>
+<text x="375" y="110" font-size="8" fill="#e94560" text-anchor="middle">interrupcion</text>
+<text x="14" y="196" font-size="8" fill="#2c3e50"><tspan font-weight="bold">BD</tspan> = Bandera de Dispositivo: el bit con el que el periferico pide atencion.</text>
+<text x="14" y="208" font-size="8" fill="#2c3e50">La instruccion <tspan font-weight="bold">SKF XX</tspan> lee la bandera y la borra.</text>
+<text x="14" y="220" font-size="8" fill="#2c3e50"><tspan font-weight="bold">RM</tspan> = Registro Mascara, se carga con <tspan font-weight="bold">EMR Valor</tspan> y sirve para enmascarar</text>
+<text x="14" y="232" font-size="8" fill="#e94560">solicitudes. OJO: el RM es una alternativa que la MEI NO implementa.</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Fig. 8.9 (pag. 236). Cada periferico levanta su <b>bandera BD</b>; la mascara deja pasar o no cada una, y el OR de todas las que pasan genera la solicitud de interrupcion. La instruccion <b>SKF XX</b> lee la bandera y la borra. El <b>Registro Mascara</b> (instruccion <b>EMR</b>) es una alternativa que <b>la MEI no implementa</b>: conviene decirlo, es un detalle fino.</div></div>
+` },
           { title: 'Maquina Elemental Indexada (MEI)', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> la MEI es la <b>maquina elemental con upgrades</b>. A la maquina didactica basica se le agregan registros, modos de direccionamiento e instrucciones nuevas para que <b>sea mas comoda de programar</b> (bucles, arrays, reubicar programas) y para preparar el terreno hacia un procesador real como el 8088. Es el ultimo escalon didactico antes del 8088.</p>
     <h4>Por que mejorar la maquina elemental</h4>
     <ul style="padding-left:20px;font-size:0.92rem;">
@@ -5699,7 +5821,80 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     <p style="font-size:0.92rem;">Es el <b>Sumador de Direcciones</b> (no la Unidad de Control, ni la ALU) el que <b>suma el contenido de RB al campo direccion en tiempo de ejecucion</b>. Asi un mismo programa puede correr en distintas zonas de memoria sin reescribir las direcciones: se cambia RB y listo (reubicacion). Por eso su control esta <b>reservado al administrador</b>: la <b>instruccion privada</b> <code>ENI 1, XXXXXX</code>, que es la que carga RB (Tabla 8.1, p.219), lo que ya anticipa la idea de proteccion del sistema operativo. El libro subraya que RB se suma <b>solo cuando hay una referencia a memoria</b> en la ejecucion, y por eso <b>las constantes quedan inmunes</b> a la reubicacion (p.215).</p>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> la MEI suma <b>RIF, RID y RB</b> mas un <b>Sumador de Direcciones</b> dedicado (entradas W, X y RB), cuatro modos seleccionados por el campo modificador (directo, indirecto por memoria, indexado por RIF, indexado por RID) e instrucciones nuevas (<b>CRR, SIX, LIX, ENI, INC, JRI, SKF, ION/IOF/RTI</b>) para programar arrays, bucles (el par <b>INC Reg,-1 + JRI</b> &rarr; LOOP) y reubicar programas (RB); es el ensayo didactico de lo que el 8088 hace en serio. <span style="font-size:0.85rem;color:#555;">(Tabla 8.1, Perez pp. 217-220.)</span>
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 430 202" width="100%" style="max-width:430px;font-family:inherit;" role="img" aria-label="Formato de instruccion de la Maquina Elemental Indexada">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Formato de instruccion de la MEI (Fig. 8.5)</text>
+<text x="10" y="34" font-size="8.5" font-weight="bold" fill="#2c3e50">Palabra 1</text>
+<rect x="14" y="40" width="130" height="24" fill="#fdecef" stroke="#0f3460"/><text x="79" y="49" font-size="8.5" fill="#e94560" text-anchor="middle">COD. OPERACION</text><text x="79" y="60" font-size="7" fill="#7f8c8d" text-anchor="middle">5 bits</text>
+<rect x="144" y="40" width="90" height="24" fill="#fdecef" stroke="#0f3460"/><text x="189" y="49" font-size="8.5" fill="#e94560" text-anchor="middle">MODIFICADOR</text><text x="189" y="60" font-size="7" fill="#7f8c8d" text-anchor="middle">2 bits</text>
+<rect x="234" y="40" width="180" height="24" fill="#eef1f7" stroke="#0f3460"/><text x="324" y="52" font-size="8.5" fill="#7f8c8d" text-anchor="middle">(resto)</text>
+<text x="10" y="88" font-size="8.5" font-weight="bold" fill="#2c3e50">Palabra 2</text>
+<rect x="14" y="94" width="400" height="24" fill="#eef1f7" stroke="#0f3460"/><text x="214" y="103" font-size="8.5" fill="#2c3e50" text-anchor="middle">CAMPO DE DIRECCION</text><text x="214" y="114" font-size="7" fill="#7f8c8d" text-anchor="middle">16 bits</text>
+<text x="14" y="138" font-size="8" fill="#2c3e50">5 bits de opcode &rarr; hasta <tspan font-weight="bold">32</tspan> instrucciones.</text>
+<text x="14" y="150" font-size="8" fill="#2c3e50">2 bits de modificador &rarr; <tspan font-weight="bold">4</tspan> modos de direccionamiento.</text>
+<text x="14" y="162" font-size="8" fill="#2c3e50">16 bits de direccion &rarr; <tspan font-weight="bold">65536</tspan> posiciones (la Blue tenia 4096).</text>
+<text x="14" y="178" font-size="8" fill="#e94560">La instruccion completa ocupa <tspan font-weight="bold">2 posiciones</tspan> de 16 bits. Las que no necesitan</text>
+<text x="14" y="190" font-size="8" fill="#e94560">modificador ni direccion se guardan en una sola.</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Fig. 8.5 (pag. 212). Es el formato que habilita los modos de direccionamiento: aparece el <b>campo modificador</b> de 2 bits que no existia en la Blue.</div></div>
+
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 430 322" width="100%" style="max-width:430px;font-family:inherit;" role="img" aria-label="Diagrama en bloques de la Maquina Elemental Indexada">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Maquina Elemental Indexada (Fig. 8.6)</text>
+<rect x="16" y="32" width="72" height="20" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="52" y="46" font-size="8.5" fill="#e94560" font-style="italic" text-anchor="middle">RB (16)</text>
+<rect x="16" y="58" width="72" height="20" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="52" y="72" font-size="8.5" fill="#2c3e50" text-anchor="middle">ACC (16)</text>
+<rect x="16" y="84" width="72" height="20" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="52" y="98" font-size="8.5" fill="#e94560" font-style="italic" text-anchor="middle">RIF (16)</text>
+<rect x="16" y="110" width="72" height="20" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="52" y="124" font-size="8.5" fill="#e94560" font-style="italic" text-anchor="middle">RID (16)</text>
+<rect x="150" y="32" width="72" height="20" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="186" y="46" font-size="8.5" fill="#2c3e50" text-anchor="middle">SR (16)</text>
+<rect x="150" y="58" width="72" height="20" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="186" y="72" font-size="8.5" fill="#2c3e50" text-anchor="middle">PC (16)</text>
+<rect x="150" y="84" width="72" height="20" rx="3" fill="#eef1f7" stroke="#0f3460"/>
+<text x="186" y="98" font-size="8.5" fill="#2c3e50" text-anchor="middle">IR (16)</text>
+<rect x="118" y="28" width="6" height="132" fill="#0f3460"/>
+<text x="121" y="172" font-size="7" fill="#7f8c8d" text-anchor="middle">BUS</text>
+<rect x="292" y="26" width="118" height="26" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="351" y="43" font-size="8.5" fill="#e94560" font-style="italic" text-anchor="middle">Sumador de direcciones</text>
+<rect x="300" y="62" width="52" height="20" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="326" y="76" font-size="8" fill="#e94560" font-style="italic" text-anchor="middle">W (16)</text>
+<line x1="326" y1="62" x2="326" y2="52" stroke="#0f3460"/>
+<rect x="366" y="62" width="52" height="20" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="392" y="76" font-size="8" fill="#e94560" font-style="italic" text-anchor="middle">X (16)</text>
+<line x1="392" y1="62" x2="392" y2="52" stroke="#0f3460"/>
+<rect x="292" y="92" width="72" height="20" rx="3" fill="#eef1f7" stroke="#0f3460"/><text x="328" y="106" font-size="8.5" fill="#2c3e50" text-anchor="middle">MBR (16)</text>
+<rect x="292" y="120" width="118" height="42" rx="3" fill="#dfe6f2" stroke="#0f3460"/>
+<text x="351" y="138" font-size="9" fill="#2c3e50" text-anchor="middle">MEMORIA</text>
+<text x="351" y="151" font-size="7.5" fill="#e94560" text-anchor="middle">65536 x 16</text>
+<rect x="292" y="170" width="72" height="20" rx="3" fill="#eef1f7" stroke="#0f3460"/><text x="328" y="184" font-size="8.5" fill="#2c3e50" text-anchor="middle">MAR (16)</text>
+<line x1="124" y1="100" x2="292" y2="100" stroke="#0f3460" stroke-width="2"/>
+<line x1="124" y1="180" x2="292" y2="180" stroke="#0f3460" stroke-width="2"/>
+<rect x="40" y="176" width="48" height="18" rx="3" fill="#eef1f7" stroke="#0f3460"/><text x="64" y="189" font-size="8" fill="#2c3e50" text-anchor="middle">Z (16)</text>
+<rect x="150" y="176" width="48" height="18" rx="3" fill="#eef1f7" stroke="#0f3460"/><text x="174" y="189" font-size="8" fill="#2c3e50" text-anchor="middle">Y (16)</text>
+<polygon points="46,202 192,202 172,224 66,224" fill="#eef1f7" stroke="#0f3460"/>
+<text x="119" y="217" font-size="9.5" fill="#0f3460" text-anchor="middle">ALU</text>
+<rect x="16" y="238" width="394" height="62" rx="4" fill="#f2f5fa" stroke="#0f3460"/>
+<text x="213" y="252" font-size="9" font-weight="bold" fill="#0f3460" text-anchor="middle">UNIDAD DE CONTROL</text>
+<rect x="24" y="258" width="96" height="34" rx="3" fill="#ffffff" stroke="#0f3460"/>
+<text x="72" y="272" font-size="7" fill="#2c3e50" text-anchor="middle">Decodificador de</text>
+<text x="72" y="283" font-size="7" fill="#2c3e50" text-anchor="middle">Instrucciones (32)</text>
+<rect x="128" y="258" width="96" height="34" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="176" y="272" font-size="7" fill="#e94560" text-anchor="middle">Decodificador del</text>
+<text x="176" y="283" font-size="7" fill="#e94560" text-anchor="middle">Campo Modificador (4)</text>
+<rect x="232" y="258" width="90" height="34" rx="3" fill="#fdecef" stroke="#0f3460"/>
+<text x="277" y="272" font-size="7" fill="#e94560" text-anchor="middle">Secuenciador +</text>
+<text x="277" y="283" font-size="7" fill="#e94560" text-anchor="middle">Hardware de Interrupciones</text>
+<rect x="330" y="258" width="96" height="34" rx="3" fill="#ffffff" stroke="#0f3460"/>
+<text x="378" y="272" font-size="7" fill="#2c3e50" text-anchor="middle">Logica de</text>
+<text x="378" y="283" font-size="7" fill="#2c3e50" text-anchor="middle">Control</text>
+<text x="16" y="313" font-size="7.5" fill="#e94560">En rojo y cursiva, el hardware NUEVO respecto de la Blue.</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Fig. 8.6 (pag. 216). Lo NUEVO respecto de la Blue: los registros indice <b>RIF</b> y <b>RID</b>, el <b>Registro Base RB</b>, el <b>sumador de direcciones</b> dedicado con sus registros <b>W</b> y <b>X</b> (para no gastar tiempo de ALU), el <b>decodificador del campo modificador</b> y el <b>hardware de interrupciones</b>. La memoria pasa de 4096 a <b>65536</b> palabras. Ojo: los registros indice son solo <b>RIF y RID</b>; no existe ningun RID2.</div></div>
+` },
           { title: 'De la Blue al 8088: hacia una estructura convencional', detail: `<p style="font-size:0.95rem;"><b>La idea en simple:</b> esta ficha es el <b>mapa que une todo el cuatrimestre</b>. Arrancamos con una computadora elemental (la Blue de la U4), le fuimos agregando mejoras (la MEI) y terminamos en un procesador comercial real (el 8088). El objetivo es ver que <b>cada pieza del 8088 nacio para resolver un problema concreto</b> que ya vimos antes, no cae del cielo.</p>
     <h4>El recorrido, paso a paso</h4>
     <div style="background:#f8f9fa;border-left:4px solid #2196f3;padding:12px 16px;margin:10px 0;border-radius:6px;font-size:0.92rem;">
@@ -5729,7 +5924,40 @@ const EXERCISES = [{"id":1,"unit":1,"desc":"Convertir a decimal (binario, hex, o
     </ul>
     <div style="background:#e8f5e9;border-left:4px solid #4caf50;padding:12px 16px;margin:10px 0;border-radius:6px;">
     <b>En una frase:</b> el 8088 no es magia: es la <b>maquina elemental + MEI + estructura convencional</b> llevadas a silicio, donde cada pieza (indices, LOOP, pila, interrupciones, segmentacion, BIU/EU) resuelve un problema que el programa fue planteando unidad por unidad.
-    </div>` },
+    </div>
+<div style="margin:14px 0;padding:12px 12px 8px;background:#fbfcff;border:1px solid #dde3ec;border-radius:8px;overflow-x:auto;">
+<svg viewBox="0 0 430 264" width="100%" style="max-width:430px;font-family:inherit;" role="img" aria-label="De cuatro direcciones a una: evolucion del formato de instruccion">
+<text x="10" y="16" font-size="12" font-weight="bold" fill="#0f3460">Formatos de instruccion (Figs. 8.1 a 8.4)</text>
+<text x="10" y="30" font-size="8.5" font-weight="bold" fill="#2c3e50">Fig. 8.1 - cuatro direcciones</text>
+<rect x="14" y="36" width="80" height="20" fill="#fdecef" stroke="#0f3460"/><text x="54" y="46" font-size="8" fill="#2c3e50" text-anchor="middle">COD.OP</text>
+<rect x="94" y="36" width="80" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="134" y="46" font-size="8" fill="#2c3e50" text-anchor="middle">Operando 1</text>
+<rect x="174" y="36" width="80" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="214" y="46" font-size="8" fill="#2c3e50" text-anchor="middle">Operando 2</text>
+<rect x="254" y="36" width="80" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="294" y="46" font-size="8" fill="#2c3e50" text-anchor="middle">Resultado</text>
+<rect x="334" y="36" width="80" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="374" y="46" font-size="8" fill="#2c3e50" text-anchor="middle">Prox. instr.</text>
+<text x="14" y="64" font-size="7.5" fill="#7f8c8d">ADD A,B,C,D : A+B va a C, y la proxima instruccion esta en D</text>
+<text x="214" y="74" font-size="10" fill="#7f8c8d" text-anchor="middle">|</text>
+<text x="10" y="82" font-size="8.5" font-weight="bold" fill="#2c3e50">Fig. 8.2 - tres direcciones</text>
+<rect x="14" y="88" width="100" height="20" fill="#fdecef" stroke="#0f3460"/><text x="64" y="98" font-size="8" fill="#2c3e50" text-anchor="middle">COD.OP</text>
+<rect x="114" y="88" width="100" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="164" y="98" font-size="8" fill="#2c3e50" text-anchor="middle">Operando 1</text>
+<rect x="214" y="88" width="100" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="264" y="98" font-size="8" fill="#2c3e50" text-anchor="middle">Operando 2</text>
+<rect x="314" y="88" width="100" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="364" y="98" font-size="8" fill="#2c3e50" text-anchor="middle">Resultado</text>
+<text x="14" y="116" font-size="7.5" fill="#7f8c8d">ADD A,B,C : se elimina la prox. instruccion, aparece el PC</text>
+<text x="214" y="126" font-size="10" fill="#7f8c8d" text-anchor="middle">|</text>
+<text x="10" y="134" font-size="8.5" font-weight="bold" fill="#2c3e50">Fig. 8.3 - dos direcciones</text>
+<rect x="14" y="140" width="133" height="20" fill="#fdecef" stroke="#0f3460"/><text x="80" y="150" font-size="8" fill="#2c3e50" text-anchor="middle">COD.OP</text>
+<rect x="147" y="140" width="133" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="213" y="150" font-size="8" fill="#2c3e50" text-anchor="middle">Operando 1</text>
+<rect x="280" y="140" width="133" height="20" fill="#eef1f7" stroke="#0f3460"/><text x="346" y="150" font-size="8" fill="#2c3e50" text-anchor="middle">Operando 2</text>
+<text x="14" y="168" font-size="7.5" fill="#7f8c8d">ADD A,B : el resultado se guarda en B (pisa un operando)</text>
+<text x="214" y="178" font-size="10" fill="#7f8c8d" text-anchor="middle">|</text>
+<text x="10" y="186" font-size="8.5" font-weight="bold" fill="#e94560">Fig. 8.4 - una direccion</text>
+<rect x="14" y="192" width="200" height="20" fill="#fdecef" stroke="#0f3460"/><text x="114" y="202" font-size="8" fill="#e94560" text-anchor="middle">COD.OP</text>
+<rect x="214" y="192" width="200" height="20" fill="#fdecef" stroke="#0f3460"/><text x="314" y="202" font-size="8" fill="#2c3e50" text-anchor="middle">Operando</text>
+<text x="14" y="220" font-size="7.5" fill="#7f8c8d">ADD B : Acc + B va al Acc. ESTE ES EL CASO DE LA BLUE</text>
+<text x="14" y="242" font-size="8" fill="#2c3e50">Cada formato se obtiene ELIMINANDO una pieza del anterior. Lo eliminado se suple con hardware:</text>
+<text x="14" y="253" font-size="8" fill="#2c3e50">el PC, y despues el acumulador.</text>
+</svg>
+<div style="font-size:0.72rem;color:#7f8c8d;margin-top:6px;">Redibujado de Perez, Figs. 8.1 a 8.4 (pags. 206-208). Es la progresion con la que arranca el cap. 8 y explica <b>por que la Blue tiene una sola direccion</b>: cada paso elimina un campo y lo reemplaza por hardware (primero el PC, despues el acumulador implicito).</div></div>
+` },
         ,
           { title: 'Como exponerlo en el oral (guion + trampas + repreguntas)', detail: `<p style="font-size:0.95rem;"><b>Para que sirve:</b> tu kit para defender la unidad en el oral &mdash; el guion para exponerla, que no confundir y las repreguntas tipicas. No es teoria nueva: es <b>como decir</b> lo que ya sabes.</p>
     <h4>Guion de exposicion (60-90 s)</h4>
