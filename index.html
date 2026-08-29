@@ -11592,26 +11592,25 @@ const BANCO89 = {"1":{"u":1,"t":"Conversion a decimal (bin, hex, octal)","enun":
     // 4 bloques activos (1-4) + dia de la mesa. Bloque 4 = repaso puro (ultimos 4 dias).
     // ============================================================
     const WEEKLY_PLAN = [
-      { week:1, label:'1', dates:'28 ago - 2 sep', exercises:[1,89], phase:'Cubrir el banco YA CORREGIDO, unidad por unidad, y dejar dichos los 14 anclajes',
-        learn:'Una unidad por dia, en orden de peso y de riesgo: vie U5 (8088), sab U4 (la BLUE, reescrita entera), dom U2 parte 1, lun U2 parte 2 + U3, mar U1 completa, mie U6 + U7 (que son solo orales). Entrar SIEMPRE produciendo: primero resolves o explicas de memoria, recien despues abris la teoria a parchar.',
-        practice:'El rulo de 20 minutos por receta: leer el resuelto con lapiz, escribir la receta de memoria en 5 renglones, resolver otro a ciegas, corregir por TIPO de error, y decirlo en voz alta 60 segundos. Al terminar el martes tenes los 89 cubiertos.',
-        demonstrate:'Cada dia cierra diciendo en voz alta los 2 anclajes de la unidad que tocaste. Simulacro #1 el domingo 30 y Simulacro #2 el miercoles 2. El miercoles se CIERRA EL CONTENIDO: despues no entra nada nuevo.' },
-      { week:2, label:'2', dates:'3 - 4 sep', exercises:[1,89], phase:'Ensayo general y mesa. Cero material nuevo.',
-        learn:'Nada nuevo. Solo se repasa lo que ya paso por tu mano: tus 19 recetas escritas y tus 14 anclajes.',
-        practice:'Jueves 3: Simulacro #3 completo, y despues reparar SOLO lo que fallaste. Pasada de bolillero con las 9 bolillas. Corte a las 21h.',
-        demonstrate:'Viernes 4, 17:00: la mesa. A la manana, repaso liviano de una sola pasada. Es el simulacro numero 3 o 4, ya lo hiciste. Aprobas con 6.' }
+      { week:1, label:'1', dates:'29 ago - 2 sep', exercises:[1,89], phase:'Cubrir el banco YA CORREGIDO, una unidad por dia, y dejar dichos los anclajes de U1 a U5',
+        learn:'Una unidad por dia, en orden de peso y de riesgo: sab U5 (el 8088), dom U4 (la BLUE, reescrita entera), lun U2 parte 1, mar U2 parte 2 + U3, mie U1 completa. Entrar SIEMPRE produciendo: primero resolves o explicas de memoria, recien despues abris la teoria a parchar.',
+        practice:'El rulo de 20 minutos por receta: leer el resuelto con lapiz, escribir la receta de memoria en 5 renglones, resolver otro a ciegas, corregir por TIPO de error, y decirlo en voz alta 60 segundos. Al cerrar el miercoles tenes los 89 cubiertos.',
+        demonstrate:'Cada dia cierra diciendo en voz alta los 2 anclajes de la unidad que tocaste. Simulacro #1 el domingo 30 y Simulacro #2 el miercoles 2.' },
+      { week:2, label:'2', dates:'3 - 4 sep', exercises:[1,89], phase:'U6 y U7 (solo oral), ensayo general y mesa. Cero material nuevo despues del jueves.',
+        learn:'Jueves a la manana, lo unico que falta: U6 y U7, que no tienen ejercicios y son 4 anclajes hablados. Despues no entra nada nuevo: solo se repasa lo que ya paso por tu mano.',
+        practice:'Jueves 3: Simulacro #3 completo y reparar SOLO lo que fallaste. Pasada de bolillero con las 9 bolillas. Corte a las 21h.',
+        demonstrate:'Viernes 4, 17:00: la mesa. A la manana una pasada de las 19 recetas y los 14 anclajes, y nada mas.' }
     ];
 
     // ============================================================
     // WEEKLY PLAN RENDERING
     // ============================================================
     function getCurrentWeek() {
-      // Lunes de la semana en que arranca el Bloque 1 (el plan arranca mar 4, pero los
-      // bloques 2/3/4 son lunes-domingo, asi que el ancla tiene que ser el lunes 3).
-      const startDate = new Date(2026, 7, 24); // Lun 24 ago 2026 (ancla de la recta final de 8 dias a la mesa del 4 sep)
-      const now = new Date();
-      const diff = Math.floor((now - startDate) / (7 * 86400000)) + 1;
-      return Math.min(WEEKLY_PLAN.length, Math.max(1, diff));
+      // Solo hay 2 bloques y el corte no cae en semana calendaria:
+      // Bloque 1 = sab 29 ago a mie 2 sep (contenido). Bloque 2 = jue 3 y vie 4 sep (ensayo y mesa).
+      const corte = new Date(2026, 8, 3); // jue 3 sep 2026
+      const w = (new Date() >= corte) ? 2 : 1;
+      return Math.min(WEEKLY_PLAN.length, Math.max(1, w));
     }
 
     // ============================================================
@@ -11629,15 +11628,14 @@ const BANCO89 = {"1":{"u":1,"t":"Conversion a decimal (bin, hex, octal)","enun":
       mesa:{t:'MESA', c:'var(--accent-primary)'}
     };
     var RECTA_FINAL = [
-      // ---- Recta Final de 8 dias a la mesa del vie 4 sep 2026. Reescrita el 28-08 tras corregir el Banco 89. ----
-      {d:'2026-08-28', l:'Vie 28/08', fin:false, f:'admision', foco:'U5 &mdash; el 8088. Recetas R19 (bucle sobre bloque), R18 (operacion simple) y R17 (direccion fisica): 18 ejercicios. Es la unidad que mas aparece en el bolillero (5 de 9 bolillas) y es no negociable. Cerra el dia diciendo en voz alta los 2 anclajes de U5.', s:['banco','teoria']},
-      {d:'2026-08-29', l:'Sab 29/08', fin:true, f:'admision', foco:'U4 &mdash; la BLUE, que ya quedo corregida entera. Recetas R14 (programar), R15 (ciclo de ejecucion) y R16 (hardware): 16 ejercicios. Entra por la teoria del dashboard y el cap. 7 del libro; el banco ahora acompana. El otro no negociable. Cierra con los 2 anclajes de U4, dibujando el diagrama.', s:['banco','teoria']},
-      {d:'2026-08-30', l:'Dom 30/08', fin:true, f:'simulacro', foco:'U2 parte 1: R6 (canonicas), R8 (Karnaugh), R7 (Boole) y R10 (MSI), 17 ejercicios &mdash; con las 3 convenciones de la catedra a la vista. A la tarde, SIMULACRO #1 completo y cronometrado: sortea 2 del banco, elegis 1; despues 2 bolillas, elegis 1 y expones 8 minutos parado.', s:['banco','simuladores','bolillero']},
-      {d:'2026-08-31', l:'Lun 31/08', fin:false, f:'admision', foco:'U2 parte 2 + U3: R9 (diseno desde enunciado), R12 (contadores) y R13 (dimensionar memoria), 16 ejercicios. U3 es la unidad mas sana del banco: sus 6 ejercicios estaban todos bien. Cierra con los 2 anclajes de U2 y los 2 de U3.', s:['banco','teoria']},
-      {d:'2026-09-01', l:'Mar 01/09', fin:false, f:'admision', foco:'U1 completa: R1 (bases y complementos), R2 (punto flotante en EXCESO 128), R3 (BCD), R4 (Gray/Johnson) y R5 (Hamming), 20 ejercicios. Al terminar hoy tenes el banco cubierto al 100%. Cierra con los 2 anclajes de U1.', s:['banco','teoria']},
-      {d:'2026-09-02', l:'Mie 02/09', fin:false, f:'oral', foco:'U6 y U7: no tienen NI UN ejercicio en el banco, asi que hoy es puro oral. Los 4 anclajes de esas dos unidades, de pie y sin notas. Despues SIMULACRO #2. CIERRE DE CONTENIDO: desde manana no entra nada nuevo.', s:['teoria','oral','simuladores']},
-      {d:'2026-09-03', l:'Jue 03/09', fin:false, f:'simulacro', foco:'SIMULACRO #3, el ensayo general. Despues reparas SOLO lo que fallaste, y pasada de bolillero con las 9 bolillas. Repaso de las 3 convenciones. Corte a las 21h: kit armado (carpeta de TPs, monografia, DNI, calculadora), alarma puesta, a dormir 8 horas.', s:['simuladores','bolillero','recall']},
-      {d:'2026-09-04', l:'Vie 04/09', fin:false, f:'mesa', foco:'MESA, 17:00. A la manana solo tus 19 recetas y los 14 anclajes leidos una vez. Nada nuevo, nada de cramming en la puerta. De 2 ejercicios elegis el que sepas; de 2 bolillas, aquella cuya unidad mas floja sea menos floja. Aprobas con 6.', s:[]}
+      // ---- 6 dias de estudio + la mesa. Arranca sab 29-08-2026; mesa vie 4-09 17:00. Reordenada el 29-08. ----
+      {d:'2026-08-29', l:'Sab 29/08', fin:true,  f:'admision',  foco:'U5 &mdash; el 8088. Recetas R19 (bucle sobre un bloque), R18 (operacion aritmetico-logica simple) y R17 (direccion fisica): 18 ejercicios. Arrancas por lo mas pesado y mas rentable, con la cabeza fresca: U5 aparece en 5 de las 9 bolillas y el profesor la marco como no negociable. Con estos 18 ya tenes 37% de chance de que al menos uno de los dos ejercicios sorteados sea tuyo (son el 20% del banco: la chance corre mas rapido que la cobertura, y ese es todo el truco). Cerra el dia diciendo en voz alta los 2 anclajes de U5.', s:['banco','teoria']},
+      {d:'2026-08-30', l:'Dom 30/08', fin:true,  f:'simulacro', foco:'U4 &mdash; la BLUE, reescrita entera y por fin estudiable. Recetas R14 (programar), R15 (ciclo de ejecucion) y R16 (hardware: bus comun, tercer estado, UC cableada): 16 ejercicios. El simulador ya corre el repertorio real del libro. A la tarde, SIMULACRO #1 completo y cronometrado. Van 34 ejercicios: 62% de chance en admision, con los dos no negociables ya hechos.', s:['banco','teoria','simuladores','bolillero']},
+      {d:'2026-08-31', l:'Lun 31/08', fin:false, f:'admision',  foco:'U2 parte 1: R6 (canonicas SdP/PdS), R8 (Karnaugh), R7 (Boole y De Morgan) y R10 (MSI: MUX, decoder, comparador), 17 ejercicios. Con las convenciones de la catedra a la vista: la <b>a</b> es el bit MENOS significativo y los maxiterminos se complementan a 2^n-1. Cierra con los 2 anclajes de U2. Van 51: 82% de chance.', s:['banco','teoria']},
+      {d:'2026-09-01', l:'Mar 01/09', fin:false, f:'admision',  foco:'U2 parte 2 + U3: R9 (diseno combinacional desde un enunciado), R12 (contadores y registros), R11 (biestables) y R13 (dimensionar y expandir memoria), 18 ejercicios. U3 es la unidad mas sana del banco: sus 6 ejercicios estaban todos bien de entrada, asi que rinde rapido. Cierra con los anclajes de U3. Van 69: 95% de chance.', s:['banco','teoria']},
+      {d:'2026-09-02', l:'Mie 02/09', fin:false, f:'simulacro', foco:'U1 completa: R1 (bases y complementos), R2 (punto flotante en EXCESO 128, con el primer 1 almacenado), R3 (BCD), R4 (Gray y Johnson) y R5 (Hamming), 20 ejercicios. Al cerrar hoy tenes los 89: BANCO COMPLETO y la admision practicamente asegurada. A la tarde, SIMULACRO #2.', s:['banco','teoria','simuladores']},
+      {d:'2026-09-03', l:'Jue 03/09', fin:false, f:'oral',      foco:'U6 y U7, que no tienen NI UN ejercicio en el banco: son puro oral. Los 4 anclajes que faltan (pipeline con las 5 etapas de PEREZ, cache, las 3 tecnicas de E/S, buses). Hacelos a la manana: son 2 de las 7 unidades y sin ellas se te caen bolillas enteras. Despues, SIMULACRO #3, el ensayo general. CIERRE DE CONTENIDO: no entra nada nuevo. Corte a las 21h.', s:['teoria','oral','simuladores','bolillero']},
+      {d:'2026-09-04', l:'Vie 04/09', fin:false, f:'mesa',      foco:'MESA, 17:00. A la manana, una sola pasada de tus 19 recetas escritas y tus 14 anclajes en voz alta. Nada nuevo. Llevas la carpeta de TPs y la monografia. En admision te sortean 2 ejercicios y resolves 1; en el oral sortean 2 bolillas, elegis 1 y expones dos o tres temas.', s:[]}
     ];
     function renderRectaFinal() {
       var cont = document.getElementById('rectaFinal');
@@ -13191,7 +13189,7 @@ HLT`
       { id:'R8',  u:2, n:5,  blk:3, t:'Karnaugh (minimizacion SOP y POS)', ej:[30,31,33,34,35], leer:33, ciegas:[31,35] },
       { id:'R1',  u:1, n:5,  blk:5, t:'Bases, complementos C1/C2 y rango', ej:[1,2,3,4,5], leer:4, ciegas:[3,5] },
 
-      { id:'R2',  u:1, n:5,  blk:5, t:'Punto flotante IEEE 754', ej:[6,7,8,9,10], leer:6, ciegas:[9,10] },
+      { id:'R2',  u:1, n:5,  blk:5, t:'Punto flotante (EXCESO 128 de la catedra)', ej:[6,7,8,9,10], leer:6, ciegas:[9,10] },
       { id:'R3',  u:1, n:5,  blk:5, t:'Codigos BCD: pesos, autocomplemento, distancia', ej:[13,14,15,18,19], leer:13, ciegas:[14,18] },
 
       { id:'R12', u:2, n:5,  blk:4, t:'Contadores y registros de desplazamiento', ej:[37,45,46,47,49], leer:46, ciegas:[47,49] },
@@ -13205,11 +13203,11 @@ HLT`
     ];
 
     var P24_BLOQUES = {
-      1: { nom:'Dia 1 &middot; Vie 28 &mdash; U5, el 8088', col:'#e94560', cuando:'18 ejercicios', why:'No negociable, y la unidad que mas aparece en el bolillero: 5 de las 9 bolillas la incluyen. De estos 18, la auditoria ya habia dejado 12 limpios.' },
-      2: { nom:'Dia 2 &middot; Sab 29 &mdash; U4, la BLUE', col:'#e94560', cuando:'16 ejercicios', why:'El otro no negociable. Era la unidad con CERO ejercicios sanos y quedo reescrita entera. Entra por la teoria y el cap. 7 del libro; el banco ahora acompana.' },
-      3: { nom:'Dia 3 &middot; Dom 30 &mdash; U2 parte 1 + Simulacro #1', col:'#f0883e', cuando:'17 ejercicios', why:'Boole, canonicas, Karnaugh y MSI, con las 3 convenciones a la vista. A la tarde, el primer simulacro completo.' },
-      4: { nom:'Dia 4 &middot; Lun 31 &mdash; U2 parte 2 + U3', col:'#f0883e', cuando:'18 ejercicios', why:'Secuenciales, diseno desde enunciado y memorias. U3 es la unidad mas sana del banco: sus 6 ejercicios estaban todos bien.' },
-      5: { nom:'Dia 5 &middot; Mar 1 sep &mdash; U1 completa', col:'#7c5cd6', cuando:'20 ejercicios', why:'Bases, punto flotante (en EXCESO 128), BCD, Gray/Johnson y Hamming. Al cerrar hoy tenes el banco cubierto al 100%.' }
+      1: { nom:'Dia 1 &middot; Sab 29 &mdash; U5, el 8088', col:'#e94560', cuando:'18 ejercicios', why:'No negociable, y la unidad que mas aparece en el bolillero: 5 de las 9 bolillas la incluyen. De estos 18, la auditoria ya habia dejado 12 limpios. Empezar por aca es lo mas rentable del plan: 18 ejercicios ya valen 37% de chance en admision.' },
+      2: { nom:'Dia 2 &middot; Dom 30 &mdash; U4, la BLUE + Simulacro #1', col:'#e94560', cuando:'16 ejercicios', why:'El otro no negociable. Era la unidad con CERO ejercicios sanos y quedo reescrita entera; el simulador ya corre el repertorio del libro. A la tarde, el primer simulacro. Cerras el dia con 34 ejercicios: 62% de chance en admision.' },
+      3: { nom:'Dia 3 &middot; Lun 31 &mdash; U2 parte 1', col:'#f0883e', cuando:'17 ejercicios', why:'Boole, canonicas, Karnaugh y MSI, con las convenciones de la catedra a la vista: la a como bit MENOS significativo y los maxiterminos complementados a 2^n-1.' },
+      4: { nom:'Dia 4 &middot; Mar 1 sep &mdash; U2 parte 2 + U3', col:'#f0883e', cuando:'18 ejercicios', why:'Secuenciales, diseno desde enunciado y memorias. U3 es la unidad mas sana del banco: sus 6 ejercicios estaban todos bien, asi que rinde rapido.' },
+      5: { nom:'Dia 5 &middot; Mie 2 sep &mdash; U1 completa + Simulacro #2', col:'#7c5cd6', cuando:'20 ejercicios', why:'Bases, punto flotante (en EXCESO 128, con el primer 1 almacenado), BCD, Gray/Johnson y Hamming. Al cerrar hoy tenes el banco cubierto al 100%.' }
     };;
 
     // 14 anclajes orales: 2 por unidad. En el oral expones 2 o 3 temas, no una unidad entera.
@@ -13226,14 +13224,13 @@ HLT`
     var P24_UNOTA = {4:'NO NEGOCIABLE - con el diagrama dibujado', 5:'NO NEGOCIABLE - con el diagrama dibujado', 6:'Sin ejercicios en el banco: SOLO oral', 7:'Sin ejercicios en el banco: SOLO oral'};
 
     var P24_CRONO = [
-      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Vie 28', to:'', tag:'U5', col:'#e94560', t:'El 8088: R19, R18 y R17 (18 ejercicios)', s:'Aparece en 5 de las 9 bolillas y es no negociable. 12 de esos 18 ya estaban limpios en la auditoria. Cierra con los 2 anclajes de U5 en voz alta.' },
-      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Sab 29', to:'', tag:'U4', col:'#e94560', t:'La BLUE: R14, R15 y R16 (16 ejercicios)', s:'La unidad que estaba entera mal y quedo reescrita. Entra por la teoria y el cap. 7 del libro; el banco ahora acompana. El otro no negociable. Cierra dibujando el diagrama de memoria.' },
-      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Dom 30', to:'', tag:'U2 + SIM', col:'#f0883e', t:'U2 parte 1 (R6, R8, R7, R10) + SIMULACRO #1', s:'17 ejercicios con las 3 convenciones a la vista. A la tarde el primer simulacro completo y cronometrado. El simulacro no se mueve.' },
-      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Lun 31', to:'', tag:'U2 + U3', col:'#f0883e', t:'U2 parte 2 (R9, R12) + U3 (R13): 16 ejercicios', s:'U3 es la unidad mas sana del banco: sus 6 ejercicios estaban todos bien. Cierra con los anclajes de U2 y U3.' },
-      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Mar 1', to:'', tag:'U1', col:'#7c5cd6', t:'U1 completa: R1 a R5 (20 ejercicios)', s:'Ojo con el punto flotante: va en EXCESO 128, con el 1 almacenado. Al cerrar hoy tenes el banco cubierto al 100%.' },
-      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Mie 2', to:'', tag:'ORAL + SIM', col:'#0f3460', t:'U6 y U7 (solo oral) + SIMULACRO #2 &mdash; CIERRE DE CONTENIDO', s:'Estas dos no tienen ni un ejercicio en el banco: son 4 anclajes hablados, de pie y sin notas. Desde manana no entra nada nuevo.' },
+      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Sab 29', to:'', tag:'U5', col:'#e94560', t:'El 8088: R19, R18 y R17 (18 ejercicios)', s:'Aparece en 5 de las 9 bolillas y es no negociable. 12 de esos 18 ya estaban limpios en la auditoria. Cierra con los 2 anclajes de U5 en voz alta.' },
+      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Dom 30', to:'', tag:'U4 + SIM', col:'#e94560', t:'La BLUE: R14, R15 y R16 (16 ejercicios) + SIMULACRO #1', s:'La unidad que estaba entera mal y quedo reescrita; el simulador ya corre el repertorio del libro. El otro no negociable. A la tarde el primer simulacro completo y cronometrado: no se mueve. Van 34 ejercicios: 62% de chance en admision.' },
+      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Lun 31', to:'', tag:'U2', col:'#f0883e', t:'U2 parte 1: R6, R8, R7 y R10 (17 ejercicios)', s:'Canonicas, Karnaugh, Boole y MSI, con las convenciones de la catedra a la vista. Cierra con los 2 anclajes de U2. Van 51: 82% de chance.' },
+      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Mar 1', to:'', tag:'U2 + U3', col:'#f0883e', t:'U2 parte 2 (R9, R12, R11) + U3 (R13): 18 ejercicios', s:'U3 es la unidad mas sana del banco: sus 6 ejercicios estaban todos bien. Cierra con los anclajes de U3. Van 69: 95% de chance.' },
+      { dia:'CONTENIDO &mdash; una unidad por dia, con el banco ya corregido', h:'Mie 2', to:'', tag:'U1 + SIM', col:'#7c5cd6', t:'U1 completa: R1 a R5 (20 ejercicios) + SIMULACRO #2', s:'Ojo con el punto flotante: va en EXCESO 128, con el primer 1 almacenado. Al cerrar hoy tenes los 89 y la admision practicamente asegurada.' },
 
-      { dia:'CIERRE Y MESA', h:'Jue 3', to:'', tag:'ENSAYO', col:'#2ecc71', t:'SIMULACRO #3 + reparar solo lo fallado + bolillero completo', s:'Ensayo general. Repaso de las 3 convenciones. Corte a las 21h: kit armado (carpeta de TPs, monografia, DNI, calculadora), alarma puesta, 8 horas de sueno.' },
+      { dia:'CIERRE Y MESA', h:'Jue 3', to:'', tag:'ORAL + ENSAYO', col:'#2ecc71', t:'U6 y U7 (solo oral) + SIMULACRO #3 &mdash; CIERRE DE CONTENIDO', s:'A la manana los 4 anclajes que faltan: U6 y U7 no tienen ni un ejercicio en el banco, pero son 2 de las 7 unidades y sin ellas se caen bolillas enteras. Despues el ensayo general y reparar solo lo fallado. Corte a las 21h: kit armado (carpeta de TPs, monografia, DNI, calculadora), alarma puesta, 8 horas de sueno.' },
       { dia:'CIERRE Y MESA', h:'Vie 4', to:'17:00', tag:'MESA', col:'#e94560', t:'LA MESA', s:'A la manana, tus 19 recetas y tus 14 anclajes leidos UNA vez. Nada nuevo. De 2 ejercicios elegis el que sepas; de 2 bolillas, aquella cuya unidad mas floja sea menos floja.' }
     ];
 
@@ -13324,7 +13321,7 @@ HLT`
       // ---- HEADER ----
       h += '<div class="card" style="border-top:4px solid #e94560;">';
       h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">';
-      h += '<div style="flex:1 1 320px;"><h2 style="margin:0 0 6px;">&#127919; Protocolo &laquo;1 de 2&raquo; &mdash; 8 dias a la mesa</h2>' +
+      h += '<div style="flex:1 1 320px;"><h2 style="margin:0 0 6px;">&#127919; Protocolo &laquo;1 de 2&raquo; &mdash; 6 dias de estudio y la mesa</h2>' +
         '<p style="color:var(--text-secondary);font-size:0.86rem;margin:0;line-height:1.55;">Mesa: <b>viernes 4 de septiembre, 17:00</b>. Las <b>dos</b> instancias del final te dejan <b>elegir 1 de 2</b>: sortean 2 ejercicios del Banco 89 y resolves uno; sortean 2 bolillas y expones de una. Eso cambia todo el calculo: <b>no necesitas dominio, necesitas piso ancho</b>. Este modulo convierte los 89 ejercicios en <b>19 recetas</b> y las 7 unidades en <b>14 anclajes hablados</b>, y te mide en vivo cuanto del sorteo tenes cubierto.</p></div>';
       h += '<div style="text-align:center;background:#0f3460;color:#fff;border-radius:10px;padding:12px 18px;min-width:110px;">' +
         '<div style="font-size:1.9rem;font-weight:800;line-height:1;">' + cuenta + '</div>' +
